@@ -19,7 +19,6 @@ LIBS += -L/usr/local/lib -lLabJackM
 
 SOURCES += \
     main.cpp \
-    src/Components/DIOM.cpp \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
     src/Components/Labjack.cpp \
@@ -38,7 +37,6 @@ SOURCES += \
     src/Plot/Plot.cpp \
     src/Plot/RFPlot.cpp \
     src/Plot/qcustomplot.cpp \
-    src/SubWindow/DIOW.cpp \
     src/SubWindow/LBJW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
@@ -54,7 +52,6 @@ SOURCES += \
 
 HEADERS += \
     LJM_Utilities.h \
-    src/Components/DIOM.h \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
     src/Components/Labjack.h \
@@ -73,7 +70,6 @@ HEADERS += \
     src/Plot/Plot.h \
     src/Plot/RFPlot.h \
     src/Plot/qcustomplot.h \
-    src/SubWindow/DIOW.h \
     src/SubWindow/LBJW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
