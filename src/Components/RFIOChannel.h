@@ -19,6 +19,8 @@ public:
 
    QVector<int> get_i_data() const {return i_data;}
    QVector<int> get_q_data() const {return q_data;}
+   QVector<double> get_i_plot_data() const {return i_plot_data;}
+   QVector<double> get_q_plot_data() const {return q_plot_data;}
 
    int get_number() const {return number;}
    int get_period(const QVector<int> &data);
@@ -49,8 +51,8 @@ private:
     bool is_eval = false;
     QVector<int> i_data;
     QVector<int> q_data;
-    QVector<int> i_plot_data;
-    QVector<int> q_plot_data;
+    QVector<double> i_plot_data;
+    QVector<double> q_plot_data;
     int number;
     int buffersize;
 
@@ -58,7 +60,7 @@ private:
     long long sample_position;
 
     bool evaluate_data(const QVector<int> &data);
-    void set_data(const QVector<int> &input, QVector<int> &output);
+    void set_data(const QVector<int> &input, QVector<double> &output);
 };
 
 inline int RFIOChannel::get_minimum(const QVector<int> &data) {

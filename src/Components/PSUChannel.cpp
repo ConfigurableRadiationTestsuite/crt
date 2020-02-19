@@ -18,16 +18,14 @@ PSUChannel::PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double
     trigger = false;
 }
 
-PSUChannel::~PSUChannel() {
-
-}
+PSUChannel::~PSUChannel() {}
 
 void PSUChannel::set_enable(int enable) {
     this->enable = enable == 0 ? false : true;
 
-    emit enable_changed(this->enable);
-
     update();
+
+    emit enable_changed(this->enable);
 }
 
 void PSUChannel::set_voltage(const QString &voltage) {
@@ -38,9 +36,9 @@ void PSUChannel::set_voltage(const QString &voltage) {
     else
         voltage_set = dvoltage;
 
-    emit voltage_changed(QString::number(voltage_set));
-
     update();
+
+    emit voltage_changed(QString::number(voltage_set));
 }
 
 void PSUChannel::set_current(const QString & current) {
@@ -51,13 +49,18 @@ void PSUChannel::set_current(const QString & current) {
     else
         current_set = dcurrent;
 
-    emit current_changed(QString::number(current_set));
-
     update();
+
+    emit current_changed(QString::number(current_set));
 }
 
 void PSUChannel::overcurrent_protection() {
+    if(current_set < current_meas*0.95) {
+        if(trigger)
+            set_enable(0);
 
+        emit overcurrent_event();
+    }
 }
 
 void PSUChannel::update() {

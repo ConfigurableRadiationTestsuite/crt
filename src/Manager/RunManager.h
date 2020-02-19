@@ -7,6 +7,8 @@ class QElapsedTimer;
 
 #include <QWidget>
 
+enum RunMode {Creation=0, Init=1, Start=3, Stop=255};
+
 class RunManager : public QWidget, public FileManager{
 Q_OBJECT
 
@@ -26,6 +28,8 @@ signals:
     void run_name_changed(const QString &text);
     void run_time_changed(const QString &text);
 
+    bool enable_run_button(bool enable);
+
 private:
     QString runName;
 
@@ -34,8 +38,6 @@ private:
     long long offsetTime;
 
     void create_layout();
-
-    void add_run_info();
 };
 
 #endif // RUNMANAGER_H

@@ -12,6 +12,8 @@
 class RFIOChannel;
 class RunManager;
 
+class QProcess;
+
 #include "src/Configuration/ConfigElement.h"
 
 #include <QWidget>
@@ -26,26 +28,29 @@ public:
 
    QVector<RFIOChannel *> get_channel_list() const {return channel_list;}
 
+   void set_config() override;
+
 public slots:
-   void update_channel();
-   //void start();
-   //void stop();
+   void update_device();
+
+   void start_logging();
+   void stop_logging();
 
 private:
    RunManager *runManager;
    QString address;
+   QProcess *process;
 
    QTimer *log_timer;
 
    int buffersize = 4096;
    QVector<RFIOChannel *> channel_list;
 
-   bool connect_to_device();
+   bool connect_device();
+   void disconnect_device();
 
-   int create_2b_number(char msb, char lsb);
+   int create_2b_number(char lsb, char msb);
 
-   void start_logging();
-   void stop_logging();
    void init();
 };
 

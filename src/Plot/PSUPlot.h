@@ -13,39 +13,25 @@ class PSUChannel;
 
 class QCustomPlot;
 
-#include <QWidget>
+#include "Plot.h"
 
-class PSUPlot : public QWidget {
+class PSUPlot : public Plot {
 Q_OBJECT
 
 public:
-    PSUPlot(QCustomPlot *plot, PSUChannel * channel);
-    virtual ~PSUPlot();
-
+    PSUPlot(QCustomPlot *m_plot, PSUChannel * channel, int m_datapoints=30, int m_seconds=30);
+    virtual ~PSUPlot() override;
 
 private slots:
-    void update();
+    void update_plot() override;
 
 private:
-    QTimer *timer;
-
-    QCustomPlot *plot;
-    QVector<double> time_axis;
     QVector<double> voltage_axis;
     QVector<double> current_axis;
 
     PSUChannel * channel;
 
-    int datapoints;
-    long counter;
-
-    void create_layout();
-
-    int get_max_voltage();
-    int get_max_current();
-    int maximum_function(int local_maximum, int absolute_maximum);
-
-    void shift_into_vector(QVector<double> &vector, double value);
+    void create_layout() override;
 };
 
 #endif // PSUPLOT_H

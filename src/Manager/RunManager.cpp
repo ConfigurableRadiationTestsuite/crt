@@ -30,6 +30,7 @@ void RunManager::create_layout() {
     QPushButton *runButton = new QPushButton;
     runButton->setText("New run");
     connect(runButton, SIGNAL(clicked()), this, SLOT(create_new_run()));
+    connect(this, SIGNAL(enable_run_button(bool)), runButton, SLOT(setEnabled(bool)));
 
     QLineEdit *runNameLine = new QLineEdit;
     runNameLine->setText("<NAME>");
@@ -58,8 +59,10 @@ void RunManager::create_new_run() {
     else
         return ;
 
-    //Dialog for runtime info
-    add_run_info();
+    //Create new run log for start / stop / various
+    register_component(this, "RunManager");
+    set_file_header(this, {"Action"});
+    append_value_to_file(this, double(RunMode::Creation));
 
     offsetTime = 0;
     emit run_name_changed(folder);
@@ -82,15 +85,15 @@ void RunManager::update_run() {
 
 void RunManager::start_run() {
     runTime->start();
+
+    append_value_to_file(this, double(RunMode::Start));
+    emit enable_run_button(false);
 }
 
 void RunManager::stop_run() {
     offsetTime += runTime->isValid() ? runTime->elapsed() / 1000 : 0;
     runTime->invalidate();
-}
 
-void RunManager::add_run_info() {
-    //Textbox
-
-    //Save QString to folder/info.txt
+    append_value_to_file(this, double(RunMode::Stop));
+    emit enable_run_button(true);
 }

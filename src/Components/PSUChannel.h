@@ -44,11 +44,11 @@ public slots:
     void meas_voltage();
     void meas_current();
 
-
 signals:
     void voltage_changed(const QString &text);
     void current_changed(const QString &text);
     void enable_changed(bool enable);
+    void overcurrent_event();
 
 private:
     uint number;
@@ -75,6 +75,6 @@ private:
     void meas_current_tti();
 };
 
-inline void PSUChannel::set_trigger(int trigger) {this->trigger = trigger;}
+inline void PSUChannel::set_trigger(int trigger) {this->trigger = trigger > 0 ? true : false;}
 
 #endif // PSUCHANNEL_H

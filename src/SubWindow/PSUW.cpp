@@ -13,26 +13,32 @@
 PSUW::PSUW(PSU *psu, EventManager *m_eventManager) : SubWindow(m_eventManager), psu(psu) {
     cfg_element = psu;
 
-    connect(this, SIGNAL(signal_start()), psu, SLOT(start()));
-    connect(this, SIGNAL(signal_stop()), psu, SLOT(stop()));
+    connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
+    connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
+    connect(this, SIGNAL(signal_start_log()), psu, SLOT(start_logging()));
+    connect(this, SIGNAL(signal_stop_log()), psu, SLOT(stop_logging()));
 
-    eventManager->add_signal(psu->get_element_name() + " Start", SignalType::start, this, &SubWindow::signal_start);
-    eventManager->add_signal(psu->get_element_name() + " Stop", SignalType::stop, this, &SubWindow::signal_stop);
+    eventManager->add_signal(psu->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+    eventManager->add_signal(psu->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
+    eventManager->add_signal(psu->get_element_name() + " Switch On", SignalType::on, this, &SubWindow::signal_on);
+    eventManager->add_signal(psu->get_element_name() + " Switch Off", SignalType::off, this, &SubWindow::signal_off);
 
     create_layout();
 }
 
 PSUW::~PSUW() {
     //Degregister signals
-    eventManager->delete_signal(&SubWindow::signal_start);
-    eventManager->delete_signal(&SubWindow::signal_stop);
+    eventManager->delete_signal(&SubWindow::signal_on);
+    eventManager->delete_signal(&SubWindow::signal_off);
+    eventManager->delete_signal(&SubWindow::signal_start_log);
+    eventManager->delete_signal(&SubWindow::signal_stop_log);
 
     delete psu;
-    delete subHorizontalLayout;
+    delete mainHLayout;
 }
 
 void PSUW::create_layout() {
-    subHorizontalLayout = new QHBoxLayout;
+    mainHLayout = new QHBoxLayout;
 
     PSUChannel * channel;
     foreach (channel, psu->get_channel_list()) {
@@ -70,7 +76,7 @@ void PSUW::create_layout() {
 
         /* Plot */
         QCustomPlot *plot = new QCustomPlot(this);
-        PSUPlot *psuplot = new PSUPlot(plot, channel);
+        PSUPlot *psuplot = new PSUPlot(plot, channel, 30, 30);
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
         plot->setMaximumHeight(512);
@@ -81,17 +87,27 @@ void PSUW::create_layout() {
         psuVLayout->addWidget(plot);
 
         channelGroupBox->setLayout(psuVLayout);
-        subHorizontalLayout->addWidget(channelGroupBox);
+        mainHLayout->addWidget(channelGroupBox);
     }
 
-    if(psu->has_master()) {
+    if(psu->has_master_switch()) {
+        QGridLayout *masterGridLayout = new QGridLayout;
+        QGroupBox *masterBoxLayout = new QGroupBox("Master Switch");
+
         QCheckBox * masterEnable = new QCheckBox("Master", this);
-        connect(masterEnable, SIGNAL(stateChanged(int)), psu, SLOT(set_master(int)));
+        connect(masterEnable, SIGNAL(stateChanged(int)), psu, SLOT(set_master_enable(int)));
         connect(psu, SIGNAL(master_changed(bool)), masterEnable, SLOT(setChecked(bool)));
 
-        subHorizontalLayout->addWidget(masterEnable);
+        QCheckBox * masterTrigger = new QCheckBox("Trigger", this);
+        connect(masterTrigger, SIGNAL(stateChanged(int)), psu, SLOT(set_master_trigger(int)));
+
+        masterGridLayout->addWidget(masterEnable, 0, 0);
+        masterGridLayout->addWidget(masterTrigger, 1, 0);
+
+        masterBoxLayout->setLayout(masterGridLayout);
+        mainHLayout->addWidget(masterBoxLayout);
     }
 
 
-    setLayout(subHorizontalLayout);
+    setLayout(mainHLayout);
 }

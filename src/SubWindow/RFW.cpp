@@ -10,10 +10,22 @@
 RFW::RFW(RFIO *rfio, EventManager *m_eventManager) : SubWindow(m_eventManager), rfio(rfio) {
     cfg_element = rfio;
 
+    connect(this, SIGNAL(signal_start_log()), rfio, SLOT(start_logging()));
+    connect(this, SIGNAL(signal_stop_log()), rfio, SLOT(stop_logging()));
+
+    eventManager->add_signal(rfio->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+    eventManager->add_signal(rfio->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
+
     create_layout();
 }
 
-RFW::~RFW() {}
+RFW::~RFW() {
+    //Deregister signals
+    eventManager->delete_signal(&SubWindow::signal_start_log);
+    eventManager->delete_signal(&SubWindow::signal_stop_log);
+
+    delete rfio;
+}
 
 void RFW::create_layout() {
     subHorizontalLayout = new QHBoxLayout;
@@ -25,11 +37,11 @@ void RFW::create_layout() {
 
         /* Plot */
         QCustomPlot *plot = new QCustomPlot(this);
-        RFPlot *psuplot = new RFPlot(plot);
+        //RFPlot *psuplot = new RFPlot(plot);
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
         plot->setMaximumHeight(512);
-        connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
+        //connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
         channelHLayout->addWidget(plot);
 
         QVBoxLayout *evalLayout = new QVBoxLayout;

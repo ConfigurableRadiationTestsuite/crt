@@ -1,7 +1,10 @@
 #include "EthernetClient.h"
 
+#include <arpa/inet.h>
 #include <cstdlib>
 #include <cstring>
+#include <sys/socket.h>
+#include <unistd.h>
 
 EthernetClient::EthernetClient(uint port, const std::string &server) : port(port), server(server) {
     connection_ok = false;
@@ -17,9 +20,9 @@ EthernetClient::~EthernetClient() {
 }
 
 bool EthernetClient::retry() {
-    static long retry_clock = time(NULL);
+    static long retry_clock = time(nullptr);
 
-    if(time(NULL) - retry_clock < 10)
+    if(time(nullptr) - retry_clock < RETRY_TIMEOUT)
         return false;
 
     if(!socket_ok)
@@ -28,7 +31,7 @@ bool EthernetClient::retry() {
     if(socket_ok)
         connection_ok = connect_to_server();
 
-    retry_clock = time(NULL);
+    retry_clock = time(nullptr);
 
     return connection_ok;
 }
@@ -47,7 +50,7 @@ bool EthernetClient::create_socket() {
 
     //Add send/receive timeout
     struct timeval tv;
-    tv.tv_sec = 3;
+    tv.tv_sec = CONNECTION_TIMEOUT;
     tv.tv_usec = 0;
     setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof(tv));
     setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
@@ -85,23 +88,21 @@ std::string EthernetClient::query(const std::string message) {
     if(!write(message))
         return "";
 
-    char output[256];
-    std::string buffer = "";
-
-    ssize_t data_bytes = ssize_t(recv(sock, output, 256, 0));
+    char output[READ_BUFFER_SIZE];
+    ssize_t data_bytes = ssize_t(recv(sock, output, READ_BUFFER_SIZE, 0));
 
     if(data_bytes == -1) {
-        disconnect();
+        disconnect_from_server();
         return "";
     }
 
     output[data_bytes] = '\0';
-    buffer += output;
+    std::string buffer = output;
 
     return buffer;
 }
 
-void EthernetClient::disconnect() {
+void EthernetClient::disconnect_from_server() {
     connection_ok = false;
     socket_ok = false;
     close(sock);

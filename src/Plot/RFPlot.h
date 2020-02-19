@@ -9,19 +9,30 @@
  *
  */
 
+class RFIOChannel;
+
 class QCustomPlot;
 
-#include <QWidget>
+#include "Plot.h"
 
-class RFPlot : public QWidget {
+class RFPlot : public Plot {
 Q_OBJECT
 
 public:
-    RFPlot(QCustomPlot *plot);
-    virtual ~RFPlot();
+    RFPlot(QCustomPlot *m_plot, RFIOChannel * channel);
+    virtual ~RFPlot() override;
+
+private slots:
+    void update_plot() override;
 
 private:
-    QCustomPlot *plot;
+    QVector<double> i_axis;
+    QVector<double> q_axis;
+
+    RFIOChannel * channel;
+
+    void create_layout() override;
+    void modify_time_axis();
 };
 
 #endif // RFPLOT_H

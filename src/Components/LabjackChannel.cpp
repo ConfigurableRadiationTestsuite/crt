@@ -5,24 +5,9 @@
 #include <QElapsedTimer>
 #include <QtMath>
 
-LabjackChannel::LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan) : name(name), handle(handle), p_chan(p_chan), n_chan(n_chan) {
-    this->is_input = true;
-    this->is_differential = n_chan == 199 ? false : true;
-    this->external_gain = 1;
-    this->boundary = 0;
-    this->value = 0.0;
-
-    if(is_differential)
-        set_differential();
-
-    changeTimer = new QElapsedTimer;
-    changeTimer->start();
-}
-
 LabjackChannel::LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan, int gain, double boundary) : name(name), handle(handle), p_chan(p_chan), n_chan(n_chan), boundary(boundary), external_gain(gain) {
     this->is_input = true;
     this->is_differential = n_chan == 199 ? false : true;
-    this->value = 0.0;
 
     if(is_differential)
         set_differential();
@@ -35,13 +20,8 @@ LabjackChannel::~LabjackChannel() {}
 
 void LabjackChannel::update_value(double value) {
     this->value = value;
-
     check_boundary();
-
-    if(changeTimer->elapsed() > 500) {
-        changeTimer->restart();
-        emit value_changed(QString::number(get_value()));
-    }
+    emit value_changed(QString::number(get_value()));
 }
 
 void LabjackChannel::update() {
@@ -49,11 +29,11 @@ void LabjackChannel::update() {
     set_range();
 
     check_boundary();
+    emit value_changed(QString::number(get_value()));
+}
 
-    if(changeTimer->elapsed() > 500) {
-        changeTimer->restart();
-        emit value_changed(QString::number(get_value()));
-    }
+void LabjackChannel::refresh_value() {
+    emit value_refreshed(QString::number(get_value()));
 }
 
 void LabjackChannel::set_differential() {
@@ -61,6 +41,9 @@ void LabjackChannel::set_differential() {
 }
 
 bool LabjackChannel::check_boundary() {
+    if(boundary == 0)
+        return true;
+
     if(qFabs(boundary) < qFabs(get_value())) {
         emit boundary_check_failed();
         return false;
@@ -78,14 +61,14 @@ void LabjackChannel::set_external_gain(const QString &text) {
 }
 
 void LabjackChannel::set_resolution(uint index) {
-    assert(0 <= index && index <= 10);
+    assert(0 < index && index <= 10);
     write(get_pchan_resolution_address(), LJM_UINT16, index);
     write(get_nchan_resolution_address(), LJM_UINT16, index);
 }
 
 
 void LabjackChannel::set_settling(uint index) {
-    assert(0 <= index && index <= 50000);
+    assert(0 < index && index <= 50000);
     write(get_pchan_settling_address(), LJM_UINT16, index);
     write(get_nchan_settling_address(), LJM_UINT16, index);
 }

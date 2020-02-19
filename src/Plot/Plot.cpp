@@ -2,24 +2,50 @@
 
 #include "qcustomplot.h"
 
+#include <QElapsedTimer>
 #include <QtMath>
 
-Plot::Plot(QCustomPlot *plot) : plot(plot) {
-    timer = new QTimer;
+Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
+    : plot(plot), datapoints(datapoints), seconds(seconds) {
 
-    datapoints = 30;
+    timer = new QTimer;
+    real_time = new QElapsedTimer;
+    real_time->start();
+
     counter = 0;
 
-    for(int i = 0; i < datapoints; i++)
-        time_axis.push_back(i);
+    recreate_time_axis();
 
     connect(timer, SIGNAL(timeout()), this, SLOT(update_plot()));
     timer->start(1000);
 
-    create_layout();
 }
 
 Plot::~Plot() {}
+
+void Plot::update_time_axis() {
+    if(counter >= datapoints) {
+        long last_timepoint = real_time->elapsed() + long(double(seconds * 1000) / double(datapoints));
+        shift_into_vector(time_axis, double(last_timepoint) / 1000);
+    }
+}
+
+void Plot::recreate_time_axis() {
+    int last_timepoint = int(real_time->elapsed() / 1000);
+    time_axis.clear();
+    time_axis.reserve(datapoints);
+
+    for(int i = 0; i < datapoints; i++)
+        time_axis.push_back(last_timepoint + i * (double(seconds) / double(datapoints)));
+}
+
+void Plot::recreate_axis(QVector<double> &vec) {
+    vec.clear();
+    vec.reserve(datapoints);
+
+    for(int i = 0; i < datapoints; i++)
+        vec.push_back(0.0);
+}
 
 void Plot::shift_into_vector(QVector<double> &vector, double value) {
     for(QVector<double>::iterator it = vector.begin(); it != vector.end()-1; it++) {

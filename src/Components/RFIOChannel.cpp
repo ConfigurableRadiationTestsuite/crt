@@ -27,17 +27,18 @@ int RFIOChannel::get_period(const QVector<int> &data) {
     bool sign = data[0] > 0 ? true : false;
 
     for(QVector<int>::const_iterator it = data.begin(); it != data.end(); it++) {
-        //3 Periods should be enough
-        if(cnt > 5)
+        //6 Half-Periods should be enough
+        if(cnt > 6)
             break;
 
         //Ignore values near zero
-        if(-qPow(2, BITS_TO_IGNORE) < *it || *it < qPow(2, BITS_TO_IGNORE))
+        if(-qPow(2, BITS_TO_IGNORE) < *it && *it < qPow(2, BITS_TO_IGNORE))
             continue;
 
         //Check if the sign has changed
         if(sign != (*it > 0 ? true : false)) {
-            period += samples;
+            if(cnt != 0) //Ignore the first transition
+                period += samples;
             samples = 0;
             cnt++;
             sign = !sign;
@@ -45,22 +46,22 @@ int RFIOChannel::get_period(const QVector<int> &data) {
         samples++;
     }
 
-    if(cnt == 0) {
+    if(cnt <= 1) {
         set_evaluation(0);
         return 0;
     }
 
-    return period / cnt;
+    return 2 * period / (cnt - 1);
 }
 
 int RFIOChannel::get_zero(const QVector<int> &data) {
     bool capture = false;
 
     for(int i = 0; i < data.size(); i++) {
-        if(!capture && data[i] < -qPow(2, BITS_TO_IGNORE))
-            continue;
+        if(data[i] < -qPow(2, BITS_TO_IGNORE))
+            capture = true;
 
-        if(qPow(2, BITS_TO_IGNORE) < data[i])
+        if(capture && qPow(2, BITS_TO_IGNORE) < data[i])
             return i;
     }
 
@@ -85,12 +86,12 @@ bool RFIOChannel::evaluate_data(const QVector<int> &data) {
 
 }
 
-void RFIOChannel::set_data(const QVector<int> &input, QVector<int> &output) {
+void RFIOChannel::set_data(const QVector<int> &input, QVector<double> &output) {
     int period = get_period(input);
     int zero = get_zero(input);
 
     for(int i = zero; i < input.size(); i++) {
-        if(period*4 < i)
+        if((period*4 + zero) < i)
             return ;
         output.push_back(input[i]);
     }

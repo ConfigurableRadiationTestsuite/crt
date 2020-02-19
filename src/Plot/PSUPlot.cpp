@@ -3,30 +3,19 @@
 #include "src/Components/PSUChannel.h"
 #include "qcustomplot.h"
 
-PSUPlot::PSUPlot(QCustomPlot *plot, PSUChannel *channel) : plot(plot), channel(channel) {
-    timer = new QTimer;
+PSUPlot::PSUPlot(QCustomPlot *m_plot, PSUChannel *channel, int m_datapoints, int m_seconds)
+    : Plot(m_plot, m_datapoints, m_seconds), channel(channel) {
 
-    datapoints = 30;
-    counter = 0;
-
-    for(int i = 0; i < datapoints; i++) {
-        time_axis.push_back(i);
-        voltage_axis.push_back(0);
-        current_axis.push_back(0);
-    }
-
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(1000);
+    recreate_axis(voltage_axis);
+    recreate_axis(current_axis);
 
     create_layout();
 }
 
 PSUPlot::~PSUPlot() {}
 
-
-void PSUPlot::update() {
+void PSUPlot::update_plot() {
     if(counter >= datapoints) {
-        shift_into_vector(time_axis, counter);
         shift_into_vector(voltage_axis, channel->get_voltage_meas());
         shift_into_vector(current_axis, channel->get_current_meas());
     }
@@ -35,8 +24,10 @@ void PSUPlot::update() {
         current_axis[int(counter)] = channel->get_current_meas();
     }
 
-    int max_voltage = get_max_voltage();
-    int max_current = get_max_current();
+    update_time_axis();
+
+    int max_voltage = get_maximum(voltage_axis, int(channel->get_voltage_max()));
+    int max_current = get_maximum(current_axis, int(channel->get_current_max()));
 
     plot->yAxis->setRange(0, max_voltage);
     plot->yAxis->setTickStep(max_voltage/4);
@@ -75,32 +66,4 @@ void PSUPlot::create_layout() {
     plot->yAxis2->setVisible(true);
 
     plot->replot();
-}
-
-void PSUPlot::shift_into_vector(QVector<double> &vector, double value) {
-    for(QVector<double>::iterator it = vector.begin(); it != vector.end()-1; it++) {
-        (*it) = (*(it+1));
-    }
-
-    vector[vector.size()-1] = value;
-}
-
-int PSUPlot::maximum_function(int local_maximum, int absolut_maximum) {
-    int new_maximum = 1;
-
-    while(new_maximum < absolut_maximum) {
-        if(local_maximum < 0.9*new_maximum)
-            return new_maximum;
-        new_maximum *= 10;
-    }
-
-    return absolut_maximum;
-}
-
-int PSUPlot::get_max_current() {
-    return maximum_function(int(*std::max_element(current_axis.begin(), current_axis.end())), int(channel->get_current_max()));
-}
-
-int PSUPlot::get_max_voltage() {
-    return maximum_function(int(*std::max_element(voltage_axis.begin(), voltage_axis.end())), int(channel->get_voltage_max()));
 }

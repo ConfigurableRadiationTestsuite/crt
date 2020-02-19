@@ -4,8 +4,7 @@
 /*
  * Author: Mattis Jaksch
  *
- * (Hardware-)Interface from a Labjack Window to a real
- * labjack (Here T7)
+ * Labjack (T7) Channel Manager
  *
  */
 
@@ -17,7 +16,6 @@ class LabjackChannel : public QWidget {
 Q_OBJECT
 
 public:
-    LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan);
     LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan, int gain, double boundary);
     virtual ~LabjackChannel() override;
 
@@ -51,8 +49,11 @@ public slots:
     void set_resolution(uint index);
     void set_settling(uint index);
 
+    void refresh_value();
+
 signals:
     void value_changed(const QString &text);
+    void value_refreshed(const QString &text);
     void boundary_check_failed();
 
 private:
@@ -62,7 +63,7 @@ private:
     double boundary, range;
     int external_gain;
     bool is_input, is_differential;
-    double value;
+    double value = 0.0;
 
     QElapsedTimer *changeTimer;
 

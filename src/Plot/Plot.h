@@ -9,6 +9,7 @@
  *
  */
 
+class QElapsedTimer;
 class QCustomPlot;
 
 #include <QWidget>
@@ -17,19 +18,21 @@ class Plot : public QWidget {
 Q_OBJECT
 
 public:
-    Plot(QCustomPlot *plot);
+    Plot(QCustomPlot *plot, int datapoints, int seconds);
     virtual ~Plot();
 
-private slots:
+public slots:
     virtual void update_plot() = 0;
+    void update_time_axis();
 
 protected:
     QTimer *timer;
+    QElapsedTimer *real_time;
 
     QCustomPlot *plot;
     QVector<double> time_axis;
 
-    int datapoints;
+    int datapoints, seconds;
     long counter;
 
     virtual void create_layout() = 0;
@@ -39,6 +42,9 @@ protected:
     int maximum_function(int local_maximum, int absolute_maximum);
 
     void shift_into_vector(QVector<double> &vector, double value);
+
+    void recreate_time_axis();
+    void recreate_axis(QVector<double> &vec);
 };
 
 #endif // PLOT_H

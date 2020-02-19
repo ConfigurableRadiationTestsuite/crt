@@ -56,14 +56,16 @@ QToolBar * MainLayout::create_toolbar() {
     QAction* start_test = toolbar->addAction("Start Test");
     start_test->setIcon(QIcon("..//configurable-radiation-testsuite/icon/startButton.png"));
     start_test->setCheckable(true);
-    connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_start()));
+    connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_on()));
+    connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_start_log()));
     connect(start_test, SIGNAL(triggered(bool)), start_test, SLOT(setDisabled(bool)));
     //Connect the runManager
     connect(start_test, SIGNAL(triggered()), runManager, SLOT(start_run()));
 
     QAction* stop_test = toolbar->addAction("Stop Test");
     stop_test->setIcon(QIcon("..//configurable-radiation-testsuite/icon/stopButton.png"));
-    connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_stop()));
+    connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_off()));
+    connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_stop_log()));
     connect(stop_test, SIGNAL(triggered(bool)), start_test, SLOT(setDisabled(bool)));
     connect(stop_test, SIGNAL(triggered(bool)), start_test, SLOT(setChecked(bool)));
     //Connect the runManager

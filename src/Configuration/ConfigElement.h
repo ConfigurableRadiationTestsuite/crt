@@ -28,7 +28,7 @@ public:
     QString get_element_name() const {return element_name;}
 
     void set_value(const QString &name, const QString &value);
-    virtual void set_config();
+    virtual void set_config() = 0;
     void load_config(const QString &content);
 
 protected:

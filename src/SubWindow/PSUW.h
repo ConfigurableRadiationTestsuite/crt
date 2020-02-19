@@ -26,7 +26,7 @@ public:
 private:
     PSU * psu;
 
-    QHBoxLayout * subHorizontalLayout;
+    QHBoxLayout * mainHLayout;
 
     void create_layout() override;
 };

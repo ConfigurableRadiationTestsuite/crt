@@ -45,20 +45,19 @@ signals:
     void clean_layout();
 
 protected:
-    QString sectionName;
+    QString sectionName = "";
 
     ConfigManager *configManager;
     EventManager *eventManager;
     RunManager *runManager;
 
-    QVBoxLayout *mainVerticalLayout;
+    QVBoxLayout *mainTabLayout;
 
     QList<SubWindow *> subWindow_list;
 
     SpecAddDialog *addDialog = nullptr;
 
     void clear_subwindow_list();
-    void clear_layout(QLayout *layout);
 
     virtual void create_add_subwindow_dialog() = 0;
 };

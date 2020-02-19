@@ -18,6 +18,8 @@ void FileManager::set_root_directory(const QString &directory) {
 }
 
 void FileManager::register_component(const void * subComponent, const QString name) {
+    qDebug("Register Log Component: " + name.toLatin1());
+
     QString filename = root_directory + "/" + name + "_" + QString::number(QDateTime::currentSecsSinceEpoch());
     QFile * new_file = new QFile(filename);
     assert(new_file->open(QIODevice::WriteOnly | QIODevice::Append));
@@ -25,9 +27,14 @@ void FileManager::register_component(const void * subComponent, const QString na
 }
 
 void FileManager::deregister_component(const void * subComponent) {
+    qDebug("DeRegister Log Component");
+
     for(int i = 0; i < file_list.size(); i++) {
         if(file_list[i]->subComponent == subComponent) {
+            qDebug("Remove: " + (file_list[i]->name).toLatin1());
+
             file_list[i]->file->close();
+            delete file_list[i]->file;
             delete file_list[i];
             file_list.remove(i);
 

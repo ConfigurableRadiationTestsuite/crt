@@ -8,9 +8,12 @@
 #include <QTimer>
 #include <QElapsedTimer>
 
-Labjack::Labjack(RunManager * runManager, const QString &config) : runManager(runManager) {
+Labjack::Labjack(RunManager * runManager, const QString &config)
+    : runManager(runManager) {
+    qDebug("Create Labjack from Config");
+
     load_config(config);
-    assert(parse_config({"name"}));
+    assert(parse_config({"name" , "channel"}));
 
     element_name = ConfigElement::get_value("name");
     uint channel = ConfigElement::get_value("channel").toUInt();
@@ -33,11 +36,34 @@ Labjack::Labjack(RunManager * runManager, const QString &config) : runManager(ru
     update();
 }
 
-Labjack::Labjack(RunManager * runManager, const QString &name, const QString &type, const QString &channel_name, const QString &pchannel, const QString &nchannel) {
-    //TODO Implement this
+Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
+    : runManager(runManager) {
+    qDebug("Create Labjack from Scratch");
+
+    this->element_name = m_element_name;
+
+    QVector<QString> m_name;
+    QVector<int> m_pchannel;
+    QVector<int> m_nchannel;
+
+    get_channel_names(channel_name, m_name);
+    get_channel_addresses(pchannel, m_pchannel);
+    get_channel_addresses(nchannel, m_nchannel);
+
+    assert(m_pchannel.size() == m_nchannel.size());
+    assert(m_name.size() == m_pchannel.size());
+
+    open_labjack();
+
+    for(int i = 0; i < m_name.size(); i++)
+        channel_list.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
+
+    init();
+    update();
 }
 
 Labjack::~Labjack() {
+    qDebug("Destroy Labjack");
     LJM_Close(handle);
 }
 
@@ -79,27 +105,24 @@ void Labjack::init() {
 }
 
 void Labjack::start_logging() {
+    qDebug("Start Log: " + element_name.toLatin1());
+
     runManager->register_component(this, element_name);
     runManager->set_file_header(this, generate_header());
     is_logging = true;
 }
 
 void Labjack::stop_logging() {
+    qDebug("Stop Log: " + element_name.toLatin1());
+
     runManager->deregister_component(this);
     is_logging = false;
-}
-
-void Labjack::start() {
-    start_logging();
-}
-
-void Labjack::stop() {
-    stop_logging();
 }
 
 void Labjack::update() {
     sampleTimer->restart();
 
+    /* Gather data */
     read(address_list, type_list, value_list);
 
     LabjackChannel* channel;
@@ -109,6 +132,7 @@ void Labjack::update() {
         channel->set_range();
     }
 
+    /* Check and set the sample rate */
     maxSamplerate = 1000 / (sampleTimer->elapsed() + 1);
 
     if(maxSamplerate < samplerate) {
@@ -121,6 +145,7 @@ void Labjack::update() {
         emit samplerate_changed(QString::number(samplerate));
     }
 
+    //Log data
     if(is_logging)
         runManager->append_values_to_file(this, value_list);
 }
@@ -131,11 +156,12 @@ void Labjack::set_maximum_samplerate(int is_maximum) {
 
 void Labjack::set_main_settling(const QString &text) {
     int index = text.toInt();
+    assert(0 < index && index <= 50000);
     write(get_main_settling_address(), LJM_FLOAT32, index);
 }
 
 void Labjack::set_main_resolution(int index) {
-    assert(0 <= index && index <= 10);
+    assert(0 < index && index <= 10);
     write(get_main_resolution_address(), LJM_UINT16, index);
 }
 
@@ -172,6 +198,11 @@ int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector
     for(int i = 0; i < address.size(); i++)
         value[i] = aValues[i];
 
+    delete[] aAddresses;
+    delete[] aTypes;
+    delete[] aValues;
+
+
     return err;
 }
 
@@ -194,4 +225,23 @@ QVector<QString> Labjack::generate_header() {
         header.push_back(channel->get_name());
 
     return header;
+}
+
+void Labjack::get_channel_addresses(const QString &input, QVector<int> &output) {
+    int position = 0;
+
+    do {
+        QString number = input.mid(position,  input.indexOf(',', position));
+        output.push_back(number.toInt());
+    }while((position = input.indexOf(',', position) + 1) > 0);
+}
+
+void Labjack::get_channel_names(const QString &input, QVector<QString> &output) {
+    int position = 0;
+
+     do {
+        QString name = input.mid(position,  input.indexOf(',', position));
+        name.remove(' ');
+        output.push_back(name);
+    } while((position = input.indexOf(',', position) + 1) > 0);
 }

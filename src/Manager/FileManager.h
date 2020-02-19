@@ -34,7 +34,7 @@ public:
 
     void set_root_directory(const QString &directory);
 
-private:
+protected:
     QString root_directory;
 
     QVector<ComponentFile*> file_list;

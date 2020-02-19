@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QSlider>
 #include <QHBoxLayout>
+#include <QGroupBox>
 #include <QLineEdit>
 #include <QLabel>
 #include <QIntValidator>
@@ -17,34 +18,39 @@
 LBJW::LBJW(Labjack *lbj, EventManager *m_eventManager) : SubWindow(m_eventManager), lbj(lbj) {
     cfg_element = lbj;
 
-    connect(this, SIGNAL(signal_start()), lbj, SLOT(start()));
-    connect(this, SIGNAL(signal_stop()), lbj, SLOT(stop()));
+    connect(this, SIGNAL(signal_start_log()), lbj, SLOT(start_logging()));
+    connect(this, SIGNAL(signal_stop_log()), lbj, SLOT(stop_logging()));
 
-    eventManager->add_signal(lbj->get_element_name() + " Start", SignalType::start, this, &SubWindow::signal_start);
-    eventManager->add_signal(lbj->get_element_name() + " Stop", SignalType::stop, this, &SubWindow::signal_stop);
+    eventManager->add_signal(lbj->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+    eventManager->add_signal(lbj->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
 
     create_layout();
 }
 
 LBJW::~LBJW() {
+    //Degregister signal
+    eventManager->delete_signal(&SubWindow::signal_start_log);
+    eventManager->delete_signal(&SubWindow::signal_stop_log);
+
     delete lbj;
-    delete subVerticalLayout;
+    delete mainVLayout;
+    delete lbjplot;
 }
 
 void LBJW::create_layout() {
-    subVerticalLayout = new QVBoxLayout;
+    mainVLayout = new QVBoxLayout;
 
     QHBoxLayout * topLineLayout = new QHBoxLayout;
-
-    //Add Trigger button
+    QGroupBox * settingsBox = new QGroupBox("Settings");
 
     //Precision
     QSlider *precisionSlide = new QSlider(Qt::Horizontal);
     precisionSlide->setRange(1, 10);
     precisionSlide->setTickPosition(QSlider::TicksBelow);
+    precisionSlide->setTickInterval(1);
     precisionSlide->setValue(1);
     connect(precisionSlide, SIGNAL(valueChanged(int)), lbj, SLOT(set_main_resolution(int)));
-    topLineLayout->addWidget(new QLabel("Auflösung"));
+    topLineLayout->addWidget(new QLabel("Resolution"));
     topLineLayout->addWidget(precisionSlide);
 
     //Add settling
@@ -53,7 +59,7 @@ void LBJW::create_layout() {
     settlingLine->setText(QString::number(10000));
     settlingLine->setValidator(settlingValid);
     connect(settlingLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_main_settling(const QString &)));
-    topLineLayout->addWidget(new QLabel("Settling"));
+    topLineLayout->addWidget(new QLabel("Settling [us]:"));
     topLineLayout->addWidget(settlingLine);
 
     //Add datarate
@@ -63,7 +69,7 @@ void LBJW::create_layout() {
     datarateLine->setValidator(datarateValid);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_samplerate(const QString &)));
     connect(lbj, SIGNAL(samplerate_changed(const QString &)), datarateLine, SLOT(setText(const QString &)));
-    topLineLayout->addWidget(new QLabel("Datarate"));
+    topLineLayout->addWidget(new QLabel("Datarate [S/s]:"));
     topLineLayout->addWidget(datarateLine);
 
     //Maximum Button
@@ -72,9 +78,20 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Maximum"));
     topLineLayout->addWidget(datarateBox);
 
-    //Channel header
+    //Add Trigger button
+    QPushButton *triggerButton = new QPushButton;
+    triggerButton->setText("Add Trigger");
+    connect(triggerButton, SIGNAL(clicked()), this, SLOT(show_trigger_dialog()));
+    topLineLayout->addWidget(triggerButton);
+
+    settingsBox->setLayout(topLineLayout);
+
+    //Channel Layout
     QGridLayout *channelLayout = new QGridLayout;
-    channelLayout->addWidget(new QLabel("Channel"), 0, 0);
+    QGroupBox * channelBox = new QGroupBox("Channel");
+
+    //Channel header
+    channelLayout->addWidget(new QLabel("Name"), 0, 0);
     channelLayout->addWidget(new QLabel("Boundary"), 0, 1);
     channelLayout->addWidget(new QLabel("Value"), 0, 2);
     channelLayout->addWidget(new QLabel("Gain"), 0, 3);
@@ -82,11 +99,14 @@ void LBJW::create_layout() {
 
     //Plot for the channels
     QVBoxLayout *graphLayout = new QVBoxLayout;
+    QGroupBox *graphBox = new QGroupBox("Plot");
     QCustomPlot *plot = new QCustomPlot(this);
     plot->setGeometry(QRect());
     plot->setMinimumHeight(256);
     lbjplot = new LBJPlot(plot);
     graphLayout->addWidget(plot);
+    graphBox->setLayout(graphLayout);
+    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
 
     LabjackChannel *channel; int cnt = 1;
     foreach (channel, lbj->get_channel_list()) {
@@ -99,7 +119,10 @@ void LBJW::create_layout() {
 
         //Value
         QLineEdit *valueLine = new QLineEdit(QString::number(channel->get_value()));
-        connect(channel, SIGNAL(value_changed(const QString &)), valueLine, SLOT(setText(const QString &)));
+        QTimer *timer = new QTimer;
+        timer->start(500);
+        connect(timer, SIGNAL(timeout()), channel, SLOT(refresh_value()));
+        connect(channel, SIGNAL(value_refreshed(const QString &)), valueLine, SLOT(setText(const QString &)));
 
         //Gain
         QLineEdit *gainLine = new QLineEdit(QString::number(channel->get_gain()));
@@ -117,11 +140,15 @@ void LBJW::create_layout() {
         channelLayout->addWidget(gainLine, cnt, 3);
         channelLayout->addWidget(graphCheckBox, cnt, 4);
         cnt++;
+
+        connect(channel, SIGNAL(boundary_check_failed()), this, SLOT(trigger_signal_list()));
     }
 
-    subVerticalLayout->addLayout(topLineLayout);
-    subVerticalLayout->addLayout(channelLayout);
-    subVerticalLayout->addLayout(graphLayout);
+    channelBox->setLayout(channelLayout);
 
-    setLayout(subVerticalLayout);
+    mainVLayout->addWidget(settingsBox);
+    mainVLayout->addWidget(channelBox);
+    mainVLayout->addWidget(graphBox);
+
+    setLayout(mainVLayout);
 }

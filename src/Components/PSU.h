@@ -23,37 +23,43 @@ Q_OBJECT
 
 public:
     PSU(RunManager * runManager, const QString &config);
-    PSU(RunManager * runManager, const QString &element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max);
+    PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max);
     virtual ~PSU() override;
 
     enum vendor get_vendor() {return vd;}
     QVector<PSUChannel *> get_channel_list() const {return channel_list;}
-    bool get_master() const {return master_set;}
-    bool has_master() const {return master;}
+    bool get_master_enable() const {return master_enable;}
+    bool has_master_switch() const {return master_switch;}
 
     void set_config() override;
 
 public slots:
-    void set_master(int master_set);
+    void set_master_enable(int master_enable);
+    void set_master_trigger(int master_trigger);
 
     void update();
     void update_settings();
-    void start();
-    void stop();
+
+    void switch_on();
+    void switch_off();
+    void start_logging();
+    void stop_logging();
 
 signals:
     void master_changed(bool master_set);
 
 protected:
+    RunManager *runManager;
+
     QString address;
     enum vendor vd;
-    bool master;
-    bool master_set;
+    bool master_switch;
+    bool master_enable = false;
+    bool master_trigger = false;
     EthernetClient *eth;
 
     QTimer *log_timer;
-    RunManager *runManager;
-    bool is_logging;
+    bool is_logging = false;
 
     QVector<PSUChannel *> channel_list;
 
@@ -66,8 +72,6 @@ private:
 
     void set_master_rohdeschwarz();
 
-    void start_logging();
-    void stop_logging();
 
     void init();
 

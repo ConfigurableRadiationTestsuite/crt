@@ -9,64 +9,70 @@
  *
  */
 
+#define ADC_BITS 14
+
+class PlotElement;
 class LabjackChannel;
 
 class QCustomPlot;
 
+#include "Plot.h"
+
 #include <QWidget>
+
+class LBJPlot : public Plot {
+Q_OBJECT
+
+public:
+    LBJPlot(QCustomPlot *m_plot, int m_datapoints=30, int m_seconds=30);
+    virtual ~LBJPlot() override;
+
+    void add_channel(LabjackChannel * channel, QColor color);
+    QVector<PlotElement *> get_plotelement_list() {return plotElement_list;}
+
+public slots:
+    void update_plot() override;
+    void set_datarate(const QString &datarate);
+    void set_plot_active(bool active);
+
+private:
+    QVector<double> standard_axis;
+    QVector<PlotElement *> plotElement_list;
+
+    bool plot_active = false;
+
+    void create_layout() override;
+
+    int get_total_maximum();
+    int get_total_minimum();
+};
 
 class PlotElement : public QWidget {
 Q_OBJECT
 
 public:
-    PlotElement(LabjackChannel * channel, QVector<double> axis, bool plot) :
-        channel(channel), axis(axis), plot(plot) {}
+    PlotElement(LabjackChannel * channel, QVector<double> axis, bool plot_enabled) :
+        channel(channel), axis(axis), plot_enabled(plot_enabled) {}
     virtual ~PlotElement() {}
 
     QVector<double> & get_axis() {return axis;}
     LabjackChannel * get_channel() const {return channel;}
-    bool is_plotted() const {return plot;}
+    bool is_plotted() const {return plot_enabled;}
 
 public slots:
-    void set_plot_active(int is_plotted) {plot = is_plotted > 0 ? true : false;}
+    void set_plot_active(int is_plotted) {
+        plot_enabled = is_plotted > 0 ? true : false;
+        if(plot_enabled)
+            emit plot_active(true);
+    }
+
+signals:
+    void plot_active(bool active);
 
 private:
     LabjackChannel * channel;
     QVector<double> axis;
-    bool plot;
-};
-
-class LBJPlot : public QWidget {
-Q_OBJECT
-
-public:
-    LBJPlot(QCustomPlot *plot);
-    virtual ~LBJPlot();
-
-    void add_channel(LabjackChannel * channel, QColor color);
-    QVector<PlotElement *> get_plotelement_list() {return plotElement_list;}
-
-private slots:
-    void update();
-
-private:
-    QTimer *timer;
-
-    QCustomPlot *plot;
-    QVector<double> time_axis;
-    QVector<double> standard_axis;
-    QVector<PlotElement *> plotElement_list;
-
-    int datapoints;
-    long counter;
-
-    void create_layout();
-
-    int get_minimum();
-    int get_maximum();
-    int maximum_function(int local_maximum, int absolute_maximum);
-
-    void shift_into_vector(QVector<double> &vector, double value);
+    bool plot_enabled;
 };
 
 #endif // PSUPLOT_H

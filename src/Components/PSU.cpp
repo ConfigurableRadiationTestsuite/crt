@@ -5,16 +5,17 @@
 
 #include <QTimer>
 
-PSU::PSU(RunManager * runManager, const QString &config) {
-    this->runManager = runManager;
+PSU::PSU(RunManager * runManager, const QString &config)
+    : runManager(runManager) {
+    qDebug("Create PSU from Config");
+
     load_config(config);
     assert(parse_config({"name", "vendor", "master", "address", "channel", "max_voltage", "max_current"}));
 
     this->element_name = get_value("name");
     this->vd = check_vendor(get_value("vendor"));
-    this->master = get_value("master").toUInt();
+    this->master_switch = get_value("master").toUInt();
     this->address = get_value("address");
-    this->is_logging = false;
 
     init_ethernet(address);
 
@@ -34,17 +35,17 @@ PSU::PSU(RunManager * runManager, const QString &config) {
     init();
 }
 
-PSU::PSU(RunManager * runManager, const QString &element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max) {
-    this->runManager = runManager;
-    this->element_name = element_name;
-    this->address = address;
+PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
+    : runManager(runManager), address(address) {
+    qDebug("Create PSU from scratch");
+
+    this->element_name = m_element_name;
     this->vd = check_vendor(vendor);
-    this->is_logging = false;
 
     init_ethernet(address);
 
     if(vd == rohdeSchwarz)
-        master = true;
+        master_switch = true;
 
     for(uint i = 0; i < channel_max; i++)
         channel_list.push_back(new PSUChannel{i, eth, vd, 0, 0, voltage_max, current_max});
@@ -53,6 +54,7 @@ PSU::PSU(RunManager * runManager, const QString &element_name, const QString &ad
 }
 
 PSU::~PSU() {
+    qDebug("Destroy PSU");
     delete eth;
 }
 
@@ -61,7 +63,7 @@ void PSU::set_config() {
 
     set_value("name", element_name);
     set_value("vendor", check_vendor(vd));
-    set_value("master", QString::number(master));
+    set_value("master", QString::number(master_switch));
     set_value("address", address);
     set_value("channel", QString::number(channel_list.size()));
 
@@ -82,12 +84,16 @@ void PSU::init() {
 }
 
 void PSU::start_logging() {
+    qDebug("Start Log: " + element_name.toLatin1());
+
     runManager->register_component(this, element_name);
     runManager->set_file_header(this, generate_header());
     is_logging = true;
 }
 
 void PSU::stop_logging() {
+    qDebug("Stop Log: " + element_name.toLatin1());
+
     runManager->deregister_component(this);
     is_logging = false;
 }
@@ -144,16 +150,22 @@ void PSU::init_ethernet(const QString &address) {
     eth = new EthernetClient(port, ip_address.toStdString());
 }
 
-void PSU::set_master(int master_set) {
-    this->master_set = master_set == 0 ? false : true;
+void PSU::set_master_enable(int master_enable) {
+    this->master_enable = master_enable == 0 ? false : true;
 
-    emit master_changed(this->master_set);
+    emit master_changed(this->master_enable);
 
     if(vd == rohdeSchwarz)
         set_master_rohdeschwarz();
 }
 
+void PSU::set_master_trigger(int master_trigger) {
+    this->master_trigger = master_trigger > 0 ? true : false;
+}
+
 void PSU::update_settings() {
+    qDebug("Update Settings: PSU");
+
     PSUChannel * channel;
     foreach (channel, channel_list)
         channel->update();
@@ -165,29 +177,29 @@ void PSU::set_master_rohdeschwarz() {
         return ;
     }
 
-    eth->write("OUTP:MAST " + std::string(master_set ? "ON" : "OFF"));
+    eth->write("OUTP:MAST " + std::string(master_enable ? "ON" : "OFF"));
 }
 
-void PSU::start() {
+void PSU::switch_on() {
+    qDebug("Switch On: PSU");
+
     PSUChannel * channel;
     foreach (channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(true);
 
-    if(has_master())
-        set_master(1);
-
-    start_logging();
+    if(has_master_switch() && master_trigger)
+        set_master_enable(1);
 }
 
-void PSU::stop() {
-    if(has_master())
-        set_master(0);
+void PSU::switch_off() {
+    qDebug("Switch Off: PSU");
+
+    if(has_master_switch() && master_trigger)
+        set_master_enable(0);
 
     PSUChannel * channel;
     foreach (channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(false);
-
-    stop_logging();
 }
