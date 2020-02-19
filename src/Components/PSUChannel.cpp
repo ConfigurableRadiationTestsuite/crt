@@ -106,8 +106,8 @@ void PSUChannel::meas_current() {
 
 void PSUChannel::update_rohdeschwarz() {
     if(eth->write("INST OUT" + std::to_string(number + 1))) {
-        eth->write("VOLT " + std::to_string(voltage_set));
-        eth->write("CURR " + std::to_string(current_set/1000));
+        eth->write(("VOLT " + QString::number(voltage_set)).toStdString());
+        eth->write(("CURR " + QString::number(current_set/1000.0)).toStdString());
         eth->write("OUTP:CHAN " + std::string(enable ? "ON" : "OFF"));
     }
 }
