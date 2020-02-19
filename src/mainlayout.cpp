@@ -54,7 +54,7 @@ QToolBar * MainLayout::create_toolbar() {
 
     //Start/Stop button
     QAction* start_test = toolbar->addAction("Start Test");
-    start_test->setIcon(QIcon("..//configurable-radiation-testsuite/icon/startButton.png"));
+    start_test->setIcon(QIcon("../CRT/icon/startButton.png"));
     start_test->setCheckable(true);
     connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_on()));
     connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_start_log()));
@@ -63,7 +63,7 @@ QToolBar * MainLayout::create_toolbar() {
     connect(start_test, SIGNAL(triggered()), runManager, SLOT(start_run()));
 
     QAction* stop_test = toolbar->addAction("Stop Test");
-    stop_test->setIcon(QIcon("..//configurable-radiation-testsuite/icon/stopButton.png"));
+    stop_test->setIcon(QIcon("../CRT/icon/stopButton.png"));
     connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_off()));
     connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_stop_log()));
     connect(stop_test, SIGNAL(triggered(bool)), start_test, SLOT(setDisabled(bool)));
@@ -87,7 +87,7 @@ QTabWidget * MainLayout::create_window_tabs() {
     windowTabs->addTab(new LBJTab(configManager, eventManager, runManager), "Labjack");
 
     //RF
-    windowTabs->addTab(new RFTab(configManager, eventManager, runManager), "RF");
+    //windowTabs->addTab(new RFTab(configManager, eventManager, runManager), "RF");
 
     return windowTabs;
 }

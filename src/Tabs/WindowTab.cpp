@@ -43,7 +43,7 @@ void WindowTab::create_layout() {
 
         /* Create delete button */
         QPushButton * deleteButton = new QPushButton;
-        deleteButton->setIcon(QIcon("../configurable-radiation-testsuite/icon/deleteButton.png"));
+        deleteButton->setIcon(QIcon("../CRT/configurable-radiation-testsuite/icon/deleteButton.png"));
         deleteButton->setFixedSize(QSize(32,32));
         //Destroy the window
         connect(deleteButton, SIGNAL(clicked()), window, SLOT(deleteLater()));
@@ -60,7 +60,7 @@ void WindowTab::create_layout() {
 
     /* Create add button */
     QPushButton * addButton = new QPushButton;
-    addButton->setIcon(QIcon("../configurable-radiation-testsuite/icon/addButton.png"));
+    addButton->setIcon(QIcon("../CRT/icon/addButton.png"));
     addButton->setFixedSize(QSize(32,32));
     connect(addButton, SIGNAL(clicked()), this, SLOT(add_subwindow_from_dialog()));
     connect(this, SIGNAL(clean_layout()), addButton, SLOT(deleteLater()));
