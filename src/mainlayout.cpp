@@ -84,7 +84,7 @@ QTabWidget * MainLayout::create_window_tabs() {
 }
 
 void MainLayout::start_test() {
-    if(!runManager->is_running())
+    if(runManager->is_running())
         return;
 
     eventManager->trigger_on();
