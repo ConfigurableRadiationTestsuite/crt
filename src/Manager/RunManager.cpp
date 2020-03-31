@@ -85,6 +85,7 @@ void RunManager::update_run() {
 
 void RunManager::start_run() {
     runTime->start();
+    isRunning = true;
 
     append_value_to_file(this, double(RunMode::Start));
     emit enable_run_button(false);
@@ -93,6 +94,7 @@ void RunManager::start_run() {
 void RunManager::stop_run() {
     offsetTime += runTime->isValid() ? runTime->elapsed() / 1000 : 0;
     runTime->invalidate();
+    isRunning = false;
 
     append_value_to_file(this, double(RunMode::Stop));
     emit enable_run_button(true);

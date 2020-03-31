@@ -16,6 +16,8 @@ public:
     RunManager();
     virtual ~RunManager();
 
+    bool is_running() const {return isRunning;}
+
 public slots:
     void start_run();
     void stop_run();
@@ -32,6 +34,8 @@ signals:
 
 private:
     QString runName;
+
+    bool isRunning;
 
     QElapsedTimer *runTime;
     QTimer * updateTime;
