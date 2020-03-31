@@ -14,9 +14,10 @@ class ConfigManager;
 class EventManager;
 class RunManager;
 
-class QVBoxLayout;
+class QAction;
 class QToolBar;
 class QTabWidget;
+class QVBoxLayout;
 
 #include <QWidget>
 
@@ -27,6 +28,10 @@ public:
     MainLayout();
     virtual ~MainLayout();
 
+private slots:
+    void start_test();
+    void stop_test();
+
 private:
     ConfigManager *configManager;
     EventManager *eventManager;
@@ -35,6 +40,9 @@ private:
     QVBoxLayout *mainVerticalLayout;
     QTabWidget *windowTabs;
     QToolBar *toolbar;
+
+    QAction* startTestButton;
+    QAction* stopTestButton;
 
     void create_layout();
 

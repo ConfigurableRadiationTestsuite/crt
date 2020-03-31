@@ -53,23 +53,14 @@ QToolBar * MainLayout::create_toolbar() {
     toolbar->addSeparator();
 
     //Start/Stop button
-    QAction* start_test = toolbar->addAction("Start Test");
-    start_test->setIcon(QIcon("../CRT/icon/startButton.png"));
-    start_test->setCheckable(true);
-    connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_on()));
-    connect(start_test, SIGNAL(triggered()), eventManager, SLOT(trigger_start_log()));
-    connect(start_test, SIGNAL(triggered(bool)), start_test, SLOT(setDisabled(bool)));
-    //Connect the runManager
-    connect(start_test, SIGNAL(triggered()), runManager, SLOT(start_run()));
+    startTestButton = toolbar->addAction("Start Test");
+    startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
+    startTestButton->setCheckable(true);
+    connect(startTestButton, SIGNAL(triggered()), this, SLOT(start_test()));
 
-    QAction* stop_test = toolbar->addAction("Stop Test");
-    stop_test->setIcon(QIcon("../CRT/icon/stopButton.png"));
-    connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_off()));
-    connect(stop_test, SIGNAL(triggered()), eventManager, SLOT(trigger_stop_log()));
-    connect(stop_test, SIGNAL(triggered(bool)), start_test, SLOT(setDisabled(bool)));
-    connect(stop_test, SIGNAL(triggered(bool)), start_test, SLOT(setChecked(bool)));
-    //Connect the runManager
-    connect(stop_test, SIGNAL(triggered()), runManager, SLOT(stop_run()));
+    stopTestButton = toolbar->addAction("Stop Test");
+    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+    connect(stopTestButton, SIGNAL(triggered()), this, SLOT(stop_test()));
 
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setIconSize(QSize(16, 16));
@@ -90,4 +81,27 @@ QTabWidget * MainLayout::create_window_tabs() {
     //windowTabs->addTab(new RFTab(configManager, eventManager, runManager), "RF");
 
     return windowTabs;
+}
+
+void MainLayout::start_test() {
+    eventManager->trigger_on();
+    eventManager->trigger_start_log();
+
+    startTestButton->setIcon(QIcon("../CRT/icon/startButton_active.png"));
+    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+
+    runManager->start_run();
+}
+
+void MainLayout::stop_test() {
+    runManager->stop_run();
+
+    eventManager->trigger_off();
+    eventManager->trigger_stop_log();
+
+    startTestButton->setDisabled(false);
+    startTestButton->setChecked(false);
+
+    startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
+    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton_active.png"));
 }
