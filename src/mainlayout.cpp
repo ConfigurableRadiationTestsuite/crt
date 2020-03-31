@@ -90,6 +90,8 @@ void MainLayout::start_test() {
     startTestButton->setIcon(QIcon("../CRT/icon/startButton_active.png"));
     stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
 
+    startTestButton->setChecked(true);
+
     runManager->start_run();
 }
 
@@ -99,7 +101,6 @@ void MainLayout::stop_test() {
     eventManager->trigger_off();
     eventManager->trigger_stop_log();
 
-    startTestButton->setDisabled(false);
     startTestButton->setChecked(false);
 
     startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
