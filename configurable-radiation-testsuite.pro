@@ -22,6 +22,7 @@ SOURCES += \
     src/Components/DIOM.cpp \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
+    src/Components/Indicator.cpp \
     src/Components/Labjack.cpp \
     src/Components/LabjackChannel.cpp \
     src/Components/PSU.cpp \
@@ -57,6 +58,7 @@ HEADERS += \
     src/Components/DIOM.h \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
+    src/Components/Indicator.h \
     src/Components/Labjack.h \
     src/Components/LabjackChannel.h \
     src/Components/PSU.h \

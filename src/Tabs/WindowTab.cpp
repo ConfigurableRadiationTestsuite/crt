@@ -43,7 +43,7 @@ void WindowTab::create_layout() {
 
         /* Create delete button */
         QPushButton * deleteButton = new QPushButton;
-        deleteButton->setIcon(QIcon("../CRT/configurable-radiation-testsuite/icon/deleteButton.png"));
+        deleteButton->setIcon(QIcon("../CRT/icon/deleteButton.png"));
         deleteButton->setFixedSize(QSize(32,32));
         //Destroy the window
         connect(deleteButton, SIGNAL(clicked()), window, SLOT(deleteLater()));

@@ -110,6 +110,9 @@ void PSU::update() {
 
     if(is_logging)
         runManager->append_values_to_file(this, values);
+
+    if(!eth->connectionOk())
+        emit disconnected();
 }
 
 QVector<QString> PSU::generate_header() {

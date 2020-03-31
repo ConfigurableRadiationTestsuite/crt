@@ -1,6 +1,7 @@
 #include "PSUW.h"
 
 #include "src/Components/PSU.h"
+#include "src/Components/Indicator.h"
 #include "src/Plot/PSUPlot.h"
 #include "src/Plot/qcustomplot.h"
 
@@ -64,10 +65,11 @@ void PSUW::create_layout() {
         connect(channel, SIGNAL(current_changed(const QString &)), currentLineEdit, SLOT(setText(const QString &)));
 
         /* Enable */
-        QCheckBox * enableBox = new QCheckBox("Enable", this);
+        Indicator * enableBox = new Indicator(QIcon("../CRT/icon/PSU_on.png"), QIcon("../CRT/icon/PSU_off.png"), QIcon("../CRT/icon/PSU_disconnected.png"));
         psuGridLayout->addWidget(enableBox, 0, 2);
         connect(enableBox, SIGNAL(stateChanged(int)), channel, SLOT(set_enable(int)));
         connect(channel, SIGNAL(enable_changed(bool)), enableBox, SLOT(setChecked(bool)));
+        connect(psu, SIGNAL(disconnected()), enableBox, SLOT(set_event_icon()));
 
         /* Trigger */
         QCheckBox * triggerBox = new QCheckBox("Trigger", this);
