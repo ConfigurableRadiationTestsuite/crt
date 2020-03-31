@@ -7,17 +7,18 @@ class Indicator : public QCheckBox {
 Q_OBJECT
 
 public:
-    Indicator(QIcon on, QIcon off, QIcon event);
+    Indicator(QIcon onIcon, QIcon offIcon, QIcon eventIcon);
     virtual ~Indicator();
 
 public slots:
     void set_individual_icon(int);
-    void set_event_icon();
+    void set_event_icon(bool);
 
 private:
-    QIcon *on;
-    QIcon *off;
-    QIcon *event;
+    QIcon *lastIcon;
+    QIcon *onIcon;
+    QIcon *offIcon;
+    QIcon *eventIcon;
 
 };
 

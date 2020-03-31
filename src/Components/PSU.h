@@ -47,7 +47,7 @@ public slots:
 
 signals:
     void master_changed(bool master_set);
-    void disconnected();
+    void disconnected(bool);
 
 protected:
     RunManager *runManager;

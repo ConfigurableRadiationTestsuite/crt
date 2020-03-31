@@ -45,6 +45,7 @@ void PSUW::create_layout() {
     foreach (channel, psu->get_channel_list()) {
         QGroupBox * channelGroupBox = new QGroupBox("Channel: " + QString::number(channel->get_number()));
         QGridLayout *psuGridLayout = new QGridLayout;
+        connect(psu, SIGNAL(disconnected(bool)), channelGroupBox, SLOT(setDisabled(bool)));
 
         /* Voltage */
         QLabel *voltLabel = new QLabel("[V]:");
@@ -69,7 +70,7 @@ void PSUW::create_layout() {
         psuGridLayout->addWidget(enableBox, 0, 2);
         connect(enableBox, SIGNAL(stateChanged(int)), channel, SLOT(set_enable(int)));
         connect(channel, SIGNAL(enable_changed(bool)), enableBox, SLOT(setChecked(bool)));
-        connect(psu, SIGNAL(disconnected()), enableBox, SLOT(set_event_icon()));
+        connect(psu, SIGNAL(disconnected(bool)), enableBox, SLOT(set_event_icon(bool)));
 
         /* Trigger */
         QCheckBox * triggerBox = new QCheckBox("Trigger", this);

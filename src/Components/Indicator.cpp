@@ -1,34 +1,43 @@
 #include "Indicator.h"
 
-Indicator::Indicator(QIcon on, QIcon off, QIcon event){
-    this->on = new QIcon(on);
-    this->off = new QIcon(off);
-    this->event = new QIcon(event);
+Indicator::Indicator(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
+    this->onIcon = new QIcon(onIcon);
+    this->offIcon = new QIcon(offIcon);
+    this->eventIcon = new QIcon(eventIcon);
 
     this->setIconSize(QSize(40, 20));
 
-    setIcon(off);
+    setIcon(*this->offIcon);
+    lastIcon = this->offIcon;
 
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(set_individual_icon(int)));
 }
 
 Indicator::~Indicator() {
-    delete on;
-    delete off;
-    delete event;
+    delete onIcon;
+    delete offIcon;
+    delete eventIcon;
 }
 
 void Indicator::set_individual_icon(int ic) {
     if(ic < 0)
-        setIcon(*event);
+        setIcon(*eventIcon);
 
-    if(ic == 0)
-        setIcon(*off);
+    if(ic == 0) {
+        setIcon(*offIcon);
+        lastIcon = offIcon;
+    }
 
-    if(ic > 0)
-        setIcon(*on);
+    if(ic > 0) {
+        setIcon(*onIcon);
+        lastIcon = onIcon;
+    }
 }
 
-void Indicator::set_event_icon() {
-    setIcon(*event);
+void Indicator::set_event_icon(bool status) {
+    if(status == true)
+        setIcon(*eventIcon);
+
+    if(status == false)
+        setIcon(*lastIcon);
 }
