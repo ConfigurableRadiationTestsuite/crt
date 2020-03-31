@@ -37,3 +37,5 @@ private:
 	
 	void secret_method();
 };
+
+#endif
