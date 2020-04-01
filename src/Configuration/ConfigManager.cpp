@@ -1,8 +1,8 @@
 #include "ConfigManager.h"
 
 #include <QFile>
-#include <QTextStream>
 #include <QFileDialog>
+#include <QTextStream>
 
 ConfigManager::ConfigManager() {}
 
@@ -51,7 +51,7 @@ bool ConfigManager::get_config_section(QString name, QString &section) {
     return true;
 }
 
-//Check how many sections of the same kind have already been found
+/* Check how many sections of the same kind have already been found */
 bool ConfigManager::check_section_position(const QString &name, int pos) {
     for(QVector<struct section_position>::iterator i = section_position_list.begin(); i != section_position_list.end(); i++) {
         if((*i).sectionName == name) {
@@ -70,7 +70,7 @@ bool ConfigManager::check_section_position(const QString &name, int pos) {
 }
 
 void ConfigManager::load_config() {
-    //Show dialog
+    /* Show dialog */
     QString tmp = QFileDialog::getOpenFileName(this, tr("Open Directory"), "./");
 
     if(QFileInfo::exists(tmp))
@@ -88,7 +88,12 @@ void ConfigManager::load_config() {
 
 void ConfigManager::save_config() {
     //Show dialog
-    configName = QFileDialog::getSaveFileName(this, tr("Open Directory"), "./");
+    QString tmp = QFileDialog::getOpenFileName(this, tr("Open Directory"), "./");
+
+    if(QFileInfo::exists(tmp))
+        configName = tmp;
+    else
+        return ;
 
     //Empty config content
     content.clear();
@@ -108,6 +113,7 @@ void ConfigManager::save_config() {
 
 bool ConfigManager::parse_config() {
     bool in_section = false;
+
     QFile file(configName);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
@@ -125,7 +131,7 @@ bool ConfigManager::parse_config() {
         if(!in_section && !line.contains("Section") && !line.contains("EndSection"))
             return false;
 
-        //Check if a Section is followed by Endsection
+        //Check if a 'Section' is followed by 'EndSection'
         if(!in_section && line.contains("EndSection"))
             return false;
         if(in_section && !line.contains("EndSection") && line.contains("Section"))
