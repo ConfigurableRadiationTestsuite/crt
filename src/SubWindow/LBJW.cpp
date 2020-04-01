@@ -18,6 +18,7 @@
 LBJW::LBJW(Labjack *lbj, EventManager *m_eventManager) : SubWindow(m_eventManager), lbj(lbj) {
     cfg_element = lbj;
 
+    /* Connect and register signals */
     connect(this, SIGNAL(signal_start_log()), lbj, SLOT(start_logging()));
     connect(this, SIGNAL(signal_stop_log()), lbj, SLOT(stop_logging()));
 
@@ -28,7 +29,7 @@ LBJW::LBJW(Labjack *lbj, EventManager *m_eventManager) : SubWindow(m_eventManage
 }
 
 LBJW::~LBJW() {
-    //Degregister signal
+    /* Degregister signals */
     eventManager->delete_signal(&SubWindow::signal_start_log);
     eventManager->delete_signal(&SubWindow::signal_stop_log);
 
@@ -43,7 +44,7 @@ void LBJW::create_layout() {
     QHBoxLayout * topLineLayout = new QHBoxLayout;
     QGroupBox * settingsBox = new QGroupBox("Settings");
 
-    //Precision
+    /* Precision slider from 1 to 10 */
     QSlider *precisionSlide = new QSlider(Qt::Horizontal);
     precisionSlide->setRange(1, 10);
     precisionSlide->setTickPosition(QSlider::TicksBelow);
@@ -53,7 +54,7 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Resolution"));
     topLineLayout->addWidget(precisionSlide);
 
-    //Add settling
+    /* Measurement settling time */
     QLineEdit *settlingLine = new QLineEdit;
     QIntValidator *settlingValid = new QIntValidator(1, 50000, this);
     settlingLine->setText(QString::number(10000));
@@ -62,7 +63,7 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Settling [us]:"));
     topLineLayout->addWidget(settlingLine);
 
-    //Add datarate
+    /* Measurement datarate */
     QLineEdit *datarateLine = new QLineEdit;
     QIntValidator *datarateValid = new QIntValidator(1, 1000, this);
     datarateLine->setText(QString::number(1));
@@ -72,13 +73,13 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Datarate [S/s]:"));
     topLineLayout->addWidget(datarateLine);
 
-    //Maximum Button
+    /* Maximum button */
     QCheckBox *datarateBox = new QCheckBox;
     connect(datarateBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_maximum_samplerate(int)));
     topLineLayout->addWidget(new QLabel("Maximum"));
     topLineLayout->addWidget(datarateBox);
 
-    //Add Trigger button
+    /* Trigger button */
     QPushButton *triggerButton = new QPushButton;
     triggerButton->setText("Add Trigger");
     connect(triggerButton, SIGNAL(clicked()), this, SLOT(show_trigger_dialog()));
@@ -86,18 +87,18 @@ void LBJW::create_layout() {
 
     settingsBox->setLayout(topLineLayout);
 
-    //Channel Layout
+    /* Channel Layout */
     QGridLayout *channelLayout = new QGridLayout;
     QGroupBox * channelBox = new QGroupBox("Channel");
 
-    //Channel header
+    /* Channel header */
     channelLayout->addWidget(new QLabel("Name"), 0, 0);
     channelLayout->addWidget(new QLabel("Boundary"), 0, 1);
     channelLayout->addWidget(new QLabel("Value"), 0, 2);
     channelLayout->addWidget(new QLabel("Gain"), 0, 3);
     channelLayout->addWidget(new QLabel("Graph"), 0, 4);
 
-    //Plot for the channels
+    /* Plot for the channels */
     QVBoxLayout *graphLayout = new QVBoxLayout;
     QGroupBox *graphBox = new QGroupBox("Plot");
     QCustomPlot *plot = new QCustomPlot(this);
@@ -117,7 +118,7 @@ void LBJW::create_layout() {
         QLineEdit *boundaryLine = new QLineEdit(QString::number(channel->get_boundary()));
         connect(boundaryLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_boundary(const QString &)));
 
-        //Value
+        /* Value */
         QLineEdit *valueLine = new QLineEdit(QString::number(channel->get_value()));
         QTimer *timer = new QTimer;
         timer->start(500);
@@ -128,7 +129,7 @@ void LBJW::create_layout() {
         QLineEdit *gainLine = new QLineEdit(QString::number(channel->get_gain()));
         connect(gainLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_external_gain(const QString &)));
 
-        //Graph
+        /* Graph */
         QCheckBox *graphCheckBox = new QCheckBox;
         graphCheckBox->setStyleSheet("color: " + color_list[cnt%color_list.size()].name + " ;");
         lbjplot->add_channel(channel, color_list[cnt%color_list.size()].color);

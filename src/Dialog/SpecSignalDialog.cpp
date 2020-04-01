@@ -1,18 +1,18 @@
-#include "SpecTriggerDialog.h"
+#include "SpecSignalDialog.h"
 
 #include <QCheckBox>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
 
-SpecTriggerDialog::SpecTriggerDialog() {
+SpecSignalDialog::SpecSignalDialog() {
     okButton = new QPushButton("Ok", this);
     cancleButton = new QPushButton("Cancel", this);
 }
 
-SpecTriggerDialog::~SpecTriggerDialog() {}
+SpecSignalDialog::~SpecSignalDialog() {}
 
-void SpecTriggerDialog::create_dialog() {
+void SpecSignalDialog::create_dialog() {
     QVBoxLayout * buttonLayout = new QVBoxLayout;
 
     for(QVector<struct RegisteredSignalBox>::iterator i = registeredSignal_list.begin(); i != registeredSignal_list.end(); i++)
@@ -31,7 +31,7 @@ void SpecTriggerDialog::create_dialog() {
     setLayout(vlayout);
 }
 
-void SpecTriggerDialog::add_entry(bool isChecked, struct RegisteredSignal *sig) {
+void SpecSignalDialog::add_entry(bool isChecked, struct RegisteredSignal *sig) {
     registeredSignal_list.push_back({new QCheckBox(sig->name, this), sig});
     registeredSignal_list[registeredSignal_list.size()-1].checkBox->setCheckState((isChecked ? Qt::CheckState::Checked : Qt::CheckState::Unchecked));
 }

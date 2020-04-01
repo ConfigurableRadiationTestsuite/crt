@@ -1,7 +1,7 @@
 #include "SubWindow.h"
 
 #include "src/Configuration/ConfigElement.h"
-#include "src/Dialog/SpecTriggerDialog.h"
+#include "src/Dialog/SpecSignalDialog.h"
 
 #include <QPushButton>
 #include <QCheckBox>
@@ -20,12 +20,12 @@ SubWindow::~SubWindow() {
 
 QString SubWindow::get_config() {
     cfg_element->set_config();
-    cfg_element->set_value("signal", get_trigger_list());
+    cfg_element->set_value("signal", get_signal_list());
 
     return cfg_element->get_config();
 }
 
-QString SubWindow::get_trigger_list() {
+QString SubWindow::get_signal_list() {
     QString list = "";
 
     struct RegisteredSignal *signal;
@@ -59,32 +59,32 @@ void SubWindow::post_init() {
 }
 
 void SubWindow::show_trigger_dialog() {
-    if(triggerDialog != nullptr)
-        delete triggerDialog;
+    if(signalDialog != nullptr)
+        delete signalDialog;
 
-    triggerDialog = new SpecTriggerDialog;
+    signalDialog = new SpecSignalDialog;
 
     struct RegisteredSignal * signal;
     foreach (signal, eventManager->get_signal_list()) {
         if(is_signal_in_list(signal))
-            triggerDialog->add_entry(true, signal);
+            signalDialog->add_entry(true, signal);
         else
-            triggerDialog->add_entry(false, signal);
+            signalDialog->add_entry(false, signal);
     }
 
-    connect(triggerDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_trigger()));
-    connect(triggerDialog->get_ok_button(), SIGNAL(clicked()), triggerDialog, SLOT(close()));
+    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_trigger()));
+    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), triggerDialog, SLOT(close()));
 
 
-    triggerDialog->create_dialog();
-    triggerDialog->show();
+    signalDialog->create_dialog();
+    signalDialog->show();
 }
 
 void SubWindow::add_trigger() {
     qDebug("Add trigger to: " + (cfg_element->get_element_name()).toLatin1());
 
     struct RegisteredSignalBox signal;
-    foreach (signal, triggerDialog->get_registeredSignal_list())
+    foreach (signal, signalDialog->get_registeredSignal_list())
         if(signal.checkBox->isChecked())
             signal_list.push_back(signal.sig);
 }

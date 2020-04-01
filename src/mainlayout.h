@@ -5,7 +5,7 @@
  * Author: Mattis Jaksch
  *
  * Mainlayout including a menue bar and different (individual) tabs.
- * The configuration and event manager is passed down to the tabs in
+ * The configuration, run and event manager is passed down to the tabs in
  * order to provide a load-/saveable config and the exchange of signals
  *
  */

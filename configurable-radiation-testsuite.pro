@@ -30,7 +30,7 @@ SOURCES += \
     src/Components/RFIO.cpp \
     src/Components/RFIOChannel.cpp \
     src/Dialog/SpecAddDialog.cpp \
-    src/Dialog/SpecTriggerDialog.cpp \
+    src/Dialog/SpecSignalDialog.cpp \
     src/Manager/EventManager.cpp \
     src/Manager/FileManager.cpp \
     src/Manager/RunManager.cpp \
@@ -66,7 +66,7 @@ HEADERS += \
     src/Components/RFIO.h \
     src/Components/RFIOChannel.h \
     src/Dialog/SpecAddDialog.h \
-    src/Dialog/SpecTriggerDialog.h \
+    src/Dialog/SpecSignalDialog.h \
     src/Manager/EventManager.h \
     src/Manager/FileManager.h \
     src/Manager/RunManager.h \

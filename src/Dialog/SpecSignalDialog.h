@@ -1,5 +1,5 @@
-#ifndef SPECTRIGGERDIALOG_H
-#define SPECTRIGGERDIALOG_H
+#ifndef SPECSIGNALDIALOG_H
+#define SPECSIGNALDIALOG_H
 
 /*
  * Author: Mattis Jaksch
@@ -23,12 +23,12 @@ struct RegisteredSignalBox {
     struct RegisteredSignal *sig;
 };
 
-class SpecTriggerDialog : public QDialog {
+class SpecSignalDialog : public QDialog {
 Q_OBJECT
 
 public:
-    SpecTriggerDialog();
-    virtual ~SpecTriggerDialog();
+    SpecSignalDialog();
+    virtual ~SpecSignalDialog();
 
     void add_entry(bool isChecked, struct RegisteredSignal *sig);
     void create_dialog();
@@ -43,4 +43,4 @@ private:
     QPushButton* cancleButton;
 };
 
-#endif // SPECTRIGGERDIALOG_H
+#endif // SPECSIGNALDIALOG_H

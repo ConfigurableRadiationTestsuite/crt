@@ -5,16 +5,16 @@
  * Author: Mattis Jaksch
  *
  * Labjack window to visualize and control
- * one device from labjack
+ * one device from labjack.
  *
  */
-
-#include "SubWindow.h"
 
 class Labjack;
 class LBJPlot;
 
 class QVBoxLayout;
+
+#include "SubWindow.h"
 
 struct ChannelColor {
     QString name;

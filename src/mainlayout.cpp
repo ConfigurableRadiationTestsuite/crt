@@ -3,14 +3,14 @@
 #include "src/Configuration/ConfigManager.h"
 #include "src/Manager/EventManager.h"
 #include "src/Manager/RunManager.h"
-#include "Tabs/PSUTab.h"
 #include "Tabs/LBJTab.h"
+#include "Tabs/PSUTab.h"
 #include "Tabs/RFTab.h"
 
 #include <QTabWidget>
 #include <QToolBar>
-#include <QVBoxLayout>
 #include <QToolButton>
+#include <QVBoxLayout>
 
 MainLayout::MainLayout() {
     configManager = new ConfigManager;
@@ -30,7 +30,7 @@ void MainLayout::create_layout() {
     //On top create a toolbar with save/load/start/stop buttons
     mainVerticalLayout->setMenuBar(create_toolbar());
 
-    //TODO Display run options
+    //Display run options
     mainVerticalLayout->addWidget(runManager);
 
     //Below create the tabs for psu/eth/labjack/...
@@ -91,7 +91,7 @@ void MainLayout::start_test() {
     eventManager->trigger_start_log();
 
     startTestButton->setIcon(QIcon("../CRT/icon/startButton_active.png"));
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+//    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
 
     startTestButton->setChecked(true);
 
@@ -107,5 +107,5 @@ void MainLayout::stop_test() {
     startTestButton->setChecked(false);
 
     startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton_active.png"));
+//    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton_active.png"));
 }

@@ -14,6 +14,10 @@ class global;
 #include "local";
 #include <global>;
 
+struct StructureName {
+	int variable;
+}
+
 class ClassName {
 
 public:

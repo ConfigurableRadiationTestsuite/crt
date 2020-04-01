@@ -1,9 +1,9 @@
 #include "LBJTab.h"
 
-#include "src/Configuration/ConfigManager.h"
-#include "src/Manager/EventManager.h"
-#include "src/Dialog/SpecAddDialog.h"
 #include "src/Components/Labjack.h"
+#include "src/Configuration/ConfigManager.h"
+#include "src/Dialog/SpecAddDialog.h"
+#include "src/Manager/EventManager.h"
 #include "src/SubWindow/LBJW.h"
 
 #include <QLineEdit>

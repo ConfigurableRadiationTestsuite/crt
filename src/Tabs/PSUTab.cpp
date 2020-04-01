@@ -2,8 +2,8 @@
 
 #include "src/Components/PSU.h"
 #include "src/Configuration/ConfigManager.h"
-#include "src/Manager/EventManager.h"
 #include "src/Dialog/SpecAddDialog.h"
+#include "src/Manager/EventManager.h"
 #include "src/SubWindow/PSUW.h"
 
 #include <QLineEdit>

@@ -1,8 +1,8 @@
 #include "WindowTab.h"
 
-#include "src/Dialog/SpecAddDialog.h"
 #include "src/Configuration/ConfigManager.h"
 #include "src/Configuration/ConfigElement.h"
+#include "src/Dialog/SpecAddDialog.h"
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/SubWindow.h"
 
@@ -20,12 +20,7 @@ WindowTab::WindowTab(ConfigManager *configManager, EventManager *eventManager, R
     create_layout();
 }
 
-WindowTab::~WindowTab() {
-    qDebug("Destroy WindowTab: " + (sectionName).toLatin1());
-
-    clear_subwindow_list();
-    delete mainTabLayout;
-}
+WindowTab::~WindowTab() {}
 
 void WindowTab::create_layout() {
     qDebug("Create tab layout");
@@ -34,23 +29,22 @@ void WindowTab::create_layout() {
     SubWindow *window;
     foreach (window, subWindow_list) {
         qDebug("Add window to tab");
+
         /* Main Box for the window */
         QGroupBox * windowGroupBox = new QGroupBox(window->get_config_element()->get_element_name());
         connect(this, SIGNAL(clean_layout()), windowGroupBox, SLOT(deleteLater()));
 
-        QHBoxLayout * windowHLayout = new QHBoxLayout;
-        connect(this, SIGNAL(clean_layout()), windowHLayout, SLOT(deleteLater()));
-
         /* Create delete button */
-        QPushButton * deleteButton = new QPushButton;
+        QPushButton * deleteButton = new QPushButton(window);
         deleteButton->setIcon(QIcon("../CRT/icon/deleteButton.png"));
         deleteButton->setFixedSize(QSize(32,32));
-        //Destroy the window
+
+        /* Destroy the window */
         connect(deleteButton, SIGNAL(clicked()), window, SLOT(deleteLater()));
-        connect(this, SIGNAL(clean_layout()), deleteButton, SLOT(deleteLater()));
         connect(window, SIGNAL(destroyed(SubWindow *)), this, SLOT(erase_window(SubWindow *)));
 
         /* Put everything together */
+        QHBoxLayout * windowHLayout = new QHBoxLayout(window);
         windowHLayout->addWidget(window);
         windowHLayout->addWidget(deleteButton);
 
@@ -73,6 +67,7 @@ void WindowTab::create_layout() {
 
 void WindowTab::update_layout() {
     emit clean_layout();
+
     delete mainTabLayout;
     delete layout();
 
@@ -80,7 +75,8 @@ void WindowTab::update_layout() {
 }
 
 void WindowTab::erase_window(SubWindow *window) {
-    qDebug("Erase singel window");
+    qDebug("Erase single window");
+
     for(QList<SubWindow *>::iterator it = subWindow_list.begin(); it != subWindow_list.end(); it++) {
         if((*it) == window) {
             subWindow_list.erase(it);
@@ -99,6 +95,7 @@ void WindowTab::save_to_config() {
 
 void WindowTab::clear_subwindow_list() {
     qDebug("Clear window list");
+
     SubWindow *window;
     foreach (window, subWindow_list)
         delete window;

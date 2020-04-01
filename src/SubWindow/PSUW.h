@@ -23,11 +23,6 @@ public:
     PSUW(PSU *psu, EventManager *m_eventManager);
     virtual ~PSUW() override;
 
-private slots:
-    //void set_button_on();
-    //void set_button_off();
-    //void set_button_disconnected();
-
 private:
     PSU * psu;
 

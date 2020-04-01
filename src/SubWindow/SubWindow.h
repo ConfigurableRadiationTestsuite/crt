@@ -6,15 +6,15 @@
  *
  * SubWindows are the lowest graphical elements; they can be called
  * to be configured or to pass their configuration.
- * Alternativly items can be manually added via dialogs.
+ * As alternative, items can be manually added via dialogs.
  *
- * The add-element dialog and the add-trigger dialog
- * differ as the elements are constant while the triggers dynamic
+ * The add-element dialog has to be created locally by the
+ * subwindows, while the add-trigger dialog can be created globally
  *
  */
 
 class ConfigElement;
-class SpecTriggerDialog;
+class SpecSignalDialog;
 
 #include "src/Manager/EventManager.h"
 
@@ -31,7 +31,7 @@ public:
     ConfigElement *get_config_element() const {return cfg_element;}
 
 public slots:
-    //Event / Trigger management
+    /* Event / Trigger management */
     void show_trigger_dialog();
     void add_trigger();
     void delete_trigger(struct RegisteredSignal * reg);
@@ -42,6 +42,7 @@ protected slots:
     //Configuration
     virtual void post_init(); //For all the signals
 
+    /* Emit listed signals */
     void trigger_on();
     void trigger_off();
     void trigger_start_start();
@@ -50,24 +51,25 @@ protected slots:
     void trigger_signal_list();
 
 signals:
-    //Event / Signal management
+    /* Event / Signal management */
     void signal_on();
     void signal_off();
     void signal_start_log();
     void signal_stop_log();
     void signal_event();
 
+    //Override for WindowTab
     void destroyed(SubWindow * subWindow);
 
 protected:
     ConfigElement *cfg_element;
 
-    //Event, signal and trigger management
+    /* Eventand signal management */
     EventManager *eventManager;
     QVector<struct RegisteredSignal*> signal_list;
-    SpecTriggerDialog *triggerDialog = nullptr;
+    SpecSignalDialog *signalDialog = nullptr;
 
-    QString get_trigger_list();
+    QString get_signal_list();
     bool is_signal_in_list(struct RegisteredSignal * reg);
 };
 

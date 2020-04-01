@@ -14,6 +14,7 @@
 PSUW::PSUW(PSU *psu, EventManager *m_eventManager) : SubWindow(m_eventManager), psu(psu) {
     cfg_element = psu;
 
+    /* Connect and register signals */
     connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
     connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
     connect(this, SIGNAL(signal_start_log()), psu, SLOT(start_logging()));
@@ -28,7 +29,7 @@ PSUW::PSUW(PSU *psu, EventManager *m_eventManager) : SubWindow(m_eventManager), 
 }
 
 PSUW::~PSUW() {
-    //Degregister signals
+    /* Degregister signals */
     eventManager->delete_signal(&SubWindow::signal_on);
     eventManager->delete_signal(&SubWindow::signal_off);
     eventManager->delete_signal(&SubWindow::signal_start_log);
@@ -93,6 +94,7 @@ void PSUW::create_layout() {
         mainHLayout->addWidget(channelGroupBox);
     }
 
+    /* Master switch */
     if(psu->has_master_switch()) {
         QGridLayout *masterGridLayout = new QGridLayout;
         QGroupBox *masterBoxLayout = new QGroupBox("Master Switch");
@@ -110,7 +112,6 @@ void PSUW::create_layout() {
         masterBoxLayout->setLayout(masterGridLayout);
         mainHLayout->addWidget(masterBoxLayout);
     }
-
 
     setLayout(mainHLayout);
 }
