@@ -20,6 +20,7 @@ void LBJPlot::update_plot() {
 
     PlotElement *plotElement;
 
+    /* Fill either vector up or shift the whole vector to add one datapoint */
     if(counter >= datapoints) {
         foreach (plotElement, plotElement_list)
             shift_into_vector(plotElement->get_axis(), plotElement->get_channel()->get_value());
@@ -31,12 +32,14 @@ void LBJPlot::update_plot() {
 
     update_time_axis();
 
+    /* Set y-axis */
     int maximum = get_total_maximum();
     int minimum = get_total_minimum();
 
     plot->yAxis->setRange(minimum, maximum);
     plot->yAxis->setTickStep((maximum-minimum)/4);
 
+    /* Plot active elements */
     int element_counter = 0;
     plot_active = false;
     foreach (plotElement, plotElement_list) {
@@ -62,7 +65,7 @@ void LBJPlot::create_layout() {
     plot->xAxis->setAutoTickStep(false);
     plot->xAxis->setTickStep(datapoints/3);
 
-    plot->yAxis->setLabel("[V]");
+    plot->yAxis->setLabel("[ ]");
     plot->yAxis->setAutoTickStep(false);
     plot->yAxis->setRange(-10, 10);
 

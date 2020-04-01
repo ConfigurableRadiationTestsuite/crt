@@ -18,7 +18,6 @@ Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
 
     connect(timer, SIGNAL(timeout()), this, SLOT(update_plot()));
     timer->start(1000);
-
 }
 
 Plot::~Plot() {}

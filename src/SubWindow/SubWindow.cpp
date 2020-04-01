@@ -3,18 +3,21 @@
 #include "src/Configuration/ConfigElement.h"
 #include "src/Dialog/SpecSignalDialog.h"
 
-#include <QPushButton>
 #include <QCheckBox>
+#include <QPushButton>
 
 SubWindow::SubWindow(EventManager *eventManager) : eventManager(eventManager) {
     qDebug("Create subwindow");
 
+    /* Post config management */
     connect(eventManager, SIGNAL(signal_added()), this, SLOT(post_init()));
     connect(eventManager, SIGNAL(signal_deleted(struct RegisteredSignal *)), this, SLOT(delete_trigger(struct RegisteredSignal *)));
 }
 
 SubWindow::~SubWindow() {
     qDebug("Destroy SubWindow: " + (cfg_element->get_element_name()).toLatin1());
+
+    //Notify the WindowTab
     emit destroyed(this);
 }
 
@@ -58,30 +61,26 @@ void SubWindow::post_init() {
             signal_list.push_back(signal);
 }
 
-void SubWindow::show_trigger_dialog() {
+void SubWindow::show_signal_dialog() {
     if(signalDialog != nullptr)
         delete signalDialog;
 
     signalDialog = new SpecSignalDialog;
 
+    /* Check every signal thats already listed */
     struct RegisteredSignal * signal;
-    foreach (signal, eventManager->get_signal_list()) {
-        if(is_signal_in_list(signal))
-            signalDialog->add_entry(true, signal);
-        else
-            signalDialog->add_entry(false, signal);
-    }
+    foreach (signal, eventManager->get_signal_list())
+        is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
 
     connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_trigger()));
-    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), triggerDialog, SLOT(close()));
-
+    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), signalDialog, SLOT(close()));
 
     signalDialog->create_dialog();
     signalDialog->show();
 }
 
-void SubWindow::add_trigger() {
-    qDebug("Add trigger to: " + (cfg_element->get_element_name()).toLatin1());
+void SubWindow::add_signal() {
+    qDebug("Add signal to: " + (cfg_element->get_element_name()).toLatin1());
 
     struct RegisteredSignalBox signal;
     foreach (signal, signalDialog->get_registeredSignal_list())
@@ -89,8 +88,8 @@ void SubWindow::add_trigger() {
             signal_list.push_back(signal.sig);
 }
 
-void SubWindow::delete_trigger(struct RegisteredSignal * reg) {
-    qDebug("Delete trigger from: " + (cfg_element->get_element_name()).toLatin1());
+void SubWindow::delete_signal(struct RegisteredSignal * reg) {
+    qDebug("Delete signal from: " + (cfg_element->get_element_name()).toLatin1());
 
     for(QVector<struct RegisteredSignal*>::iterator it = signal_list.begin(); it != signal_list.end(); it++) {
         if((*it) == reg) {

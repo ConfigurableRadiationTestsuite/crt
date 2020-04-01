@@ -31,10 +31,10 @@ public:
     ConfigElement *get_config_element() const {return cfg_element;}
 
 public slots:
-    /* Event / Trigger management */
-    void show_trigger_dialog();
-    void add_trigger();
-    void delete_trigger(struct RegisteredSignal * reg);
+    /* Event / Signal management */
+    void show_signal_dialog();
+    void add_signal();
+    void delete_signal(struct RegisteredSignal * reg);
 
 protected slots:
     virtual void create_layout() = 0;

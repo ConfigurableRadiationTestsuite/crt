@@ -4,13 +4,13 @@
 /*
  * Author: Mattis Jaksch
  *
- * Custom plot to show the voltage and
- * current of a single channel of the powersupply
+ * Abstract plot to provide easy use of
+ * specialized plots
  *
  */
 
-class QElapsedTimer;
 class QCustomPlot;
+class QElapsedTimer;
 
 #include <QWidget>
 

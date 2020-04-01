@@ -15,6 +15,7 @@ PSUPlot::PSUPlot(QCustomPlot *m_plot, PSUChannel *channel, int m_datapoints, int
 PSUPlot::~PSUPlot() {}
 
 void PSUPlot::update_plot() {
+    /* Fill either vector up or shift the whole vector to add one datapoint */
     if(counter >= datapoints) {
         shift_into_vector(voltage_axis, channel->get_voltage_meas());
         shift_into_vector(current_axis, channel->get_current_meas());

@@ -4,15 +4,15 @@
 /*
  * Author: Mattis Jaksch
  *
- * Custom plot to show the voltage and
- * current of a single channel of the powersupply
+ * Custom plot to show the voltage
+ * of multiple labjack channels
  *
  */
 
 #define ADC_BITS 14
 
-class PlotElement;
 class LabjackChannel;
+class PlotElement;
 
 class QCustomPlot;
 
@@ -47,6 +47,7 @@ private:
     int get_total_minimum();
 };
 
+/* Connection between channel and its graphical representation */
 class PlotElement : public QWidget {
 Q_OBJECT
 
@@ -60,6 +61,7 @@ public:
     bool is_plotted() const {return plot_enabled;}
 
 public slots:
+    /* Performance: Plot is only active if at least one channel is shown */
     void set_plot_active(int is_plotted) {
         plot_enabled = is_plotted > 0 ? true : false;
         if(plot_enabled)
