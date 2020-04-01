@@ -76,6 +76,9 @@ void PSUChannel::update() {
 
     if(vd == vendor::tti)
         update_tti();
+
+//    if(vd == vendor::vendor)
+//        update_vendor();
 }
 
 void PSUChannel::meas_voltage() {
@@ -89,6 +92,9 @@ void PSUChannel::meas_voltage() {
 
     if(vd == vendor::tti)
         meas_voltage_tti();
+
+//    if(vd == vendor::vendor)
+//        meas_voltage_vendor();
 }
 
 void PSUChannel::meas_current() {
@@ -102,6 +108,9 @@ void PSUChannel::meas_current() {
 
     if(vd == vendor::tti)
         meas_current_tti();
+
+//    if(vd == vendor::vendor)
+//        meas_current_vendor();
 }
 
 void PSUChannel::update_rohdeschwarz() {

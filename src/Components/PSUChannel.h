@@ -4,10 +4,8 @@
 /*
  * Author: Mattis Jaksch
  *
- * (Hardware-)Interface from a PSU Window to a real
- * powersupply
+ * Single channel of a multi-channel PSU
  *
- * Address example: 192.168.3.103::5025
  */
 
 class EthernetClient;
@@ -66,13 +64,20 @@ private:
 
     void overcurrent_protection();
 
+    /* Rohde Schwarz */
     void update_rohdeschwarz();
     void meas_voltage_rohdeschwarz();
     void meas_current_rohdeschwarz();
 
+    /* TTI */
     void update_tti();
     void meas_voltage_tti();
     void meas_current_tti();
+
+    /* VENDOR */
+    //void update_vendor();
+    //void meas_voltage_vendor();
+    //void meas_current_vendor();
 };
 
 inline void PSUChannel::set_trigger(int trigger) {this->trigger = trigger > 0 ? true : false;}

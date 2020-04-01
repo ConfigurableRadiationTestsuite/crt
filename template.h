@@ -8,6 +8,8 @@
  *
 */
 
+#define SOMETHING
+
 class local;
 class global;
 

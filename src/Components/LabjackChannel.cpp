@@ -11,9 +11,6 @@ LabjackChannel::LabjackChannel(QString const &name, int* handle, int p_chan, int
 
     if(is_differential)
         set_differential();
-
-    changeTimer = new QElapsedTimer;
-    changeTimer->start();
 }
 
 LabjackChannel::~LabjackChannel() {}
@@ -93,13 +90,13 @@ void LabjackChannel::set_range() {
 int LabjackChannel::write(int address, const int TYPE, double value) {
     if(*handle <= 0)
         return -1;
+
     return LJM_eWriteAddress(*handle, address, TYPE, value);
 }
 
 int LabjackChannel::read(int address, const int TYPE, double &value) {
     if(*handle <= 0)
         return -1;
+
     return LJM_eReadAddress(*handle, address, TYPE, &value);
 }
-
-

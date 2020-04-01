@@ -10,7 +10,7 @@ PSU::PSU(RunManager * runManager, const QString &config)
     qDebug("Create PSU from Config");
 
     load_config(config);
-    assert(parse_config({"name", "vendor", "master", "address", "channel", "max_voltage", "max_current"}));
+    assert(parse_config({"name", "vendor", "master", "address", "channel"}));
 
     this->element_name = get_value("name");
     this->vd = check_vendor(get_value("vendor"));
@@ -22,7 +22,7 @@ PSU::PSU(RunManager * runManager, const QString &config)
     double channel_max = get_value("channel").toUInt();
 
     for(uint i = 0; i < channel_max; i++) {
-        assert(parse_config({"c" + QString::number(i) + "v", "c" + QString::number(i) + "c"}));
+        assert(parse_config({"c" + QString::number(i) + "vs", "c" + QString::number(i) + "cs", "c" + QString::number(i) + "vm", "c" + QString::number(i) + "cm"}));
 
         double voltage_set = get_value("c" + QString::number(i) + "vs").toDouble();
         double current_set = get_value("c" + QString::number(i) + "cs").toDouble();
@@ -44,7 +44,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 
     init_ethernet(address);
 
-    if(vd == rohdeSchwarz)
+    if(vd == rohdeSchwarz) // || vendor)
         master_switch = true;
 
     for(uint i = 0; i < channel_max; i++)
@@ -56,6 +56,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 PSU::~PSU() {
     qDebug("Destroy PSU");
     delete eth;
+    delete log_timer;
 }
 
 void PSU::set_config() {
@@ -99,6 +100,11 @@ void PSU::stop_logging() {
 }
 
 void PSU::update() {
+    //Check if the network connection is ok
+    if(!check_network_connection())
+        return ;
+
+    /* Gather data */
     QVector<double> values;
     PSUChannel * channel;
     foreach (channel, channel_list) {
@@ -110,11 +116,6 @@ void PSU::update() {
 
     if(is_logging)
         runManager->append_values_to_file(this, values);
-
-    if(!eth->connectionOk())
-        emit disconnected(true);
-    else
-        emit disconnected(false);
 }
 
 QVector<QString> PSU::generate_header() {
@@ -162,6 +163,9 @@ void PSU::set_master_enable(int master_enable) {
 
     if(vd == rohdeSchwarz)
         set_master_rohdeschwarz();
+
+//    if(vd == vendor)
+//        set_master_vendor();
 }
 
 void PSU::set_master_trigger(int master_trigger) {
@@ -177,11 +181,6 @@ void PSU::update_settings() {
 }
 
 void PSU::set_master_rohdeschwarz() {
-    if(!eth->connectionOk()) {
-        eth->retry();
-        return ;
-    }
-
     eth->write("OUTP:MAST " + std::string(master_enable ? "ON" : "OFF"));
 }
 
@@ -207,4 +206,16 @@ void PSU::switch_off() {
     foreach (channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(false);
+}
+
+bool PSU::check_network_connection() {
+    if(!eth->connectionOk()) {
+        emit disconnected(true);
+
+        if(eth->retry()) {
+            emit disconnected(false);
+            return true;
+        }
+    }
+    return false;
 }

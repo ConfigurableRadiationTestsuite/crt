@@ -8,6 +8,7 @@
  * powersupply
  *
  * Address example: 192.168.3.103::5025
+ *
  */
 
 class EthernetClient;
@@ -66,15 +67,16 @@ protected:
 
 
 private:
+    void init();
     void init_ethernet(const QString &address);
 
     enum vendor check_vendor(const QString &vendor);
     QString check_vendor(enum vendor vd);
 
+    bool check_network_connection();
+
     void set_master_rohdeschwarz();
-
-
-    void init();
+    //void set_master_vendor();
 
     QVector<QString> generate_header();
 };

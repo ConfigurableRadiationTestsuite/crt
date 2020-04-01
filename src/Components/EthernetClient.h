@@ -6,6 +6,7 @@
  *
  * Ethernet Transceiver
  * Creates a socket and connects to a server
+ * Currently adapted to communicate via SCPI
  *
  */
 

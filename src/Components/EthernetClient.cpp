@@ -48,7 +48,7 @@ bool EthernetClient::create_socket() {
 	server_address.sin_family = AF_INET;
     server_address.sin_port = htons(uint16_t(port));
 
-    //Add send/receive timeout
+    /* Send/receive timeout */
     struct timeval tv;
     tv.tv_sec = CONNECTION_TIMEOUT;
     tv.tv_usec = 0;

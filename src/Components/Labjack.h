@@ -35,12 +35,12 @@ public:
     QVector<LabjackChannel*> get_channel_list() const {return channel_list;}
 
 public slots:
+    void update();
+
     void set_main_settling(const QString &text);
     void set_main_resolution(int index);
     void set_samplerate(const QString &text);
     void set_maximum_samplerate(int is_maximum);
-
-    void update();
 
     void start_logging();
     void stop_logging();

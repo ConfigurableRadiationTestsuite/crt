@@ -1,12 +1,12 @@
 #include "Labjack.h"
 
 #include "LabjackChannel.h"
-#include "src/Manager/RunManager.h"
 #include "LJM_Utilities.h"
+#include "src/Manager/RunManager.h"
 
 #include <LabJackM.h>
-#include <QTimer>
 #include <QElapsedTimer>
+#include <QTimer>
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
     : runManager(runManager) {
@@ -65,6 +65,11 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
 Labjack::~Labjack() {
     qDebug("Destroy Labjack");
     LJM_Close(handle);
+
+    delete timer;
+    delete sampleTimer;
+
+    //Delete channel
 }
 
 void Labjack::set_config() {
@@ -202,19 +207,20 @@ int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector
     delete[] aTypes;
     delete[] aValues;
 
-
     return err;
 }
 
 int Labjack::write(int address, const int TYPE, double value) {
     if(is_connected == false)
         return 0;
+
     return LJM_eWriteAddress(handle, address, TYPE, value);
 }
 
 int Labjack::read(int address, const int TYPE, double &value) {
     if(is_connected == false)
         return 0;
+
     return LJM_eReadAddress(handle, address, TYPE, &value);
 }
 
@@ -227,13 +233,14 @@ QVector<QString> Labjack::generate_header() {
     return header;
 }
 
+/* Reconstruct individual channels from user input */
 void Labjack::get_channel_addresses(const QString &input, QVector<int> &output) {
     int position = 0;
 
     do {
         QString number = input.mid(position,  input.indexOf(',', position));
         output.push_back(number.toInt());
-    }while((position = input.indexOf(',', position) + 1) > 0);
+    } while((position = input.indexOf(',', position) + 1) > 0);
 }
 
 void Labjack::get_channel_names(const QString &input, QVector<QString> &output) {

@@ -28,16 +28,16 @@ public:
     double get_boundary() const {return boundary;}
     double get_gain() const {return external_gain;}
 
-    int get_pchan_address();
-    int get_nchan_address();
-    int get_pchan_resolution_address();
-    int get_nchan_resolution_address();
-    int get_pchan_negative_address();
-    int get_nchan_negative_address();
-    int get_pchan_range_address();
-    int get_nchan_range_address();
-    int get_pchan_settling_address();
-    int get_nchan_settling_address();
+    int get_pchan_address() const {return p_chan*2;}
+    int get_nchan_address() const {return n_chan*2;}
+    int get_pchan_resolution_address() const {return 41500 + p_chan;}
+    int get_nchan_resolution_address() const {return 41500 + n_chan;}
+    int get_pchan_negative_address() const {return 41000 + p_chan;}
+    int get_nchan_negative_address() const {return 41000 + n_chan;}
+    int get_pchan_range_address() const {return 40000 + 2*p_chan;}
+    int get_nchan_range_address() const {return 40000 + 2*n_chan;}
+    int get_pchan_settling_address() const {return 42000 + 2*p_chan;}
+    int get_nchan_settling_address() const {return 42000 + 2*n_chan;}
 
     void set_range();
 
@@ -65,8 +65,6 @@ private:
     bool is_input, is_differential;
     double value = 0.0;
 
-    QElapsedTimer *changeTimer;
-
     QVector<double> range_list = {0.01, 0.1, 1, 10};
 
     void set_differential();
@@ -76,17 +74,5 @@ private:
     int write(int address, const int TYPE, double value);
     int read(int address, const int TYPE, double &value);
 };
-
-
-inline int LabjackChannel::get_pchan_address() {return p_chan*2;}
-inline int LabjackChannel::get_nchan_address() {return n_chan*2;}
-inline int LabjackChannel::get_pchan_resolution_address() {return 41500 + p_chan;}
-inline int LabjackChannel::get_nchan_resolution_address() {return 41500 + n_chan;}
-inline int LabjackChannel::get_pchan_negative_address() {return 41000 + p_chan;}
-inline int LabjackChannel::get_nchan_negative_address() {return 41000 + n_chan;}
-inline int LabjackChannel::get_pchan_range_address() {return 40000 + 2*p_chan;}
-inline int LabjackChannel::get_nchan_range_address() {return 40000 + 2*n_chan;}
-inline int LabjackChannel::get_pchan_settling_address() {return 42000 + 2*p_chan;}
-inline int LabjackChannel::get_nchan_settling_address() {return 42000 + 2*n_chan;}
 
 #endif // LABJACKCHANNEL_H
