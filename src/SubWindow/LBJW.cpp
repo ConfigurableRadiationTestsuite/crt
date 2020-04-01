@@ -79,11 +79,11 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Maximum"));
     topLineLayout->addWidget(datarateBox);
 
-    /* Trigger button */
-    QPushButton *triggerButton = new QPushButton;
-    triggerButton->setText("Add Trigger");
-    connect(triggerButton, SIGNAL(clicked()), this, SLOT(show_trigger_dialog()));
-    topLineLayout->addWidget(triggerButton);
+    /* Signal button */
+    QPushButton *signalButton = new QPushButton;
+    signalButton->setText("Add Signal");
+    connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
+    topLineLayout->addWidget(signalButton);
 
     settingsBox->setLayout(topLineLayout);
 

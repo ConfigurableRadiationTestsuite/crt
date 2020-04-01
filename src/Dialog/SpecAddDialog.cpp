@@ -1,8 +1,8 @@
 #include "SpecAddDialog.h"
 
 #include <QFormLayout>
-#include <QLineEdit>
 #include <QHBoxLayout>
+#include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -11,7 +11,10 @@ SpecAddDialog::SpecAddDialog() {
     cancleButton = new QPushButton("Cancel", this);
 }
 
-SpecAddDialog::~SpecAddDialog() {}
+SpecAddDialog::~SpecAddDialog() {
+    delete okButton;
+    delete cancleButton;
+}
 
 void SpecAddDialog::create_dialog() {
     QFormLayout * formLayout = new QFormLayout;
