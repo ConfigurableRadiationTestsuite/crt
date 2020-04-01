@@ -1,6 +1,14 @@
 #ifndef RUNMANAGER_H
 #define RUNMANAGER_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * Information on run status (not fully developed yet) and
+ * run management (e.g. start/stop time and logging of components).
+ *
+ */
+
 class QElapsedTimer;
 
 #include "FileManager.h"
@@ -9,7 +17,7 @@ class QElapsedTimer;
 
 enum RunMode {Creation=0, Init=1, Start=3, Stop=255};
 
-class RunManager : public QWidget, public FileManager{
+class RunManager : public QWidget, public FileManager {
 Q_OBJECT
 
 public:

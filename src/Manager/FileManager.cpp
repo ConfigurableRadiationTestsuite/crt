@@ -22,7 +22,9 @@ void FileManager::register_component(const void * subComponent, const QString na
 
     QString filename = root_directory + "/" + name + "_" + QString::number(QDateTime::currentSecsSinceEpoch());
     QFile * new_file = new QFile(filename);
+
     assert(new_file->open(QIODevice::WriteOnly | QIODevice::Append));
+
     file_list.push_back(new ComponentFile{filename, new_file, subComponent, QDateTime::currentSecsSinceEpoch()});
 }
 

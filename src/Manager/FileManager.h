@@ -1,6 +1,15 @@
 #ifndef FILEMANAGER_H
 #define FILEMANAGER_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * File manager to log values from the devices
+ * hosted by the subwindows in the various tabs.
+ * Components can be (de-)registered for logging.
+ *
+ */
+
 class QFile;
 
 #include <QVector>

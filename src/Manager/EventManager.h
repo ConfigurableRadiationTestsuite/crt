@@ -5,7 +5,7 @@
  * Author: Mattis Jaksch
  *
  * Allows distribution of signals
- * to different objects
+ * to different objects.
  *
  */
 

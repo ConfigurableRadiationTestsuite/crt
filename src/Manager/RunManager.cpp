@@ -1,11 +1,11 @@
 #include "RunManager.h"
 
 #include <QElapsedTimer>
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QTimer>
-#include <QFileDialog>
 
 RunManager::RunManager() {
     runTime = new QElapsedTimer;
@@ -23,21 +23,25 @@ RunManager::~RunManager() {}
 void RunManager::create_layout() {
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
+    /* Color palette */
     QPalette *grey = new QPalette();
     grey->setColor(QPalette::Base,Qt::lightGray);
     grey->setColor(QPalette::Text,Qt::black);
 
+    /* Button to create a new run */
     QPushButton *runButton = new QPushButton;
     runButton->setText("New run");
     connect(runButton, SIGNAL(clicked()), this, SLOT(create_new_run()));
     connect(this, SIGNAL(enable_run_button(bool)), runButton, SLOT(setEnabled(bool)));
 
+    /* Field for run folder */
     QLineEdit *runNameLine = new QLineEdit;
     runNameLine->setText("<NAME>");
     runNameLine->setReadOnly(true);
     runNameLine->setPalette(*grey);
     connect(this, SIGNAL(run_name_changed(const QString &)), runNameLine, SLOT(setText(const QString &)));
 
+    /* Current run time */
     QLineEdit *runTimeLine = new QLineEdit;
     runTimeLine->setText("000:00:00");
     runTimeLine->setReadOnly(true);
@@ -59,7 +63,7 @@ void RunManager::create_new_run() {
     else
         return ;
 
-    //Create new run log for start / stop / various
+    /* Create new run log for start / stop / various */
     register_component(this, "RunManager");
     set_file_header(this, {"Action"});
     append_value_to_file(this, double(RunMode::Creation));
