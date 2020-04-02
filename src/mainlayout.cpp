@@ -15,7 +15,7 @@
 MainLayout::MainLayout() {
     configManager = new ConfigManager;
     eventManager = new EventManager;
-    runManager = new RunManager;
+    runManager = new RunManager(eventManager);
 
     create_layout();
 }
@@ -55,14 +55,13 @@ QToolBar * MainLayout::create_toolbar() {
     //Start/Stop button
     startTestButton = toolbar->addAction("Start Test");
     startTestButton->setIcon(QIcon(":/icon/startButton.png"));
-    //startTestButton->setCheckable(true);
-    connect(startTestButton, SIGNAL(triggered()), this, SLOT(start_test()));
+    connect(startTestButton, SIGNAL(triggered()), runManager, SLOT(start_run()));
+    connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_start_button(enum RunMode)));
 
     stopTestButton = toolbar->addAction("Stop Test");
     stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
-    connect(stopTestButton, SIGNAL(triggered()), this, SLOT(stop_test()));
-
-    connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(reset_test()));
+    connect(stopTestButton, SIGNAL(triggered()), runManager, SLOT(stop_run()));
+    connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_stop_button(enum RunMode)));
 
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setIconSize(QSize(16, 16));
@@ -85,30 +84,34 @@ QTabWidget * MainLayout::create_window_tabs() {
     return windowTabs;
 }
 
-void MainLayout::start_test() {
-    if(runManager->is_running())
-        return;
-
-    eventManager->trigger_on();
-    eventManager->trigger_start_log();
-
-    startTestButton->setIcon(QIcon(":/icon/startButton_active.png"));
-    stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
-
-    runManager->start_run();
+void MainLayout::set_start_button(enum RunMode mode) {
+    switch(mode) {
+    case Creation:
+        startTestButton->setIcon(QIcon(":icon/startButton.png"));
+        break;
+    case Start:
+        startTestButton->setIcon(QIcon(":icon/startButton_active.png"));
+        break;
+    case Stop:
+        startTestButton->setIcon(QIcon(":icon/startButton.png"));
+        break;
+    default:
+        break;
+    }
 }
 
-void MainLayout::stop_test() {
-    runManager->stop_run();
-
-    eventManager->trigger_off();
-    eventManager->trigger_stop_log();
-
-    startTestButton->setIcon(QIcon(":/icon/startButton.png"));
-    stopTestButton->setIcon(QIcon(":/icon/stopButton_active.png"));
-}
-
-void MainLayout::reset_test() {
-    startTestButton->setIcon(QIcon(":/icon/startButton.png"));
-    stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
+void MainLayout::set_stop_button(enum RunMode mode) {
+    switch(mode) {
+    case Creation:
+        stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
+        break;
+    case Start:
+        stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
+        break;
+    case Stop:
+        stopTestButton->setIcon(QIcon(":icon/stopButton_active.png"));
+        break;
+    default:
+        break;
+    }
 }

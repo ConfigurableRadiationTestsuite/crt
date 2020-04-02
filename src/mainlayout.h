@@ -12,12 +12,13 @@
 
 class ConfigManager;
 class EventManager;
-class RunManager;
 
 class QAction;
 class QToolBar;
 class QTabWidget;
 class QVBoxLayout;
+
+#include "Manager/RunManager.h"
 
 #include <QWidget>
 
@@ -29,9 +30,9 @@ public:
     virtual ~MainLayout();
 
 private slots:
-    void start_test();
-    void stop_test();
-    void reset_test();
+    void set_start_button(enum RunMode mode);
+    void set_stop_button(enum RunMode mode);
+
 
 private:
     ConfigManager *configManager;

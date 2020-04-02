@@ -15,13 +15,15 @@ class QElapsedTimer;
 
 #include <QWidget>
 
+class EventManager;
+
 enum RunMode {Creation=0, Init=1, Start=3, Stop=255};
 
 class RunManager : public QWidget, public FileManager {
 Q_OBJECT
 
 public:
-    RunManager();
+    RunManager(EventManager *eventManager);
     virtual ~RunManager();
 
     bool is_running() const {return isRunning;}
@@ -29,6 +31,7 @@ public:
 public slots:
     void start_run();
     void stop_run();
+    void set_run_mode(enum RunMode mode);
 
 private slots:
     void create_new_run();
@@ -37,11 +40,14 @@ private slots:
 signals:
     void run_name_changed(const QString &text);
     void run_time_changed(const QString &text);
+    void run_mode_changed(enum RunMode mode);
 
-    bool enable_run_button(bool enable);
+    void enable_run_button(bool enable);
 
 private:
     QString runName;
+
+    EventManager *eventManager;
 
     bool isRunning;
 

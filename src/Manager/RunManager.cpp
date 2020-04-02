@@ -1,5 +1,7 @@
 #include "RunManager.h"
 
+#include "EventManager.h"
+
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QHBoxLayout>
@@ -7,7 +9,7 @@
 #include <QLineEdit>
 #include <QTimer>
 
-RunManager::RunManager() {
+RunManager::RunManager(EventManager *eventManager) : eventManager(eventManager) {
     runTime = new QElapsedTimer;
     offsetTime = 0;
 
@@ -66,7 +68,7 @@ void RunManager::create_new_run() {
     /* Create new run log for start / stop / various */
     register_component(this, "RunManager");
     set_file_header(this, {"Action"});
-    append_value_to_file(this, double(RunMode::Creation));
+    set_run_mode(RunMode::Creation);
 
     offsetTime = 0;
     emit run_name_changed(folder);
@@ -88,18 +90,37 @@ void RunManager::update_run() {
 }
 
 void RunManager::start_run() {
+    if(isRunning)
+        return;
+
+    emit enable_run_button(false);
+
     runTime->start();
     isRunning = true;
 
-    append_value_to_file(this, double(RunMode::Start));
-    emit enable_run_button(false);
+    eventManager->trigger_start_log();
+    eventManager->trigger_on();
+
+    set_run_mode(RunMode::Start);
 }
 
 void RunManager::stop_run() {
+    if(!isRunning)
+        return;
+
     offsetTime += runTime->isValid() ? runTime->elapsed() / 1000 : 0;
     runTime->invalidate();
     isRunning = false;
 
-    append_value_to_file(this, double(RunMode::Stop));
+    eventManager->trigger_off();
+    eventManager->trigger_stop_log();
+
+    set_run_mode(RunMode::Stop);
+
     emit enable_run_button(true);
+}
+
+void RunManager::set_run_mode(enum RunMode mode) {
+    append_value_to_file(this, double(mode));
+    emit run_mode_changed(mode);
 }
