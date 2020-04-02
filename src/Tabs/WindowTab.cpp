@@ -36,7 +36,7 @@ void WindowTab::create_layout() {
 
         /* Create delete button */
         QPushButton * deleteButton = new QPushButton(window);
-        deleteButton->setIcon(QIcon("../CRT/icon/deleteButton.png"));
+        deleteButton->setIcon(QIcon(":/icon/deleteButton.png"));
         deleteButton->setFixedSize(QSize(32,32));
 
         /* Destroy the window */
@@ -54,7 +54,7 @@ void WindowTab::create_layout() {
 
     /* Create add button */
     QPushButton * addButton = new QPushButton;
-    addButton->setIcon(QIcon("../CRT/icon/addButton.png"));
+    addButton->setIcon(QIcon(":/icon/addButton.png"));
     addButton->setFixedSize(QSize(32,32));
     connect(addButton, SIGNAL(clicked()), this, SLOT(add_subwindow_from_dialog()));
     connect(this, SIGNAL(clean_layout()), addButton, SLOT(deleteLater()));

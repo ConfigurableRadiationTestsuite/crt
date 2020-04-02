@@ -54,12 +54,12 @@ QToolBar * MainLayout::create_toolbar() {
 
     //Start/Stop button
     startTestButton = toolbar->addAction("Start Test");
-    startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
+    startTestButton->setIcon(QIcon(":/icon/startButton.png"));
     //startTestButton->setCheckable(true);
     connect(startTestButton, SIGNAL(triggered()), this, SLOT(start_test()));
 
     stopTestButton = toolbar->addAction("Stop Test");
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+    stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
     connect(stopTestButton, SIGNAL(triggered()), this, SLOT(stop_test()));
 
     connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(reset_test()));
@@ -92,8 +92,8 @@ void MainLayout::start_test() {
     eventManager->trigger_on();
     eventManager->trigger_start_log();
 
-    startTestButton->setIcon(QIcon("../CRT/icon/startButton_active.png"));
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+    startTestButton->setIcon(QIcon(":/icon/startButton_active.png"));
+    stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
 
     runManager->start_run();
 }
@@ -104,11 +104,11 @@ void MainLayout::stop_test() {
     eventManager->trigger_off();
     eventManager->trigger_stop_log();
 
-    startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton_active.png"));
+    startTestButton->setIcon(QIcon(":/icon/startButton.png"));
+    stopTestButton->setIcon(QIcon(":/icon/stopButton_active.png"));
 }
 
 void MainLayout::reset_test() {
-    startTestButton->setIcon(QIcon("../CRT/icon/startButton.png"));
-    stopTestButton->setIcon(QIcon("../CRT/icon/stopButton.png"));
+    startTestButton->setIcon(QIcon(":/icon/startButton.png"));
+    stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
 }
