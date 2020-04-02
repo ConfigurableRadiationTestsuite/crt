@@ -197,10 +197,97 @@ This testsuite is developed to automate test procedures. It supports different d
 	\subsection{Ethernet}
 	Not implemented yet
 
+\section{Signal Event Mechanism}
+\label{c:signal_event_mechanism}
+
+%In the \textit{SubWindow} presented in the GUI, a signal can be added which is emitted on certain occasions. These signals are then propagated to the assigned \textit{SubWindow} where they execute an action.
+
+\bigbreak
+
+If we have configured at least one power-supply and our LabJack, then the LabJack offers a \textit{Add Signal} button. If we click this, a dialog will appear
+
 \appendix
 
 \section{Diagrams}
 
+\section{Signal Event Mechanism}
+
+To understand the signal event mechanism an overview of the participating classes is presented in figure \ref{f:signal_event_mechanism}. 
+
+\bigbreak
+
+In the \textit{SubWindow} are general cases of signals and corresponding slots defined. The signals can be added to the \textit{EventManger} in the derived \textit{SubWindow} classes. Theses signals are then official and can then be used to trigger actions. Either internally in the program code or externally by adding signals in the GUI via dialog. 
+
+\begin{figure}[H]
+\centering
+\caption{Signal Event Mechanism with the participating classes}
+\label{f:signal_event_mechanism}
+\end{figure}
+
+	\subsection{Event Manager}
 	
+	The \textit{EventManger} class object exists only once in the program. It presents an interface to all the other classes to handle signals and slots and especially the interaction between \textit{SubWindows} and their components. For this to work, the signals from the \textit{SubWindow} have to be added to the \textit{EventManager}.
+	
+		\subsubsection{Registered Signal Structure}
+
+		A signal from the \textit{SubWindow}, which is added to the \textit{EventManager}, holds the following properties:
+		
+\begin{lstlisting}
+struct RegisteredSignal {
+	QString name;
+	SignalType st;
+
+	SubWindow *sub;
+	void (SubWindow::*sp)(void);
+};
+\end{lstlisting}
+
+			The name is a descriptive name and should consist of the components name (\textit{cfg\_element\_name}) and info of the action (e.g. turn on, turn off). The signal type is one of the predefined types / actions listed in the \textit{EventManager}. The next two rows are the pointers to find the signal later on and to emit them via the call mechanism.
+
+		\subsubsection{Call Mechanism}
+		
+		To now emit the registered signals and cause an action, the \textit{call\_tigger()} method is used which needs the type of signal to be triggered and a signal list to choose from:
+		
+\begin{lstlisting}
+void EventManager::call_trigger(enum SignalType st,
+const QVector<struct RegisteredSignal*> &signal_list) {
+
+    RegisteredSignal * signal;
+    foreach (signal, signal_list)
+        if(signal->st == st)
+            emit ((signal->sub)->*(signal->sp))();
+}
+\end{lstlisting}
+
+	\subsection{Sub Window}
+	
+	In the \textit{SubWindow} a general set of signals and slots is available. These can be implemented in the derived classes for easy interaction internally as well as externally. The class holds a signal list with signals which have been added either internal or external. All the available signals are stored in the signal list of the \textit{EventManager}.
+
+		\subsubsection{Code Example}
+
+		First, in the derived subclass the used signals have to be registered to inform the \textit{EventManager} (and therefore the outer world) about it. In this example we announce from our power-supply the signals \enquote{on} and \enquote{off}. Which means that our power-supply is listening and will turn itself on or off if one of these signals are emitted:
+		
+\begin{lstlisting}
+PSU::PSU() {
+ connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
+ connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
+
+ eventManager->add_signal(psu->get_element_name() + " Switch On",
+  SignalType::on, this, &SubWindow::signal_on);
+ eventManager->add_signal(psu->get_element_name() + " Switch Off",
+  SignalType::off, this, &SubWindow::signal_off);
+ }
+\end{lstlisting}
+
+If one now wants to not only react, but also to trigger other components, the predefined slots have to be used. They can be connected to certain internal class signals. 
+
+For example if we track various sub-voltages on a board via LabJack, we can then connect an off-signal if we cross a set boundary:
+
+\begin{lstlisting}
+connect(channel, SIGNAL(boundary_check_failed()),
+ this, SLOT(trigger_signal_list()));
+\end{lstlisting}
+
+If a voltage now crosses a boundary, all signals that have been added to the signal list are now emitted. The action could be also limited by calling only off-signals with the other slots.
 
 \end{document}
