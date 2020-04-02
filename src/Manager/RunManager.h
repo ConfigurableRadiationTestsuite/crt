@@ -49,7 +49,8 @@ private:
 
     EventManager *eventManager;
 
-    bool isRunning;
+    bool isRunning = false;
+    bool runExists = false;
 
     QElapsedTimer *runTime;
     QTimer * updateTime;

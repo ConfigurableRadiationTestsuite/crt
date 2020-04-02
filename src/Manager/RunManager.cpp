@@ -71,6 +71,7 @@ void RunManager::create_new_run() {
     set_run_mode(RunMode::Creation);
 
     offsetTime = 0;
+    runExists = true;
     emit run_name_changed(folder);
 }
 
@@ -121,6 +122,8 @@ void RunManager::stop_run() {
 }
 
 void RunManager::set_run_mode(enum RunMode mode) {
-    append_value_to_file(this, double(mode));
+    if(runExists)
+        append_value_to_file(this, double(mode));
+
     emit run_mode_changed(mode);
 }
