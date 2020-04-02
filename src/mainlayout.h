@@ -31,6 +31,7 @@ public:
 private slots:
     void start_test();
     void stop_test();
+    void reset_test();
 
 private:
     ConfigManager *configManager;

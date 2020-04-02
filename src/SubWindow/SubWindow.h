@@ -47,7 +47,7 @@ protected slots:
     void trigger_off();
     void trigger_start_start();
     void trigger_stop_stop();
-    void trigger_event();
+    void trigger_special();
     void trigger_signal_list();
 
 signals:
@@ -77,7 +77,7 @@ inline void SubWindow::trigger_on() {eventManager->call_trigger(SignalType::on, 
 inline void SubWindow::trigger_off() {eventManager->call_trigger(SignalType::off, signal_list);}
 inline void SubWindow::trigger_start_start() {eventManager->call_trigger(SignalType::start_log, signal_list);}
 inline void SubWindow::trigger_stop_stop() {eventManager->call_trigger(SignalType::stop_log, signal_list);}
-inline void SubWindow::trigger_event() {eventManager->call_trigger(SignalType::trigger, signal_list);}
+inline void SubWindow::trigger_special() {eventManager->call_trigger(SignalType::special, signal_list);}
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}
 
 #endif // SUBWINDOW_H

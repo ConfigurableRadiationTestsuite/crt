@@ -69,8 +69,10 @@ void SubWindow::show_signal_dialog() {
 
     /* Check every signal thats already listed */
     struct RegisteredSignal * signal;
-    foreach (signal, eventManager->get_signal_list())
-        is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
+    foreach (signal, eventManager->get_signal_list()) {
+        if(signal->st != SignalType::start_log && signal->st != SignalType::stop_log)
+            is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
+    }
 
     connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_trigger()));
     connect(signalDialog->get_ok_button(), SIGNAL(clicked()), signalDialog, SLOT(close()));
