@@ -101,22 +101,22 @@ This testsuite is developed to automate test procedures. It supports different d
 	
 	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that the current channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix $v$ for voltage and $c$ for current.
 	
-	\begin{lstlisting}
-	Section PSU
-		name=PSU Links
-		address=192.168.3.103:5025
-		channel=3
-		max_voltage=30
-		max_current=10
-		c0v=10
-		c0c=3
-		c1v=10
-		c1c=3
-		c2v=10
-		c2c=3
-		signal=
-	EndSection
-	\end{lstlisting}
+\begin{lstlisting}
+Section PSU
+	name=PSU Links
+	address=192.168.3.103:5025
+	channel=3
+	max_voltage=30
+	max_current=10
+	c0v=10
+	c0c=3
+	c1v=10
+	c1c=3
+	c2v=10
+	c2c=3
+	signal=
+EndSection
+\end{lstlisting}
 	
 		\subsubsection{Supported devices}
 		Support for other devices can be easily added. One only needs to edit the \textit{psu.*} files and add a few lines for the correct SCPI\footnote{Standard Commands for Programmable Instruments} Code.
@@ -158,23 +158,23 @@ This testsuite is developed to automate test procedures. It supports different d
 	\item $g$: Gain value
 	\end{itemize}
 	
-	\begin{lstlisting}
-	Section LBJ
-		name=Rotes T7
-		channel=2
-		c0n=AIN62/68
-		c0pc=62
-		c0nc=68
-		c0b=0
-		c0g=1
-		c1n=AIN63
-		c1pc=63
-		c1nc=199
-		c1b=0
-		c1g=1
-		signal=
-	EndSection
-	\end{lstlisting}
+\begin{lstlisting}
+Section LBJ
+	name=Rotes T7
+	channel=2
+	c0n=AIN62/68
+	c0pc=62
+	c0nc=68
+	c0b=0
+	c0g=1
+	c1n=AIN63
+	c1pc=63
+	c1nc=199
+	c1b=0
+	c1g=1
+	signal=
+EndSection
+\end{lstlisting}
 	
 		\subsubsection{Supported devices}
 		To support other devices the addresses in the \textit{Labjack.*} files have to be extended.
@@ -200,11 +200,19 @@ This testsuite is developed to automate test procedures. It supports different d
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
 
-%In the \textit{SubWindow} presented in the GUI, a signal can be added which is emitted on certain occasions. These signals are then propagated to the assigned \textit{SubWindow} where they execute an action.
+The signal event mechanism allows the user to define interactions between components. For example if a certain event happens in component $A$ it can trigger an action in component $B$. Signals are added via the \enquote{Add Signal} button in the components window. If no such button is available it means that this component is not able to trigger any signal.
 
-\bigbreak
+	\subsection{Usage Example}
+	
+	If one has a power-supply and a LabJack set up, a signal interaction can be created. The LabJack has a button to add signals (see figure \ref{f:sem_menu}). Here the user can choose what action should be taken if a certain value boundary is crossed. In this case the power-supply would switch off if a boundary crossing would occur.
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.3\textwidth]{./5_sem_menu.png}
+	\caption{\enquote{Add Signal} menu with available signals}
+	\label{f:sem_menu}
+	\end{figure}
 
-If we have configured at least one power-supply and our LabJack, then the LabJack offers a \textit{Add Signal} button. If we click this, a dialog will appear
 
 \appendix
 
