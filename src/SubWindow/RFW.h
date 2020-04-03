@@ -4,8 +4,8 @@
 /*
  * Author: Mattis Jaksch
  *
- * Labjack window to visualize and control
- * one device from labjack
+ * RF window to visualize the IQ data
+ * of a (AD-IIO) device connected via ethernet
  *
  */
 

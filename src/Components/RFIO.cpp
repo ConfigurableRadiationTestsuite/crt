@@ -20,7 +20,7 @@ RFIO::RFIO(RunManager * runManager, const QString &address, int channel)
     : runManager(runManager), address(address){
 
     for(int i = 0; i < channel; i++)
-        channel_list.push_back(new RFIOChannel(i, buffersize));
+        channel_list.push_back(new RFIOChannel(i));
 
     init();
 }

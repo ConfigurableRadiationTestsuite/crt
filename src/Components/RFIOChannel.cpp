@@ -4,7 +4,7 @@
 
 #include <QtMath>
 
-RFIOChannel::RFIOChannel(int number, int buffersize) : number(number), buffersize(buffersize) {}
+RFIOChannel::RFIOChannel(int channel_number) : channel_number(channel_number) {}
 
 RFIOChannel::~RFIOChannel() {}
 
@@ -14,10 +14,10 @@ void RFIOChannel::update_data(){
         evaluate_data(q_data);
     }
     else
-        is_evaluable();
+        check_data_valid();
 
-    set_data(i_data, i_plot_data);
-    set_data(q_data, q_plot_data);
+    generate_plot_data(i_data, i_plot_data);
+    generate_plot_data(q_data, q_plot_data);
 
     emit channel_updated();
 }
@@ -46,10 +46,8 @@ int RFIOChannel::get_period(const QVector<int> &data) {
         samples++;
     }
 
-    if(cnt <= 1) {
-        set_evaluation(0);
+    if(cnt <= 1)
         return 0;
-    }
 
     return 2 * period / (cnt - 1);
 }
@@ -68,25 +66,51 @@ int RFIOChannel::get_zero(const QVector<int> &data) {
     return 0;
 }
 
-bool RFIOChannel::is_evaluable() {
+void RFIOChannel::check_data_valid() {
+    bool ok = true;
 
+    /* Check if there is possibly valid data */
+    ok &= MIN_DATAPOINTS < get_period(i_data);
+    ok &= MIN_DATAPOINTS < get_period(q_data);
+
+    ok &= get_maximum(i_data) > qPow(2, BITS_TO_IGNORE);
+    ok &= get_maximum(q_data) > qPow(2, BITS_TO_IGNORE);
+
+    ok &= get_minimum(i_data) < - qPow(2, BITS_TO_IGNORE);
+    ok &= get_minimum(q_data) < - qPow(2, BITS_TO_IGNORE);
+
+    /* Set data valid */
+    if(ok) {
+        data_valid = true;
+        emit has_data(true);
+    }
+    else {
+        data_valid = false;
+        emit has_data(false);
+    }
 }
 
 void RFIOChannel::set_margin(int scale) {
-
+    assert(0 < scale && scale < 10);
+    margin = qPow(2, scale);
 }
 
 void RFIOChannel::set_evaluation(int eval) {
     is_eval = eval > 0 ? true : false;
-
-    emit evaluable_changed(eval);
 }
 
-bool RFIOChannel::evaluate_data(const QVector<int> &data) {
+void RFIOChannel::evaluate_data(const QVector<int> &data) {
+    //Find the first zero
+
+    //Compare all values till the next zero
+
+    //Check if the period is ok
+
+    //emit signal
 
 }
 
-void RFIOChannel::set_data(const QVector<int> &input, QVector<double> &output) {
+void RFIOChannel::generate_plot_data(const QVector<int> &input, QVector<double> &output) {
     int period = get_period(input);
     int zero = get_zero(input);
 
@@ -95,4 +119,13 @@ void RFIOChannel::set_data(const QVector<int> &input, QVector<double> &output) {
             return ;
         output.push_back(input[i]);
     }
+}
+
+void RFIOChannel::clear_data() {
+    int buffersize = i_data.size();
+
+    i_data.clear(); i_data.reserve(buffersize);
+    q_data.clear(); q_data.reserve(buffersize);
+    i_plot_data.clear(); i_plot_data.reserve(buffersize);
+    q_plot_data.clear(); q_plot_data.reserve(buffersize);
 }

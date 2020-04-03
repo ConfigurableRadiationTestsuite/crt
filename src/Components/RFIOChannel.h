@@ -6,6 +6,7 @@
 *
 */
 
+#define MIN_DATAPOINTS 10
 #define BITS_TO_IGNORE 3
 
 #include <QWidget>
@@ -14,7 +15,7 @@ class RFIOChannel : public QWidget{
 Q_OBJECT
 
 public:
-   RFIOChannel(int number, int buffersize);
+   RFIOChannel(int channel_number);
    virtual ~RFIOChannel() override;
 
    QVector<int> get_i_data() const {return i_data;}
@@ -22,7 +23,7 @@ public:
    QVector<double> get_i_plot_data() const {return i_plot_data;}
    QVector<double> get_q_plot_data() const {return q_plot_data;}
 
-   int get_number() const {return number;}
+   int get_channel_number() const {return channel_number;}
    int get_period(const QVector<int> &data);
    int get_zero(const QVector<int> &data);
    int get_minimum(const QVector<int> &data);
@@ -32,9 +33,9 @@ public:
    void set_sample_position(long long position) {sample_position = position;}
    void append_values(int i_value, int q_value);
 
-   void clear_data();
+   bool is_valid() const {return data_valid;}
 
-   bool is_evaluable();
+   void clear_data();
 
 public slots:
    void set_margin(int scale);
@@ -44,23 +45,25 @@ public slots:
 
 signals:
    void iq_error(const QVector<double> &data);
-   void evaluable_changed(int evaluable);
+   void has_data(bool data);
    void channel_updated();
 
 private:
-    bool is_eval = false;
-    QVector<int> i_data;
-    QVector<int> q_data;
-    QVector<double> i_plot_data;
-    QVector<double> q_plot_data;
-    int number;
-    int buffersize;
+   int channel_number;
+   int margin;
+   bool is_eval = false;
+   bool data_valid = false;
+   QVector<int> i_data;
+   QVector<int> q_data;
+   QVector<double> i_plot_data;
+   QVector<double> q_plot_data;
 
-    QVector<double> reference_data;
-    long long sample_position;
+   long long sample_position;
 
-    bool evaluate_data(const QVector<int> &data);
-    void set_data(const QVector<int> &input, QVector<double> &output);
+   void evaluate_data(const QVector<int> &data);
+   void generate_plot_data(const QVector<int> &input, QVector<double> &output);
+
+    void check_data_valid();
 };
 
 inline int RFIOChannel::get_minimum(const QVector<int> &data) {
@@ -76,10 +79,4 @@ inline void RFIOChannel::append_values(int i_value, int q_value) {
     q_data.push_back(q_value);
 }
 
-inline void RFIOChannel::clear_data() {
-    i_data.clear(); i_data.reserve(buffersize);
-    q_data.clear(); q_data.reserve(buffersize);
-    i_plot_data.clear(); i_plot_data.reserve(buffersize);
-    q_plot_data.clear(); q_plot_data.reserve(buffersize);
-}
 #endif // RFIOCHANNEL_H

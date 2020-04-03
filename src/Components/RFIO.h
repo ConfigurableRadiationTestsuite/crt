@@ -43,7 +43,6 @@ private:
 
    QTimer *log_timer;
 
-   int buffersize = 4096;
    QVector<RFIOChannel *> channel_list;
 
    bool connect_device();

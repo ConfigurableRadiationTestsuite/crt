@@ -37,11 +37,11 @@ void RFW::create_layout() {
 
         /* Plot */
         QCustomPlot *plot = new QCustomPlot(this);
-        //RFPlot *psuplot = new RFPlot(plot);
+        RFPlot *psuplot = new RFPlot(plot, channel);
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
         plot->setMaximumHeight(512);
-        //connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
+        connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
         channelHLayout->addWidget(plot);
 
         QVBoxLayout *evalLayout = new QVBoxLayout;
