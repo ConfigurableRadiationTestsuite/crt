@@ -9,9 +9,9 @@
 #define MIN_DATAPOINTS 10
 #define BITS_TO_IGNORE 3
 
-#include <QWidget>
+#include <QObject>
 
-class RFIOChannel : public QWidget{
+class RFIOChannel : public QObject {
 Q_OBJECT
 
 public:

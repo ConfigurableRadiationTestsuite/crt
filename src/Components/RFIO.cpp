@@ -60,6 +60,8 @@ void RFIO::stop_logging() {
 bool RFIO::connect_device() {
     int port = 9010;//(QString(address.mid(address.indexOf(':')))).toInt();
 
+    /* START THREAD HERE */
+
     process = new QProcess(this);
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
 

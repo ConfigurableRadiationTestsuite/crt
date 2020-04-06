@@ -29,6 +29,7 @@ SOURCES += \
     src/Components/PSUChannel.cpp \
     src/Components/RFIO.cpp \
     src/Components/RFIOChannel.cpp \
+    src/Components/RFIOUpdater.cpp \
     src/Dialog/SpecAddDialog.cpp \
     src/Dialog/SpecSignalDialog.cpp \
     src/Manager/EventManager.cpp \
@@ -65,6 +66,7 @@ HEADERS += \
     src/Components/PSUChannel.h \
     src/Components/RFIO.h \
     src/Components/RFIOChannel.h \
+    src/Components/RFIOUpdater.h \
     src/Dialog/SpecAddDialog.h \
     src/Dialog/SpecSignalDialog.h \
     src/Manager/EventManager.h \
