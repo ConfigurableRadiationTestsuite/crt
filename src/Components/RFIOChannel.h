@@ -17,7 +17,7 @@ class RFIOChannel : public QObject {
 Q_OBJECT
 
 public:
-   RFIOChannel(RunManager * runManager);
+   RFIOChannel(RunManager * runManager, const QString &element_name, int number);
    virtual ~RFIOChannel();
 
    QVector<int> get_i_data() const {return i_data;}
@@ -56,6 +56,8 @@ signals:
 
 private:
    RunManager *runManager;
+   QString element_name;
+   int number;
 
    bool data_valid, data_analyze;
    long long sample_position;

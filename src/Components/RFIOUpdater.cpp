@@ -6,13 +6,11 @@
 
 RFIOUpdater::RFIOUpdater(int port, QProcess * process, QVector<RFIOChannel *> *channel_list)
     : port(port), process(process), channel_list(channel_list){
-
-    init();
 }
 
 RFIOUpdater::~RFIOUpdater () {}
 
-void RFIOUpdater::init() {
+void RFIOUpdater::start_process() {
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
 
     process->start("/bin/ncat -l " + QString::number(port));

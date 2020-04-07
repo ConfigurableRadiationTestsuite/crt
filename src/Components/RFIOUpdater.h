@@ -18,6 +18,7 @@ public:
     virtual ~RFIOUpdater();
 
 public slots:
+    void start_process();
     void update_device();
 
 signals:
@@ -28,8 +29,6 @@ private:
     QProcess * process;
     QVector<RFIOChannel *> *channel_list;
     int port;
-
-    void init();
 
     int create_2b_number(char lsb, char msb);
 };

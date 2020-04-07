@@ -1,8 +1,11 @@
 #include "RFIOChannel.h"
 
+#include "src/Manager/RunManager.h"
+
 #include <QtMath>
 
-RFIOChannel::RFIOChannel(RunManager *runManager) : runManager(runManager) {
+RFIOChannel::RFIOChannel(RunManager *runManager, const QString &element_name, int number)
+    : runManager(runManager), element_name(element_name), number(number) {
 
     data_valid = false;
     data_analyze = false;
@@ -39,7 +42,15 @@ void RFIOChannel::analyze_data() {
 }
 
 void RFIOChannel::handle_error() {
-    //Write the raw data to the runManager
+    /* Write the raw data to the runManager */
+    runManager->register_component(this, element_name + QString::number(number));
+
+    runManager->set_file_header(this, {"Sample", "i", "q"});
+
+    for(int i = 0; i < i_data.size(); i++)
+        runManager->append_values_to_file(this, {double(i), double(i_data[i]), double(q_data[i])});
+
+    runManager->deregister_component(this);
 }
 
 int RFIOChannel::get_zero(const QVector<int> &data) {
