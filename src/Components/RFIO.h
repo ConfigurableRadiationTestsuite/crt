@@ -6,19 +6,18 @@
 *
 */
 
-#define BYTE_PER_CHANNEL 4
-#define BYTE_PER_SAMPLE 2
-
 class RFIOChannel;
+class RFIOUpdater;
 class RunManager;
 
 class QProcess;
+class QThread;
 
 #include "src/Configuration/ConfigElement.h"
 
-#include <QWidget>
+#include <QObject>
 
-class RFIO : public QWidget, public ConfigElement {
+class RFIO : public QObject, public ConfigElement {
 Q_OBJECT
 
 public:
@@ -30,25 +29,20 @@ public:
 
    void set_config() override;
 
-public slots:
-   void update_device();
-
-   void start_logging();
-   void stop_logging();
+private slots:
+   void reconnect();
 
 private:
    RunManager *runManager;
    QString address;
+   int port;
+
+   RFIOUpdater *rfioUpdater;
    QProcess *process;
-
-   QTimer *log_timer;
-
+   QThread *updateThread;
    QVector<RFIOChannel *> channel_list;
 
-   bool connect_device();
-   void disconnect_device();
-
-   int create_2b_number(char lsb, char msb);
+   int channel;
 
    void init();
 };

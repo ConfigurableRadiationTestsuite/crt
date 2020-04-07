@@ -1,6 +1,9 @@
 #ifndef RFIOUPDATER_H
 #define RFIOUPDATER_H
 
+#define BYTE_PER_SAMPLE 2
+#define BYTE_PER_CHANNEL 4
+
 class RFIOChannel;
 
 class QProcess;
@@ -11,15 +14,24 @@ class RFIOUpdater : public QObject {
     Q_OBJECT
 
 public:
-    RFIOUpdater(QProcess * process, QVector<RFIOChannel *> channel_list);
+    RFIOUpdater(int port, QProcess * process, QVector<RFIOChannel *> *channel_list);
     virtual ~RFIOUpdater();
 
 public slots:
-    void process();
+    void update_device();
 
 signals:
     void finished();
-    void error();
+    void disconnected();
+
+private:
+    QProcess * process;
+    QVector<RFIOChannel *> *channel_list;
+    int port;
+
+    void init();
+
+    int create_2b_number(char lsb, char msb);
 };
 
 #endif // RFIOUPDATER_H
