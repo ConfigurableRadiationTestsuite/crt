@@ -29,7 +29,7 @@ RFW::~RFW() {
 }
 
 void RFW::create_layout() {
-    mainVLayout = new QVBoxLayout;
+    mainVLayout = new QVBoxLayout(this);
 
     /* Header */
     headerHLayout = new QHBoxLayout;
@@ -41,7 +41,7 @@ void RFW::create_layout() {
     headerHLayout->addWidget(signalButton);
 
     /* Channel */
-    subHLayout = new QHBoxLayout;
+    subHLayout = new QHBoxLayout(this);
 
     RFIOChannel * channel;
     foreach (channel, rfio->get_channel_list()) {
@@ -53,7 +53,7 @@ void RFW::create_layout() {
         RFPlot *rfplot = new RFPlot(plot, channel);
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
-        plot->setMaximumHeight(512);
+        plot->setMinimumWidth(256);
         connect(this, SIGNAL(destroyed()), rfplot, SLOT(deleteLater()));
         channelHLayout->addWidget(plot);
 

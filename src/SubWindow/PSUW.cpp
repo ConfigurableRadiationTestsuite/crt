@@ -74,7 +74,7 @@ void PSUW::create_layout() {
         connect(psu, SIGNAL(disconnected(bool)), enableBox, SLOT(set_event_icon(bool)));
 
         /* Trigger */
-        QCheckBox * triggerBox = new QCheckBox("Trigger", this);
+        QCheckBox * triggerBox = new QCheckBox("Trigger");
         psuGridLayout->addWidget(triggerBox, 1, 2);
         connect(triggerBox, SIGNAL(stateChanged(int)), channel, SLOT(set_trigger(int)));
 

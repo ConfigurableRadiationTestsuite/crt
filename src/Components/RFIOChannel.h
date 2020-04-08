@@ -47,6 +47,7 @@ public:
 
 public slots:
    void set_data_analyze(int );
+   void set_margin(int );
 
 private slots:
    void handle_error();

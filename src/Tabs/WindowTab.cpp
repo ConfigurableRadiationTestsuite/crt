@@ -24,7 +24,7 @@ WindowTab::~WindowTab() {}
 
 void WindowTab::create_layout() {
     qDebug("Create tab layout");
-    mainTabLayout = new QVBoxLayout;
+    mainTabLayout = new QVBoxLayout(this);
 
     SubWindow *window;
     foreach (window, subWindow_list) {

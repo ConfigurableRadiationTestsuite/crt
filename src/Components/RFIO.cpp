@@ -36,7 +36,6 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 
 RFIO::~RFIO() {
     delete rfioUpdater;
-    delete updateThread; //Crash
     delete process;
 }
 

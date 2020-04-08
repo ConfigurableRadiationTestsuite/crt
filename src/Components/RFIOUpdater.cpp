@@ -11,7 +11,7 @@ RFIOUpdater::RFIOUpdater(int port, QProcess * process, QVector<RFIOChannel *> *c
 RFIOUpdater::~RFIOUpdater () {}
 
 void RFIOUpdater::start_process() {
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
+    //connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
 
 #ifndef DUMMY_DATA
     process->start("/bin/ncat -l " + QString::number(port));
@@ -22,6 +22,11 @@ void RFIOUpdater::start_process() {
 #endif
 
     process->waitForStarted();
+
+    while(process->state() == QProcess::Running) {
+        if(process->waitForReadyRead())
+            update_device();
+    }
 }
 
 void RFIOUpdater::update_device() {

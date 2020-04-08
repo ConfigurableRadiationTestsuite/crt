@@ -134,3 +134,7 @@ void RFIOChannel::clear_data() {
 void RFIOChannel::set_sample_position(long long position) {
     sample_position = position;
 }
+
+void RFIOChannel::set_margin(int margin) {
+    this->margin = margin;
+}
