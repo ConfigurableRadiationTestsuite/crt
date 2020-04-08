@@ -4,7 +4,15 @@
 #include "qcustomplot.h"
 
 RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
-    : Plot(m_plot, 0, 0), channel(channel) {}
+    : Plot(m_plot, 256, 30), channel(channel) {
+
+    connect(channel, SIGNAL(finished()), this, SLOT(update_plot()));
+
+    recreate_axis(i_axis);
+    recreate_axis(q_axis);
+
+    create_layout();
+}
 
 RFPlot::~RFPlot() {}
 
@@ -36,6 +44,7 @@ void RFPlot::create_layout() {
     plot->graph(0)->setPen(QPen(Qt::blue));
 
     //Assign Q-Data
+    plot->addGraph();
     plot->graph(1)->setPen(QPen(Qt::red));
 
     plot->xAxis->setLabel("Sample");
@@ -52,6 +61,12 @@ void RFPlot::create_layout() {
 
 void RFPlot::modify_time_axis() {
     //Check if time axis is big enough
+
+    time_axis.clear();
+    time_axis.reserve(i_axis.size());
+
+    for(int i = 0; i < i_axis.size(); i++)
+        time_axis.push_back(i);
 
     //Else push back oder pop
 }

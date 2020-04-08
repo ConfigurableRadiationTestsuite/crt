@@ -32,7 +32,7 @@ void RFTab::create_subwindow_from_dialog() {
     QString address = addDialog->get_entry_list()[1].input_value->text();
     int channel = addDialog->get_entry_list()[2].input_value->text().toInt();
 
-    subWindow_list.push_back(new RFW(new RFIO(runManager, address, channel), eventManager));
+    subWindow_list.push_back(new RFW(new RFIO(runManager, name, address, channel), eventManager));
 
     update_layout();
 }

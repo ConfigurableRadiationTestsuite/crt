@@ -4,6 +4,8 @@
 #define BYTE_PER_SAMPLE 2
 #define BYTE_PER_CHANNEL 4
 
+#define DUMMY_DATA
+
 class RFIOChannel;
 
 class QProcess;

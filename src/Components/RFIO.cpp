@@ -15,6 +15,10 @@ RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManag
     //Address
 
     //Channel
+        //Number
+        //Margin
+    for(int i = 0; i < channel; i++)
+        channel_list.push_back(new RFIOChannel(runManager, element_name, i));
 
     init();
 }
@@ -24,22 +28,21 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 
     this->element_name = m_element_name;
 
+    for(int i = 0; i < channel; i++)
+        channel_list.push_back(new RFIOChannel(runManager, element_name, i));
+
     init();
 }
 
 RFIO::~RFIO() {
     delete rfioUpdater;
-    delete updateThread;
+    delete updateThread; //Crash
     delete process;
 }
 
 void RFIO::set_config() {}
 
 void RFIO::init() {
-    //Create channel
-    for(int i = 0; i < channel; i++)
-        channel_list.push_back(new RFIOChannel(runManager, element_name, i));
-
     //Create reception process
     process = new QProcess(this);
 

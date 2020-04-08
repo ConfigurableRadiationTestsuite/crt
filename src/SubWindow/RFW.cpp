@@ -6,6 +6,7 @@
 #include "src/Plot/RFPlot.h"
 
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 
 RFW::RFW(RFIO *rfio, EventManager *m_eventManager) : SubWindow(m_eventManager), rfio(rfio) {
     cfg_element = rfio;
@@ -28,20 +29,32 @@ RFW::~RFW() {
 }
 
 void RFW::create_layout() {
-    subHorizontalLayout = new QHBoxLayout;
+    mainVLayout = new QVBoxLayout;
+
+    /* Header */
+    headerHLayout = new QHBoxLayout;
+
+    /* Signal button */
+    QPushButton *signalButton = new QPushButton;
+    signalButton->setText("Add Signal");
+    connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
+    headerHLayout->addWidget(signalButton);
+
+    /* Channel */
+    subHLayout = new QHBoxLayout;
 
     RFIOChannel * channel;
     foreach (channel, rfio->get_channel_list()) {
-        QGroupBox * channelGroupBox = new QGroupBox("Channel: " + QString::number(channel->get_number()));
+        QGroupBox * channelGroupBox = new QGroupBox("Channel: " + QString::number(channel->get_channel_number()));
         QHBoxLayout *channelHLayout = new QHBoxLayout;
 
         /* Plot */
         QCustomPlot *plot = new QCustomPlot(this);
-        RFPlot *psuplot = new RFPlot(plot, channel);
+        RFPlot *rfplot = new RFPlot(plot, channel);
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
         plot->setMaximumHeight(512);
-        connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
+        connect(this, SIGNAL(destroyed()), rfplot, SLOT(deleteLater()));
         channelHLayout->addWidget(plot);
 
         QVBoxLayout *evalLayout = new QVBoxLayout;
@@ -50,15 +63,17 @@ void RFW::create_layout() {
         QCheckBox * evalBox = new QCheckBox("Evaluate", this);
         evalBox->setDisabled(true);
         evalLayout->addWidget(evalBox);
-        connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_evaluation(int)));
-        connect(channel, SIGNAL(evaluable_changed(bool)), evalBox, SLOT(setChecked(bool)));
-        connect(channel, SIGNAL(evaluable_changed(bool)), evalBox, SLOT(setDisabled(bool)));
+        connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
+        connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
+
+        connect(channel, SIGNAL(error()), this, SLOT(trigger_signal_list()));
 
         /* Slider */
         QSlider *precisionSlide = new QSlider(Qt::Vertical);
         precisionSlide->setRange(1, 10);
         precisionSlide->setTickPosition(QSlider::TicksRight);
-        precisionSlide->setValue(1);
+        precisionSlide->setTickInterval(1);
+        precisionSlide->setValue(channel->get_margin());
         connect(precisionSlide, SIGNAL(valueChanged(int)), channel, SLOT(set_margin(int)));
         evalLayout->addWidget(new QLabel("Margin"));
         evalLayout->addWidget(precisionSlide);
@@ -66,8 +81,11 @@ void RFW::create_layout() {
         channelHLayout->addLayout(evalLayout);
 
         channelGroupBox->setLayout(channelHLayout);
-        subHorizontalLayout->addWidget(channelGroupBox);
+        subHLayout->addWidget(channelGroupBox);
     }
 
-    setLayout(subHorizontalLayout);
+    mainVLayout->addLayout(headerHLayout);
+    mainVLayout->addLayout(subHLayout);
+
+    setLayout(mainVLayout);
 }

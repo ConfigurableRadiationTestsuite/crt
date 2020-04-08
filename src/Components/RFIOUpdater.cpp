@@ -13,7 +13,13 @@ RFIOUpdater::~RFIOUpdater () {}
 void RFIOUpdater::start_process() {
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
 
+#ifndef DUMMY_DATA
     process->start("/bin/ncat -l " + QString::number(port));
+#endif
+
+#ifdef DUMMY_DATA
+    process->start("/bin/cat /dev/urandom");
+#endif
 
     process->waitForStarted();
 }
@@ -35,7 +41,7 @@ void RFIOUpdater::update_device() {
     int i, chan;
     for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list->size()); i++) {
         chan = 0;
-        foreach(channel, channel_list) {
+        foreach(channel, *channel_list) {
             real[0] = data[i*BYTE_PER_CHANNEL*channel_list->size() + chan*BYTE_PER_SAMPLE + offset];
             real[1] = data[i*BYTE_PER_CHANNEL*channel_list->size() + chan*BYTE_PER_SAMPLE + 1 + offset];
 
@@ -50,7 +56,7 @@ void RFIOUpdater::update_device() {
     offset = (i + 1) * BYTE_PER_CHANNEL * channel_list->size() - data.size();
 
     //Analyize it
-    foreach (channel, channel_list) {
+    foreach (channel, *channel_list) {
         channel->analyze_data();
         channel->set_sample_position(channel->get_sample_position()+i*BYTE_PER_CHANNEL);
     }

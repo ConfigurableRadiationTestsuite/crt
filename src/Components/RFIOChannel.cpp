@@ -4,8 +4,8 @@
 
 #include <QtMath>
 
-RFIOChannel::RFIOChannel(RunManager *runManager, const QString &element_name, int number)
-    : runManager(runManager), element_name(element_name), number(number) {
+RFIOChannel::RFIOChannel(RunManager *runManager, const QString &element_name, int number, int margin)
+    : runManager(runManager), element_name(element_name), number(number), margin(margin) {
 
     data_valid = false;
     data_analyze = false;
@@ -129,4 +129,8 @@ void RFIOChannel::clear_data() {
 
     i_plot_data.clear(); i_plot_data.reserve(buffersize);
     q_plot_data.clear(); q_plot_data.reserve(buffersize);
+}
+
+void RFIOChannel::set_sample_position(long long position) {
+    sample_position = position;
 }

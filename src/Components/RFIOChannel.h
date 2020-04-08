@@ -17,7 +17,7 @@ class RFIOChannel : public QObject {
 Q_OBJECT
 
 public:
-   RFIOChannel(RunManager * runManager, const QString &element_name, int number);
+   RFIOChannel(RunManager * runManager, const QString &element_name, int number, int margin=0);
    virtual ~RFIOChannel();
 
    QVector<int> get_i_data() const {return i_data;}
@@ -32,6 +32,8 @@ public:
    bool get_data_valid(const QVector<int> &data);
 
    long long get_sample_position() const {return sample_position;}
+   int get_channel_number() const {return number;}
+   int get_margin() const {return margin;}
 
    void set_sample_position(long long position);
 
@@ -58,6 +60,7 @@ private:
    RunManager *runManager;
    QString element_name;
    int number;
+   int margin;
 
    bool data_valid, data_analyze;
    long long sample_position;
