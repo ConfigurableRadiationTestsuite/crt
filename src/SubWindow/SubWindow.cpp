@@ -74,7 +74,7 @@ void SubWindow::show_signal_dialog() {
             is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
     }
 
-    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_trigger()));
+    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_signal()));
     connect(signalDialog->get_ok_button(), SIGNAL(clicked()), signalDialog, SLOT(close()));
 
     signalDialog->create_dialog();
