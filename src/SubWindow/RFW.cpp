@@ -65,7 +65,7 @@ void RFW::create_layout() {
         evalBox->setDisabled(true);
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
-        //connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
+        connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
 
         connect(channel, SIGNAL(error()), this, SLOT(trigger_signal_list()));
 

@@ -70,7 +70,8 @@ private:
    int margin;
 
    bool data_valid, data_analyze;
-   bool capture_transition;
+   bool capture_transition = false;
+   bool margin_changed = false;
    long long sample_position;
 
    QVector<int> i_data, q_data;
@@ -83,6 +84,7 @@ private:
 
    void reset_transition();
    bool is_transition(int value);
+   int position(int position, const QVector<int> &vec);
 };
 
 inline void RFIOChannel::reset_transition() {
@@ -114,4 +116,11 @@ inline void RFIOChannel::clear_data(QVector<double> &data) {
     data.reserve(buffersize);
 }
 
+inline int RFIOChannel::position(int position, const QVector<int> &vec) {
+    if(position < 0)
+        return 0;
+    if(position >= vec.size())
+        return vec.size()-1;
+    return position;
+}
 #endif // RFIOCHANNEL_H
