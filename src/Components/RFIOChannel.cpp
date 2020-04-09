@@ -22,8 +22,11 @@ void RFIOChannel::set_data_analyze(int analyze) {
 
 void RFIOChannel::analyze_data() {
     /* Create plot data */
-    generate_plot_data(i_data, i_plot_data);
-    generate_plot_data(i_data, q_plot_data);
+    clear_data(i_plot_data);
+    int start = get_zero(i_data);
+    generate_plot_data(start, i_data, i_plot_data);
+    clear_data(q_plot_data);
+    generate_plot_data(start, q_data, q_plot_data);
 
     /* Huge evaluation */
     if(data_valid && data_analyze) {
@@ -36,7 +39,11 @@ void RFIOChannel::analyze_data() {
     else
         data_valid = false;
 
-    emit announce_data_valid(data_valid);
+    /* Delete data */
+    clear_data(i_data);
+    clear_data(q_data);
+
+    emit announce_data_valid(!data_valid);
 
     emit finished();
 }
@@ -108,27 +115,14 @@ int RFIOChannel::get_period(const QVector<int> &data) {
     return 2 * period / (cnt - 1);
 }
 
-void RFIOChannel::generate_plot_data(const QVector<int> &input, QVector<double> &output) {
+void RFIOChannel::generate_plot_data(int start, const QVector<int> &input, QVector<double> &output) {
     int period = get_period(input);
-    int zero = get_zero(input);
 
-    for(int i = zero; i < input.size(); i++) {
-        if((period*4 + zero) < i)
+    for(int i = start; i < input.size(); i++) {
+        if((period*4 + start) < i)
             return ;
         output.push_back(input[i]);
     }
-}
-
-void RFIOChannel::clear_data() {
-    int buffersize = i_data.size();
-
-    i_data.clear(); i_data.reserve(buffersize);
-    q_data.clear(); q_data.reserve(buffersize);
-
-    buffersize = i_plot_data.size();
-
-    i_plot_data.clear(); i_plot_data.reserve(buffersize);
-    q_plot_data.clear(); q_plot_data.reserve(buffersize);
 }
 
 void RFIOChannel::set_sample_position(long long position) {

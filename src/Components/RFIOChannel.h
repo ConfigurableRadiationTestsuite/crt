@@ -43,7 +43,8 @@ public:
    void append_value(int i, int q);
    void analyze_data();
 
-   void clear_data();
+   void clear_data(QVector<int> &data);
+   void clear_data(QVector<double> &data);
 
 public slots:
    void set_data_analyze(int );
@@ -69,7 +70,7 @@ private:
    QVector<int> i_data, q_data;
    QVector<double> i_plot_data, q_plot_data;
 
-   void generate_plot_data(const QVector<int> &input, QVector<double> &output);
+   void generate_plot_data(int start, const QVector<int> &input, QVector<double> &output);
 };
 
 inline int RFIOChannel::get_minimum(const QVector<int> &data) {
@@ -83,6 +84,18 @@ inline int RFIOChannel::get_maximum(const QVector<int> &data) {
 inline void RFIOChannel::append_value(int i_value, int q_value) {
     i_data.push_back(i_value);
     q_data.push_back(q_value);
+}
+
+inline void RFIOChannel::clear_data(QVector<int> &data) {
+    int buffersize = data.size();
+    data.clear();
+    data.reserve(buffersize);
+}
+
+inline void RFIOChannel::clear_data(QVector<double> &data) {
+    int buffersize = data.size();
+    data.clear();
+    data.reserve(buffersize);
 }
 
 #endif // RFIOCHANNEL_H

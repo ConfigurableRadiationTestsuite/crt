@@ -33,6 +33,7 @@ private:
     int port;
 
     int create_2b_number(char lsb, char msb);
+    QByteArray dummy_iq(int period, int channel);
 };
 
 #endif // RFIOUPDATER_H

@@ -30,9 +30,11 @@ RFW::~RFW() {
 
 void RFW::create_layout() {
     mainVLayout = new QVBoxLayout(this);
+    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     /* Header */
     headerHLayout = new QHBoxLayout;
+
 
     /* Signal button */
     QPushButton *signalButton = new QPushButton;
@@ -52,19 +54,18 @@ void RFW::create_layout() {
         QCustomPlot *plot = new QCustomPlot(this);
         RFPlot *rfplot = new RFPlot(plot, channel);
         plot->setGeometry(QRect());
-        plot->setMinimumHeight(128);
-        plot->setMinimumWidth(256);
+        plot->setMaximumHeight(512);
         connect(this, SIGNAL(destroyed()), rfplot, SLOT(deleteLater()));
         channelHLayout->addWidget(plot);
 
         QVBoxLayout *evalLayout = new QVBoxLayout;
 
         /* Evaluate */
-        QCheckBox * evalBox = new QCheckBox("Evaluate", this);
+        QCheckBox * evalBox = new QCheckBox("Evaluate");
         evalBox->setDisabled(true);
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
-        connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
+        //connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
 
         connect(channel, SIGNAL(error()), this, SLOT(trigger_signal_list()));
 

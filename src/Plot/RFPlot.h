@@ -24,6 +24,7 @@ public:
 
 private slots:
     void update_plot() override;
+    void update_data();
 
 private:
     QVector<double> i_axis;

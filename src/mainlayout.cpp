@@ -23,7 +23,7 @@ MainLayout::MainLayout() {
 MainLayout::~MainLayout() {}
 
 void MainLayout::create_layout() {
-    mainVerticalLayout = new QVBoxLayout();
+    mainVerticalLayout = new QVBoxLayout(this);
 
     mainVerticalLayout->setSpacing(20);
 
