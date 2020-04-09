@@ -13,6 +13,11 @@ class RunManager;
 
 #include <QObject>
 
+struct ReferencePoint {
+    int top;
+    int bottom;
+};
+
 class RFIOChannel : public QObject {
 Q_OBJECT
 
@@ -65,13 +70,24 @@ private:
    int margin;
 
    bool data_valid, data_analyze;
+   bool capture_transition;
    long long sample_position;
 
    QVector<int> i_data, q_data;
+   QVector<ReferencePoint> ref_data;
    QVector<double> i_plot_data, q_plot_data;
 
    void generate_plot_data(int start, const QVector<int> &input, QVector<double> &output);
+   void generate_ref_data(const QVector<int> &input);
+   bool evaluate_data(const QVector<int> &input);
+
+   void reset_transition();
+   bool is_transition(int value);
 };
+
+inline void RFIOChannel::reset_transition() {
+    capture_transition = false;
+}
 
 inline int RFIOChannel::get_minimum(const QVector<int> &data) {
     return *std::min_element(data.begin(), data.end());

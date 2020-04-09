@@ -30,12 +30,19 @@ void RFIOChannel::analyze_data() {
 
     /* Huge evaluation */
     if(data_valid && data_analyze) {
-        emit error();
+        bool ok = true;
+        ok &= evaluate_data(i_data);
+        ok &= evaluate_data(q_data);
+
+        if(!ok)
+            emit error();
     }
 
     /* Data valid check */
-    if(get_data_valid(i_data) && get_data_valid(q_data))
+    if(!data_valid && get_data_valid(i_data) && get_data_valid(q_data)) {
+        generate_ref_data(i_data);
         data_valid = true;
+    }
     else
         data_valid = false;
 
@@ -64,11 +71,13 @@ int RFIOChannel::get_zero(const QVector<int> &data) {
     bool capture = false;
 
     for(int i = 0; i < data.size(); i++) {
+        /* Wait till the curve is below zero and the noiseloor */
         if(data[i] < -qPow(2, BITS_TO_IGNORE))
             capture = true;
 
+        /* Capture the translation from zero beyond the noisefloor */
         if(capture && qPow(2, BITS_TO_IGNORE) < data[i])
-            return i;
+            return i-1;
     }
 
     return 0;
@@ -115,6 +124,46 @@ int RFIOChannel::get_period(const QVector<int> &data) {
     return 2 * period / (cnt - 1);
 }
 
+bool RFIOChannel::evaluate_data(const QVector<int> &input) {
+    int ref_i = 0;
+
+    for(int i = get_zero(input); i < input.size(); i++) {
+        if(is_transition(input[i])) {
+            reset_transition();
+            i -= 1;
+            ref_i = 0;
+        }
+
+        if(ref_i >= ref_data.size())
+            return false;
+
+        if(input[i] < ref_data[ref_i].bottom || ref_data[ref_i].top < input[i])
+            return false;
+    }
+    return true;
+}
+
+void RFIOChannel::generate_ref_data(const QVector<int> &input) {
+    int period = get_period(input);
+    int min = get_minimum(input);
+    int max = get_maximum(input);
+    int amplitude = (qAbs(min) + qAbs(max)) / 2;
+
+    ref_data.clear();
+    ref_data.reserve(period);
+
+    for(int i = 0; i < period*1.5; i++) {
+        int top = amplitude * qSin(float(i) / float(period) * 2 * M_PI) + margin;
+        int bottom = amplitude * qSin(float(i) / float(period) * 2 * M_PI) - margin;
+        ref_data.push_back(ReferencePoint{top, bottom});
+
+        if(i >= period && ref_data[i].top < 0) {
+            ref_data.pop_back();
+            break;
+        }
+    }
+}
+
 void RFIOChannel::generate_plot_data(int start, const QVector<int> &input, QVector<double> &output) {
     int period = get_period(input);
 
@@ -125,10 +174,22 @@ void RFIOChannel::generate_plot_data(int start, const QVector<int> &input, QVect
     }
 }
 
+bool RFIOChannel::is_transition(int value) {
+    if(!capture_transition && value < -qPow(2, BITS_TO_IGNORE))
+        capture_transition = true;
+
+    if(capture_transition && value > qPow(2, BITS_TO_IGNORE)) {
+        capture_transition = false;
+        return true;
+    }
+
+    return false;
+}
+
 void RFIOChannel::set_sample_position(long long position) {
     sample_position = position;
 }
 
 void RFIOChannel::set_margin(int margin) {
-    this->margin = margin;
+    this->margin = qPow(2, margin);
 }
