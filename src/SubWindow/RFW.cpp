@@ -35,7 +35,6 @@ void RFW::create_layout() {
     /* Header */
     headerHLayout = new QHBoxLayout;
 
-
     /* Signal button */
     QPushButton *signalButton = new QPushButton;
     signalButton->setText("Add Signal");
@@ -69,6 +68,17 @@ void RFW::create_layout() {
 
         connect(channel, SIGNAL(error()), this, SLOT(trigger_signal_list()));
 
+        /* Margin info */
+        QLabel *marginLabel = new QLabel("Margin");
+        QLineEdit *marginLineEdit = new QLineEdit;
+        marginLineEdit->setText("2^0");
+        marginLineEdit->setMaxLength(4);
+        marginLineEdit->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+        marginLineEdit->setDisabled(true);
+        evalLayout->addWidget(marginLabel);
+        evalLayout->addWidget(marginLineEdit);
+        connect(channel, SIGNAL(announce_margin_changed(const QString &)), marginLineEdit, SLOT(setText(const QString &)));
+
         /* Slider */
         QSlider *precisionSlide = new QSlider(Qt::Vertical);
         precisionSlide->setRange(1, 10);
@@ -76,7 +86,6 @@ void RFW::create_layout() {
         precisionSlide->setTickInterval(1);
         precisionSlide->setValue(channel->get_margin());
         connect(precisionSlide, SIGNAL(valueChanged(int)), channel, SLOT(set_margin(int)));
-        evalLayout->addWidget(new QLabel("Margin"));
         evalLayout->addWidget(precisionSlide);
 
         channelHLayout->addLayout(evalLayout);

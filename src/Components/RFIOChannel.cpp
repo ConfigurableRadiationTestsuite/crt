@@ -72,19 +72,55 @@ void RFIOChannel::handle_error() {
 }
 
 int RFIOChannel::get_zero(const QVector<int> &data) {
-    bool capture = false;
+    int minimum = 0;
+    int maximum = 0;
+    int min_point = 0;
+    int max_point = 0;
 
+    /* Search minimum */
     for(int i = 0; i < data.size(); i++) {
-        /* Wait till the curve is below zero and the noiseloor */
-        if(data[i] < -qPow(2, BITS_TO_IGNORE))
-            capture = true;
 
-        /* Capture the translation from zero beyond the noisefloor */
-        if(capture && qPow(2, BITS_TO_IGNORE) < data[i])
-            return qAbs(data[position(i-1, data)]) < qAbs(data[i]) ? i-1 : i;
+        if(minimum == 0 && data[i] > -qPow(2, BITS_TO_IGNORE))
+            continue;
+
+        if(data[i] < minimum) {
+            minimum = data[i];
+            min_point = i;
+            continue;
+        }
+
+        if(data[i] > 0) {
+            break;
+        }
     }
 
-    return 0;
+    /* Search maximum */
+    for(int i = min_point; i < data.size(); i++) {
+
+        if(maximum == 0 && data[i] < qPow(2, BITS_TO_IGNORE))
+            continue;
+
+        if(data[i] > maximum) {
+            maximum = data[i];
+            max_point = i;
+            continue;
+        }
+
+        if(data[i] < 0) {
+            break;
+        }
+    }
+
+    int zero_point = min_point + (max_point - min_point) / 2;
+
+    /* Check one point before / after */
+    if(qAbs(data[position(zero_point-1, data)]) < qAbs(data[zero_point]))
+        return zero_point-1;
+
+    if(qAbs(data[position(zero_point+1, data)]) < qAbs(data[zero_point]))
+        return zero_point+1;
+
+    return zero_point;
 }
 
 bool RFIOChannel::get_data_valid(const QVector<int> &data) {
@@ -103,8 +139,8 @@ int RFIOChannel::get_period(const QVector<int> &data) {
     bool sign = true;
 
     for(int i = get_zero(data); i < data.size(); i++) {
-        //6 Half-Periods should be enough
-        if(cnt > 5)
+        //10 Half-Periods should be enough
+        if(cnt > 9)
             break;
 
         //Ignore values near zero
@@ -203,4 +239,6 @@ void RFIOChannel::set_sample_position(long long position) {
 void RFIOChannel::set_margin(int margin) {
     this->margin = qPow(2, margin);
     margin_changed = true;
+
+    emit announce_margin_changed("2^" + QString::number(margin));
 }

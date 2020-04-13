@@ -61,3 +61,11 @@ void RFIO::init() {
 void RFIO::reconnect() {
     //Delete old connection, clean process and set it up again (init()?)
 }
+
+void RFIO::start_logging() {
+
+}
+
+void RFIO::stop_logging() {
+
+}

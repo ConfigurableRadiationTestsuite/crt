@@ -40,7 +40,7 @@ void RFIOUpdater::update_device() {
     QByteArray data = process->readAllStandardOutput();
 #endif
 #ifdef DUMMY_DATA
-    QByteArray data = dummy_iq(32, channel_list->size());
+    QByteArray data = dummy_iq(12, channel_list->size());
 #endif
     char * real = new char[BYTE_PER_SAMPLE];
     char * imag = new char[BYTE_PER_SAMPLE];
@@ -52,7 +52,7 @@ void RFIOUpdater::update_device() {
 
     /* Distribute it to the data to the channels */
     int i, chan;
-    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list->size()); i++) {
+    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list->size()) + offset; i++) {
         chan = 0;
         foreach(channel, *channel_list) {
             real[0] = data[i*BYTE_PER_CHANNEL*channel_list->size() + chan*BYTE_PER_SAMPLE + offset];
@@ -66,7 +66,7 @@ void RFIOUpdater::update_device() {
         }
     }
 
-    offset = (i + 1) * BYTE_PER_CHANNEL * channel_list->size() - data.size();
+    offset = i * BYTE_PER_CHANNEL * channel_list->size() - data.size();
 
     //Analyize it
     foreach (channel, *channel_list) {

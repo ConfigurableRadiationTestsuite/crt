@@ -29,6 +29,10 @@ public:
 
    void set_config() override;
 
+public slots:
+   void start_logging();
+   void stop_logging();
+
 private slots:
    void reconnect();
 

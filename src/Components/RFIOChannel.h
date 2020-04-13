@@ -6,7 +6,7 @@
 *
 */
 
-#define BITS_TO_IGNORE 3
+#define BITS_TO_IGNORE 5
 #define MIN_DATAPOINTS 10
 
 class RunManager;
@@ -62,6 +62,7 @@ signals:
    void error();
    void announce_data_valid(bool);
    void finished();
+   void announce_margin_changed(const QString &text);
 
 private:
    RunManager *runManager;
