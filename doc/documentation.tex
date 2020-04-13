@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{siunitx}
+\usepackage{titlesec}
 \usepackage{url}
 \usepackage{xcolor}
 
@@ -22,8 +23,13 @@
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
 \lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=0.045\textwidth}
 
+%More sections
+\setcounter{secnumdepth}{4}
+
+%Different margin
 \usepackage[margin=30mm]{geometry}
 
+%Author and title info
 \title{Configurable Radiation Testsuite \\- \\Documentation}
 \author{Mattis Jaksch}
 \date{\today}
@@ -253,9 +259,9 @@ EndSection
 		\begin{tabular}{c|cc|cc|cc|cc}
 		\toprule
 		Channel $n$	& \multicolumn{8}{c}{8 Byte}\\ \midrule
-		IQ-Data		& \multicolumn{4}{c}{4 Byte} & \multicolumn{4}{|c}{4 Byte} \\ \hline 
-		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{2 Byte} & \multicolumn{4}{|c}{} \\ 
-		Q	& \multicolumn{4}{c}{} & \multicolumn{2}{|c}{2 Byte} & \multicolumn{2}{c}{2 Byte} \\  \hline
+		IQ-Data		& \multicolumn{4}{c|}{4 Byte} & \multicolumn{4}{c}{4 Byte} \\ \hline 
+		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c|}{2 Byte} & \multicolumn{4}{c}{} \\ 
+		Q	& \multicolumn{4}{c|}{} & \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{2 Byte} \\  \hline
 		Byte		& LSB & MSB & LSB & MSB & LSB & MSB & LSB & MSB \\ \bottomrule
 		\end{tabular}
 		\caption{Data structure of the RF IQ-data}
@@ -287,9 +293,11 @@ The signal event mechanism allows the user to define interactions between compon
 \newpage
 \appendix
 
-\section{Diagrams}
+\section{Appendix}
 
-\section{Signal Event Mechanism}
+\subsection{Diagrams}
+
+\subsection{Signal Event Mechanism}
 
 To understand the signal event mechanism an overview of the participating classes is presented in figure \ref{f:signal_event_mechanism}. 
 
@@ -303,11 +311,11 @@ In the \textit{SubWindow} are general cases of signals and corresponding slots d
 \label{f:signal_event_mechanism}
 \end{figure}
 
-	\subsection{Event Manager}
+	\subsubsection{Event Manager}
 	
 	The \textit{EventManger} class object exists only once in the program. It presents an interface to all the other classes to handle signals and slots and especially the interaction between \textit{SubWindows} and their components. For this to work, the signals from the \textit{SubWindow} have to be added to the \textit{EventManager}.
 	
-		\subsubsection{Registered Signal Structure}
+		\paragraph{Registered Signal Structure}
 
 		A signal from the \textit{SubWindow}, which is added to the \textit{EventManager}, holds the following properties:
 		
@@ -323,7 +331,7 @@ struct RegisteredSignal {
 
 			The name is a descriptive name and should consist of the components name (\textit{cfg\_element\_name}) and info of the action (e.g. turn on, turn off). The signal type is one of the predefined types / actions listed in the \textit{EventManager}. The next two rows are the pointers to find the signal later on and to emit them via the call mechanism.
 
-		\subsubsection{Call Mechanism}
+		\paragraph{Call Mechanism}
 		
 		To now emit the registered signals and cause an action, the \textit{call\_tigger()} method is used which needs the type of signal to be triggered and a signal list to choose from:
 		
@@ -338,11 +346,11 @@ const QVector<struct RegisteredSignal*> &signal_list) {
 }
 \end{lstlisting}
 
-	\subsection{Sub Window}
+	\subsubsection{Sub Window}
 	
 	In the \textit{SubWindow} a general set of signals and slots is available. These can be implemented in the derived classes for easy interaction internally as well as externally. The class holds a signal list with signals which have been added either internal or external. All the available signals are stored in the signal list of the \textit{EventManager}.
 
-		\subsubsection{Code Example}
+		\paragraph{Code Example}
 
 		First, in the derived subclass the used signals have to be registered to inform the \textit{EventManager} (and therefore the outer world) about it. In this example we announce from our power-supply the signals \enquote{on} and \enquote{off}. Which means that our power-supply is listening and will turn itself on or off if one of these signals are emitted:
 		
