@@ -5,6 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{booktabs}
+\usepackage{caption}
 \usepackage{csquotes}
 \usepackage{graphicx}
 \usepackage{float}
@@ -12,7 +13,14 @@
 \usepackage{listings}
 \usepackage{siunitx}
 \usepackage{url}
+\usepackage{xcolor}
 
+%Beautiful lstlistning
+\DeclareCaptionFont{white}{\color{white}}
+\DeclareCaptionFormat{listing}{%
+ \parbox{\textwidth}{\colorbox{gray}{\parbox{0.95\textwidth}{#1#2#3}}\vskip-4pt}}
+\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
+\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=0.045\textwidth}
 
 \usepackage[margin=30mm]{geometry}
 
@@ -30,6 +38,10 @@
 \newpage
 
 \section{Overview}
+Wieso, weshalb, warum, wer nicht fragt bleibt dumm!
+
+\bigbreak
+
 This testsuite is developed to automate test procedures. It supports different devices (e.g. power supplies, ethernet clients, data acquisition units, ...) which can be configured to control the process in a desired way. The interaction between components is realized with the \enquote{qt-signal-slot}\footnote{Refer to \url{doc.qt.io/qt-5/signalsandslots.html}} mechanism. One may add signals to a device which are then send out to trigger actions on other devices. A trigger-device can be for example a power supply switching off to protect the DUT.
 
 	\subsection{Mainwindow}
@@ -113,7 +125,7 @@ Here the various components, corresponding to the tabs, are explained. The descr
 	
 	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix $v$ for voltage and $c$ for current.
 	
-\begin{lstlisting}
+\begin{lstlisting}[caption=PSU Config]
 Section PSU
 	name=PSU Links
 	address=192.168.3.103:5025
@@ -179,7 +191,7 @@ EndSection
 	\item $g$: Gain value
 	\end{itemize}
 	
-\begin{lstlisting}
+\begin{lstlisting}[caption=LBJ Config]
 Section LBJ
 	name=Rotes T7
 	channel=2
@@ -272,6 +284,7 @@ The signal event mechanism allows the user to define interactions between compon
 	\end{figure}
 
 
+\newpage
 \appendix
 
 \section{Diagrams}
@@ -298,7 +311,7 @@ In the \textit{SubWindow} are general cases of signals and corresponding slots d
 
 		A signal from the \textit{SubWindow}, which is added to the \textit{EventManager}, holds the following properties:
 		
-\begin{lstlisting}
+\begin{lstlisting}[caption=EventManager.h]
 struct RegisteredSignal {
 	QString name;
 	SignalType st;
@@ -314,7 +327,7 @@ struct RegisteredSignal {
 		
 		To now emit the registered signals and cause an action, the \textit{call\_tigger()} method is used which needs the type of signal to be triggered and a signal list to choose from:
 		
-\begin{lstlisting}
+\begin{lstlisting}[caption=EventManager.cpp]
 void EventManager::call_trigger(enum SignalType st,
 const QVector<struct RegisteredSignal*> &signal_list) {
 
@@ -333,7 +346,7 @@ const QVector<struct RegisteredSignal*> &signal_list) {
 
 		First, in the derived subclass the used signals have to be registered to inform the \textit{EventManager} (and therefore the outer world) about it. In this example we announce from our power-supply the signals \enquote{on} and \enquote{off}. Which means that our power-supply is listening and will turn itself on or off if one of these signals are emitted:
 		
-\begin{lstlisting}
+\begin{lstlisting}[caption=PSU.cpp]
 PSU::PSU() {
  connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
  connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
@@ -349,7 +362,7 @@ If one now wants to not only react, but also to trigger other components, the pr
 
 For example if we track various sub-voltages on a board via LabJack, we can then connect an off-signal if we cross a set boundary:
 
-\begin{lstlisting}
+\begin{lstlisting}[caption=PSU.cpp]
 connect(channel, SIGNAL(boundary_check_failed()),
  this, SLOT(trigger_signal_list()));
 \end{lstlisting}
