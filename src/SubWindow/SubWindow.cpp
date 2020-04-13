@@ -11,7 +11,7 @@ SubWindow::SubWindow(EventManager *eventManager) : eventManager(eventManager) {
 
     /* Post config management */
     connect(eventManager, SIGNAL(signal_added()), this, SLOT(post_init()));
-    connect(eventManager, SIGNAL(signal_deleted(struct RegisteredSignal *)), this, SLOT(delete_trigger(struct RegisteredSignal *)));
+    connect(eventManager, SIGNAL(signal_deleted(struct RegisteredSignal *)), this, SLOT(delete_signal(struct RegisteredSignal *)));
 }
 
 SubWindow::~SubWindow() {
