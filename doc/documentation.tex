@@ -10,12 +10,13 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{siunitx}
 \usepackage{url}
 
 
 \usepackage[margin=30mm]{geometry}
 
-\title{Configurable Radiation Testsuite - Documentation}
+\title{Configurable Radiation Testsuite \\- \\Documentation}
 \author{Mattis Jaksch}
 \date{\today}
 
@@ -29,48 +30,50 @@
 \newpage
 
 \section{Overview}
-This testsuite is developed to automate test procedures. It supports different devices\footnote{e.g. power supplies, ethernet clients, data acquisition units, ...} which can be configured to control the process in a desired way. The interaction between components is realized with the qt-signal-slot mechanism. One may add triggers to a device which are then send out to other devices. For example if the voltage in the Labjack measurement exceeds a certain boundary a signal is send to trigger all the previously selected devices. A trigger device could be a power supply switching off to protect the DUT.
+This testsuite is developed to automate test procedures. It supports different devices (e.g. power supplies, ethernet clients, data acquisition units, ...) which can be configured to control the process in a desired way. The interaction between components is realized with the \enquote{qt-signal-slot}\footnote{Refer to \url{doc.qt.io/qt-5/signalsandslots.html}} mechanism. One may add signals to a device which are then send out to trigger actions on other devices. A trigger-device can be for example a power supply switching off to protect the DUT.
 
 	\subsection{Mainwindow}
+	Here in figure \eqref{f:main_menu} an overview on the general program is given. The different options are described in the following sub-chapters.
 	
 	\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.9\textwidth]{./1_Plain_Expl.png}
-	\caption{Main menu of the suite}
+\centering
+\includegraphics[width=0.9\textwidth]{./1_Plain_Expl.png}
+\caption{Main menu of the suite}
+\label{f:main_menu}
 	\end{figure}
 	
 	\subsubsection{Top Row}	
 	
-	On the top row, on the left side, configurations for all the components in the various tabs can be either stored or loaded. The stored configuration file is also human readable and editable.
+	On the top row, on the left side, configurations for all the components in the various tabs can be either stored or loaded in a single file. The stored configuration file is also human readable and editable.
 	
 	\bigbreak
 	
-	On the right side the test can be started or stopped. Starting and stopping the test sends a trigger to all components. E.g. the power supply will turn selected channels on/off and start/stop the logging. Hence one can not click the start-button twice in a row!
+	On the right side the test can be started or stopped. Starting and stopping the test sends a signal to all components. E.g. the power supply will turn selected channels on/off and start/stop the logging. Hence one can not click the start-button twice in a row!
 	
-	\subsubsection{Run Information (Mid Row)}
+	\subsubsection{Mid Row (Run Information)}
 	
-	In the row below is the run information. To start a run one should first create a \enquote{New run} by clicking the button and creating a folder to store all the log files. On the right of this button, the current file location and the time of the run are displayed. If one stops the run, the time also halts till the run gets restarted. 
+	In the row below is the run information. To start a run one should first create a \enquote{New run} by clicking the button and creating a folder to store all the devices log files. On the right of this button, the current file location and the time of the run are displayed. If one stops the run, the time also halts till the run gets restarted. 
 
 	\bigbreak	
 	
-	The log files are named after the individual components, so one should make sure to not have any names twice.
+	The log files are named after the individual components, so one should make sure to not have any names twice to avoid confusion.
 	
 	\subsubsection{Tabs}
 	
 	The tabs contain various devices of the same kind. Currently implemented are:
 	
 	\begin{itemize}
-	\item Power-supply
-	\item Labjack
-	\item RF (Reception client for the Analog Devices IIO-daemon)
+\item Power-supply
+\item Labjack
+\item RF (Reception client for the Analog Devices IIO-daemon)
 	\end{itemize}		
 	
 	\subsection{Testrun}	
 	
 	\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.9\textwidth]{./4_Testrun.png}
-	\caption{An active testrun in the suite}
+\centering
+\includegraphics[width=0.9\textwidth]{./4_Testrun.png}
+\caption{An active testrun in the suite}
 	\end{figure}
 	
 	If a test run is started, the \enquote{Start} button and the \enquote{New run} button get deactivated and the time starts to count up. Meanwhile in the background, logfiles are generated with a UTC timestamp. The data itself is stored in a \textit{.csv} format to be easily readable. To every datapoint or row being stored, a relative timestamp in milliseconds is added.
@@ -79,27 +82,36 @@ This testsuite is developed to automate test procedures. It supports different d
 	
 	To stop the run and therefore also the logging and timer, the \enquote{Stop} button should be pressed. After that a run can also be continued by clicking the \enquote{Start} button again.	
 	
+\newpage
+	
 \section{Components}
+Here the various components, corresponding to the tabs, are explained. The description includes a function overview, an example and two creation procedures (manual / config) as well as the currently supported devices.
 
 	\subsection{Power-Supply}
+	The power supply tab controls a given device remotely. An arbitrary maximum voltage / current can be set to avoid unwanted change and damage. In figure \eqref{f:psu_example} one example is given. The psu can be easily controlled via voltage and current line edits. Also every channel can be enabled / disabled individually and also by a signal (e.g. with the test start / stop). Also a time-line of the voltage and current is given on a small graph for each channel. 	
 	
 	\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.4\textwidth]{./2_PSU_menu.png}
-	\caption{An active testrun in the suite}
-	\label{f:psu_menu}
-	\end{figure}
-	
-	The power supply can be either added via configuration file or manually. If it's added manually a small window will pop up (see figure \ref{f:psu_menu}). 
+\centering
+\includegraphics[width=0.9\textwidth]{./2_PSU_example.png}
+\caption{An example with a Rohde\&Schwarz 3-channel power supply}
+\label{f:psu_example}
+	\end{figure}	 
 	
 	\subsubsection{Manual Creation}	
 	\label{c:psu_manual_creation}
 	
-	The window for manual creation is presented in figure \ref{f:psu_menu}. In the first row an individual (meaningful) name can be chosen. In the second row the vendor is put in (case insensitive). Then follows the address which has a IPv4 part and a port number after the double dot. In the last three rows a description of the power supply is given with the number of channels and the maximum voltage / current the supply has or one wants to apply.	
+	The window for manual creation is presented in figure \eqref{f:psu_menu}. In the first row an individual (meaningful) name can be chosen. In the second row the vendor is put in (case insensitive). Then follows the address which has a IPv4 part and a port number after the double dot. In the last three rows a description of the power supply is given with the number of channels and the maximum voltage / current the supply either has or one wants to apply.	
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./2_PSU_menu.png}
+	\caption{Creation menu for a power-supply}
+	\label{f:psu_menu}
+	\end{figure}
 	
 	\subsubsection{Config Creation}
 	
-	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that the current channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix $v$ for voltage and $c$ for current.
+	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix $v$ for voltage and $c$ for current.
 	
 \begin{lstlisting}
 Section PSU
@@ -108,12 +120,12 @@ Section PSU
 	channel=3
 	max_voltage=30
 	max_current=10
-	c0v=10
-	c0c=3
-	c1v=10
-	c1c=3
-	c2v=10
-	c2c=3
+	c0v=12
+	c0c=500
+	c1v=0
+	c1c=0
+	c2v=0
+	c2c=0
 	signal=
 EndSection
 \end{lstlisting}
@@ -131,21 +143,30 @@ EndSection
 		\bottomrule
 		\end{tabular}			
 		\end{table}	
+		
+\newpage
 	
 	\subsection{Labjack}
+	The Labjack is a data acquisition device to measure voltages in a range of $\SI{10}{\milli\volt}$ to $\SI{10}{\volt}$. As a consequence available the resolution is dependant on the chosen measurement range. The same goes for the data rate which depends on the settling time (see low-pass filter) and on the chosen resolution. In the figure \eqref{f:lbj_example} a Labjack with two channels (one differential, one single-ended) are shown. In the top row the mentioned data-rate, resolution and settling time can be chosen. The \enquote{Maximum} check box allows to set the data-rate to the available maximum. Below are presented the two channels with a boundary (\enquote{0} means \enquote{not set}), their latest value and the chosen gain (only post-processing). The display of the channel in the graph can be switched on or off by the corresponding check box. At the bottom the graph is presented with all channels plotted on one graph.
 	
 	\begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\textwidth]{./3_LBJ_menu.png}
-	\caption{An active testrun in the suite}
-	\label{f:lbj_menu}
+	\includegraphics[width=0.9\textwidth]{./3_LBJ_example.png}
+	\caption{An example with a T7 Labjack data acquisition device}
+	\label{f:lbj_example}
 	\end{figure}
-	
-	The labjack can be either added via configuration file or manually. If it's added manually a small window will pop up (see figure \ref{f:lbj_menu}).
 	
 	\subsubsection{Manual Creation}	
 	
 	The window for manual creation is presented in figure \ref{f:lbj_menu}. In the first row an individual name can be chosen. The channel names in the second row can also be chosen individually. The third and fourth row determines the used channels\footnote{Refer to \url{labjack.com/support/datasheets/t-series/ain}} and if they are differential or not. A differential channel is given by a certain positive and negative address, whereas single ended just use $199$ as negative channel.
+	
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./3_LBJ_menu.png}
+	\caption{Creation menu for a Labjack}
+	\label{f:lbj_menu}
+	\end{figure}
 	
 	\subsubsection{Config Creation}	
 	The LabJack is denoted in the configuration file in the \enquote{LabJack} section. First the name is defined and after that the number of channels as a validity check. The individual channels are written with a prefix $c$, a number $X$ and their features as prefix:
@@ -189,14 +210,51 @@ EndSection
 		\end{tabular}			
 		\end{table}	
 
+	\newpage
 	\subsection{RF Signals}
-	Not implemented yet
-	
-		\subsubsection{IIO Daemon}
+	In order to verify RF signals, the RF tab can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. A evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal gets emitted.
 		
+		\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./6_RF_example.png}
+\caption{An active RF testrun in the suite}
+\label{f:rf_example}
+		\end{figure}
+	
+		\subsubsection{Manual Creation}
+
+		\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{./6_RF_menu.png}
+\caption{RF creation menu}
+\label{f:rf_menu}
+		\end{figure}
+			
+		\subsubsection{Config Creation}
+		Not implemented
+	
+		\subsubsection{Data Reception}
+		The current implementation uses the simple \textit{ncat}\footnote{Refer to \url{de.wikipedia.org/wiki/Netcat}} command to receive raw data over Ethernet. This makes it rather independent. The current data protocol is given in table (\ref{t:rf_data}):
+		
+		\begin{table}[H]
+		\centering
+		\begin{tabular}{c|cc|cc|cc|cc}
+		\toprule
+		Channel $n$	& \multicolumn{8}{c}{8 Byte}\\ \midrule
+		IQ-Data		& \multicolumn{4}{c}{4 Byte} & \multicolumn{4}{|c}{4 Byte} \\ \hline 
+		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{2 Byte} & \multicolumn{4}{|c}{} \\ 
+		Q	& \multicolumn{4}{c}{} & \multicolumn{2}{|c}{2 Byte} & \multicolumn{2}{c}{2 Byte} \\  \hline
+		Byte		& LSB & MSB & LSB & MSB & LSB & MSB & LSB & MSB \\ \bottomrule
+		\end{tabular}
+		\caption{Data structure of the RF IQ-data}
+		\label{t:rf_data}
+		\end{table}
+		
+	\newpage
 	\subsection{Ethernet}
 	Not implemented yet
 
+\newpage
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
 
