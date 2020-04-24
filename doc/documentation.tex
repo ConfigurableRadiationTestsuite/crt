@@ -12,6 +12,7 @@
 \usepackage{hyperref}
 \usepackage{listings}
 \usepackage{siunitx}
+\usepackage{svg}
 \usepackage{titlesec}
 \usepackage{url}
 \usepackage{xcolor}
@@ -44,18 +45,18 @@
 \newpage
 
 \section{Overview}
-Wieso, weshalb, warum, wer nicht fragt bleibt dumm!
+This testsuite is developed to automate various test procedures, like thermal-vacuum, radiation or just general long-term tests. The use is made to be as easy as possible to have a comprehensive and fast test setup. It offers interfaces to gather all the needed data, together with some measurements to protect the device under test (DUT) and act in unsafe situations.
 
 \bigbreak
 
-This testsuite is developed to automate test procedures. It supports different devices (e.g. power supplies, ethernet clients, data acquisition units, ...) which can be configured to control the process in a desired way. The interaction between components is realized with the \enquote{qt-signal-slot}\footnote{Refer to \url{doc.qt.io/qt-5/signalsandslots.html}} mechanism. One may add signals to a device which are then send out to trigger actions on other devices. A trigger-device can be for example a power supply switching off to protect the DUT.
+The test-suite supports different devices (e.g. power supplies, ethernet clients, data acquisition units, ...) which can be configured to control the process in a desired way. The interaction between components is realized with the \enquote{qt-signal-slot}\footnote{Refer to \url{doc.qt.io/qt-5/signalsandslots.html}} mechanism. One may add signals to a device which are then send out to trigger actions on other devices. A trigger-device can be, for example, a power supply switching off to protect the DUT.
 
 	\subsection{Mainwindow}
 	Here in figure \eqref{f:main_menu} an overview on the general program is given. The different options are described in the following sub-chapters.
 	
 	\begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{./1_Plain_Expl.png}
+\includesvg[width=0.9\textwidth]{1_Plain_Expl.svg}
 \caption{Main menu of the suite}
 \label{f:main_menu}
 	\end{figure}
@@ -66,15 +67,15 @@ This testsuite is developed to automate test procedures. It supports different d
 	
 	\bigbreak
 	
-	On the right side the test can be started or stopped. Starting and stopping the test sends a signal to all components. E.g. the power supply will turn selected channels on/off and start/stop the logging. Hence one can not click the start-button twice in a row!
+	On the right side, the test can be started or stopped. Starting and stopping the test sends a signal to all components. E.g. the power supply will turn selected channels on/off and start/stop the logging. Hence one can not click the start-button twice in a row!
 	
 	\subsubsection{Mid Row (Run Information)}
 	
-	In the row below is the run information. To start a run one should first create a \enquote{New run} by clicking the button and creating a folder to store all the devices log files. On the right of this button, the current file location and the time of the run are displayed. If one stops the run, the time also halts till the run gets restarted. 
+	In the row below is the run information. To start a run, one should first create a \enquote{New run} by clicking the button and creating a folder to store all the devices log files. On the right of this button, the current file location and the time of the run are displayed. If one stops the run, the time also halts till the run gets restarted. 
 
 	\bigbreak	
 	
-	The log files are named after the individual components, so one should make sure to not have any names twice to avoid confusion.
+	The log files are named after the individual components (e.g. \enquote{PSU Left}), so one should make sure to not have any names twice to avoid confusion.
 	
 	\subsubsection{Tabs}
 	
@@ -84,6 +85,7 @@ This testsuite is developed to automate test procedures. It supports different d
 \item Power-supply
 \item Labjack
 \item RF (Reception client for the Analog Devices IIO-daemon)
+\item DIO (Digital I/O to switch relays, \textit{to be implemented})
 	\end{itemize}		
 	
 	\subsection{Testrun}	
@@ -94,11 +96,11 @@ This testsuite is developed to automate test procedures. It supports different d
 \caption{An active testrun in the suite}
 	\end{figure}
 	
-	If a test run is started, the \enquote{Start} button and the \enquote{New run} button get deactivated and the time starts to count up. Meanwhile in the background, logfiles are generated with a UTC timestamp. The data itself is stored in a \textit{.csv} format to be easily readable. To every datapoint or row being stored, a relative timestamp in milliseconds is added.
+	If a test run is started, the \enquote{Start Test} button and the \enquote{New run} button get deactivated and the time starts to count up. Meanwhile in the background, logfiles are generated with a UTC timestamp. The data itself is stored in a \textit{.csv} format to be easily readable. To every datapoint or row being stored, a relative timestamp in milliseconds is added.
 	
 	\bigbreak
 	
-	To stop the run and therefore also the logging and timer, the \enquote{Stop} button should be pressed. After that a run can also be continued by clicking the \enquote{Start} button again.	
+	To stop the run and therefore also the logging and timer, the \enquote{Stop Test} button should be pressed. After that, a run can also be continued by clicking the \enquote{Start Test} button again.	
 	
 \newpage
 	
@@ -106,7 +108,7 @@ This testsuite is developed to automate test procedures. It supports different d
 Here the various components, corresponding to the tabs, are explained. The description includes a function overview, an example and two creation procedures (manual / config) as well as the currently supported devices.
 
 	\subsection{Power-Supply}
-	The power supply tab controls a given device remotely. An arbitrary maximum voltage / current can be set to avoid unwanted change and damage. In figure \eqref{f:psu_example} one example is given. The psu can be easily controlled via voltage and current line edits. Also every channel can be enabled / disabled individually and also by a signal (e.g. with the test start / stop). Also a time-line of the voltage and current is given on a small graph for each channel. 	
+	The power supply tab controls a given device remotely. An arbitrary maximum voltage / current can be set to avoid unwanted change and damage. In figure \eqref{f:psu_example} an supply example is given. The psu can be easily controlled via voltage and current line edits. Also every channel can be enabled / disabled individually and also by a signal (e.g. with the \enquote{Start Test} / \enquote{Stop Test}). Also, a time-line of the voltage and current is given on a small graph for each channel in steps of 1 second over an interval of 30 seconds. 	
 	
 	\begin{figure}[H]
 \centering
@@ -118,7 +120,7 @@ Here the various components, corresponding to the tabs, are explained. The descr
 	\subsubsection{Manual Creation}	
 	\label{c:psu_manual_creation}
 	
-	The window for manual creation is presented in figure \eqref{f:psu_menu}. In the first row an individual (meaningful) name can be chosen. In the second row the vendor is put in (case insensitive). Then follows the address which has a IPv4 part and a port number after the double dot. In the last three rows a description of the power supply is given with the number of channels and the maximum voltage / current the supply either has or one wants to apply.	
+	The window for manual creation is presented in figure \eqref{f:psu_menu}. In the first row an individual (meaningful) name can be chosen. In the second row the vendor is put in (case insensitive). Then follows the address which has a IPv4 part and a port number after the double dot. In the last three rows, a description of the power supply is given with the number of channels and the maximum voltage/current. The voltage here, as well as the current, can be set to an arbitrary level to avoid accidental overvoltage.
 	
 	\begin{figure}[H]
 	\centering
@@ -129,7 +131,7 @@ Here the various components, corresponding to the tabs, are explained. The descr
 	
 	\subsubsection{Config Creation}
 	
-	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix $v$ for voltage and $c$ for current.
+	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that, the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix, with $v$ for voltage and $c$ for current.
 	
 \begin{lstlisting}[caption=PSU Config]
 Section PSU
@@ -165,7 +167,7 @@ EndSection
 \newpage
 	
 	\subsection{Labjack}
-	The Labjack is a data acquisition device to measure voltages in a range of $\SI{10}{\milli\volt}$ to $\SI{10}{\volt}$. As a consequence available the resolution is dependant on the chosen measurement range. The same goes for the data rate which depends on the settling time (see low-pass filter) and on the chosen resolution. In the figure \eqref{f:lbj_example} a Labjack with two channels (one differential, one single-ended) are shown. In the top row the mentioned data-rate, resolution and settling time can be chosen. The \enquote{Maximum} check box allows to set the data-rate to the available maximum. Below are presented the two channels with a boundary (\enquote{0} means \enquote{not set}), their latest value and the chosen gain (only post-processing). The display of the channel in the graph can be switched on or off by the corresponding check box. At the bottom the graph is presented with all channels plotted on one graph.
+	The Labjack is a data acquisition device to measure voltages in a range of $\SI{10}{\milli\volt}$ to $\SI{10}{\volt}$. As a consequence, the available resolution is dependant on the chosen measurement range. The same goes for the data rate which depends on the settling time (see low-pass filter) and for the chosen resolution. In the figure \eqref{f:lbj_example} a Labjack with two channels (one differential, one single-ended) are shown. In the top row, the mentioned data-rate, resolution and settling time can be chosen. The \enquote{Maximum} check box allows to set the data-rate to the available maximum. Below presented are the two channels with a boundary (\enquote{0} means \enquote{not set}), their latest value and the chosen gain (only post-processing). At the bottom a graph is presented containing all plotted channels. To display the channels in the graph, they can be switched on or off by the corresponding check box. 
 	
 	\begin{figure}[H]
 	\centering
@@ -176,7 +178,7 @@ EndSection
 	
 	\subsubsection{Manual Creation}	
 	
-	The window for manual creation is presented in figure \ref{f:lbj_menu}. In the first row an individual name can be chosen. The channel names in the second row can also be chosen individually. The third and fourth row determines the used channels\footnote{Refer to \url{labjack.com/support/datasheets/t-series/ain}} and if they are differential or not. A differential channel is given by a certain positive and negative address, whereas single ended just use $199$ as negative channel.
+	The window for manual creation is presented in figure (\ref{f:lbj_menu}). In the first row an individual name can be chosen. The channel names in the second row can also be chosen individually. The third and fourth row determines the used channels\footnote{Refer to \url{labjack.com/support/datasheets/t-series/ain}} and if they are differential or not. A differential channel is given by a certain positive and negative address, whereas single ended just use $199$ as negative channel.
 	
 	
 	\begin{figure}[H]
@@ -187,7 +189,7 @@ EndSection
 	\end{figure}
 	
 	\subsubsection{Config Creation}	
-	The LabJack is denoted in the configuration file in the \enquote{LabJack} section. First the name is defined and after that the number of channels as a validity check. The individual channels are written with a prefix $c$, a number $X$ and their features as prefix:
+	The LabJack is denoted in the configuration file in the \enquote{LBJ} section. First the name is defined and after that the number of channels as a validity check. The individual channels are written with a prefix $c$, a number $X$ and their features as suffix:
 	
 	\begin{itemize}
 	\item $n$: Name
@@ -230,7 +232,7 @@ EndSection
 
 	\newpage
 	\subsection{RF Signals}
-	In order to verify RF signals, the RF tab can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. A evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal gets emitted.
+	In order to verify RF signals, the RF tab can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. An evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
 		
 		\begin{figure}[H]
 \centering
@@ -276,11 +278,11 @@ EndSection
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
 
-The signal event mechanism allows the user to define interactions between components. For example if a certain event happens in component $A$ it can trigger an action in component $B$. Signals are added via the \enquote{Add Signal} button in the components window. If no such button is available it means that this component is not able to trigger any signal.
+The signal event mechanism allows the user to define interactions between components. For example if a certain event happens in component \textbf{A} it can trigger an action in component \textbf{B}. Signals are added via the \enquote{Add Signal} button in the components window. If no such button is available it means that this component is not able to send any signal.
 
 	\subsection{Usage Example}
 	
-	If one has a power-supply and a LabJack set up, a signal interaction can be created. The LabJack has a button to add signals (see figure \ref{f:sem_menu}). Here the user can choose what action should be taken if a certain value boundary is crossed. In this case the power-supply would switch off if a boundary crossing would occur.
+	If one has a power-supply and a LabJack set up, a signal interaction can be created. The LabJack has a button to add signals (see figure \ref{f:sem_menu}). Here the user can choose what action should be taken if a certain value boundary is crossed. In this case, the power-supply would switch off if a boundary crossing would occur.
 	
 	\begin{figure}[H]
 	\centering
@@ -307,6 +309,7 @@ The signal event mechanism allows the user to define interactions between compon
 \centering
 \includegraphics[width=0.9\textwidth]{./A_EventManager.png}
 \caption{Signal Event Mechanism described in the \textit{EventManager} and the \textit{SubWindow} with an example}
+\label{f:signal_event_mechanism}
 \end{figure}
 
 \subsection{Signal Event Mechanism}
@@ -316,12 +319,6 @@ To understand the signal event mechanism an overview of the participating classe
 \bigbreak
 
 In the \textit{SubWindow} are general cases of signals and corresponding slots defined. The signals can be added to the \textit{EventManger} in the derived \textit{SubWindow} classes. Theses signals are then official and can then be used to trigger actions. Either internally in the program code or externally by adding signals in the GUI via dialog. 
-
-\begin{figure}[H]
-\centering
-\caption{Signal Event Mechanism with the participating classes}
-\label{f:signal_event_mechanism}
-\end{figure}
 
 	\subsubsection{Event Manager}
 	
