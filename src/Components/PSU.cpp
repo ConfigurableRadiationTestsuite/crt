@@ -19,7 +19,7 @@ PSU::PSU(RunManager * runManager, const QString &config)
 
     init_ethernet(address);
 
-    double channel_max = get_value("channel").toUInt();
+    uint channel_max = get_value("channel").toUInt();
 
     for(uint i = 0; i < channel_max; i++) {
         assert(parse_config({"c" + QString::number(i) + "vs", "c" + QString::number(i) + "cs", "c" + QString::number(i) + "vm", "c" + QString::number(i) + "cm"}));
@@ -57,6 +57,8 @@ PSU::~PSU() {
     qDebug("Destroy PSU");
     delete eth;
     delete log_timer;
+
+    //Delete channel
 }
 
 void PSU::set_config() {

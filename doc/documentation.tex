@@ -131,21 +131,21 @@ Here the various components, corresponding to the tabs, are explained. The descr
 	
 	\subsubsection{Config Creation}
 	
-	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first four lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that, the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix, with $v$ for voltage and $c$ for current.
+	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first three lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that, the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix, with $vs$ for voltage-set, $cs$ current-set, $vm$ voltage-max and $cm$ current-max. Therefore the maximum settings can be defined individually here, in contrast to the manual creation.
 	
 \begin{lstlisting}[caption=PSU Config]
 Section PSU
 	name=PSU Links
 	address=192.168.3.103:5025
 	channel=3
-	max_voltage=30
-	max_current=10
-	c0v=12
-	c0c=500
-	c1v=0
-	c1c=0
-	c2v=0
-	c2c=0
+	c0vs=12
+	c0cs=500
+	c0vm=30
+	c0cs=3000
+	c1vs=0
+	c1cs=0
+	c1vm=5
+	c1cm=1500
 	signal=
 EndSection
 \end{lstlisting}

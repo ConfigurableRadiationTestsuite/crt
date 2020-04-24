@@ -88,12 +88,17 @@ void ConfigManager::load_config() {
 
 void ConfigManager::save_config() {
     //Show dialog
-    QString tmp = QFileDialog::getOpenFileName(this, tr("Open Directory"), "./");
+    QFileDialog fileDialog(this, tr("Open Directory"), "./");
+    fileDialog.setFileMode(QFileDialog::AnyFile);
+    QStringList tmp;
 
-    if(QFileInfo::exists(tmp))
-        configName = tmp;
+    if(fileDialog.exec())
+        tmp = fileDialog.selectedFiles();
     else
         return ;
+
+    if(tmp.size() > 0)
+        configName = tmp[0];
 
     //Empty config content
     content.clear();
