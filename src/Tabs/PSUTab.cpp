@@ -9,7 +9,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-PSUTab::PSUTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager) : WindowTab(m_configManager, m_eventManager, m_runManager) {
+PSUTab::PSUTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager)
+    : WindowTab(m_configManager, m_eventManager, m_runManager) {
     sectionName = "PSU";
 }
 
