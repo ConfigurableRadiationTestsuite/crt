@@ -1,6 +1,9 @@
 #include "PROGW.h"
 
-PROGW::PROGW(EventManager *m_eventManager) : SubWindow(m_eventManager) {
+#include "src/Components/ProgrammStarter.h"
+
+PROGW::PROGW(ProgrammStarter *programmStarter, EventManager *m_eventManager)
+    : SubWindow(m_eventManager), programmStarter(programmStarter) {
 
 }
 

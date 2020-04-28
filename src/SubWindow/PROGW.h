@@ -6,16 +6,20 @@
  *
  */
 
+class ProgrammStarter;
+
 #include "SubWindow.h"
 
 class PROGW : public SubWindow {
 Q_OBJECT
 
 public:
-    PROGW(EventManager *m_evenManager);
+    PROGW(ProgrammStarter * programmStarter, EventManager *m_evenManager);
     virtual ~PROGW() override;
 
 private:
+    ProgrammStarter * programmStarter;
+
     void create_layout() override;
 
 };
