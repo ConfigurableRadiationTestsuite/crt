@@ -41,6 +41,36 @@ void RFW::create_layout() {
     connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
     headerHLayout->addWidget(signalButton);
 
+    /* Seperator */
+    QFrame* line_1 = new QFrame();
+    line_1->setFrameShape(QFrame::VLine);
+    line_1->setFrameShadow(QFrame::Sunken);
+    headerHLayout->addWidget(line_1);
+
+    /* Single vs Multishot */
+    QButtonGroup * shotGroup = new QButtonGroup;
+    QRadioButton * singleShot = new QRadioButton("Single");
+    QRadioButton * multiShot = new QRadioButton("Multi");
+    shotGroup->addButton(singleShot);
+    shotGroup->addButton(multiShot);
+    connect(singleShot, SIGNAL(clicked()), rfio, SLOT(set_single_shot()));
+    connect(multiShot, SIGNAL(clicked()), rfio, SLOT(set_multi_shot()));
+
+    headerHLayout->addWidget(singleShot);
+    headerHLayout->addWidget(multiShot);
+
+    /* Seperator */
+    QFrame* line_2 = new QFrame();
+    line_2->setFrameShape(QFrame::VLine);
+    line_2->setFrameShadow(QFrame::Sunken);
+    headerHLayout->addWidget(line_2);
+
+    /* Resume */
+    QPushButton * resumeButton = new QPushButton;
+    resumeButton->setText("Resume");
+    headerHLayout->addWidget(resumeButton);
+    connect(resumeButton, SIGNAL(clicked()), rfio, SLOT(reconnect()));
+
     /* Channel */
     subHLayout = new QHBoxLayout(this);
 
@@ -66,7 +96,7 @@ void RFW::create_layout() {
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
         connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
 
-        connect(channel, SIGNAL(error()), this, SLOT(trigger_signal_list()));
+        connect(channel, SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(trigger_signal_list()));
 
         /* Margin info */
         QLabel *marginLabel = new QLabel("Margin");

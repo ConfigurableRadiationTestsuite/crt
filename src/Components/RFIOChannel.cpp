@@ -9,8 +9,6 @@ RFIOChannel::RFIOChannel(RunManager *runManager, const QString &element_name, in
 
     data_valid = false;
     data_analyze = false;
-
-    connect(this, SIGNAL(error()), this, SLOT(handle_error()));
 }
 
 RFIOChannel::~RFIOChannel() {}
@@ -41,7 +39,7 @@ void RFIOChannel::analyze_data() {
         ok &= evaluate_data(q_data);
 
         if(!ok)
-            emit error();
+            emit error(i_data, q_data, number);
     }
 
     /* Data valid check */
@@ -57,18 +55,6 @@ void RFIOChannel::analyze_data() {
     emit announce_data_valid(!data_valid);
 
     emit finished();
-}
-
-void RFIOChannel::handle_error() {
-    /* Write the raw data to the runManager */
-    runManager->register_component(this, element_name + QString::number(number));
-
-    runManager->set_file_header(this, {"Sample", "i", "q"});
-
-    for(int i = 0; i < i_data.size(); i++)
-        runManager->append_values_to_file(this, {double(i), double(i_data[i]), double(q_data[i])});
-
-    runManager->deregister_component(this);
 }
 
 int RFIOChannel::get_zero(const QVector<int> &data) {

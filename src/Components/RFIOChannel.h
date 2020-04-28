@@ -55,11 +55,8 @@ public slots:
    void set_data_analyze(int );
    void set_margin(int );
 
-private slots:
-   void handle_error();
-
 signals:
-   void error();
+   void error(QVector<int> i_data, QVector<int> q_data, int channel);
    void announce_data_valid(bool);
    void finished();
    void announce_margin_changed(const QString &text);

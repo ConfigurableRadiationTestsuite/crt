@@ -32,14 +32,21 @@ public:
 public slots:
    void start_logging();
    void stop_logging();
+   void set_single_shot();
+   void set_multi_shot();
 
 private slots:
    void reconnect();
+   void handle_error(QVector<int> i_data, QVector<int> q_data, int number);
+   void set_thread_destroyed();
 
 private:
    RunManager *runManager;
    QString address;
    int port;
+   bool is_logging = false;
+   bool is_single_shot = false;
+   bool is_destroyed;
 
    RFIOUpdater *rfioUpdater;
    QProcess *process;
@@ -49,6 +56,8 @@ private:
    int channel;
 
    void init();
+
+   QVector<QString> generate_header();
 };
 
 #endif // RFIO_H
