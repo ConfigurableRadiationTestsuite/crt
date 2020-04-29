@@ -29,6 +29,7 @@ SOURCES += \
     src/Components/LabjackChannel.cpp \
     src/Components/PSU.cpp \
     src/Components/PSUChannel.cpp \
+    src/Components/ProgrammStarter.cpp \
     src/Components/RFIO.cpp \
     src/Components/RFIOChannel.cpp \
     src/Components/RFIOUpdater.cpp \
@@ -44,9 +45,11 @@ SOURCES += \
     src/Plot/qcustomplot.cpp \
     src/SubWindow/DIOW.cpp \
     src/SubWindow/LBJW.cpp \
+    src/SubWindow/PROGW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
     src/Tabs/LBJTab.cpp \
+    src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
     src/Tabs/RFTab.cpp \
     src/mainwindow.cpp \
@@ -66,6 +69,7 @@ HEADERS += \
     src/Components/LabjackChannel.h \
     src/Components/PSU.h \
     src/Components/PSUChannel.h \
+    src/Components/ProgrammStarter.h \
     src/Components/RFIO.h \
     src/Components/RFIOChannel.h \
     src/Components/RFIOUpdater.h \
@@ -81,9 +85,11 @@ HEADERS += \
     src/Plot/qcustomplot.h \
     src/SubWindow/DIOW.h \
     src/SubWindow/LBJW.h \
+    src/SubWindow/PROGW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
     src/Tabs/LBJTab.h \
+    src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \
     src/Tabs/RFTab.h \
     src/mainwindow.h \
