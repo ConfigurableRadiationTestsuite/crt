@@ -19,8 +19,6 @@ public:
     PROGW(ProgrammStarter * programmStarter, EventManager *m_evenManager);
     virtual ~PROGW() override;
 
-
-
 private:
     QVBoxLayout * mainVLayout;
     ProgrammStarter * programmStarter;
