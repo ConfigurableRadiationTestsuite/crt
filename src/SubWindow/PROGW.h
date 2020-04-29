@@ -8,6 +8,8 @@
 
 class ProgrammStarter;
 
+class QVBoxLayout;
+
 #include "SubWindow.h"
 
 class PROGW : public SubWindow {
@@ -17,7 +19,10 @@ public:
     PROGW(ProgrammStarter * programmStarter, EventManager *m_evenManager);
     virtual ~PROGW() override;
 
+
+
 private:
+    QVBoxLayout * mainVLayout;
     ProgrammStarter * programmStarter;
 
     void create_layout() override;
