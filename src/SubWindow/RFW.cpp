@@ -71,6 +71,9 @@ void RFW::create_layout() {
     headerHLayout->addWidget(resumeButton);
     connect(resumeButton, SIGNAL(clicked()), rfio, SLOT(reconnect()));
 
+    QSpacerItem *space = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+    headerHLayout->addSpacerItem(space);
+
     /* Channel */
     subHLayout = new QHBoxLayout(this);
 
