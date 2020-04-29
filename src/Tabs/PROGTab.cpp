@@ -41,7 +41,7 @@ void PROGTab::create_subwindow_from_dialog() {
 void PROGTab::create_add_subwindow_dialog() {
     addDialog = new SpecAddDialog;
     addDialog->add_entry("Name", "Test Programm");
-    addDialog->add_entry("Pfad", "/usr/bin/sh");
+    addDialog->add_entry("Pfad", "../CRT/CRTTest");
 
     addDialog->create_dialog();
 

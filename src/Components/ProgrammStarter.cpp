@@ -1,23 +1,29 @@
 #include "ProgrammStarter.h"
 
+#include "src/Manager/RunManager.h"
+
 #include <QProcess>
 
-ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config) {
+ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
+    : runManager(runManager) {
 
 }
 
-ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path) {
+ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path)
+    : runManager(runManager), path(path) {
     this->element_name = m_element_name;
-    this->path = path;
-
-    process = new QProcess;
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
 }
 
 ProgrammStarter::~ProgrammStarter() {}
 
+
 void ProgrammStarter::set_config() {
 
+}
+
+void ProgrammStarter::init() {
+    process = new QProcess;
+    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
 }
 
 void ProgrammStarter::set_path(const QString &text) {
@@ -47,26 +53,42 @@ void ProgrammStarter::set_trigger(int trigger) {
 }
 
 void ProgrammStarter::start_logging() {
+    if(is_logging)
+        return;
 
+    runManager->register_component(this, element_name);
+    runManager->set_file_header(this, {"Line"});
+
+    is_logging = true;
 }
 
 void ProgrammStarter::stop_logging() {
+    if(!is_logging)
+        return ;
 
+    runManager->deregister_component(this);
+    is_logging = false;
 }
 
 void ProgrammStarter::execute_programm() {
+    if(is_early_logging)
+        start_logging();
+
     process->start(path);
     process->waitForStarted();
 
     is_running = true;
+
     emit announce_run(true);
 }
 
 void ProgrammStarter::kill_programm() {
-
     process->kill();
 
     is_running = false;
+
+    stop_logging();
+
     emit announce_run(false);
 }
 
@@ -80,6 +102,9 @@ void ProgrammStarter::receive_data() {
         if(text[text.size()-1] == '\r')
             text.remove(text.size()-1, 1);
     }
+
+    if(is_logging)
+        runManager->append_value_to_file(this, text);
 
     emit data_available(text);
 }

@@ -48,12 +48,16 @@ signals:
     void announce_run(bool);
 
 private:
+    QProcess *process;
+    RunManager *runManager;
+
     QString path;
     bool is_early_logging;
+    bool is_logging;
     bool is_running;
     bool is_trigger;
 
-    QProcess * process;
+    void init();
 };
 
 #endif // PROGRAMMSTARTER_H

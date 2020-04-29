@@ -61,6 +61,13 @@ void FileManager::append_value_to_file(const void * subComponent, double value) 
     get_file(subComponent)->file->flush();
 }
 
+void FileManager::append_value_to_file(const void * subComponent, const QString &text) {
+    long long time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
+
+    get_file(subComponent)->file->write((QString::number(time) + ";" + QString(text + "\n")).toUtf8());
+    get_file(subComponent)->file->flush();
+}
+
 void FileManager::append_values_to_file(const void * subComponent, const QVector<double> &values) {
     long long  time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
 
