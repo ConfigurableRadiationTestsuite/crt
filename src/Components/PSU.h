@@ -17,9 +17,9 @@ class RunManager;
 #include "PSUChannel.h"
 #include "src/Configuration/ConfigElement.h"
 
-#include <QWidget>
+#include <QObject>
 
-class PSU : public QWidget, public ConfigElement {
+class PSU : public QObject, public ConfigElement {
 Q_OBJECT
 
 public:
