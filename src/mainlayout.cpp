@@ -4,6 +4,7 @@
 #include "src/Manager/EventManager.h"
 #include "src/Manager/RunManager.h"
 #include "Tabs/LBJTab.h"
+#include "Tabs/PROGTab.h"
 #include "Tabs/PSUTab.h"
 #include "Tabs/RFTab.h"
 
@@ -80,6 +81,9 @@ QTabWidget * MainLayout::create_window_tabs() {
 
     //RF
     windowTabs->addTab(new RFTab(configManager, eventManager, runManager), "RF");
+
+    //PROG
+    windowTabs->addTab(new PROGTab(configManager, eventManager, runManager), "PROG");
 
     return windowTabs;
 }
