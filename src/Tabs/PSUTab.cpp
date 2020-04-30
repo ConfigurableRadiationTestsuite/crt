@@ -48,6 +48,4 @@ void PSUTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Channel", "3");
     addDialog->add_entry("Max Voltage [V]", "30");
     addDialog->add_entry("Max Current [mA]", "3000");
-
-    addDialog->create_dialog();
 }

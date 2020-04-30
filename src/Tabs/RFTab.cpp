@@ -41,6 +41,4 @@ void RFTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Name", "DUT - AD9361");
     addDialog->add_entry("Address", "192.168.3.2:9001");
     addDialog->add_entry("Channel", "2");
-
-    addDialog->create_dialog();
 }

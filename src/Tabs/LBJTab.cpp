@@ -45,6 +45,4 @@ void LBJTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Channel Name", "AIN62/68, AIN63");
     addDialog->add_entry("Channel Positive", "62, 63");
     addDialog->add_entry("Channel Negative", "68, 199");
-
-    addDialog->create_dialog();
 }

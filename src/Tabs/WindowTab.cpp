@@ -112,7 +112,9 @@ void WindowTab::add_subwindow_from_dialog() {
     if(addDialog == nullptr) {
         addDialog = new SpecAddDialog;
         connect(addDialog, SIGNAL(dialog_accepted(bool)), this, SLOT(create_subwindow_from_dialog(bool)));
+
         create_add_subwindow_dialog();
+        addDialog->create_dialog();
     }
 
     addDialog->show();
