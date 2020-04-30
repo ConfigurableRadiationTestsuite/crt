@@ -62,8 +62,10 @@ void RunManager::create_new_run() {
 
     if(QFileInfo::exists(folder))
         set_root_directory(folder);
-    else
+    else {
+        emit eventManager->logging_disabled(true);
         return ;
+    }
 
     /* Create new run log for start / stop / various */
     register_component(this, "RunManager");
@@ -73,6 +75,7 @@ void RunManager::create_new_run() {
     offsetTime = 0;
     runExists = true;
     emit run_name_changed(folder);
+    emit eventManager->logging_disabled(false);
 }
 
 void RunManager::update_run() {

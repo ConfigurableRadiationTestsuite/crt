@@ -45,8 +45,10 @@ void PROGW::create_layout() {
 
     /* Early Logging */
     QCheckBox * earlyLogging = new QCheckBox("Early Logging");
+    earlyLogging->setDisabled(true);
     optionLayout->addWidget(earlyLogging);
     connect(earlyLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_early_logging(int)));
+    connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogging, SLOT(setDisabled(bool)));
 
     /* Trigger */
     QCheckBox *trigger = new QCheckBox("Trigger");

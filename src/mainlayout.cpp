@@ -56,8 +56,10 @@ QToolBar * MainLayout::create_toolbar() {
     //Start/Stop button
     startTestButton = toolbar->addAction("Start Test");
     startTestButton->setIcon(QIcon(":/icon/startButton.png"));
+    startTestButton->setDisabled(true);
     connect(startTestButton, SIGNAL(triggered()), runManager, SLOT(start_run()));
     connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_start_button(enum RunMode)));
+    connect(eventManager, SIGNAL(logging_disabled(bool)), startTestButton, SLOT(setDisabled(bool)));
 
     stopTestButton = toolbar->addAction("Stop Test");
     stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));

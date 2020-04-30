@@ -38,9 +38,9 @@ private slots:
     void update_run();
 
 signals:
-    void run_name_changed(const QString &text);
-    void run_time_changed(const QString &text);
-    void run_mode_changed(enum RunMode mode);
+    void run_name_changed(const QString &);
+    void run_time_changed(const QString &);
+    void run_mode_changed(enum RunMode);
 
     void enable_run_button(bool enable);
 
