@@ -40,7 +40,6 @@ void LBJTab::create_subwindow_from_dialog() {
 }
 
 void LBJTab::create_add_subwindow_dialog() {
-    addDialog = new SpecAddDialog;
     addDialog->add_entry("Name", "Rotes T7");
     //addDialog->add_entry("Type", "T7");
     addDialog->add_entry("Channel Name", "AIN62/68, AIN63");
@@ -48,7 +47,4 @@ void LBJTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Channel Negative", "68, 199");
 
     addDialog->create_dialog();
-
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(create_subwindow_from_dialog()));
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), addDialog, SLOT(close()));
 }

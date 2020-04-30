@@ -53,7 +53,7 @@ QToolBar * MainLayout::create_toolbar() {
 
     toolbar->addSeparator();
 
-    //Start/Stop button
+    /* Start/Stop button */
     startTestButton = toolbar->addAction("Start Test");
     startTestButton->setIcon(QIcon(":/icon/startButton.png"));
     startTestButton->setDisabled(true);

@@ -103,9 +103,17 @@ void WindowTab::clear_subwindow_list() {
     subWindow_list.clear();
 }
 
+void WindowTab::create_subwindow_from_dialog(bool dialog_accpeted) {
+    if(dialog_accpeted)
+        create_subwindow_from_dialog();
+}
+
 void WindowTab::add_subwindow_from_dialog() {
-    if(addDialog == nullptr)
+    if(addDialog == nullptr) {
+        addDialog = new SpecAddDialog;
+        connect(addDialog, SIGNAL(dialog_accepted(bool)), this, SLOT(create_subwindow_from_dialog(bool)));
         create_add_subwindow_dialog();
+    }
 
     addDialog->show();
 }

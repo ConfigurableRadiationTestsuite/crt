@@ -38,13 +38,9 @@ void RFTab::create_subwindow_from_dialog() {
 }
 
 void RFTab::create_add_subwindow_dialog() {
-    addDialog = new SpecAddDialog;
     addDialog->add_entry("Name", "DUT - AD9361");
     addDialog->add_entry("Address", "192.168.3.2:9001");
     addDialog->add_entry("Channel", "2");
 
     addDialog->create_dialog();
-
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(create_subwindow_from_dialog()));
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), addDialog, SLOT(close()));
 }

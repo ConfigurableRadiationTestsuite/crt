@@ -26,7 +26,7 @@ void RunManager::create_layout() {
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
     /* Color palette */
-    QPalette *grey = new QPalette();
+    QPalette *grey = new QPalette;
     grey->setColor(QPalette::Base,Qt::lightGray);
     grey->setColor(QPalette::Text,Qt::black);
 

@@ -8,7 +8,12 @@
 
 SpecAddDialog::SpecAddDialog() {
     okButton = new QPushButton("Ok", this);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(clicked_ok()));
+
     cancleButton = new QPushButton("Cancel", this);
+    connect(cancleButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(cancleButton, SIGNAL(clicked()), this, SLOT(clicked_close()));
 }
 
 SpecAddDialog::~SpecAddDialog() {
@@ -26,8 +31,6 @@ void SpecAddDialog::create_dialog() {
     hlayout->addWidget(okButton);
     hlayout->addWidget(cancleButton);
 
-    connect(cancleButton, SIGNAL(clicked()), this, SLOT(close()));
-
     QVBoxLayout * vlayout = new QVBoxLayout;
     vlayout->addLayout(formLayout);
     vlayout->addLayout(hlayout);
@@ -42,4 +45,12 @@ void SpecAddDialog::add_entry(const QString &display_name) {
 void SpecAddDialog::add_entry(const QString &display_name, const QString &standard_value) {
     QLineEdit * entry = new QLineEdit(standard_value);
     line_entry_list.push_back({display_name, entry});
+}
+
+void SpecAddDialog::clicked_ok() {
+    emit dialog_accepted(true);
+}
+
+void SpecAddDialog::clicked_close()  {
+    emit dialog_accepted(false);
 }

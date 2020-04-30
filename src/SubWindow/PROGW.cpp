@@ -52,23 +52,24 @@ void PROGW::create_layout() {
 
     /* Trigger */
     QCheckBox *trigger = new QCheckBox("Trigger");
-    optionLayout->addWidget(trigger);
     connect(trigger, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_trigger(int)));
     connect(programmStarter, SIGNAL(announce_run(bool)), trigger, SLOT(setDisabled(bool)));
 
     /* Stop */
     QPushButton *startButton = new QPushButton("Start");
-    optionLayout->addWidget(startButton);
     connect(startButton, SIGNAL(clicked()), programmStarter, SLOT(execute_programm()));
     connect(programmStarter, SIGNAL(announce_trigger(bool)), startButton, SLOT(setDisabled(bool)));
 
     QPushButton *stopButton = new QPushButton("Stop");
-    optionLayout->addWidget(stopButton);
     connect(stopButton, SIGNAL(clicked()), programmStarter, SLOT(kill_programm()));
     connect(programmStarter, SIGNAL(announce_trigger(bool)), stopButton, SLOT(setDisabled(bool)));
 
     /* Spacer */
     QSpacerItem *space = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    optionLayout->addWidget(trigger);
+    optionLayout->addWidget(startButton);
+    optionLayout->addWidget(stopButton);
     optionLayout->addSpacerItem(space);
 
     /* Second Row */
@@ -76,15 +77,21 @@ void PROGW::create_layout() {
     QHBoxLayout *pathLayout = new QHBoxLayout;
 
     /* Programmpath */
-    QLineEdit *programmPath = new QLineEdit;
-    programmPath->setDisabled(true);
-    connect(programmStarter, SIGNAL(announce_path(const QString &)), programmPath, SLOT(setText(const QString &)));
-    pathLayout->addWidget(programmPath);
-
     QPushButton *setPath = new QPushButton("New Path");
     connect(setPath, SIGNAL(clicked()), this, SLOT(path_dialog()));
     connect(programmStarter, SIGNAL(announce_run(bool)), setPath, SLOT(setDisabled(bool)));
+
+    QLineEdit *programmPath = new QLineEdit;
+    QPalette *grey = new QPalette;
+    grey->setColor(QPalette::Base, Qt::lightGray);
+    grey->setColor(QPalette::Text, Qt::black);
+    programmPath->setText("<PROGRAMM>");
+    programmPath->setReadOnly(true);
+    programmPath->setPalette(*grey);
+    connect(programmStarter, SIGNAL(announce_path(const QString &)), programmPath, SLOT(setText(const QString &)));
+
     pathLayout->addWidget(setPath);
+    pathLayout->addWidget(programmPath);
 
     /* Console */
     QTextEdit * consoleText = new QTextEdit;

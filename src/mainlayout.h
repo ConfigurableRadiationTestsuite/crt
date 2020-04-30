@@ -33,7 +33,6 @@ private slots:
     void set_start_button(enum RunMode mode);
     void set_stop_button(enum RunMode mode);
 
-
 private:
     ConfigManager *configManager;
     EventManager *eventManager;

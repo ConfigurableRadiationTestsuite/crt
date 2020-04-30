@@ -36,6 +36,7 @@ protected slots:
     void save_to_config();
 
     virtual void create_subwindow_from_dialog() = 0;
+    virtual void create_subwindow_from_dialog(bool dialog_accepted);
     void add_subwindow_from_dialog();
 
 private slots:

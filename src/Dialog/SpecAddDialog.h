@@ -29,8 +29,14 @@ public:
     void add_entry(const QString &display_name, const QString &standard_value);
     void create_dialog();
 
-    QPushButton* get_ok_button() {return okButton;}
     QVector<struct LineEntry> get_entry_list() const {return line_entry_list;}
+
+private slots:
+    void clicked_close();
+    void clicked_ok();
+
+signals:
+    void dialog_accepted(bool);
 
 private:
     QVector<struct LineEntry> line_entry_list;

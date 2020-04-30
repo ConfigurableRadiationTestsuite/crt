@@ -42,7 +42,6 @@ void PSUTab::create_subwindow_from_dialog() {
 }
 
 void PSUTab::create_add_subwindow_dialog() {
-    addDialog = new SpecAddDialog;
     addDialog->add_entry("Name", "PSU Links");
     addDialog->add_entry("Vendor", "Rohde Schwarz");
     addDialog->add_entry("Address", "192.168.3.103:5025");
@@ -51,7 +50,4 @@ void PSUTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Max Current [mA]", "3000");
 
     addDialog->create_dialog();
-
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(create_subwindow_from_dialog()));
-    connect(addDialog->get_ok_button(), SIGNAL(clicked()), addDialog, SLOT(close()));
 }
