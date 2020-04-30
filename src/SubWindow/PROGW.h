@@ -19,12 +19,14 @@ public:
     PROGW(ProgrammStarter * programmStarter, EventManager *m_evenManager);
     virtual ~PROGW() override;
 
+private slots:
+    void path_dialog();
+
 private:
     QVBoxLayout * mainVLayout;
     ProgrammStarter * programmStarter;
 
     void create_layout() override;
-
 };
 
 #endif // PROGW_H

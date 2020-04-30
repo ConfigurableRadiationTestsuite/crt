@@ -2,23 +2,39 @@
 
 #include "src/Manager/RunManager.h"
 
+#include <QFileDialog>
 #include <QProcess>
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
     : runManager(runManager) {
+    qDebug("Create ProgammStarter from Config");
 
+    load_config(config);
+    assert(parse_config({"name", "path"}));
+
+    this->element_name = get_value("name");
+    this->path = get_value("path");
+
+    init();
 }
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path)
     : runManager(runManager), path(path) {
     this->element_name = m_element_name;
+
+    init();
 }
 
-ProgrammStarter::~ProgrammStarter() {}
-
+ProgrammStarter::~ProgrammStarter() {
+    qDebug("Destroy ProgrammStarter");
+    delete process;
+}
 
 void ProgrammStarter::set_config() {
+    config_entry_list.clear();
 
+    set_value("name", element_name);
+    set_value("path", path);
 }
 
 void ProgrammStarter::init() {
@@ -27,14 +43,11 @@ void ProgrammStarter::init() {
 }
 
 void ProgrammStarter::set_path(const QString &text) {
-    if(is_running)
+    if(is_running || !QFileInfo::exists(text))
         return;
 
-    //Check if path exists
-
     path = text;
-
-    //emit signal
+    emit announce_path(path);
 }
 
 void ProgrammStarter::set_early_logging(int early_logging) {

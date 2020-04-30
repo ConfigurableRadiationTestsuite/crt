@@ -3,6 +3,7 @@
 #include "src/Components/ProgrammStarter.h"
 
 #include <QCheckBox>
+#include <QFileDialog>
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QPushButton>
@@ -14,10 +15,28 @@ PROGW::PROGW(ProgrammStarter *programmStarter, EventManager *m_eventManager)
     : SubWindow(m_eventManager), programmStarter(programmStarter) {
     cfg_element = programmStarter;
 
+    connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
+    connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
+    connect(this, SIGNAL(signal_start_log()), programmStarter, SLOT(start_logging()));
+    connect(this, SIGNAL(signal_stop_log()), programmStarter, SLOT(stop_logging()));
+
+    eventManager->add_signal(programmStarter->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+    eventManager->add_signal(programmStarter->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
+    eventManager->add_signal(programmStarter->get_element_name() + " Execute", SignalType::on, this, &SubWindow::signal_on);
+    eventManager->add_signal(programmStarter->get_element_name() + " Kill", SignalType::off, this, &SubWindow::signal_off);
+
     create_layout();
 }
 
-PROGW::~PROGW() {}
+PROGW::~PROGW() {
+    eventManager->delete_signal(&SubWindow::signal_on);
+    eventManager->delete_signal(&SubWindow::signal_off);
+    eventManager->delete_signal(&SubWindow::signal_start_log);
+    eventManager->delete_signal(&SubWindow::signal_stop_log);
+
+    delete programmStarter;
+    delete mainVLayout;
+}
 
 void PROGW::create_layout() {
     mainVLayout = new QVBoxLayout(this);
@@ -56,9 +75,13 @@ void PROGW::create_layout() {
 
     /* Programmpath */
     QLineEdit *programmPath = new QLineEdit;
+    programmPath->setDisabled(true);
+    connect(programmStarter, SIGNAL(announce_path(const QString &)), programmPath, SLOT(setText(const QString &)));
     pathLayout->addWidget(programmPath);
 
     QPushButton *setPath = new QPushButton("New Path");
+    connect(setPath, SIGNAL(clicked()), this, SLOT(path_dialog()));
+    connect(programmStarter, SIGNAL(announce_run(bool)), setPath, SLOT(setDisabled(bool)));
     pathLayout->addWidget(setPath);
 
     /* Console */
@@ -70,4 +93,8 @@ void PROGW::create_layout() {
     mainVLayout->addWidget(consoleText);
 
     setLayout(mainVLayout);
+}
+
+void PROGW::path_dialog() {
+    programmStarter->set_path(QFileDialog::getOpenFileName(this, tr("Open File"), "./"));
 }

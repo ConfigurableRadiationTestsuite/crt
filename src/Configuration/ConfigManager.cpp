@@ -88,7 +88,7 @@ void ConfigManager::load_config() {
 
 void ConfigManager::save_config() {
     //Show dialog
-    QFileDialog fileDialog(this, tr("Open Directory"), "./");
+    QFileDialog fileDialog(this, tr("Open File"), "./");
     fileDialog.setFileMode(QFileDialog::AnyFile);
     QStringList tmp;
 

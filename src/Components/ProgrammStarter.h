@@ -46,6 +46,7 @@ signals:
 
     void announce_trigger(bool);
     void announce_run(bool);
+    void announce_path(const QString &);
 
 private:
     QProcess *process;
