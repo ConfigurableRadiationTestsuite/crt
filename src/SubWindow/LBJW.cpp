@@ -98,17 +98,6 @@ void LBJW::create_layout() {
     channelLayout->addWidget(new QLabel("Gain"), 0, 3);
     channelLayout->addWidget(new QLabel("Graph"), 0, 4);
 
-    /* Plot for the channels */
-    QVBoxLayout *graphLayout = new QVBoxLayout;
-    QGroupBox *graphBox = new QGroupBox("Plot");
-    QCustomPlot *plot = new QCustomPlot(this);
-    plot->setGeometry(QRect());
-    plot->setMinimumHeight(256);
-    lbjplot = new LBJPlot(plot);
-    graphLayout->addWidget(plot);
-    graphBox->setLayout(graphLayout);
-    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
-
     LabjackChannel *channel; int cnt = 1;
     foreach (channel, lbj->get_channel_list()) {
         //Name
@@ -146,6 +135,17 @@ void LBJW::create_layout() {
     }
 
     channelBox->setLayout(channelLayout);
+
+    /* Plot for the channels */
+    QVBoxLayout *graphLayout = new QVBoxLayout;
+    QGroupBox *graphBox = new QGroupBox("Plot");
+    QCustomPlot *plot = new QCustomPlot(this);
+    plot->setGeometry(QRect());
+    plot->setMinimumHeight(256);
+    lbjplot = new LBJPlot(plot);
+    graphLayout->addWidget(plot);
+    graphBox->setLayout(graphLayout);
+    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
 
     mainVLayout->addWidget(settingsBox);
     mainVLayout->addWidget(channelBox);

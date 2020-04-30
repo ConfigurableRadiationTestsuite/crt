@@ -5,7 +5,7 @@
  * Author: Mattis Jaksch
  *
  * Powersupply window to visualize and control
- * one supply with certain channels.
+ * one supply with multiple channels.
  *
  */
 

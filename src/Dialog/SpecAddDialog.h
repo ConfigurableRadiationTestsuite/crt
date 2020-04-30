@@ -9,9 +9,8 @@
  *
  */
 
-class QLineEdit;
-
 #include <QDialog>
+#include <QLineEdit>
 
 struct LineEntry {
     QString display_name;

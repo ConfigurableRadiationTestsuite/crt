@@ -6,9 +6,6 @@
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/PROGW.h"
 
-#include <QLineEdit>
-#include <QPushButton>
-
 PROGTab::PROGTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager)
     : WindowTab(m_configManager, m_eventManager, m_runManager) {
     sectionName = "PROG";

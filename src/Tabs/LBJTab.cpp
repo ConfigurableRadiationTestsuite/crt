@@ -6,9 +6,6 @@
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/LBJW.h"
 
-#include <QLineEdit>
-#include <QPushButton>
-
 LBJTab::LBJTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager) : WindowTab(m_configManager, m_eventManager, m_runManager) {
     sectionName = "LabJack";
 }

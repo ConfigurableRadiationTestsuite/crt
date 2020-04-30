@@ -2,7 +2,6 @@
 
 #include <QFormLayout>
 #include <QHBoxLayout>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
 
