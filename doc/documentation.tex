@@ -232,7 +232,7 @@ EndSection
 
 	\newpage
 	\subsection{RF Signals}
-	In order to verify RF signals, the RF tab can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. An evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
+	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. An evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
 		
 		\begin{figure}[H]
 \centering
@@ -242,7 +242,8 @@ EndSection
 		\end{figure}
 	
 		\subsubsection{Manual Creation}
-
+		For the manual creation, refer to figure (\ref{f:rf_menu}). In the first row an individual name can be chosen. The second row contains the IPv4 address including the port number. In the third row the number of channels is specified.		
+		
 		\begin{figure}[H]
 \centering
 \includegraphics[width=0.4\textwidth]{./6_RF_menu.png}
@@ -251,7 +252,23 @@ EndSection
 		\end{figure}
 			
 		\subsubsection{Config Creation}
-		Not implemented
+				
+		The RF is denoted in the configuration file in the \enquote{RF} section. First the name is defined, then the IPv4 address of the device and after that the number of channels. The individual channels are written with a prefix $c$, a number $X$ and their features as suffix:
+	
+	\begin{itemize}
+	\item $m$: margin
+	\end{itemize}
+	
+\begin{lstlisting}[caption=RF Config]
+Section RF
+	name=DUT - AD9361
+	address=192.168.3.2:9001
+	channel=2
+	c0m=0
+	c1m=0
+	signal=
+EndSection
+\end{lstlisting}
 	
 		\subsubsection{Data Reception}
 		The current implementation uses the simple \textit{ncat}\footnote{Refer to \url{de.wikipedia.org/wiki/Netcat}} command to receive raw data over Ethernet. This makes it rather independent. The current data protocol is given in table (\ref{t:rf_data}):
@@ -270,6 +287,42 @@ EndSection
 		\label{t:rf_data}
 		\end{table}
 		
+	\newpage
+	\subsection{Programm}
+	To communicate with the DUT in an individual way or to initialize it, a specified program can be started. This is done in the program tab (see figure \ref{f:prog_example}). Here, the path to a program one want to use can be put in. It can then be either manual started early (and logged) or via the trigger mechanism, together with the rest of the test. So far, only console outputs are supported.
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./7_PROG_example.png}
+	\caption{An active PROG testrun in the suite}
+	\label{f:prog_example}
+	\end{figure}
+	
+		\subsubsection{Manual Creation}	
+		For the manual creation, refer to figure (\ref{f:prog_menu}). In the first row an individual name can be chosen. The path to the program is set in the second row. 
+		
+		\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{./7_PROG_menu.png}
+\caption{RF creation menu}
+\label{f:prog_menu}
+		\end{figure}
+			
+		\subsubsection{Config Creation}
+		The RF is denoted in the configuration file in the \enquote{RF} section. First the name is defined, then the IPv4 address of the device and after that the number of channels. The individual channels are written with a prefix $c$, a number $X$ and their features as suffix:
+	
+	\begin{itemize}
+	\item $m$: margin
+	\end{itemize}
+	
+\begin{lstlisting}[caption=PROG Config]
+Section PROG
+	name=Test Programm
+	path=../CRT/CRTTest
+	signal=
+EndSection
+\end{lstlisting}
+	
 	\newpage
 	\subsection{Ethernet}
 	Not implemented yet
