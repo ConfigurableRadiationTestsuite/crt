@@ -1,5 +1,5 @@
-#ifndef PSUPLOT_H
-#define PSUPLOT_H
+#ifndef LBJPLOT_H
+#define LBJPLOT_H
 
 /*
  * Author: Mattis Jaksch
@@ -9,16 +9,12 @@
  *
  */
 
-#define ADC_BITS 14
+#define LBJ_ADC_BITS 14
 
 class LabjackChannel;
 class PlotElement;
 
-class QCustomPlot;
-
 #include "Plot.h"
-
-#include <QWidget>
 
 class LBJPlot : public Plot {
 Q_OBJECT
@@ -32,6 +28,7 @@ public:
 
 public slots:
     void update_plot() override;
+
     void set_datarate(const QString &datarate);
     void set_plot_active(bool active);
 
@@ -48,16 +45,16 @@ private:
 };
 
 /* Connection between channel and its graphical representation */
-class PlotElement : public QWidget {
+class PlotElement : public QObject {
 Q_OBJECT
 
 public:
-    PlotElement(LabjackChannel * channel, QVector<double> axis, bool plot_enabled) :
+    PlotElement(const LabjackChannel * channel, QVector<double> axis, bool plot_enabled) :
         channel(channel), axis(axis), plot_enabled(plot_enabled) {}
     virtual ~PlotElement() {}
 
     QVector<double> & get_axis() {return axis;}
-    LabjackChannel * get_channel() const {return channel;}
+    const LabjackChannel * get_channel() const {return channel;}
     bool is_plotted() const {return plot_enabled;}
 
 public slots:
@@ -72,7 +69,7 @@ signals:
     void plot_active(bool active);
 
 private:
-    LabjackChannel * channel;
+    const LabjackChannel * channel;
     QVector<double> axis;
     bool plot_enabled;
 };

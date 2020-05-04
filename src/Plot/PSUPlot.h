@@ -11,8 +11,6 @@
 
 class PSUChannel;
 
-class QCustomPlot;
-
 #include "Plot.h"
 
 class PSUPlot : public Plot {

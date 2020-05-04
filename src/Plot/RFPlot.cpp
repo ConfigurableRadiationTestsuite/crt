@@ -36,8 +36,12 @@ void RFPlot::update_plot() {
     int max_q = get_maximum(q_axis, int(qPow(2, 16)));
     int maximum = max_i > max_q ? max_i : max_q;
 
-    plot->yAxis->setRange(-maximum, maximum);
-    plot->yAxis->setTickStep(maximum/4);
+    int min_i = get_minimum(i_axis, int(qPow(2, 16)));
+    int min_q = get_minimum(q_axis, int(qPow(2, 16)));
+    int minimum = min_i > min_q ? min_i : min_q;
+
+    plot->yAxis->setRange(-minimum, maximum);
+    plot->yAxis->setTickStep((maximum-minimum)/8);
 
     plot->xAxis->setRange(*std::min_element(time_axis.begin(), time_axis.end()), *std::max_element(time_axis.begin(), time_axis.end()));
     plot->xAxis->setRange(0, time_axis.size());

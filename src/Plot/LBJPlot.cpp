@@ -60,7 +60,7 @@ void LBJPlot::update_plot() {
 }
 
 void LBJPlot::create_layout() {
-    plot->xAxis->setLabel("t[s]");
+    plot->xAxis->setLabel("[s]");
     plot->xAxis->setRange(0, datapoints);
     plot->xAxis->setAutoTickStep(false);
     plot->xAxis->setTickStep(datapoints/3);
@@ -77,7 +77,7 @@ void LBJPlot::add_channel(LabjackChannel * channel, QColor color) {
     plot->addGraph();
     plot->graph(plotElement_list.size() - 1)->setPen(QPen(color));
 
-    connect(plotElement_list[plotElement_list.size()-1], SIGNAL(plot_active(bool)), this, SLOT(set_plot_active(bool)));
+    connect(plotElement_list.last(), SIGNAL(plot_active(bool)), this, SLOT(set_plot_active(bool)));
 }
 
 void LBJPlot::set_datarate(const QString &datarate) {
@@ -104,11 +104,11 @@ int LBJPlot::get_total_maximum() {
 
     PlotElement *plotElement;
     foreach (plotElement, plotElement_list) {
-        int new_maximum = get_maximum(plotElement->get_axis(), int(qPow(2, ADC_BITS)));
+        int new_maximum = get_maximum(plotElement->get_axis(), int(qPow(2, LBJ_ADC_BITS)));
 
         if(new_maximum > maximum)
             maximum = new_maximum;
-        }
+    }
 
     return maximum;
 }
@@ -118,7 +118,7 @@ int LBJPlot::get_total_minimum() {
 
     PlotElement *plotElement;
     foreach (plotElement, plotElement_list) {
-        int new_minimum = get_minimum(plotElement->get_axis(), int(qPow(2, ADC_BITS)));
+        int new_minimum = get_minimum(plotElement->get_axis(), int(qPow(2, LBJ_ADC_BITS)));
 
         if(new_minimum < minimum)
             minimum = new_minimum;
