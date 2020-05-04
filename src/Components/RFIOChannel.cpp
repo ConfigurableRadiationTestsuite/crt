@@ -4,11 +4,8 @@
 
 #include <QtMath>
 
-RFIOChannel::RFIOChannel(RunManager *runManager, const QString &element_name, int number, int margin)
-    : runManager(runManager), element_name(element_name), number(number), margin(margin) {
-
-    data_valid = false;
-    data_analyze = false;
+RFIOChannel::RFIOChannel(const QString &element_name, int number, int margin)
+    : element_name(element_name), number(number), margin(margin) {
 }
 
 RFIOChannel::~RFIOChannel() {}

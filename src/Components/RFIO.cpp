@@ -18,7 +18,7 @@ RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManag
         //Number
         //Margin
     for(int i = 0; i < channel; i++) {
-        channel_list.push_back(new RFIOChannel(runManager, element_name, i));
+        channel_list.push_back(new RFIOChannel(element_name, i));
         connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
     }
 
@@ -31,7 +31,7 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
     this->element_name = m_element_name;
 
     for(int i = 0; i < channel; i++) {
-        channel_list.push_back(new RFIOChannel(runManager, element_name, i));
+        channel_list.push_back(new RFIOChannel(element_name, i));
         connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
     }
 

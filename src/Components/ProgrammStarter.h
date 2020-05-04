@@ -38,7 +38,6 @@ public slots:
 private slots:
     void receive_data();
 
-
 signals:
     void data_available(const QString &);
     void started();
@@ -49,8 +48,8 @@ signals:
     void announce_path(const QString &);
 
 private:
-    QProcess *process;
     RunManager *runManager;
+    QProcess *process;
 
     QString path;
     bool is_early_logging;

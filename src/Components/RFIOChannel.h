@@ -22,7 +22,7 @@ class RFIOChannel : public QObject {
 Q_OBJECT
 
 public:
-   RFIOChannel(RunManager * runManager, const QString &element_name, int number, int margin=0);
+   RFIOChannel(const QString &element_name, int number, int margin=0);
    virtual ~RFIOChannel();
 
    QVector<int> get_i_data() const {return i_data;}
@@ -62,12 +62,11 @@ signals:
    void announce_margin_changed(const QString &text);
 
 private:
-   RunManager *runManager;
    QString element_name;
    int number;
    int margin;
 
-   bool data_valid, data_analyze;
+   bool data_valid=false, data_analyze=false;
    bool capture_transition = false;
    bool margin_changed = false;
    long long sample_position;

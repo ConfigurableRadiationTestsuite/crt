@@ -52,8 +52,6 @@ void ProgrammStarter::set_path(const QString &text) {
 
 void ProgrammStarter::set_early_logging(int early_logging) {
     is_early_logging = early_logging > 0 ? true : false;
-
-    //emit signal
 }
 
 void ProgrammStarter::set_trigger(int trigger) {
@@ -109,10 +107,10 @@ void ProgrammStarter::receive_data() {
     QString text = process->readAllStandardOutput();
 
     if(text.size() > 1) {
-        if(text[text.size()-1] == '\n')
+        if(text.back() == '\n')
             text.remove(text.size()-1, 1);
 
-        if(text[text.size()-1] == '\r')
+        if(text.back() == '\r')
             text.remove(text.size()-1, 1);
     }
 
