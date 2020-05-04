@@ -4,8 +4,8 @@
 
 #include <QtMath>
 
-RFIOChannel::RFIOChannel(const QString &element_name, int number, int margin)
-    : element_name(element_name), number(number), margin(margin) {
+RFIOChannel::RFIOChannel(int number, int margin)
+    : number(number), margin(margin) {
 }
 
 RFIOChannel::~RFIOChannel() {}

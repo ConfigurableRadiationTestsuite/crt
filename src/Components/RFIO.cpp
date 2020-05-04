@@ -10,15 +10,15 @@
 RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManager) {
     load_config(config);
 
-    //Element name
+    assert(parse_config({"name", "address", "channel"}));
+    this->element_name = get_value("name");
+    this->address = get_value("address");
+    this->channel = get_value("channel").toInt();
 
-    //Address
-
-    //Channel
-        //Number
-        //Margin
     for(int i = 0; i < channel; i++) {
-        channel_list.push_back(new RFIOChannel(element_name, i));
+        assert(parse_config({"c" + QString::number(i) + "margin"}));
+
+        channel_list.push_back(new RFIOChannel(i, get_value("c" + QString::number(i) + "margin").toInt()));
         connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
     }
 
@@ -31,7 +31,7 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
     this->element_name = m_element_name;
 
     for(int i = 0; i < channel; i++) {
-        channel_list.push_back(new RFIOChannel(element_name, i));
+        channel_list.push_back(new RFIOChannel(i));
         connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
     }
 
@@ -46,7 +46,17 @@ RFIO::~RFIO() {
     delete process;
 }
 
-void RFIO::set_config() {}
+void RFIO::set_config() {
+    config_entry_list.clear();
+
+    set_value("name", element_name);
+    set_value("address", address);
+    set_value("channel", QString::number(channel));
+
+    for(int i = 0; i < channel; i++)
+        set_value("c" + QString::number(i) + "marge", QString::number(channel_list[i]->get_margin()));
+
+}
 
 void RFIO::init() {
     //Create reception process
