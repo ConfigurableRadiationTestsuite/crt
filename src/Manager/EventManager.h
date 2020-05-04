@@ -11,7 +11,7 @@
 
 class SubWindow;
 
-#include <QWidget>
+#include <QObject>
 
 enum SignalType {on, off, start_log, stop_log, special};
 
@@ -23,7 +23,7 @@ struct RegisteredSignal {
     void (SubWindow::*sp)(void);
 };
 
-class EventManager : public QWidget {
+class EventManager : public QObject {
 Q_OBJECT
 
 public:
@@ -32,8 +32,14 @@ public:
 
     QVector<struct RegisteredSignal*> get_signal_list() {return signal_list;}
 
+    void set_invalid_run(bool invalid) {isInvalidRun = invalid;}
+    void set_running(bool running) {isRunning = running;}
+
     void add_signal(const QString &name, SignalType st, SubWindow *sub, void (SubWindow::*sp)(void));
     void delete_signal(void (SubWindow::*sp)(void));
+
+    bool is_invalidRun() const {return isInvalidRun;}
+    bool is_running() const {return isRunning;}
 
 public slots:
     void trigger_on();
@@ -54,6 +60,8 @@ signals:
 private:
     QVector<struct RegisteredSignal*> signal_list;
 
+    bool isRunning = false;
+    bool isInvalidRun = true;
 };
 
 inline void EventManager::trigger_on() {call_trigger(SignalType::on, signal_list);}

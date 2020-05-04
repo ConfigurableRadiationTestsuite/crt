@@ -24,6 +24,8 @@ public:
 
     void set_config() override;
 
+    QString get_path() const {return path;}
+
 public slots:
     void set_path(const QString &text);
     void set_early_logging(int early_logging);
@@ -52,10 +54,10 @@ private:
     QProcess *process;
 
     QString path;
-    bool is_early_logging;
-    bool is_logging;
-    bool is_running;
-    bool is_trigger;
+    bool is_early_logging = false;
+    bool is_logging = false;
+    bool is_running = false;
+    bool is_trigger = false;
 
     void init();
 };

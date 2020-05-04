@@ -64,7 +64,7 @@ void FileManager::append_value_to_file(const void * subComponent, double value) 
 void FileManager::append_value_to_file(const void * subComponent, const QString &text) {
     long long time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
 
-    get_file(subComponent)->file->write((QString::number(time) + ";" + QString(text + "\n")).toUtf8());
+    get_file(subComponent)->file->write((QString::number(time) + ";" + QString(escape_text(text) + "\n")).toUtf8());
     get_file(subComponent)->file->flush();
 }
 
@@ -114,5 +114,26 @@ QString FileManager::vector_to_string(const QVector<QString> &vector) {
         msg += it.next() + (it.hasNext() ? ";" : "");
 
     return msg;
+}
+
+QString FileManager::escape_text(const QString &text) {
+    QString res;
+    res.reserve(text.size());
+
+    for(QString::const_iterator it = text.begin(); it != text.end(); it++) {
+        if((*it) == '\n' || (*it) == '\r') {
+            res.push_back('\\');
+            res.push_back((*it) == '\n' ? 'n' : 'r');
+            continue;
+        }
+
+        if((*it) == ';') {
+            res.push_back('\\');
+            continue;
+        }
+
+        res.push_back(*it);
+    }
+    return res;
 }
 

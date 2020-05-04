@@ -45,7 +45,7 @@ void PROGW::create_layout() {
 
     /* Early Logging */
     QCheckBox * earlyLogging = new QCheckBox("Early Logging");
-    earlyLogging->setDisabled(true);
+    earlyLogging->setDisabled(eventManager->is_invalidRun());
     optionLayout->addWidget(earlyLogging);
     connect(earlyLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_early_logging(int)));
     connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogging, SLOT(setDisabled(bool)));
@@ -55,10 +55,11 @@ void PROGW::create_layout() {
     connect(trigger, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_trigger(int)));
     connect(programmStarter, SIGNAL(announce_run(bool)), trigger, SLOT(setDisabled(bool)));
 
-    /* Stop */
+    /* Start / Stop */
     QPushButton *startButton = new QPushButton("Start");
     connect(startButton, SIGNAL(clicked()), programmStarter, SLOT(execute_programm()));
     connect(programmStarter, SIGNAL(announce_trigger(bool)), startButton, SLOT(setDisabled(bool)));
+    connect(programmStarter, SIGNAL(announce_run(bool)), startButton, SLOT(setDisabled(bool)));
 
     QPushButton *stopButton = new QPushButton("Stop");
     connect(stopButton, SIGNAL(clicked()), programmStarter, SLOT(kill_programm()));
@@ -85,7 +86,7 @@ void PROGW::create_layout() {
     QPalette *grey = new QPalette;
     grey->setColor(QPalette::Base, Qt::lightGray);
     grey->setColor(QPalette::Text, Qt::black);
-    programmPath->setText("<PROGRAMM>");
+    programmPath->setText(programmStarter->get_path());
     programmPath->setReadOnly(true);
     programmPath->setPalette(*grey);
     connect(programmStarter, SIGNAL(announce_path(const QString &)), programmPath, SLOT(setText(const QString &)));

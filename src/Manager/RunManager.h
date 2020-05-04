@@ -26,7 +26,7 @@ public:
     RunManager(EventManager *eventManager);
     virtual ~RunManager();
 
-    bool is_running() const {return isRunning;}
+    EventManager * get_eventManager() {return eventManager;}
 
 public slots:
     void start_run();
@@ -48,9 +48,6 @@ private:
     QString runName;
 
     EventManager *eventManager;
-
-    bool isRunning = false;
-    bool runExists = false;
 
     QElapsedTimer *runTime;
     QTimer * updateTime;

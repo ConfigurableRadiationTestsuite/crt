@@ -53,6 +53,9 @@ protected:
 
     QString vector_to_string(const QVector<double> &vector);
     QString vector_to_string(const QVector<QString> &vector);
+
+private:
+    QString escape_text(const QString &text);
 };
 
 #endif // FILEMANAGER_H
