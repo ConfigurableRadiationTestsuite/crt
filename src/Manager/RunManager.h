@@ -12,10 +12,9 @@
 class QElapsedTimer;
 
 #include "FileManager.h"
+#include "EventManager.h"
 
 #include <QWidget>
-
-class EventManager;
 
 enum RunMode {Creation=0, Init=1, Start=3, Stop=255};
 
@@ -27,6 +26,9 @@ public:
     virtual ~RunManager();
 
     EventManager * get_eventManager() {return eventManager;}
+
+    bool is_valid() const {return valid;}
+    bool is_running() const {return running;}
 
 public slots:
     void start_run();
@@ -44,6 +46,9 @@ signals:
 
     void enable_run_button(bool enable);
 
+    void isValid_changed(bool);
+    void isRunning_changed(bool);
+
 private:
     QString runName;
 
@@ -52,6 +57,9 @@ private:
     QElapsedTimer *runTime;
     QTimer * updateTime;
     long long offsetTime;
+
+    bool valid = false;
+    bool running = false;
 
     void create_layout();
 };

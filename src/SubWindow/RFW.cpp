@@ -8,7 +8,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-RFW::RFW(RFIO *rfio, EventManager *m_eventManager) : SubWindow(m_eventManager), rfio(rfio) {
+RFW::RFW(RFIO *rfio, RunManager *m_runManager) : SubWindow(m_runManager), rfio(rfio) {
     cfg_element = rfio;
 
     connect(this, SIGNAL(signal_start_log()), rfio, SLOT(start_logging()));

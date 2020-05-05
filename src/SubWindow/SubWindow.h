@@ -16,7 +16,7 @@
 class ConfigElement;
 class SpecSignalDialog;
 
-#include "src/Manager/EventManager.h"
+#include "src/Manager/RunManager.h"
 
 #include <QWidget>
 
@@ -24,7 +24,7 @@ class SubWindow : public QWidget {
 Q_OBJECT
 
 public:
-    SubWindow(EventManager *eventManager);
+    SubWindow(RunManager *runManager);
     virtual ~SubWindow();
 
     QString get_config();
@@ -65,6 +65,7 @@ protected:
     ConfigElement *cfg_element;
 
     /* Eventand signal management */
+    RunManager *runManager;
     EventManager *eventManager;
     QVector<struct RegisteredSignal*> signal_list;
     SpecSignalDialog *signalDialog = nullptr;

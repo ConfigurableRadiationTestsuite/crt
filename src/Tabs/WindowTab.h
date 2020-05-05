@@ -24,7 +24,7 @@ class WindowTab : public QWidget {
 Q_OBJECT
 
 public:
-    WindowTab(ConfigManager *configManager, EventManager *eventManager, RunManager *runManager);
+    WindowTab(ConfigManager *configManager, RunManager *runManager);
     virtual ~WindowTab();
 
 protected slots:

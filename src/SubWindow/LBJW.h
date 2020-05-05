@@ -25,7 +25,7 @@ class LBJW : public SubWindow {
 Q_OBJECT
 
 public:
-    LBJW(Labjack *lbj, EventManager *m_eventManager);
+    LBJW(Labjack *lbj, RunManager *m_runManager);
     virtual ~LBJW() override;
 
 private:

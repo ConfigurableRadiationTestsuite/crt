@@ -16,7 +16,7 @@ class DIOW : public SubWindow {
 Q_OBJECT
 
 public:
-    DIOW(DIOM *diom, EventManager *m_eventManager);
+    DIOW(DIOM *diom, RunManager *m_runManager);
     virtual ~DIOW() override;
 
 private:

@@ -16,7 +16,7 @@ class PROGW : public SubWindow {
 Q_OBJECT
 
 public:
-    PROGW(ProgrammStarter * programmStarter, EventManager *m_evenManager);
+    PROGW(ProgrammStarter * programmStarter, RunManager *m_runManager);
     virtual ~PROGW() override;
 
 private slots:

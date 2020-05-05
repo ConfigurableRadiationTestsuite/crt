@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-DIOW::DIOW(DIOM *diom, EventManager *m_eventManager) : SubWindow(m_eventManager), diom(diom) {
+DIOW::DIOW(DIOM *diom, RunManager *m_runManager) : SubWindow(m_runManager), diom(diom) {
     cfg_element = diom;
 
     create_layout();

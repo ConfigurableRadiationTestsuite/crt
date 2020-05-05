@@ -6,7 +6,8 @@
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/LBJW.h"
 
-LBJTab::LBJTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager) : WindowTab(m_configManager, m_eventManager, m_runManager) {
+LBJTab::LBJTab(ConfigManager *m_configManager, RunManager *m_runManager)
+    : WindowTab(m_configManager, m_runManager) {
     sectionName = "LabJack";
 }
 
@@ -17,7 +18,7 @@ void LBJTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new LBJW(new Labjack(runManager, section_content), eventManager));
+        subWindow_list.push_back(new LBJW(new Labjack(runManager, section_content), runManager));
         section_content.clear();
     }
 
@@ -31,7 +32,7 @@ void LBJTab::create_subwindow_from_dialog() {
     QString pchannel = addDialog->get_entry_list()[2].input_value->text();
     QString nchannel = addDialog->get_entry_list()[3].input_value->text();
 
-    subWindow_list.push_back(new LBJW(new Labjack(runManager, name, channel_name, pchannel, nchannel), eventManager));
+    subWindow_list.push_back(new LBJW(new Labjack(runManager, name, channel_name, pchannel, nchannel), runManager));
 
     update_layout();
 }

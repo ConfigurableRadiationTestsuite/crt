@@ -73,7 +73,7 @@ void RunManager::create_new_run() {
     set_run_mode(RunMode::Creation);
 
     offsetTime = 0;
-    eventManager->set_invalid_run(false);
+    valid = true;
     emit run_name_changed(folder);
     emit eventManager->logging_disabled(false);
 }
@@ -94,13 +94,13 @@ void RunManager::update_run() {
 }
 
 void RunManager::start_run() {
-    if(eventManager->is_running())
+    if(running)
         return;
 
     emit enable_run_button(false);
 
     runTime->start();
-    eventManager->set_running(true);
+    running = true;
 
     eventManager->trigger_start_log();
     eventManager->trigger_on();
@@ -109,12 +109,12 @@ void RunManager::start_run() {
 }
 
 void RunManager::stop_run() {
-    if(!eventManager->is_running())
+    if(!running)
         return;
 
     offsetTime += runTime->isValid() ? runTime->elapsed() / 1000 : 0;
     runTime->invalidate();
-    eventManager->set_running(false);
+    running = false;
 
     eventManager->trigger_off();
     eventManager->trigger_stop_log();
@@ -125,7 +125,7 @@ void RunManager::stop_run() {
 }
 
 void RunManager::set_run_mode(enum RunMode mode) {
-    if(eventManager->is_invalidRun())
+    if(!valid)
         append_value_to_file(this, double(mode));
 
     emit run_mode_changed(mode);

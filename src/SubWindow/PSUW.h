@@ -20,7 +20,7 @@ class PSUW : public SubWindow {
 Q_OBJECT
 
 public:
-    PSUW(PSU *psu, EventManager *m_eventManager);
+    PSUW(PSU *psu, RunManager *m_runManager);
     virtual ~PSUW() override;
 
 private:

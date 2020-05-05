@@ -15,7 +15,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 
-LBJW::LBJW(Labjack *lbj, EventManager *m_eventManager) : SubWindow(m_eventManager), lbj(lbj) {
+LBJW::LBJW(Labjack *lbj, RunManager *m_runManager) : SubWindow(m_runManager), lbj(lbj) {
     cfg_element = lbj;
 
     /* Connect and register signals */

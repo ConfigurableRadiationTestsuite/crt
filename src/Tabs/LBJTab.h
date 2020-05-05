@@ -15,7 +15,7 @@ class LBJTab : public WindowTab {
 Q_OBJECT
 
 public:
-    LBJTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager);
+    LBJTab(ConfigManager *m_configManager, RunManager *m_runManager);
     virtual ~LBJTab() override;
 
 private slots:

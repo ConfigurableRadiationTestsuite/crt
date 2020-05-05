@@ -10,9 +10,11 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-WindowTab::WindowTab(ConfigManager *configManager, EventManager *eventManager, RunManager *runManager)
-    : configManager(configManager), eventManager(eventManager), runManager(runManager) {
+WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
+    : configManager(configManager), runManager(runManager) {
     qDebug("Create windowtab" + (sectionName).toLatin1());
+
+    this->eventManager = runManager->get_eventManager();
 
     connect(configManager, SIGNAL(loading_config()), this, SLOT(load_from_config()));
     connect(configManager, SIGNAL(saving_config()), this, SLOT(save_to_config()));

@@ -76,16 +76,16 @@ QTabWidget * MainLayout::create_window_tabs() {
     windowTabs= new QTabWidget;
 
     //Power supplies
-    windowTabs->addTab(new PSUTab(configManager, eventManager, runManager), "PSU");
+    windowTabs->addTab(new PSUTab(configManager, runManager), "PSU");
 
     //Labjack
-    windowTabs->addTab(new LBJTab(configManager, eventManager, runManager), "Labjack");
+    windowTabs->addTab(new LBJTab(configManager, runManager), "Labjack");
 
     //RF
-    windowTabs->addTab(new RFTab(configManager, eventManager, runManager), "RF");
+    windowTabs->addTab(new RFTab(configManager, runManager), "RF");
 
     //PROG
-    windowTabs->addTab(new PROGTab(configManager, eventManager, runManager), "PROG");
+    windowTabs->addTab(new PROGTab(configManager, runManager), "PROG");
 
     return windowTabs;
 }

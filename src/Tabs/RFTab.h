@@ -15,7 +15,7 @@ class RFTab : public WindowTab {
 Q_OBJECT
 
 public:
-    RFTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager);
+    RFTab(ConfigManager *m_configManager, RunManager *m_runManager);
     virtual ~RFTab() override;
 
 private slots:

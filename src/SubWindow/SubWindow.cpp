@@ -6,8 +6,10 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-SubWindow::SubWindow(EventManager *eventManager) : eventManager(eventManager) {
+SubWindow::SubWindow(RunManager *runManager) : runManager(runManager) {
     qDebug("Create subwindow");
+
+    this->eventManager = runManager->get_eventManager();
 
     /* Post config management */
     connect(eventManager, SIGNAL(signal_added()), this, SLOT(post_init()));

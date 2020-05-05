@@ -16,7 +16,7 @@ class PSUTab : public WindowTab {
 Q_OBJECT
 
 public:
-    PSUTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager);
+    PSUTab(ConfigManager *m_configManager, RunManager *m_runManager);
     virtual ~PSUTab() override;
 
 private slots:

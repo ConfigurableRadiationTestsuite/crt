@@ -6,8 +6,8 @@
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/PSUW.h"
 
-PSUTab::PSUTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager)
-    : WindowTab(m_configManager, m_eventManager, m_runManager) {
+PSUTab::PSUTab(ConfigManager *m_configManager, RunManager *m_runManager)
+    : WindowTab(m_configManager, m_runManager) {
     sectionName = "PSU";
 }
 
@@ -18,7 +18,7 @@ void PSUTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PSUW(new PSU(runManager, section_content), eventManager));
+        subWindow_list.push_back(new PSUW(new PSU(runManager, section_content), runManager));
         section_content.clear();
     }
 
@@ -33,7 +33,7 @@ void PSUTab::create_subwindow_from_dialog() {
     double max_voltage = addDialog->get_entry_list()[4].input_value->text().toDouble();
     double max_current = addDialog->get_entry_list()[5].input_value->text().toDouble();
 
-    subWindow_list.push_back(new PSUW(new PSU(runManager, name, address, vendor, channel, max_voltage, max_current), eventManager));
+    subWindow_list.push_back(new PSUW(new PSU(runManager, name, address, vendor, channel, max_voltage, max_current), runManager));
 
     update_layout();
 }

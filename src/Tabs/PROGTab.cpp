@@ -6,8 +6,8 @@
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/PROGW.h"
 
-PROGTab::PROGTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager)
-    : WindowTab(m_configManager, m_eventManager, m_runManager) {
+PROGTab::PROGTab(ConfigManager *m_configManager, RunManager *m_runManager)
+    : WindowTab(m_configManager, m_runManager) {
     sectionName = "PROG";
 }
 
@@ -18,7 +18,7 @@ void PROGTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, section_content), eventManager));
+        subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, section_content), runManager));
         section_content.clear();
     }
 
@@ -30,7 +30,7 @@ void PROGTab::create_subwindow_from_dialog() {
     QString name = addDialog->get_entry_list()[0].input_value->text();
     QString path = addDialog->get_entry_list()[1].input_value->text();
 
-    subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, name, path), eventManager));
+    subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, name, path), runManager));
 
     update_layout();
 }

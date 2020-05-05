@@ -16,9 +16,9 @@ RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManag
     this->channel = get_value("channel").toInt();
 
     for(int i = 0; i < channel; i++) {
-        assert(parse_config({"c" + QString::number(i) + "margin"}));
+        assert(parse_config({"c" + QString::number(i) + "m"}));
 
-        channel_list.push_back(new RFIOChannel(i, get_value("c" + QString::number(i) + "margin").toInt()));
+        channel_list.push_back(new RFIOChannel(i, get_value("c" + QString::number(i) + "m").toInt()));
         connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
     }
 
@@ -54,7 +54,7 @@ void RFIO::set_config() {
     set_value("channel", QString::number(channel));
 
     for(int i = 0; i < channel; i++)
-        set_value("c" + QString::number(i) + "marge", QString::number(channel_list[i]->get_margin()));
+        set_value("c" + QString::number(i) + "m", QString::number(channel_list[i]->get_margin()));
 
 }
 
@@ -85,7 +85,6 @@ void RFIO::set_thread_destroyed() {
 }
 
 void RFIO::reconnect() {
-    //Delete old connection, clean process and set it up again (init()?)
     if(is_destroyed)
         init();
 }

@@ -27,7 +27,6 @@ void EventManager::delete_signal(void (SubWindow::*sp)(void)) {
     }
 }
 
-
 void EventManager::call_trigger(const QVector<struct RegisteredSignal*> &signal_list) {
     qDebug("Call trigger from eventManager");
 

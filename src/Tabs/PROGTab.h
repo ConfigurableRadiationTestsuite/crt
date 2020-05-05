@@ -15,7 +15,7 @@ class PROGTab : public WindowTab {
 Q_OBJECT
 
 public:
-    PROGTab(ConfigManager *m_configManager, EventManager *m_eventManager, RunManager *m_runManager);
+    PROGTab(ConfigManager *m_configManager, RunManager *m_runManager);
     virtual ~PROGTab() override;
 
 private slots:

@@ -11,8 +11,8 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
-PROGW::PROGW(ProgrammStarter *programmStarter, EventManager *m_eventManager)
-    : SubWindow(m_eventManager), programmStarter(programmStarter) {
+PROGW::PROGW(ProgrammStarter *programmStarter, RunManager *m_runManager)
+    : SubWindow(m_runManager), programmStarter(programmStarter) {
     cfg_element = programmStarter;
 
     connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
@@ -45,7 +45,7 @@ void PROGW::create_layout() {
 
     /* Early Logging */
     QCheckBox * earlyLogging = new QCheckBox("Early Logging");
-    earlyLogging->setDisabled(eventManager->is_invalidRun());
+    earlyLogging->setDisabled(!runManager->is_valid());
     optionLayout->addWidget(earlyLogging);
     connect(earlyLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_early_logging(int)));
     connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogging, SLOT(setDisabled(bool)));

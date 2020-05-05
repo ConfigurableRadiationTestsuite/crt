@@ -20,7 +20,7 @@ class RFW : public SubWindow {
 Q_OBJECT
 
 public:
-    RFW(RFIO *rfio, EventManager *m_eventManager);
+    RFW(RFIO *rfio, RunManager *m_runManager);
     virtual ~RFW() override;
 
 private:

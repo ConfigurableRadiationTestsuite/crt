@@ -11,7 +11,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-PSUW::PSUW(PSU *psu, EventManager *m_eventManager) : SubWindow(m_eventManager), psu(psu) {
+PSUW::PSUW(PSU *psu, RunManager *m_runManager) : SubWindow(m_runManager), psu(psu) {
     cfg_element = psu;
 
     /* Connect and register signals */
