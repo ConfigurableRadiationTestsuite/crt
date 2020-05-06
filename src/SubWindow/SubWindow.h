@@ -45,8 +45,8 @@ protected slots:
     /* Emit listed signals */
     void trigger_on();
     void trigger_off();
-    void trigger_start_start();
-    void trigger_stop_stop();
+    void trigger_start_log();
+    void trigger_stop_log();
     void trigger_special();
     void trigger_signal_list();
 
@@ -76,8 +76,8 @@ protected:
 
 inline void SubWindow::trigger_on() {eventManager->call_trigger(SignalType::on, signal_list);}
 inline void SubWindow::trigger_off() {eventManager->call_trigger(SignalType::off, signal_list);}
-inline void SubWindow::trigger_start_start() {eventManager->call_trigger(SignalType::start_log, signal_list);}
-inline void SubWindow::trigger_stop_stop() {eventManager->call_trigger(SignalType::stop_log, signal_list);}
+inline void SubWindow::trigger_start_log() {eventManager->call_trigger(SignalType::start_log, signal_list);}
+inline void SubWindow::trigger_stop_log() {eventManager->call_trigger(SignalType::stop_log, signal_list);}
 inline void SubWindow::trigger_special() {eventManager->call_trigger(SignalType::special, signal_list);}
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}
 

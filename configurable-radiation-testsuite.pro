@@ -21,6 +21,7 @@ LIBS += -L/usr/local/lib -lLabJackM
 
 SOURCES += \
     main.cpp \
+    src/Components/Component.cpp \
     src/Components/DIOM.cpp \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
@@ -62,6 +63,7 @@ SOURCES += \
 
 HEADERS += \
     LJM_Utilities.h \
+    src/Components/Component.h \
     src/Components/DIOM.h \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
