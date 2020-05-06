@@ -7,11 +7,15 @@
 #include <QProcess>
 #include <QThread>
 
-RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManager) {
-    load_config(config);
+RFIO::RFIO(RunManager * runManager, const QString &config)
+    : Logger(runManager) {
 
+    load_config(config);
     assert(parse_config({"name", "address", "channel"}));
+
     this->element_name = get_value("name");
+    set_fileName(element_name);
+
     this->address = get_value("address");
     this->channel = get_value("channel").toInt();
 
@@ -26,7 +30,7 @@ RFIO::RFIO(RunManager * runManager, const QString &config) : runManager(runManag
 }
 
 RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel)
-    : runManager(runManager), address(address), channel(channel) {
+    : Logger(runManager, m_element_name), address(address), channel(channel) {
 
     this->element_name = m_element_name;
 
@@ -97,15 +101,6 @@ void RFIO::set_multi_shot() {
     is_single_shot = false;
 }
 
-void RFIO::start_logging() {
-    qDebug("Start Log: " + element_name.toLatin1());
-
-    runManager->register_component(this, element_name);
-    runManager->set_file_header(this, generate_header());
-
-    is_logging = true;
-}
-
 QVector<QString> RFIO::generate_header() {
     QVector<QString> header;
     header.push_back("Sample");
@@ -119,15 +114,9 @@ QVector<QString> RFIO::generate_header() {
     return header;
 }
 
-void RFIO::stop_logging() {
-    is_logging = false;
-
-    runManager->deregister_component(this);
-}
-
 void RFIO::handle_error(QVector<int> i_data, QVector<int> q_data, int number) {
     /* Write the raw data to the runManager */
-    if(!is_logging)
+    if(!logging)
         return;
 
     if(is_single_shot) {

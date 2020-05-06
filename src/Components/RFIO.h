@@ -8,16 +8,14 @@
 
 class RFIOChannel;
 class RFIOUpdater;
-class RunManager;
 
 class QProcess;
 class QThread;
 
+#include "Logger.h"
 #include "src/Configuration/ConfigElement.h"
 
-#include <QObject>
-
-class RFIO : public QObject, public ConfigElement {
+class RFIO : public Logger, public ConfigElement {
 Q_OBJECT
 
 public:
@@ -30,8 +28,6 @@ public:
    void set_config() override;
 
 public slots:
-   void start_logging();
-   void stop_logging();
    void set_single_shot();
    void set_multi_shot();
 
@@ -41,10 +37,8 @@ private slots:
    void set_thread_destroyed();
 
 private:
-   RunManager *runManager;
    QString address;
    int port;
-   bool is_logging = false;
    bool is_single_shot = false;
    bool is_destroyed;
 
@@ -57,7 +51,7 @@ private:
 
    void init();
 
-   QVector<QString> generate_header();
+   QVector<QString> generate_header() override;
 };
 
 #endif // RFIO_H

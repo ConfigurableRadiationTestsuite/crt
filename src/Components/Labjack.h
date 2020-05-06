@@ -10,15 +10,13 @@
  */
 
 class LabjackChannel;
-class RunManager;
 
 class QElapsedTimer;
 
+#include "Logger.h"
 #include "src/Configuration/ConfigElement.h"
 
-#include <QWidget>
-
-class Labjack : public QWidget, public ConfigElement {
+class Labjack : public Logger, public ConfigElement {
 Q_OBJECT
 
 public:
@@ -42,26 +40,20 @@ public slots:
     void set_samplerate(const QString &text);
     void set_maximum_samplerate(int is_maximum);
 
-    void start_logging();
-    void stop_logging();
-
 signals:
     void samplerate_changed(const QString &text);
 
 private:
     int handle;
     bool is_connected;
-    RunManager * runManager;
 
     QVector<LabjackChannel*> channel_list;
     QVector<int> address_list;
     QVector<int> type_list;
     QVector<double> value_list;
 
-    QTimer *timer;
     QElapsedTimer *sampleTimer;
     int samplerate = 1, maxSamplerate = 1;
-    bool is_logging;
     bool is_maximum;
 
     void init();
@@ -74,7 +66,7 @@ private:
     void get_channel_addresses(const QString &input, QVector<int> &output);
     void get_channel_names(const QString &input, QVector<QString> &output);
 
-    QVector<QString> generate_header();
+    QVector<QString> generate_header() override;
 };
 
 inline int Labjack::get_main_resolution_address() {return 43903;}

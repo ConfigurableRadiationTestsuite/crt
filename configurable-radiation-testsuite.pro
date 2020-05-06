@@ -27,6 +27,7 @@ SOURCES += \
     src/Components/Indicator.cpp \
     src/Components/Labjack.cpp \
     src/Components/LabjackChannel.cpp \
+    src/Components/Logger.cpp \
     src/Components/PSU.cpp \
     src/Components/PSUChannel.cpp \
     src/Components/ProgrammStarter.cpp \
@@ -67,6 +68,7 @@ HEADERS += \
     src/Components/Indicator.h \
     src/Components/Labjack.h \
     src/Components/LabjackChannel.h \
+    src/Components/Logger.h \
     src/Components/PSU.h \
     src/Components/PSUChannel.h \
     src/Components/ProgrammStarter.h \

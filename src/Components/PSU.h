@@ -12,14 +12,12 @@
  */
 
 class EthernetClient;
-class RunManager;
 
 #include "PSUChannel.h"
+#include "Logger.h"
 #include "src/Configuration/ConfigElement.h"
 
-#include <QObject>
-
-class PSU : public QObject, public ConfigElement {
+class PSU : public Logger, public ConfigElement {
 Q_OBJECT
 
 public:
@@ -43,25 +41,18 @@ public slots:
 
     void switch_on();
     void switch_off();
-    void start_logging();
-    void stop_logging();
 
 signals:
     void master_changed(bool master_set);
     void disconnected(bool);
 
 protected:
-    RunManager *runManager;
-
     QString address;
     enum vendor vd;
     bool master_switch;
     bool master_enable = false;
     bool master_trigger = false;
     EthernetClient *eth;
-
-    QTimer *log_timer;
-    bool is_logging = false;
 
     QVector<PSUChannel *> channel_list;
 
@@ -78,7 +69,7 @@ private:
     void set_master_rohdeschwarz();
     //void set_master_vendor();
 
-    QVector<QString> generate_header();
+    QVector<QString> generate_header() override;
 };
 
 #endif // PSU_H

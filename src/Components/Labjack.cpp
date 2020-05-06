@@ -6,28 +6,29 @@
 
 #include <LabJackM.h>
 #include <QElapsedTimer>
-#include <QTimer>
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
-    : runManager(runManager) {
+    : Logger(runManager) {
     qDebug("Create Labjack from Config");
 
     load_config(config);
     assert(parse_config({"name" , "channel"}));
 
-    element_name = ConfigElement::get_value("name");
-    uint channel = ConfigElement::get_value("channel").toUInt();
+    this->element_name = get_value("name");
+    set_fileName(element_name);
+
+    uint channel = get_value("channel").toUInt();
 
     open_labjack();
 
     for(uint i = 0; i < channel; i++) {
-        QString name = ConfigElement::get_value("c" + QString::number(i) + "n");
+        QString name = get_value("c" + QString::number(i) + "n");
 
-        int p_chan = ConfigElement::get_value("c" + QString::number(i) + "pc").toInt();
-        int n_chan = ConfigElement::get_value("c" + QString::number(i) + "nc").toInt();
+        int p_chan = get_value("c" + QString::number(i) + "pc").toInt();
+        int n_chan = get_value("c" + QString::number(i) + "nc").toInt();
 
-        double boundary = ConfigElement::get_value("c" + QString::number(i) + "b").toDouble();
-        int gain = ConfigElement::get_value("c" + QString::number(i) + "g").toInt();
+        double boundary = get_value("c" + QString::number(i) + "b").toDouble();
+        int gain = get_value("c" + QString::number(i) + "g").toInt();
 
         channel_list.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
     }
@@ -37,7 +38,7 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 }
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
-    : runManager(runManager) {
+    : Logger(runManager, m_element_name) {
     qDebug("Create Labjack from Scratch");
 
     this->element_name = m_element_name;
@@ -66,7 +67,6 @@ Labjack::~Labjack() {
     qDebug("Destroy Labjack");
     LJM_Close(handle);
 
-    delete timer;
     delete sampleTimer;
 
     //Delete channel
@@ -93,7 +93,6 @@ void Labjack::open_labjack() {
 
 void Labjack::init() {
     is_maximum = false;
-    is_logging = false;
 
     LabjackChannel* channel;
     foreach (channel, channel_list) {
@@ -104,24 +103,9 @@ void Labjack::init() {
 
     sampleTimer = new QElapsedTimer;
 
-    timer = new QTimer;
-    timer->start(1000);
-    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-}
-
-void Labjack::start_logging() {
-    qDebug("Start Log: " + element_name.toLatin1());
-
-    runManager->register_component(this, element_name);
-    runManager->set_file_header(this, generate_header());
-    is_logging = true;
-}
-
-void Labjack::stop_logging() {
-    qDebug("Stop Log: " + element_name.toLatin1());
-
-    runManager->deregister_component(this);
-    is_logging = false;
+    logTimer = new QTimer;
+    logTimer->start(1000);
+    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 void Labjack::update() {
@@ -151,7 +135,7 @@ void Labjack::update() {
     }
 
     //Log data
-    if(is_logging)
+    if(logging)
         runManager->append_values_to_file(this, value_list);
 }
 
@@ -173,7 +157,7 @@ void Labjack::set_main_resolution(int index) {
 void Labjack::set_samplerate(const QString &text) {
     samplerate = text.toInt() > maxSamplerate ? maxSamplerate : text.toInt();
     samplerate = samplerate > 0 ? samplerate : 1;
-    timer->start(1000/samplerate);
+    logTimer->start(1000/samplerate);
 
     emit samplerate_changed(QString::number(samplerate));
 }

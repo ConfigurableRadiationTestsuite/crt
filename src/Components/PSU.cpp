@@ -3,18 +3,17 @@
 #include "EthernetClient.h"
 #include "src/Manager/RunManager.h"
 
-#include <QTimer>
-
 PSU::PSU(RunManager * runManager, const QString &config)
-    : runManager(runManager) {
-    qDebug("Create PSU from Config");
+    : Logger(runManager) {
 
     load_config(config);
     assert(parse_config({"name", "vendor", "master", "address", "channel"}));
 
     this->element_name = get_value("name");
+    set_fileName(element_name);
+
     this->vd = check_vendor(get_value("vendor"));
-    this->master_switch = get_value("master").toUInt();
+    this->master_switch = get_value("master").toInt();
     this->address = get_value("address");
 
     init_ethernet(address);
@@ -36,7 +35,7 @@ PSU::PSU(RunManager * runManager, const QString &config)
 }
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
-    : runManager(runManager), address(address) {
+    : Logger(runManager, m_element_name), address(address) {
     qDebug("Create PSU from scratch");
 
     this->element_name = m_element_name;
@@ -56,7 +55,6 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 PSU::~PSU() {
     qDebug("Destroy PSU");
     delete eth;
-    delete log_timer;
 
     //Delete channel
 }
@@ -81,24 +79,9 @@ void PSU::set_config() {
 void PSU::init() {
     update_settings();
 
-    log_timer = new QTimer;
-    log_timer->start(1000);
-    connect(log_timer, SIGNAL(timeout()), this, SLOT(update()));
-}
-
-void PSU::start_logging() {
-    qDebug("Start Log: " + element_name.toLatin1());
-
-    runManager->register_component(this, element_name);
-    runManager->set_file_header(this, generate_header());
-    is_logging = true;
-}
-
-void PSU::stop_logging() {
-    qDebug("Stop Log: " + element_name.toLatin1());
-
-    runManager->deregister_component(this);
-    is_logging = false;
+    logTimer = new QTimer;
+    logTimer->start(1000);
+    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 void PSU::update() {
@@ -116,7 +99,7 @@ void PSU::update() {
         values.push_back(channel->get_current_meas());
     }
 
-    if(is_logging)
+    if(logging)
         runManager->append_values_to_file(this, values);
 }
 
