@@ -9,7 +9,7 @@
 #include <QLineEdit>
 
 DIOW::DIOW(DIOM *diom, RunManager *m_runManager) : SubWindow(m_runManager), diom(diom) {
-    cfg_element = diom;
+    //component = diom;
 
     create_layout();
 }

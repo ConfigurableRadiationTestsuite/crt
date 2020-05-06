@@ -13,11 +13,10 @@
 
 class EthernetClient;
 
+#include "Component.h"
 #include "PSUChannel.h"
-#include "Logger.h"
-#include "src/Configuration/ConfigElement.h"
 
-class PSU : public Logger, public ConfigElement {
+class PSU : public Component {
 Q_OBJECT
 
 public:
@@ -36,7 +35,7 @@ public slots:
     void set_master_enable(int master_enable);
     void set_master_trigger(int master_trigger);
 
-    void update();
+    void update() override;
     void update_settings();
 
     void switch_on();

@@ -13,10 +13,9 @@ class LabjackChannel;
 
 class QElapsedTimer;
 
-#include "Logger.h"
-#include "src/Configuration/ConfigElement.h"
+#include "Component.h"
 
-class Labjack : public Logger, public ConfigElement {
+class Labjack : public Component {
 Q_OBJECT
 
 public:
@@ -33,7 +32,7 @@ public:
     QVector<LabjackChannel*> get_channel_list() const {return channel_list;}
 
 public slots:
-    void update();
+    void update() override;
 
     void set_main_settling(const QString &text);
     void set_main_resolution(int index);

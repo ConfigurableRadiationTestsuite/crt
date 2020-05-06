@@ -14,13 +14,14 @@
 
 class QElapsedTimer;
 
-#include "src/Configuration/ConfigElement.h"
+#include "Component.h"
 
-class Ethernet : public ConfigElement {
+class Ethernet : public Component {
+Q_OBJECT
 
 public:
-    Ethernet(const QString &config);
-    Ethernet(const QString &address, uint port, const QString &data_folder, long long timeout);
+    Ethernet(RunManager *runManager, const QString &config);
+    Ethernet(RunManager *runManager, const QString &m_element_name, const QString &address, uint port, const QString &data_folder, long long timeout);
     virtual ~Ethernet() override;
 
     QString get_address() const {return address;}
@@ -32,6 +33,9 @@ public:
     void reset_timeout();
 
     void set_config() override;
+
+    void update() override {}
+    QVector<QString> generate_header() override {return {""};}
 
 private:
     QString address;

@@ -8,15 +8,13 @@
 #include <QElapsedTimer>
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
-    : Logger(runManager) {
+    : Component(runManager, config) {
     qDebug("Create Labjack from Config");
 
     load_config(config);
     assert(parse_config({"name" , "channel"}));
 
-    this->element_name = get_value("name");
-    set_fileName(element_name);
-
+    this->elementName = get_value("name");
     uint channel = get_value("channel").toUInt();
 
     open_labjack();
@@ -38,10 +36,10 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 }
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
-    : Logger(runManager, m_element_name) {
+    : Component(m_element_name, runManager) {
     qDebug("Create Labjack from Scratch");
 
-    this->element_name = m_element_name;
+    this->elementName = m_element_name;
 
     QVector<QString> m_name;
     QVector<int> m_pchannel;
@@ -75,7 +73,7 @@ Labjack::~Labjack() {
 void Labjack::set_config() {
     config_entry_list.clear();
 
-    set_value("name", element_name);
+    set_value("name", elementName);
     set_value("channel", QString::number(channel_list.size()));
 
     for(int i = 0; i < channel_list.size(); i++) {
@@ -103,9 +101,7 @@ void Labjack::init() {
 
     sampleTimer = new QElapsedTimer;
 
-    logTimer = new QTimer;
     logTimer->start(1000);
-    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 void Labjack::update() {

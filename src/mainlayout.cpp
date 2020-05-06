@@ -1,8 +1,6 @@
 #include "mainlayout.h"
 
 #include "src/Configuration/ConfigManager.h"
-#include "src/Manager/EventManager.h"
-#include "src/Manager/RunManager.h"
 #include "Tabs/LBJTab.h"
 #include "Tabs/PROGTab.h"
 #include "Tabs/PSUTab.h"

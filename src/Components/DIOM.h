@@ -9,16 +9,11 @@
  *
  */
 
-#include "src/Configuration/ConfigElement.h"
-
-#include <QWidget>
-
-class DIOM : public QWidget, public ConfigElement {
-Q_OBJECT
+class DIOM {
 
 public:
     DIOM();
-    virtual ~DIOM() override;
+    virtual ~DIOM();
 
 private:
     void read_io();

@@ -2,11 +2,12 @@
 
 #include <QElapsedTimer>
 
-Ethernet::Ethernet(const QString &config) {
+Ethernet::Ethernet(RunManager *runManager, const QString &config)
+    : Component(runManager, config) {
     load_config(config);
     assert(parse_config({"name", "address", "port", "data", "timeout"}));
 
-    element_name = get_value("name");
+    elementName = get_value("name");
     address = get_value("address");
     isReceiver = address.size() <= 1 ? true : false;
     port = get_value("port").toUInt();
@@ -17,7 +18,8 @@ Ethernet::Ethernet(const QString &config) {
     timer->start();
 }
 
-Ethernet::Ethernet(const QString &address, uint port, const QString &data_folder, long long timeout) : address(address), port(port), data_folder(data_folder), timeout(timeout){
+Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, const QString &address, uint port, const QString &data_folder, long long timeout)
+    : Component(m_element_name, runManager), address(address), port(port), data_folder(data_folder), timeout(timeout){
     timer = new QElapsedTimer;
     timer->start();
 
@@ -36,7 +38,7 @@ long long Ethernet::get_timeout_timer() {
 void Ethernet::set_config() {
     config_entry_list.clear();
 
-    set_value("name", element_name);
+    set_value("name", elementName);
     set_value("address", address);
     set_value("port", QString::number(port));
     set_value("data", data_folder);

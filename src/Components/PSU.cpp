@@ -4,13 +4,10 @@
 #include "src/Manager/RunManager.h"
 
 PSU::PSU(RunManager * runManager, const QString &config)
-    : Logger(runManager) {
+    : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name", "vendor", "master", "address", "channel"}));
-
-    this->element_name = get_value("name");
-    set_fileName(element_name);
 
     this->vd = check_vendor(get_value("vendor"));
     this->master_switch = get_value("master").toInt();
@@ -35,10 +32,10 @@ PSU::PSU(RunManager * runManager, const QString &config)
 }
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
-    : Logger(runManager, m_element_name), address(address) {
+    : Component(m_element_name, runManager), address(address) {
     qDebug("Create PSU from scratch");
 
-    this->element_name = m_element_name;
+    this->elementName = m_element_name;
     this->vd = check_vendor(vendor);
 
     init_ethernet(address);
@@ -53,7 +50,6 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 }
 
 PSU::~PSU() {
-    qDebug("Destroy PSU");
     delete eth;
 
     //Delete channel
@@ -62,7 +58,7 @@ PSU::~PSU() {
 void PSU::set_config() {
     config_entry_list.clear();
 
-    set_value("name", element_name);
+    set_value("name", elementName);
     set_value("vendor", check_vendor(vd));
     set_value("master", QString::number(master_switch));
     set_value("address", address);
@@ -78,10 +74,7 @@ void PSU::set_config() {
 
 void PSU::init() {
     update_settings();
-
-    logTimer = new QTimer;
     logTimer->start(1000);
-    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
 }
 
 void PSU::update() {

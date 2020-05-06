@@ -8,14 +8,12 @@
 #include <QThread>
 
 RFIO::RFIO(RunManager * runManager, const QString &config)
-    : Logger(runManager) {
+    : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name", "address", "channel"}));
 
-    this->element_name = get_value("name");
-    set_fileName(element_name);
-
+    this->elementName = get_value("name");
     this->address = get_value("address");
     this->channel = get_value("channel").toInt();
 
@@ -30,9 +28,9 @@ RFIO::RFIO(RunManager * runManager, const QString &config)
 }
 
 RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel)
-    : Logger(runManager, m_element_name), address(address), channel(channel) {
+    : Component(m_element_name, runManager), address(address), channel(channel) {
 
-    this->element_name = m_element_name;
+    this->elementName = m_element_name;
 
     for(int i = 0; i < channel; i++) {
         channel_list.push_back(new RFIOChannel(i));
@@ -47,13 +45,12 @@ RFIO::~RFIO() {
 
     process->kill();
     updateThread->quit();
-    delete process;
 }
 
 void RFIO::set_config() {
     config_entry_list.clear();
 
-    set_value("name", element_name);
+    set_value("name", elementName);
     set_value("address", address);
     set_value("channel", QString::number(channel));
 

@@ -12,10 +12,9 @@ class RFIOUpdater;
 class QProcess;
 class QThread;
 
-#include "Logger.h"
-#include "src/Configuration/ConfigElement.h"
+#include "Component.h"
 
-class RFIO : public Logger, public ConfigElement {
+class RFIO : public Component {
 Q_OBJECT
 
 public:
@@ -28,6 +27,8 @@ public:
    void set_config() override;
 
 public slots:
+   void update() override {}
+
    void set_single_shot();
    void set_multi_shot();
 

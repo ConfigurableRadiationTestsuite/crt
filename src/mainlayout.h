@@ -11,7 +11,6 @@
  */
 
 class ConfigManager;
-class EventManager;
 
 class QAction;
 class QToolBar;

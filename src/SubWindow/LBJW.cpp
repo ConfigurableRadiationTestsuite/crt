@@ -16,7 +16,7 @@
 #include <QGridLayout>
 
 LBJW::LBJW(Labjack *lbj, RunManager *m_runManager) : SubWindow(m_runManager), lbj(lbj) {
-    cfg_element = lbj;
+    component = lbj;
 
     /* Connect and register signals */
     connect(this, SIGNAL(signal_start_log()), lbj, SLOT(start_logging()));
@@ -87,6 +87,17 @@ void LBJW::create_layout() {
 
     settingsBox->setLayout(topLineLayout);
 
+    /* Plot for the channels */
+    QVBoxLayout *graphLayout = new QVBoxLayout;
+    QGroupBox *graphBox = new QGroupBox("Plot");
+    QCustomPlot *plot = new QCustomPlot(this);
+    plot->setGeometry(QRect());
+    plot->setMinimumHeight(256);
+    lbjplot = new LBJPlot(plot);
+    graphLayout->addWidget(plot);
+    graphBox->setLayout(graphLayout);
+    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
+
     /* Channel Layout */
     QGridLayout *channelLayout = new QGridLayout;
     QGroupBox * channelBox = new QGroupBox("Channel");
@@ -135,17 +146,6 @@ void LBJW::create_layout() {
     }
 
     channelBox->setLayout(channelLayout);
-
-    /* Plot for the channels */
-    QVBoxLayout *graphLayout = new QVBoxLayout;
-    QGroupBox *graphBox = new QGroupBox("Plot");
-    QCustomPlot *plot = new QCustomPlot(this);
-    plot->setGeometry(QRect());
-    plot->setMinimumHeight(256);
-    lbjplot = new LBJPlot(plot);
-    graphLayout->addWidget(plot);
-    graphBox->setLayout(graphLayout);
-    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
 
     mainVLayout->addWidget(settingsBox);
     mainVLayout->addWidget(channelBox);

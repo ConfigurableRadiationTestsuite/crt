@@ -12,7 +12,7 @@
 #include <QLineEdit>
 
 PSUW::PSUW(PSU *psu, RunManager *m_runManager) : SubWindow(m_runManager), psu(psu) {
-    cfg_element = psu;
+    component = psu;
 
     /* Connect and register signals */
     connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));

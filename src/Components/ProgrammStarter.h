@@ -10,11 +10,9 @@ class RunManager;
 
 class QProcess;
 
-#include "src/Configuration/ConfigElement.h"
+#include "Component.h"
 
-#include <QObject>
-
-class ProgrammStarter : public QObject, public ConfigElement {
+class ProgrammStarter : public Component {
 Q_OBJECT
 
 public:
@@ -31,11 +29,10 @@ public slots:
     void set_early_logging(int early_logging);
     void set_trigger(int trigger);
 
-    void start_logging();
-    void stop_logging();
-
     void execute_programm();
     void kill_programm();
+
+    void update() override {} //Mix with receive data
 
 private slots:
     void receive_data();
@@ -50,16 +47,14 @@ signals:
     void announce_path(const QString &);
 
 private:
-    RunManager *runManager;
     QProcess *process;
 
     QString path;
-    bool is_early_logging = false;
-    bool is_logging = false;
-    bool is_running = false;
-    bool is_trigger = false;
+    bool running = false;
+    bool trigger = false;
 
     void init();
+    QVector<QString> generate_header() override;
 };
 
 #endif // PROGRAMMSTARTER_H

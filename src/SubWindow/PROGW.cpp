@@ -13,7 +13,7 @@
 
 PROGW::PROGW(ProgrammStarter *programmStarter, RunManager *m_runManager)
     : SubWindow(m_runManager), programmStarter(programmStarter) {
-    cfg_element = programmStarter;
+    component = programmStarter;
 
     connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
     connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));

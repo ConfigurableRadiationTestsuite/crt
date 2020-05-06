@@ -9,7 +9,7 @@
 #include <QVBoxLayout>
 
 RFW::RFW(RFIO *rfio, RunManager *m_runManager) : SubWindow(m_runManager), rfio(rfio) {
-    cfg_element = rfio;
+    component = rfio;
 
     connect(this, SIGNAL(signal_start_log()), rfio, SLOT(start_logging()));
     connect(this, SIGNAL(signal_stop_log()), rfio, SLOT(stop_logging()));

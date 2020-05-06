@@ -1,7 +1,7 @@
 #include "WindowTab.h"
 
 #include "src/Configuration/ConfigManager.h"
-#include "src/Configuration/ConfigElement.h"
+#include "src/Components/Component.h"
 #include "src/Dialog/SpecAddDialog.h"
 #include "src/Manager/EventManager.h"
 #include "src/SubWindow/SubWindow.h"
@@ -12,7 +12,6 @@
 
 WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
     : configManager(configManager), runManager(runManager) {
-    qDebug("Create windowtab" + (sectionName).toLatin1());
 
     this->eventManager = runManager->get_eventManager();
 
@@ -25,15 +24,12 @@ WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
 WindowTab::~WindowTab() {}
 
 void WindowTab::create_layout() {
-    qDebug("Create tab layout");
     mainTabLayout = new QVBoxLayout(this);
 
     SubWindow *window;
     foreach (window, subWindow_list) {
-        qDebug("Add window to tab");
-
         /* Main Box for the window */
-        QGroupBox * windowGroupBox = new QGroupBox(window->get_config_element()->get_element_name());
+        QGroupBox * windowGroupBox = new QGroupBox(window->get_component()->get_element_name());
         connect(this, SIGNAL(clean_layout()), windowGroupBox, SLOT(deleteLater()));
 
         /* Create delete button */
@@ -77,8 +73,6 @@ void WindowTab::update_layout() {
 }
 
 void WindowTab::erase_window(SubWindow *window) {
-    qDebug("Erase single window");
-
     for(QList<SubWindow *>::iterator it = subWindow_list.begin(); it != subWindow_list.end(); it++) {
         if((*it) == window) {
             subWindow_list.erase(it);
@@ -96,8 +90,6 @@ void WindowTab::save_to_config() {
 }
 
 void WindowTab::clear_subwindow_list() {
-    qDebug("Clear window list");
-
     SubWindow *window;
     foreach (window, subWindow_list)
         delete window;

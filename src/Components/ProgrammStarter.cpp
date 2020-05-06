@@ -6,21 +6,21 @@
 #include <QProcess>
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
-    : runManager(runManager) {
+    : Component(runManager, config) {
     qDebug("Create ProgammStarter from Config");
 
     load_config(config);
     assert(parse_config({"name", "path"}));
 
-    this->element_name = get_value("name");
+    this->elementName = get_value("name");
     this->path = get_value("path");
 
     init();
 }
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path)
-    : runManager(runManager), path(path) {
-    this->element_name = m_element_name;
+    : Component(m_element_name, runManager), path(path) {
+    this->elementName = m_element_name;
 
     init();
 }
@@ -33,7 +33,7 @@ ProgrammStarter::~ProgrammStarter() {
 void ProgrammStarter::set_config() {
     config_entry_list.clear();
 
-    set_value("name", element_name);
+    set_value("name", elementName);
     set_value("path", path);
 }
 
@@ -43,7 +43,7 @@ void ProgrammStarter::init() {
 }
 
 void ProgrammStarter::set_path(const QString &text) {
-    if(is_running || !QFileInfo::exists(text))
+    if(running || !QFileInfo::exists(text))
         return;
 
     path = text;
@@ -51,44 +51,26 @@ void ProgrammStarter::set_path(const QString &text) {
 }
 
 void ProgrammStarter::set_early_logging(int early_logging) {
-    is_early_logging = early_logging > 0 ? true : false;
+    this->early_logging = early_logging > 0 ? true : false;
 }
 
 void ProgrammStarter::set_trigger(int trigger) {
-    if(is_running)
+    if(running)
         return ;
 
-    is_trigger = trigger > 0 ? true : false;
+    this->trigger = trigger > 0 ? true : false;
 
-    emit announce_trigger(is_trigger);
-}
-
-void ProgrammStarter::start_logging() {
-    if(is_logging)
-        return;
-
-    runManager->register_component(this, element_name);
-    runManager->set_file_header(this, {"Line"});
-
-    is_logging = true;
-}
-
-void ProgrammStarter::stop_logging() {
-    if(!is_logging)
-        return ;
-
-    runManager->deregister_component(this);
-    is_logging = false;
+    emit announce_trigger(this->trigger);
 }
 
 void ProgrammStarter::execute_programm() {
-    if(is_early_logging)
+    if(early_logging)
         start_logging();
 
     process->start(path);
     process->waitForStarted();
 
-    is_running = true;
+    running = true;
 
     emit announce_run(true);
 }
@@ -96,11 +78,15 @@ void ProgrammStarter::execute_programm() {
 void ProgrammStarter::kill_programm() {
     process->kill();
 
-    is_running = false;
+    running = false;
 
     stop_logging();
 
     emit announce_run(false);
+}
+
+QVector<QString> ProgrammStarter::generate_header() {
+    return {"line"};
 }
 
 void ProgrammStarter::receive_data() {
@@ -114,7 +100,7 @@ void ProgrammStarter::receive_data() {
             text.remove(text.size()-1, 1);
     }
 
-    if(is_logging)
+    if(logging)
         runManager->append_value_to_file(this, text);
 
     emit data_available(text);

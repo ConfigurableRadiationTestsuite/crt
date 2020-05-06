@@ -1,14 +1,12 @@
 #include "SubWindow.h"
 
-#include "src/Configuration/ConfigElement.h"
+#include "src/Components/Component.h"
 #include "src/Dialog/SpecSignalDialog.h"
 
 #include <QCheckBox>
 #include <QPushButton>
 
 SubWindow::SubWindow(RunManager *runManager) : runManager(runManager) {
-    qDebug("Create subwindow");
-
     this->eventManager = runManager->get_eventManager();
 
     /* Post config management */
@@ -17,17 +15,15 @@ SubWindow::SubWindow(RunManager *runManager) : runManager(runManager) {
 }
 
 SubWindow::~SubWindow() {
-    qDebug("Destroy SubWindow: " + (cfg_element->get_element_name()).toLatin1());
-
     //Notify the WindowTab
     emit destroyed(this);
 }
 
 QString SubWindow::get_config() {
-    cfg_element->set_config();
-    cfg_element->set_value("signal", get_signal_list());
+    component->set_config();
+    component->set_value("signal", get_signal_list());
 
-    return cfg_element->get_config();
+    return component->get_config();
 }
 
 QString SubWindow::get_signal_list() {
@@ -50,9 +46,7 @@ bool SubWindow::is_signal_in_list(struct RegisteredSignal * reg) {
 }
 
 void SubWindow::post_init() {
-    qDebug("Call post init on: " + (cfg_element->get_element_name()).toLatin1());
-
-    QString signal_names = cfg_element->get_value("signal");
+    QString signal_names = component->get_value("signal");
 
     if(signal_names.count(";") == signal_list.size())
         return ;
@@ -84,7 +78,7 @@ void SubWindow::show_signal_dialog() {
 }
 
 void SubWindow::add_signal() {
-    qDebug("Add signal to: " + (cfg_element->get_element_name()).toLatin1());
+    qDebug("Add signal to: " + (component->get_element_name()).toLatin1());
 
     struct RegisteredSignalBox signal;
     foreach (signal, signalDialog->get_registeredSignal_list())
@@ -93,7 +87,7 @@ void SubWindow::add_signal() {
 }
 
 void SubWindow::delete_signal(struct RegisteredSignal * reg) {
-    qDebug("Delete signal from: " + (cfg_element->get_element_name()).toLatin1());
+    qDebug("Delete signal from: " + (component->get_element_name()).toLatin1());
 
     for(QVector<struct RegisteredSignal*>::iterator it = signal_list.begin(); it != signal_list.end(); it++) {
         if((*it) == reg) {

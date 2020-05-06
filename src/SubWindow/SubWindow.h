@@ -13,7 +13,7 @@
  *
  */
 
-class ConfigElement;
+class Component;
 class SpecSignalDialog;
 
 #include "src/Manager/RunManager.h"
@@ -28,7 +28,7 @@ public:
     virtual ~SubWindow();
 
     QString get_config();
-    ConfigElement *get_config_element() const {return cfg_element;}
+    Component *get_component() const {return component;}
 
 public slots:
     /* Event / Signal management */
@@ -42,12 +42,6 @@ protected slots:
     //Configuration
     virtual void post_init(); //For all the signals
 
-    /* Emit listed signals */
-    void trigger_on();
-    void trigger_off();
-    void trigger_start_log();
-    void trigger_stop_log();
-    void trigger_special();
     void trigger_signal_list();
 
 signals:
@@ -62,9 +56,9 @@ signals:
     void destroyed(SubWindow * subWindow);
 
 protected:
-    ConfigElement *cfg_element;
+    Component *component;
 
-    /* Eventand signal management */
+    /* Event and signal management */
     RunManager *runManager;
     EventManager *eventManager;
     QVector<struct RegisteredSignal*> signal_list;
@@ -74,11 +68,6 @@ protected:
     bool is_signal_in_list(struct RegisteredSignal * reg);
 };
 
-inline void SubWindow::trigger_on() {eventManager->call_trigger(SignalType::on, signal_list);}
-inline void SubWindow::trigger_off() {eventManager->call_trigger(SignalType::off, signal_list);}
-inline void SubWindow::trigger_start_log() {eventManager->call_trigger(SignalType::start_log, signal_list);}
-inline void SubWindow::trigger_stop_log() {eventManager->call_trigger(SignalType::stop_log, signal_list);}
-inline void SubWindow::trigger_special() {eventManager->call_trigger(SignalType::special, signal_list);}
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}
 
 #endif // SUBWINDOW_H
