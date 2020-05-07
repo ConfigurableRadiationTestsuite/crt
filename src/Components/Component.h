@@ -28,13 +28,17 @@ public slots:
     void start_logging();
     void stop_logging();
 
+    void set_early_logging(int);
+
+signals:
+    void is_logging(bool);
+
 protected:
     RunManager *runManager;
     QString elementName;
 
     QTimer *logTimer;
     bool logging = false;
-    bool early_logging = false;
 
     virtual QVector<QString> generate_header() = 0;
 };

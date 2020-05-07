@@ -9,7 +9,6 @@
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
-    qDebug("Create Labjack from Config");
 
     load_config(config);
     assert(parse_config({"name" , "channel"}));
@@ -37,7 +36,6 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
     : Component(m_element_name, runManager) {
-    qDebug("Create Labjack from Scratch");
 
     this->elementName = m_element_name;
 
@@ -62,12 +60,12 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
 }
 
 Labjack::~Labjack() {
-    qDebug("Destroy Labjack");
     LJM_Close(handle);
 
     delete sampleTimer;
 
-    //Delete channel
+    for(QVector<LabjackChannel*>::iterator it = channel_list.begin(); it != channel_list.end(); it++)
+        delete (*it);
 }
 
 void Labjack::set_config() {

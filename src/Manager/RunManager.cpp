@@ -130,7 +130,7 @@ void RunManager::stop_run() {
 }
 
 void RunManager::set_run_mode(enum RunMode mode, const QString &component) {
-    if(!valid)
+    if(valid)
         append_values_to_file(this, {QString::number(mode), component});
 
     emit run_mode_changed(mode);
