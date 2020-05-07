@@ -24,7 +24,7 @@ class SubWindow : public QWidget {
 Q_OBJECT
 
 public:
-    SubWindow(RunManager *runManager);
+    SubWindow(RunManager *runManager, Component *component);
     virtual ~SubWindow();
 
     QString get_config();
@@ -37,8 +37,6 @@ public slots:
     void delete_signal(struct RegisteredSignal * reg);
 
 protected slots:
-    virtual void create_layout() = 0;
-
     //Configuration
     virtual void post_init(); //For all the signals
 
@@ -56,16 +54,18 @@ signals:
     void destroyed(SubWindow * subWindow);
 
 protected:
-    Component *component;
-
     /* Event and signal management */
     RunManager *runManager;
     EventManager *eventManager;
     QVector<struct RegisteredSignal*> signal_list;
     SpecSignalDialog *signalDialog = nullptr;
 
+    Component *component;
+
     QString get_signal_list();
     bool is_signal_in_list(struct RegisteredSignal * reg);
+
+    virtual void create_layout() = 0;
 };
 
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}

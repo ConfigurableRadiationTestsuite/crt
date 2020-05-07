@@ -60,22 +60,27 @@ void RunManager::create_layout() {
 void RunManager::create_new_run() {
     QString folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "./", QFileDialog::ShowDirsOnly);
 
+    //If run is valid, first deregister the RunManager
+    if(valid)
+        deregister_component(this);
+
+    /* Check if the selected folder exists */
     if(QFileInfo::exists(folder))
         set_root_directory(folder);
     else {
-        emit eventManager->logging_disabled(true);
+        set_run_valid(false);
         return ;
     }
 
     /* Create new run log for start / stop / various */
     register_component(this, "RunManager");
-    set_file_header(this, {"Action"});
-    set_run_mode(RunMode::Creation);
+    set_file_header(this, {"Action", "Component"});
+    set_run_mode(RunMode::Creation, "Run Manager");
 
     offsetTime = 0;
-    valid = true;
+
     emit run_name_changed(folder);
-    emit eventManager->logging_disabled(false);
+    set_run_valid(true);
 }
 
 void RunManager::update_run() {
@@ -105,7 +110,7 @@ void RunManager::start_run() {
     eventManager->trigger_start_log();
     eventManager->trigger_on();
 
-    set_run_mode(RunMode::Start);
+    set_run_mode(RunMode::StartRun, "Run Manager");
 }
 
 void RunManager::stop_run() {
@@ -119,14 +124,21 @@ void RunManager::stop_run() {
     eventManager->trigger_off();
     eventManager->trigger_stop_log();
 
-    set_run_mode(RunMode::Stop);
+    set_run_mode(RunMode::StopRun, "Run Manager");
 
     emit enable_run_button(true);
 }
 
-void RunManager::set_run_mode(enum RunMode mode) {
+void RunManager::set_run_mode(enum RunMode mode, const QString &component) {
     if(!valid)
-        append_value_to_file(this, double(mode));
+        append_values_to_file(this, {QString::number(mode), component});
 
     emit run_mode_changed(mode);
+}
+
+void RunManager::set_run_valid(bool valid) {
+    this->valid = valid;
+
+    emit isValid_changed(valid);
+    emit isInvalid_changed(!valid);
 }

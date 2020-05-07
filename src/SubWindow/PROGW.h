@@ -4,6 +4,9 @@
 /*
  * Author: Mattis Jaksch
  *
+ * Allows to set a path to a program which can be started
+ * either manually or automatically
+ *
  */
 
 class ProgrammStarter;
@@ -16,7 +19,7 @@ class PROGW : public SubWindow {
 Q_OBJECT
 
 public:
-    PROGW(ProgrammStarter * programmStarter, RunManager *m_runManager);
+    PROGW(RunManager *m_runManager, ProgrammStarter * programmStarter);
     virtual ~PROGW() override;
 
 private slots:

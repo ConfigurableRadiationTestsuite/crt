@@ -1,4 +1,4 @@
-#include "DIOW.h"
+/*#include "DIOW.h"
 
 #include "src/Components/DIOM.h"
 
@@ -8,7 +8,7 @@
 #include <QLabel>
 #include <QLineEdit>
 
-DIOW::DIOW(DIOM *diom, RunManager *m_runManager) : SubWindow(m_runManager), diom(diom) {
+DIOW::DIOW(RunManager *m_runManager, DIOM *diom) : SubWindow(m_runManager, diom), diom(diom) {
     //component = diom;
 
     create_layout();
@@ -25,3 +25,4 @@ void DIOW::create_layout() {
 
     setLayout(mainHLayout);
 }
+*/

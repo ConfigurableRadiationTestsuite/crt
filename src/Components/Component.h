@@ -9,7 +9,6 @@
 #include "src/Configuration/ConfigElement.h"
 #include "src/Manager/RunManager.h"
 
-
 #include <QObject>
 #include <QTimer>
 

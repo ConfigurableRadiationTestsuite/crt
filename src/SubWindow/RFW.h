@@ -20,14 +20,12 @@ class RFW : public SubWindow {
 Q_OBJECT
 
 public:
-    RFW(RFIO *rfio, RunManager *m_runManager);
+    RFW(RunManager *m_runManager, RFIO *rfio);
     virtual ~RFW() override;
 
 private:
-    RFIO * rfio;
     QVBoxLayout *mainVLayout;
-    QHBoxLayout *headerHLayout;
-    QHBoxLayout *subHLayout;
+    RFIO * rfio;
 
     void create_layout() override;
 

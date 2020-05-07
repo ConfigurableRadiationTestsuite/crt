@@ -61,10 +61,10 @@ void FileManager::append_value_to_file(const void * subComponent, double value) 
     get_file(subComponent)->file->flush();
 }
 
-void FileManager::append_value_to_file(const void * subComponent, const QString &text) {
+void FileManager::append_value_to_file(const void * subComponent, const QString &value) {
     long long time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
 
-    get_file(subComponent)->file->write((QString::number(time) + ";" + QString(escape_text(text) + "\n")).toUtf8());
+    get_file(subComponent)->file->write((QString::number(time) + ";" + QString(escape_text(value) + "\n")).toUtf8());
     get_file(subComponent)->file->flush();
 }
 
@@ -73,6 +73,17 @@ void FileManager::append_values_to_file(const void * subComponent, const QVector
 
     QVector<double> internal_values;
     internal_values.push_back(time);
+    internal_values.append(values);
+
+    get_file(subComponent)->file->write((QString(vector_to_string(internal_values) + "\n")).toUtf8());
+    get_file(subComponent)->file->flush();
+}
+
+void FileManager::append_values_to_file(const void * subComponent, const QVector<QString> &values) {
+    long long  time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
+
+    QVector<QString> internal_values;
+    internal_values.push_back(QString::number(time));
     internal_values.append(values);
 
     get_file(subComponent)->file->write((QString(vector_to_string(internal_values) + "\n")).toUtf8());

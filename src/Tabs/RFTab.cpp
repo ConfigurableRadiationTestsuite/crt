@@ -18,7 +18,7 @@ void RFTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new RFW(new RFIO(runManager, section_content), runManager));
+        subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, section_content)));
         section_content.clear();
     }
 
@@ -30,7 +30,7 @@ void RFTab::create_subwindow_from_dialog() {
     QString address = addDialog->get_entry_list()[1].input_value->text();
     int channel = addDialog->get_entry_list()[2].input_value->text().toInt();
 
-    subWindow_list.push_back(new RFW(new RFIO(runManager, name, address, channel), runManager));
+    subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, name, address, channel)));
 
     update_layout();
 }

@@ -1,10 +1,6 @@
-#ifndef DIOW_H
+/*#ifndef DIOW_H
 #define DIOW_H
 
-/*
- * Author: Mattis Jaksch
- *
- */
 
 class DIOM;
 
@@ -28,3 +24,4 @@ private:
 };
 
 #endif // DIOW_H
+*/

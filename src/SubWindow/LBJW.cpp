@@ -5,34 +5,21 @@
 #include "src/Plot/qcustomplot.h"
 #include "src/Plot/LBJPlot.h"
 
-#include <QVBoxLayout>
-#include <QSlider>
-#include <QHBoxLayout>
-#include <QGroupBox>
-#include <QLineEdit>
-#include <QLabel>
-#include <QIntValidator>
 #include <QCheckBox>
+#include <QGroupBox>
 #include <QGridLayout>
+#include <QHBoxLayout>
+#include <QIntValidator>
+#include <QLabel>
+#include <QLineEdit>
+#include <QSlider>
+#include <QVBoxLayout>
 
-LBJW::LBJW(Labjack *lbj, RunManager *m_runManager) : SubWindow(m_runManager), lbj(lbj) {
-    component = lbj;
-
-    /* Connect and register signals */
-    connect(this, SIGNAL(signal_start_log()), lbj, SLOT(start_logging()));
-    connect(this, SIGNAL(signal_stop_log()), lbj, SLOT(stop_logging()));
-
-    eventManager->add_signal(lbj->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
-    eventManager->add_signal(lbj->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
-
+LBJW::LBJW(RunManager *m_runManager, Labjack *lbj) : SubWindow(m_runManager, lbj), lbj(lbj) {
     create_layout();
 }
 
 LBJW::~LBJW() {
-    /* Degregister signals */
-    eventManager->delete_signal(&SubWindow::signal_start_log);
-    eventManager->delete_signal(&SubWindow::signal_stop_log);
-
     delete lbj;
     delete mainVLayout;
     delete lbjplot;

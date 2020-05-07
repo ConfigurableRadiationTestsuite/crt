@@ -20,13 +20,12 @@ class PSUW : public SubWindow {
 Q_OBJECT
 
 public:
-    PSUW(PSU *psu, RunManager *m_runManager);
+    PSUW(RunManager *m_runManager, PSU *psu);
     virtual ~PSUW() override;
 
 private:
-    PSU * psu;
-
     QHBoxLayout * mainHLayout;
+    PSU * psu;
 
     void create_layout() override;
 };

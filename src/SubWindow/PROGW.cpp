@@ -11,18 +11,12 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
-PROGW::PROGW(ProgrammStarter *programmStarter, RunManager *m_runManager)
-    : SubWindow(m_runManager), programmStarter(programmStarter) {
-    component = programmStarter;
+PROGW::PROGW(RunManager *m_runManager, ProgrammStarter *programmStarter)
+    : SubWindow(m_runManager, programmStarter), programmStarter(programmStarter) {
 
     connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
-    connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
-    connect(this, SIGNAL(signal_start_log()), programmStarter, SLOT(start_logging()));
-    connect(this, SIGNAL(signal_stop_log()), programmStarter, SLOT(stop_logging()));
-
-    eventManager->add_signal(programmStarter->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
-    eventManager->add_signal(programmStarter->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
     eventManager->add_signal(programmStarter->get_element_name() + " Execute", SignalType::on, this, &SubWindow::signal_on);
+    connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Kill", SignalType::off, this, &SubWindow::signal_off);
 
     create_layout();
@@ -31,8 +25,6 @@ PROGW::PROGW(ProgrammStarter *programmStarter, RunManager *m_runManager)
 PROGW::~PROGW() {
     eventManager->delete_signal(&SubWindow::signal_on);
     eventManager->delete_signal(&SubWindow::signal_off);
-    eventManager->delete_signal(&SubWindow::signal_start_log);
-    eventManager->delete_signal(&SubWindow::signal_stop_log);
 
     delete programmStarter;
     delete mainVLayout;

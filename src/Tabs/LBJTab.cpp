@@ -18,7 +18,7 @@ void LBJTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new LBJW(new Labjack(runManager, section_content), runManager));
+        subWindow_list.push_back(new LBJW(runManager, new Labjack(runManager, section_content)));
         section_content.clear();
     }
 
@@ -32,7 +32,7 @@ void LBJTab::create_subwindow_from_dialog() {
     QString pchannel = addDialog->get_entry_list()[2].input_value->text();
     QString nchannel = addDialog->get_entry_list()[3].input_value->text();
 
-    subWindow_list.push_back(new LBJW(new Labjack(runManager, name, channel_name, pchannel, nchannel), runManager));
+    subWindow_list.push_back(new LBJW(runManager, new Labjack(runManager, name, channel_name, pchannel, nchannel)));
 
     update_layout();
 }

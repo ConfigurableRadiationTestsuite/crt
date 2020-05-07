@@ -18,7 +18,7 @@ void PROGTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, section_content), runManager));
+        subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, section_content)));
         section_content.clear();
     }
 
@@ -30,7 +30,7 @@ void PROGTab::create_subwindow_from_dialog() {
     QString name = addDialog->get_entry_list()[0].input_value->text();
     QString path = addDialog->get_entry_list()[1].input_value->text();
 
-    subWindow_list.push_back(new PROGW(new ProgrammStarter(runManager, name, path), runManager));
+    subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, name, path)));
 
     update_layout();
 }

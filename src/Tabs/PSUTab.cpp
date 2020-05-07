@@ -18,7 +18,7 @@ void PSUTab::load_from_config() {
 
     QString section_content;
     while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PSUW(new PSU(runManager, section_content), runManager));
+        subWindow_list.push_back(new PSUW(runManager, new PSU(runManager, section_content)));
         section_content.clear();
     }
 
@@ -33,7 +33,7 @@ void PSUTab::create_subwindow_from_dialog() {
     double max_voltage = addDialog->get_entry_list()[4].input_value->text().toDouble();
     double max_current = addDialog->get_entry_list()[5].input_value->text().toDouble();
 
-    subWindow_list.push_back(new PSUW(new PSU(runManager, name, address, vendor, channel, max_voltage, max_current), runManager));
+    subWindow_list.push_back(new PSUW(runManager, new PSU(runManager, name, address, vendor, channel, max_voltage, max_current)));
 
     update_layout();
 }

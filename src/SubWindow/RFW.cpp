@@ -8,22 +8,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-RFW::RFW(RFIO *rfio, RunManager *m_runManager) : SubWindow(m_runManager), rfio(rfio) {
-    component = rfio;
-
-    connect(this, SIGNAL(signal_start_log()), rfio, SLOT(start_logging()));
-    connect(this, SIGNAL(signal_stop_log()), rfio, SLOT(stop_logging()));
-
-    eventManager->add_signal(rfio->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
-    eventManager->add_signal(rfio->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
-
+RFW::RFW(RunManager *m_runManager, RFIO *rfio) : SubWindow(m_runManager, rfio), rfio(rfio) {
     create_layout();
 }
 
 RFW::~RFW() {
-    //Deregister signals
-    eventManager->delete_signal(&SubWindow::signal_start_log);
-    eventManager->delete_signal(&SubWindow::signal_stop_log);
+    delete mainVLayout;
 
     delete rfio;
 }
@@ -33,7 +23,7 @@ void RFW::create_layout() {
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     /* Header */
-    headerHLayout = new QHBoxLayout;
+    QHBoxLayout *headerHLayout = new QHBoxLayout;
 
     /* Signal button */
     QPushButton *signalButton = new QPushButton;
@@ -75,7 +65,7 @@ void RFW::create_layout() {
     headerHLayout->addSpacerItem(space);
 
     /* Channel */
-    subHLayout = new QHBoxLayout(this);
+    QHBoxLayout *subHLayout = new QHBoxLayout;
 
     RFIOChannel * channel;
     foreach (channel, rfio->get_channel_list()) {

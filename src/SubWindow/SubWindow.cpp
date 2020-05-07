@@ -6,8 +6,15 @@
 #include <QCheckBox>
 #include <QPushButton>
 
-SubWindow::SubWindow(RunManager *runManager) : runManager(runManager) {
+SubWindow::SubWindow(RunManager *runManager, Component *component)
+    : runManager(runManager), component(component) {
     this->eventManager = runManager->get_eventManager();
+
+    /* Announce logging */
+    connect(this, SIGNAL(signal_start_log()), component, SLOT(start_logging()));
+    eventManager->add_signal(component->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+    connect(this, SIGNAL(signal_stop_log()), component, SLOT(stop_logging()));
+    eventManager->add_signal(component->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
 
     /* Post config management */
     connect(eventManager, SIGNAL(signal_added()), this, SLOT(post_init()));
@@ -15,6 +22,9 @@ SubWindow::SubWindow(RunManager *runManager) : runManager(runManager) {
 }
 
 SubWindow::~SubWindow() {
+    eventManager->delete_signal(&SubWindow::signal_start_log);
+    eventManager->delete_signal(&SubWindow::signal_stop_log);
+
     //Notify the WindowTab
     emit destroyed(this);
 }
@@ -78,8 +88,6 @@ void SubWindow::show_signal_dialog() {
 }
 
 void SubWindow::add_signal() {
-    qDebug("Add signal to: " + (component->get_element_name()).toLatin1());
-
     struct RegisteredSignalBox signal;
     foreach (signal, signalDialog->get_registeredSignal_list())
         if(signal.checkBox->isChecked())
@@ -87,8 +95,6 @@ void SubWindow::add_signal() {
 }
 
 void SubWindow::delete_signal(struct RegisteredSignal * reg) {
-    qDebug("Delete signal from: " + (component->get_element_name()).toLatin1());
-
     for(QVector<struct RegisteredSignal*>::iterator it = signal_list.begin(); it != signal_list.end(); it++) {
         if((*it) == reg) {
             signal_list.erase(it);

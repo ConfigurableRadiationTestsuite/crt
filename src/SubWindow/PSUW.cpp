@@ -11,18 +11,11 @@
 #include <QLabel>
 #include <QLineEdit>
 
-PSUW::PSUW(PSU *psu, RunManager *m_runManager) : SubWindow(m_runManager), psu(psu) {
-    component = psu;
-
+PSUW::PSUW(RunManager *m_runManager, PSU *psu) : SubWindow(m_runManager, psu), psu(psu) {
     /* Connect and register signals */
     connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
-    connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
-    connect(this, SIGNAL(signal_start_log()), psu, SLOT(start_logging()));
-    connect(this, SIGNAL(signal_stop_log()), psu, SLOT(stop_logging()));
-
-    eventManager->add_signal(psu->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
-    eventManager->add_signal(psu->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
     eventManager->add_signal(psu->get_element_name() + " Switch On", SignalType::on, this, &SubWindow::signal_on);
+    connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
     eventManager->add_signal(psu->get_element_name() + " Switch Off", SignalType::off, this, &SubWindow::signal_off);
 
     create_layout();
@@ -32,8 +25,6 @@ PSUW::~PSUW() {
     /* Degregister signals */
     eventManager->delete_signal(&SubWindow::signal_on);
     eventManager->delete_signal(&SubWindow::signal_off);
-    eventManager->delete_signal(&SubWindow::signal_start_log);
-    eventManager->delete_signal(&SubWindow::signal_stop_log);
 
     delete psu;
     delete mainHLayout;

@@ -13,8 +13,7 @@
 
 MainLayout::MainLayout() {
     configManager = new ConfigManager;
-    eventManager = new EventManager;
-    runManager = new RunManager(eventManager);
+    runManager = new RunManager(new EventManager);
 
     create_layout();
 }
@@ -57,12 +56,14 @@ QToolBar * MainLayout::create_toolbar() {
     startTestButton->setDisabled(true);
     connect(startTestButton, SIGNAL(triggered()), runManager, SLOT(start_run()));
     connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_start_button(enum RunMode)));
-    connect(eventManager, SIGNAL(logging_disabled(bool)), startTestButton, SLOT(setDisabled(bool)));
+    connect(runManager, SIGNAL(isInvalid_changed(bool)), startTestButton, SLOT(setDisabled(bool)));
 
     stopTestButton = toolbar->addAction("Stop Test");
     stopTestButton->setIcon(QIcon(":/icon/stopButton.png"));
+    stopTestButton->setDisabled(true);
     connect(stopTestButton, SIGNAL(triggered()), runManager, SLOT(stop_run()));
     connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_stop_button(enum RunMode)));
+    connect(runManager, SIGNAL(isInvalid_changed(bool)), stopTestButton, SLOT(setDisabled(bool)));
 
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setIconSize(QSize(16, 16));
@@ -93,10 +94,10 @@ void MainLayout::set_start_button(enum RunMode mode) {
     case Creation:
         startTestButton->setIcon(QIcon(":icon/startButton.png"));
         break;
-    case Start:
+    case StartRun:
         startTestButton->setIcon(QIcon(":icon/startButton_active.png"));
         break;
-    case Stop:
+    case StopRun:
         startTestButton->setIcon(QIcon(":icon/startButton.png"));
         break;
     default:
@@ -109,10 +110,10 @@ void MainLayout::set_stop_button(enum RunMode mode) {
     case Creation:
         stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
         break;
-    case Start:
+    case StartRun:
         stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
         break;
-    case Stop:
+    case StopRun:
         stopTestButton->setIcon(QIcon(":icon/stopButton_active.png"));
         break;
     default:

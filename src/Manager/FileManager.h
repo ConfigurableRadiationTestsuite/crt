@@ -34,8 +34,9 @@ public:
     struct ComponentFile * get_file(const void * subComponent);
 
     void append_value_to_file(const void * subComponent, double value);
-    void append_value_to_file(const void * subComponent, const QString &text);
+    void append_value_to_file(const void * subComponent, const QString &value);
     void append_values_to_file(const void * subComponent, const QVector<double> &values);
+    void append_values_to_file(const void * subComponent, const QVector<QString> &values);
 
     void set_file_header(const void * subComponent, const QVector<QString> &header);
 

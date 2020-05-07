@@ -34,7 +34,6 @@ private slots:
 
 private:
     ConfigManager *configManager;
-    EventManager *eventManager;
     RunManager *runManager;
 
     QVBoxLayout *mainVerticalLayout;
