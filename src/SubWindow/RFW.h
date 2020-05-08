@@ -11,9 +11,6 @@
 
 class RFIO;
 
-class QHBoxLayout;
-class QVBoxLayout;
-
 #include "SubWindow.h"
 
 class RFW : public SubWindow {
@@ -24,11 +21,9 @@ public:
     virtual ~RFW() override;
 
 private:
-    QVBoxLayout *mainVLayout;
     RFIO * rfio;
 
     void create_layout() override;
-
 };
 
 #endif // LBJW_H

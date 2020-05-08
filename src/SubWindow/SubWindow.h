@@ -13,9 +13,9 @@
  *
  */
 
-class Component;
 class SpecSignalDialog;
 
+#include "src/Components/Component.h"
 #include "src/Manager/RunManager.h"
 
 #include <QWidget>

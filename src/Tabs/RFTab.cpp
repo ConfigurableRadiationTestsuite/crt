@@ -1,10 +1,7 @@
 #include "RFTab.h"
 
-#include "src/Configuration/ConfigManager.h"
-#include "src/Manager/EventManager.h"
-#include "src/Dialog/SpecAddDialog.h"
-#include "src/SubWindow/RFW.h"
 #include "src/Components/RFIO.h"
+#include "src/SubWindow/RFW.h"
 
 RFTab::RFTab(ConfigManager *m_configManager, RunManager *m_runManager)
     : WindowTab(m_configManager, m_runManager) {

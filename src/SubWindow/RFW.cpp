@@ -13,13 +13,11 @@ RFW::RFW(RunManager *m_runManager, RFIO *rfio) : SubWindow(m_runManager, rfio), 
 }
 
 RFW::~RFW() {
-    delete mainVLayout;
-
     delete rfio;
 }
 
 void RFW::create_layout() {
-    mainVLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     /* Header */

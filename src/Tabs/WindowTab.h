@@ -10,10 +10,10 @@
  *
  */
 
-class EventManager;
-class ConfigManager;
-class RunManager;
-class SpecAddDialog;
+#include "src/Configuration/ConfigManager.h"
+#include "src/Manager/RunManager.h"
+#include "src/Dialog/SpecAddDialog.h"
+
 class SubWindow;
 
 class QVBoxLayout;
@@ -36,7 +36,6 @@ protected slots:
     void save_to_config();
 
     virtual void create_subwindow_from_dialog() = 0;
-    virtual void create_subwindow_from_dialog(bool dialog_accepted);
     void add_subwindow_from_dialog();
 
 private slots:
@@ -49,7 +48,6 @@ protected:
     QString sectionName = "";
 
     ConfigManager *configManager;
-    EventManager *eventManager;
     RunManager *runManager;
 
     QVBoxLayout *mainTabLayout;

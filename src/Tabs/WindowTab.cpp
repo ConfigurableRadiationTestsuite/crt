@@ -1,9 +1,5 @@
 #include "WindowTab.h"
 
-#include "src/Configuration/ConfigManager.h"
-#include "src/Components/Component.h"
-#include "src/Dialog/SpecAddDialog.h"
-#include "src/Manager/EventManager.h"
 #include "src/SubWindow/SubWindow.h"
 
 #include <QGroupBox>
@@ -12,8 +8,6 @@
 
 WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
     : configManager(configManager), runManager(runManager) {
-
-    this->eventManager = runManager->get_eventManager();
 
     connect(configManager, SIGNAL(loading_config()), this, SLOT(load_from_config()));
     connect(configManager, SIGNAL(saving_config()), this, SLOT(save_to_config()));
@@ -97,15 +91,10 @@ void WindowTab::clear_subwindow_list() {
     subWindow_list.clear();
 }
 
-void WindowTab::create_subwindow_from_dialog(bool dialog_accpeted) {
-    if(dialog_accpeted)
-        create_subwindow_from_dialog();
-}
-
 void WindowTab::add_subwindow_from_dialog() {
     if(addDialog == nullptr) {
         addDialog = new SpecAddDialog;
-        connect(addDialog, SIGNAL(dialog_accepted(bool)), this, SLOT(create_subwindow_from_dialog(bool)));
+        connect(addDialog, SIGNAL(accepted()), this, SLOT(create_subwindow_from_dialog()));
 
         create_add_subwindow_dialog();
         addDialog->create_dialog();

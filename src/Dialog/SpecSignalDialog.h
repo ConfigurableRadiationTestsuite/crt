@@ -33,14 +33,10 @@ public:
     void add_entry(bool isChecked, struct RegisteredSignal *sig);
     void create_dialog();
 
-    QPushButton* get_ok_button() {return okButton;}
     QVector<struct RegisteredSignalBox> get_registeredSignal_list() const {return registeredSignal_list;}
 
 private:
     QVector<struct RegisteredSignalBox> registeredSignal_list;
-
-    QPushButton* okButton;
-    QPushButton* cancleButton;
 };
 
 #endif // SPECSIGNALDIALOG_H

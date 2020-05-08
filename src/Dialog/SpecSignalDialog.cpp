@@ -5,24 +5,24 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 
-SpecSignalDialog::SpecSignalDialog() {
-    okButton = new QPushButton("Ok", this);
-    cancleButton = new QPushButton("Cancel", this);
-}
+SpecSignalDialog::SpecSignalDialog() {}
 
-SpecSignalDialog::~SpecSignalDialog() {
-    delete okButton;
-    delete cancleButton;
-}
+SpecSignalDialog::~SpecSignalDialog() {}
 
 void SpecSignalDialog::create_dialog() {
-    QVBoxLayout * buttonLayout = new QVBoxLayout;
+    QVBoxLayout * buttonLayout = new QVBoxLayout(this);
 
     for(QVector<struct RegisteredSignalBox>::iterator i = registeredSignal_list.begin(); i != registeredSignal_list.end(); i++)
         buttonLayout->addWidget((*i).checkBox);
 
     QHBoxLayout * hlayout = new QHBoxLayout;
+
+    QPushButton *okButton = new QPushButton("Ok");
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accpect()));
     hlayout->addWidget(okButton);
+
+    QPushButton *cancleButton = new QPushButton("Cancel");
+    connect(cancleButton, SIGNAL(clicked()), this, SLOT(reject()));
     hlayout->addWidget(cancleButton);
 
     connect(cancleButton, SIGNAL(clicked()), this, SLOT(close()));

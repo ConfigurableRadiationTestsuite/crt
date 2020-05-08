@@ -1,9 +1,6 @@
 #include "PROGTab.h"
 
 #include "src/Components/ProgrammStarter.h"
-#include "src/Configuration/ConfigManager.h"
-#include "src/Dialog/SpecAddDialog.h"
-#include "src/Manager/EventManager.h"
 #include "src/SubWindow/PROGW.h"
 
 PROGTab::PROGTab(ConfigManager *m_configManager, RunManager *m_runManager)

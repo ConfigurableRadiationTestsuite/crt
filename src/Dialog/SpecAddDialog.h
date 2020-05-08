@@ -30,18 +30,8 @@ public:
 
     QVector<struct LineEntry> get_entry_list() const {return line_entry_list;}
 
-private slots:
-    void clicked_close();
-    void clicked_ok();
-
-signals:
-    void dialog_accepted(bool);
-
 private:
     QVector<struct LineEntry> line_entry_list;
-
-    QPushButton* okButton;
-    QPushButton* cancleButton;
 };
 
 #endif // PSUW_H

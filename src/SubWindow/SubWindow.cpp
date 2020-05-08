@@ -1,6 +1,5 @@
 #include "SubWindow.h"
 
-#include "src/Components/Component.h"
 #include "src/Dialog/SpecSignalDialog.h"
 
 #include <QCheckBox>
@@ -85,8 +84,7 @@ void SubWindow::show_signal_dialog() {
             is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
     }
 
-    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), this, SLOT(add_signal()));
-    connect(signalDialog->get_ok_button(), SIGNAL(clicked()), signalDialog, SLOT(close()));
+    connect(signalDialog, SIGNAL(accepted()), this, SLOT(add_signal()));
 
     signalDialog->create_dialog();
     signalDialog->show();
