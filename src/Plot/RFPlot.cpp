@@ -8,9 +8,6 @@ RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
 
     connect(channel, SIGNAL(finished()), this, SLOT(update_data()));
 
-    timer->start(3000);
-    connect(timer, SIGNAL(timeout()), this, SLOT(update_plot()));
-
     recreate_axis(i_axis);
     recreate_axis(q_axis);
 

@@ -8,7 +8,7 @@
 #include <QElapsedTimer>
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
-    : Component(runManager, config) {
+    : Component(runManager, config, 1000) {
 
     load_config(config);
     assert(parse_config({"name" , "channel"}));
@@ -35,7 +35,7 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 }
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
-    : Component(m_element_name, runManager) {
+    : Component(m_element_name, runManager, 1000) {
 
     this->elementName = m_element_name;
 
@@ -98,8 +98,6 @@ void Labjack::init() {
     }
 
     sampleTimer = new QElapsedTimer;
-
-    logTimer->start(1000);
 }
 
 void Labjack::update() {
@@ -114,6 +112,8 @@ void Labjack::update() {
         channel->update_value(it != value_list.end() ? *it++ : 0);
         channel->set_range();
     }
+
+    emit data_available();
 
     /* Check and set the sample rate */
     maxSamplerate = 1000 / (sampleTimer->elapsed() + 1);

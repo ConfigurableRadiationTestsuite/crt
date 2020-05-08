@@ -20,7 +20,7 @@ public:
     PSUPlot(QCustomPlot *m_plot, PSUChannel * channel, int m_datapoints=30, int m_seconds=30);
     virtual ~PSUPlot() override;
 
-private slots:
+public slots:
     void update_plot() override;
 
 private:

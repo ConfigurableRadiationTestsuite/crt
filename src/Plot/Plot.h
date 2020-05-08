@@ -26,7 +26,6 @@ public slots:
     void update_time_axis();
 
 protected:
-    QTimer *timer;
     QElapsedTimer *real_time;
 
     QCustomPlot *plot;

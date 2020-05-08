@@ -1,13 +1,12 @@
 #include "Component.h"
 
-Component::Component(const QString &elementName, RunManager *runManager)
+Component::Component(const QString &elementName, RunManager *runManager, uint time)
     : runManager(runManager), elementName(elementName) {
 
-    logTimer = new QTimer;
-    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
+    configure_timer(time);
 }
 
-Component::Component(RunManager *runManager, const QString &config)
+Component::Component(RunManager *runManager, const QString &config, uint time)
     : runManager(runManager) {
 
     load_config(config);
@@ -15,8 +14,7 @@ Component::Component(RunManager *runManager, const QString &config)
 
     this->elementName = get_value("name");
 
-    logTimer = new QTimer;
-    connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
+    configure_timer(time);
 }
 
 Component::~Component() {
@@ -60,4 +58,13 @@ void Component::set_early_logging(int early_logging) {
         stop_logging();
         logging = false;
     }
+}
+
+void Component::configure_timer(uint time) {
+    if(logTimer == nullptr) {
+        logTimer = new QTimer;
+        connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
+    }
+
+    logTimer->start(time);
 }

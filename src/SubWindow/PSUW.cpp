@@ -75,6 +75,7 @@ void PSUW::create_layout() {
         plot->setGeometry(QRect());
         plot->setMinimumHeight(128);
         plot->setMaximumHeight(512);
+        connect(psu, SIGNAL(data_available()), psuplot, SLOT(update_plot()));
         connect(this, SIGNAL(destroyed()), psuplot, SLOT(deleteLater()));
 
         QVBoxLayout *psuVLayout = new QVBoxLayout;

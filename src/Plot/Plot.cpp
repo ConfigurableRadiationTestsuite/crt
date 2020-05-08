@@ -8,16 +8,12 @@
 Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
     : plot(plot), datapoints(datapoints), seconds(seconds) {
 
-    timer = new QTimer;
     real_time = new QElapsedTimer;
     real_time->start();
 
     counter = 0;
 
     recreate_time_axis();
-
-    connect(timer, SIGNAL(timeout()), this, SLOT(update_plot()));
-    timer->start(1000);
 }
 
 Plot::~Plot() {}

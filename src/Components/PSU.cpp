@@ -4,7 +4,7 @@
 #include "src/Manager/RunManager.h"
 
 PSU::PSU(RunManager * runManager, const QString &config)
-    : Component(runManager, config) {
+    : Component(runManager, config, 1000) {
 
     load_config(config);
     assert(parse_config({"name", "vendor", "master", "address", "channel"}));
@@ -28,11 +28,11 @@ PSU::PSU(RunManager * runManager, const QString &config)
         channel_list.push_back(new PSUChannel{i, eth, vd, voltage_set, current_set, voltage_max, current_max});
     }
 
-    init();
+    update_settings();
 }
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
-    : Component(m_element_name, runManager), address(address) {
+    : Component(m_element_name, runManager, 1000), address(address) {
     qDebug("Create PSU from scratch");
 
     this->elementName = m_element_name;
@@ -46,7 +46,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
     for(uint i = 0; i < channel_max; i++)
         channel_list.push_back(new PSUChannel{i, eth, vd, 0, 0, voltage_max, current_max});
 
-    init();
+    update_settings();
 }
 
 PSU::~PSU() {
@@ -70,11 +70,8 @@ void PSU::set_config() {
         set_value("c" + QString::number(i) + "vm", QString::number(channel_list[i]->get_voltage_max()));
         set_value("c" + QString::number(i) + "cm", QString::number(channel_list[i]->get_current_max()));
     }
-}
 
-void PSU::init() {
     update_settings();
-    logTimer->start(1000);
 }
 
 void PSU::update() {
@@ -91,6 +88,8 @@ void PSU::update() {
         values.push_back(channel->get_voltage_meas());
         values.push_back(channel->get_current_meas());
     }
+
+    emit data_available();
 
     if(logging)
         runManager->append_values_to_file(this, values);

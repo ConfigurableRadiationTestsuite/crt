@@ -13,7 +13,6 @@ LBJPlot::LBJPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
 
 LBJPlot::~LBJPlot() {}
 
-
 void LBJPlot::update_plot() {
     if(!plot_active)
         return ;
@@ -95,7 +94,6 @@ void LBJPlot::set_datarate(const QString &datarate) {
     foreach (plotElement, plotElement_list)
         recreate_axis(plotElement->get_axis());
 
-    timer->start(1000/drate);
     counter = 0;
 }
 

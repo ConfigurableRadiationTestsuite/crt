@@ -90,6 +90,7 @@ void LBJW::create_layout() {
     graphLayout->addWidget(plot);
     graphBox->setLayout(graphLayout);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
+    connect(lbj, SIGNAL(data_available()), lbjplot, SLOT(update_plot()));
 
     /* Channel Layout */
     QGridLayout *channelLayout = new QGridLayout;

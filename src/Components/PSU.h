@@ -55,9 +55,7 @@ protected:
 
     QVector<PSUChannel *> channel_list;
 
-
 private:
-    void init();
     void init_ethernet(const QString &address);
 
     enum vendor check_vendor(const QString &vendor);

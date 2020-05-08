@@ -50,9 +50,6 @@ void ProgrammStarter::set_path(const QString &text) {
     emit announce_path(path);
 }
 
-void ProgrammStarter::set_early_logging(int early_logging) {
-    this->early_logging = early_logging > 0 ? true : false;
-}
 
 void ProgrammStarter::set_trigger(int trigger) {
     if(running)
@@ -64,9 +61,6 @@ void ProgrammStarter::set_trigger(int trigger) {
 }
 
 void ProgrammStarter::execute_programm() {
-    if(early_logging)
-        start_logging();
-
     process->start(path);
     process->waitForStarted();
 

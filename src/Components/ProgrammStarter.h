@@ -26,7 +26,6 @@ public:
 
 public slots:
     void set_path(const QString &text);
-    void set_early_logging(int early_logging);
     void set_trigger(int trigger);
 
     void execute_programm();
