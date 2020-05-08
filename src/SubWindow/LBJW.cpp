@@ -21,12 +21,11 @@ LBJW::LBJW(RunManager *m_runManager, Labjack *lbj) : SubWindow(m_runManager, lbj
 
 LBJW::~LBJW() {
     delete lbj;
-    delete mainVLayout;
     delete lbjplot;
 }
 
 void LBJW::create_layout() {
-    mainVLayout = new QVBoxLayout;
+    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
 
     QHBoxLayout * topLineLayout = new QHBoxLayout;
     QGroupBox * settingsBox = new QGroupBox("Settings");

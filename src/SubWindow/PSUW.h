@@ -12,8 +12,6 @@
 class PSU;
 class PSUPlot;
 
-class QHBoxLayout;
-
 #include "SubWindow.h"
 
 class PSUW : public SubWindow {
@@ -24,7 +22,6 @@ public:
     virtual ~PSUW() override;
 
 private:
-    QHBoxLayout * mainHLayout;
     PSU * psu;
 
     void create_layout() override;

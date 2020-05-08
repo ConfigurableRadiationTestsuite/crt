@@ -11,8 +11,6 @@
 
 class ProgrammStarter;
 
-class QVBoxLayout;
-
 #include "SubWindow.h"
 
 class PROGW : public SubWindow {
@@ -26,7 +24,6 @@ private slots:
     void path_dialog();
 
 private:
-    QVBoxLayout * mainVLayout;
     ProgrammStarter * programmStarter;
 
     void create_layout() override;

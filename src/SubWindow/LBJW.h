@@ -32,8 +32,6 @@ private:
     Labjack * lbj;
     LBJPlot * lbjplot;
 
-    QVBoxLayout *mainVLayout;
-
     QVector<ChannelColor> color_list = {{"black", Qt::black}, {"blue", Qt::blue}, {"red", Qt::red}, {"green", Qt::green}, {"magenta", Qt::magenta}, {"yellow", Qt::yellow}};
 
     void create_layout() override;

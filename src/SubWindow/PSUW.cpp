@@ -11,10 +11,13 @@
 #include <QLabel>
 #include <QLineEdit>
 
-PSUW::PSUW(RunManager *m_runManager, PSU *psu) : SubWindow(m_runManager, psu), psu(psu) {
+PSUW::PSUW(RunManager *m_runManager, PSU *psu)
+    : SubWindow(m_runManager, psu), psu(psu) {
+
     /* Connect and register signals */
     connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
     eventManager->add_signal(psu->get_element_name() + " Switch On", SignalType::on, this, &SubWindow::signal_on);
+
     connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
     eventManager->add_signal(psu->get_element_name() + " Switch Off", SignalType::off, this, &SubWindow::signal_off);
 
@@ -27,11 +30,10 @@ PSUW::~PSUW() {
     eventManager->delete_signal(&SubWindow::signal_off);
 
     delete psu;
-    delete mainHLayout;
 }
 
 void PSUW::create_layout() {
-    mainHLayout = new QHBoxLayout;
+    QHBoxLayout *mainHLayout = new QHBoxLayout(this);
 
     PSUChannel * channel;
     foreach (channel, psu->get_channel_list()) {

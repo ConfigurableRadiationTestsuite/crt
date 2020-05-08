@@ -7,11 +7,13 @@
 
 SubWindow::SubWindow(RunManager *runManager, Component *component)
     : runManager(runManager), component(component) {
+
     this->eventManager = runManager->get_eventManager();
 
     /* Announce logging */
     connect(this, SIGNAL(signal_start_log()), component, SLOT(start_logging()));
     eventManager->add_signal(component->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
+
     connect(this, SIGNAL(signal_stop_log()), component, SLOT(stop_logging()));
     eventManager->add_signal(component->get_element_name() + " Stop Log", SignalType::stop_log, this, &SubWindow::signal_stop_log);
 

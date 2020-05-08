@@ -14,8 +14,10 @@
 PROGW::PROGW(RunManager *m_runManager, ProgrammStarter *programmStarter)
     : SubWindow(m_runManager, programmStarter), programmStarter(programmStarter) {
 
+    /* Connect and register signals */
     connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Execute", SignalType::on, this, &SubWindow::signal_on);
+
     connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Kill", SignalType::off, this, &SubWindow::signal_off);
 
@@ -27,11 +29,10 @@ PROGW::~PROGW() {
     eventManager->delete_signal(&SubWindow::signal_off);
 
     delete programmStarter;
-    delete mainVLayout;
 }
 
 void PROGW::create_layout() {
-    mainVLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
 
     QHBoxLayout *optionLayout = new QHBoxLayout;
 
