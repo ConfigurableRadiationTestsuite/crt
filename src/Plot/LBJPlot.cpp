@@ -1,7 +1,6 @@
 #include "LBJPlot.h"
 
 #include "src/Components/LabjackChannel.h"
-#include "qcustomplot.h"
 
 LBJPlot::LBJPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
     : Plot(m_plot, m_datapoints, m_seconds) {
@@ -14,7 +13,10 @@ LBJPlot::LBJPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
 LBJPlot::~LBJPlot() {}
 
 void LBJPlot::update_plot() {
-    if(!plot_active)
+    static long last_update = 0;
+
+    /* Return if plot is either inactive or was updated within the last 10ms */
+    if(!plot_active || last_update+9 <= realTime->elapsed())
         return ;
 
     PlotElement *plotElement;
@@ -43,18 +45,18 @@ void LBJPlot::update_plot() {
     plot_active = false;
     foreach (plotElement, plotElement_list) {
         if(plotElement->is_plotted()) {
-            plot->graph(element_counter)->setData(time_axis, plotElement->get_axis());
+            plot->graph(element_counter)->setData(timeAxis, plotElement->get_axis());
             plot_active = true;
         }
         else
-            plot->graph(element_counter)->setData(time_axis, standard_axis);
+            plot->graph(element_counter)->setData(timeAxis, standard_axis);
         element_counter++;
     }
 
-    plot->xAxis->setRange(*std::min_element(time_axis.begin(), time_axis.end()), *std::max_element(time_axis.begin(), time_axis.end()));
+    plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
 
     plot->replot();
-
+    last_update = realTime->elapsed();
     counter++;
 }
 

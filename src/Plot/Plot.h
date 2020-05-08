@@ -9,8 +9,9 @@
  *
  */
 
-class QCustomPlot;
 class QElapsedTimer;
+
+#include "qcustomplot.h"
 
 #include <QWidget>
 
@@ -26,13 +27,13 @@ public slots:
     void update_time_axis();
 
 protected:
-    QElapsedTimer *real_time;
+    QElapsedTimer *realTime;
 
     QCustomPlot *plot;
-    QVector<double> time_axis;
+    QVector<double> timeAxis;
 
     int datapoints, seconds;
-    long counter;
+    long counter = 0;
 
     virtual void create_layout() = 0;
 

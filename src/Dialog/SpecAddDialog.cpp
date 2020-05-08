@@ -10,22 +10,23 @@ SpecAddDialog::SpecAddDialog() {}
 SpecAddDialog::~SpecAddDialog() {}
 
 void SpecAddDialog::create_dialog() {
-    QFormLayout * formLayout = new QFormLayout(this);
+    QVBoxLayout * vlayout = new QVBoxLayout(this);
+
+    QFormLayout * formLayout = new QFormLayout;
 
     for(QVector<struct LineEntry>::iterator i = line_entry_list.begin(); i != line_entry_list.end(); i++)
         formLayout->addRow((*i).display_name, (*i).input_value);
 
     QHBoxLayout * hlayout = new QHBoxLayout;
 
-    QPushButton *okButton = new QPushButton("Ok", this);
+    QPushButton *okButton = new QPushButton("Ok");
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
     hlayout->addWidget(okButton);
 
-    QPushButton *cancleButton = new QPushButton("Cancel", this);
+    QPushButton *cancleButton = new QPushButton("Cancel");
     connect(cancleButton, SIGNAL(clicked()), this, SLOT(reject()));
     hlayout->addWidget(cancleButton);
 
-    QVBoxLayout * vlayout = new QVBoxLayout;
     vlayout->addLayout(formLayout);
     vlayout->addLayout(hlayout);
 

@@ -1,7 +1,6 @@
 #include "PSUPlot.h"
 
 #include "src/Components/PSUChannel.h"
-#include "qcustomplot.h"
 
 PSUPlot::PSUPlot(QCustomPlot *m_plot, PSUChannel *channel, int m_datapoints, int m_seconds)
     : Plot(m_plot, m_datapoints, m_seconds), channel(channel) {
@@ -35,9 +34,9 @@ void PSUPlot::update_plot() {
     plot->yAxis2->setRange(0,max_current);
     plot->yAxis2->setTickStep(max_current/4);
 
-    plot->graph(0)->setData(time_axis, voltage_axis);
-    plot->graph(1)->setData(time_axis, current_axis);
-    plot->xAxis->setRange(*std::min_element(time_axis.begin(), time_axis.end()), *std::max_element(time_axis.begin(), time_axis.end()));
+    plot->graph(0)->setData(timeAxis, voltage_axis);
+    plot->graph(1)->setData(timeAxis, current_axis);
+    plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
 
     plot->replot();
 

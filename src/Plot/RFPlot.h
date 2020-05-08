@@ -11,8 +11,6 @@
 
 class RFIOChannel;
 
-class QCustomPlot;
-
 #include "Plot.h"
 
 class RFPlot : public Plot {
@@ -22,15 +20,17 @@ public:
     RFPlot(QCustomPlot *m_plot, RFIOChannel * channel);
     virtual ~RFPlot() override;
 
-private slots:
+public slots:
     void update_plot() override;
-    void update_data();
+    void update_layout();
 
 private:
     QVector<double> i_axis;
     QVector<double> q_axis;
 
     RFIOChannel * channel;
+
+    QTimer *layoutUpdateTimer;
 
     void create_layout() override;
     void modify_time_axis();

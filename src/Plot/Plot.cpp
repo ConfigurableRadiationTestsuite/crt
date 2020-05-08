@@ -1,17 +1,13 @@
 #include "Plot.h"
 
-#include "qcustomplot.h"
-
 #include <QElapsedTimer>
 #include <QtMath>
 
 Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
     : plot(plot), datapoints(datapoints), seconds(seconds) {
 
-    real_time = new QElapsedTimer;
-    real_time->start();
-
-    counter = 0;
+    realTime = new QElapsedTimer;
+    realTime->start();
 
     recreate_time_axis();
 }
@@ -20,18 +16,18 @@ Plot::~Plot() {}
 
 void Plot::update_time_axis() {
     if(counter >= datapoints) {
-        long last_timepoint = real_time->elapsed() + long(double(seconds * 1000) / double(datapoints));
-        shift_into_vector(time_axis, double(last_timepoint) / 1000);
+        long lastTimepoint = realTime->elapsed() + long(double(seconds * 1000) / double(datapoints));
+        shift_into_vector(timeAxis, double(lastTimepoint) / 1000);
     }
 }
 
 void Plot::recreate_time_axis() {
-    int last_timepoint = int(real_time->elapsed() / 1000);
-    time_axis.clear();
-    time_axis.reserve(datapoints);
+    int lastTimepoint = int(realTime->elapsed() / 1000);
+    timeAxis.clear();
+    timeAxis.reserve(datapoints);
 
     for(int i = 0; i < datapoints; i++)
-        time_axis.push_back(last_timepoint + i * (double(seconds) / double(datapoints)));
+        timeAxis.push_back(lastTimepoint + i * (double(seconds) / double(datapoints)));
 }
 
 void Plot::recreate_axis(QVector<double> &vec) {

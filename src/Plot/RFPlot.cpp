@@ -1,32 +1,35 @@
 #include "RFPlot.h"
 
 #include "src/Components/RFIOChannel.h"
-#include "qcustomplot.h"
 
 RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
     : Plot(m_plot, 256, 30), channel(channel) {
 
-    connect(channel, SIGNAL(finished()), this, SLOT(update_data()));
-
     recreate_axis(i_axis);
     recreate_axis(q_axis);
+
+    layoutUpdateTimer = new QTimer;
+    connect(layoutUpdateTimer, SIGNAL(timeout()), this, SLOT(update_layout()));
+    layoutUpdateTimer->start(1000);
 
     create_layout();
 }
 
-RFPlot::~RFPlot() {}
+RFPlot::~RFPlot() {
+    delete layoutUpdateTimer;
+}
 
-void RFPlot::update_data() {
+void RFPlot::update_plot() {
     i_axis = channel->get_i_plot_data();
     q_axis = channel->get_q_plot_data();
 
-    plot->graph(0)->setData(time_axis, i_axis);
-    plot->graph(1)->setData(time_axis, q_axis);
+    plot->graph(0)->setData(timeAxis, i_axis);
+    plot->graph(1)->setData(timeAxis, q_axis);
 
     plot->replot();
 }
 
-void RFPlot::update_plot() {
+void RFPlot::update_layout() {
     modify_time_axis();
 
     int max_i = get_maximum(i_axis, int(qPow(2, 16)));
@@ -40,8 +43,8 @@ void RFPlot::update_plot() {
     plot->yAxis->setRange(minimum, maximum);
     plot->yAxis->setTickStep((maximum-minimum)/8);
 
-    plot->xAxis->setRange(*std::min_element(time_axis.begin(), time_axis.end()), *std::max_element(time_axis.begin(), time_axis.end()));
-    plot->xAxis->setRange(0, time_axis.size());
+    plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
+    plot->xAxis->setRange(0, timeAxis.size());
 
     plot->replot();
 
@@ -72,9 +75,9 @@ void RFPlot::create_layout() {
 void RFPlot::modify_time_axis() {
     //Check if time axis is big enough
 
-    time_axis.clear();
-    time_axis.reserve(i_axis.size());
+    timeAxis.clear();
+    timeAxis.reserve(i_axis.size());
 
     for(int i = 0; i < i_axis.size(); i++)
-        time_axis.push_back(i);
+        timeAxis.push_back(i);
 }
