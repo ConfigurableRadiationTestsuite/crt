@@ -75,9 +75,11 @@ void PSU::set_config() {
 }
 
 void PSU::update() {
+#ifndef DUMMY_DATA
     //Check if the network connection is ok
     if(!check_network_connection())
         return ;
+#endif
 
     /* Gather data */
     QVector<double> values;
@@ -150,8 +152,6 @@ void PSU::set_master_trigger(int master_trigger) {
 }
 
 void PSU::update_settings() {
-    qDebug("Update Settings: PSU");
-
     PSUChannel * channel;
     foreach (channel, channel_list)
         channel->update();
@@ -162,8 +162,6 @@ void PSU::set_master_rohdeschwarz() {
 }
 
 void PSU::switch_on() {
-    qDebug("Switch On: PSU");
-
     PSUChannel * channel;
     foreach (channel, channel_list)
         if(channel->get_trigger())
@@ -174,8 +172,6 @@ void PSU::switch_on() {
 }
 
 void PSU::switch_off() {
-    qDebug("Switch Off: PSU");
-
     if(has_master_switch() && master_trigger)
         set_master_enable(0);
 

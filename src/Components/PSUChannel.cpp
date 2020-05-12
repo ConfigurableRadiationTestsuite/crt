@@ -2,6 +2,9 @@
 
 #include "EthernetClient.h"
 
+#include <QRandomGenerator>
+#include <QtMath>
+
 PSUChannel::PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max) {
     this->number = number;
     this->eth = eth;
@@ -82,6 +85,12 @@ void PSUChannel::update() {
 }
 
 void PSUChannel::meas_voltage() {
+#ifdef DUMMY_DATA
+    voltage_meas = voltage_set + QRandomGenerator::global()->bounded(-qint16(qPow(2, 10)), qint16(qPow(2, 10))) / qint16(qPow(2, 11));
+    voltage_meas = voltage_meas < 0 ? 0 : voltage_meas;
+    return ;
+#endif
+
     if(!eth->connectionOk()){
         eth->retry();
         return ;
@@ -98,6 +107,12 @@ void PSUChannel::meas_voltage() {
 }
 
 void PSUChannel::meas_current() {
+#ifdef DUMMY_DATA
+    current_meas = current_set/2 + QRandomGenerator::global()->bounded(-qint16(qPow(2, 10)), qint16(qPow(2, 10))) / qint16(qPow(2, 9));
+    current_meas = current_meas < 0 ? 0 : current_meas;
+    return ;
+#endif
+
     if(!eth->connectionOk()) {
         eth->retry();
         return ;
