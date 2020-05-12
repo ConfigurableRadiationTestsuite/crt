@@ -4,6 +4,9 @@ Component::Component(const QString &elementName, RunManager *runManager, uint ti
     : runManager(runManager), elementName(elementName) {
 
     configure_timer(time);
+
+    /* RunManager info */
+    runManager->set_run_mode(AddComponent, elementName);
 }
 
 Component::Component(RunManager *runManager, const QString &config, uint time)
@@ -12,12 +15,17 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
     load_config(config);
     assert(parse_config({"name"}));
 
-    this->elementName = get_value("name");
+    elementName = get_value("name");
 
     configure_timer(time);
+
+    /* RunManager info */
+    runManager->set_run_mode(AddComponent, elementName);
 }
 
 Component::~Component() {
+    runManager->set_run_mode(RemoveComponent, elementName);
+
     delete logTimer;
 }
 
