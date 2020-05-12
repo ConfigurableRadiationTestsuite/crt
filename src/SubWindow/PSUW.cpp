@@ -67,7 +67,7 @@ void PSUW::create_layout() {
         connect(psu, SIGNAL(disconnected(bool)), enableBox, SLOT(set_event_icon(bool)));
 
         /* Trigger */
-        QCheckBox * triggerBox = new QCheckBox("Trigger");
+        QCheckBox * triggerBox = new QCheckBox("Auto");
         psuGridLayout->addWidget(triggerBox, 1, 2);
         connect(triggerBox, SIGNAL(stateChanged(int)), channel, SLOT(set_trigger(int)));
 
@@ -91,15 +91,17 @@ void PSUW::create_layout() {
     if(psu->has_master_switch()) {
         QGridLayout *masterGridLayout = new QGridLayout;
         QGroupBox *masterBoxLayout = new QGroupBox("Master Switch");
+        connect(psu, SIGNAL(disconnected(bool)), masterBoxLayout, SLOT(setDisabled(bool)));
 
-        QCheckBox * masterEnable = new QCheckBox("Master", this);
-        connect(masterEnable, SIGNAL(stateChanged(int)), psu, SLOT(set_master_enable(int)));
-        connect(psu, SIGNAL(master_changed(bool)), masterEnable, SLOT(setChecked(bool)));
+        Indicator * masterBox = new Indicator(QIcon("../CRT/icon/PSU_on.png"), QIcon("../CRT/icon/PSU_off.png"), QIcon("../CRT/icon/PSU_disconnected.png"));
+        connect(masterBox, SIGNAL(stateChanged(int)), psu, SLOT(set_master_enable(int)));
+        connect(psu, SIGNAL(master_changed(bool)), masterBox, SLOT(setChecked(bool)));
+        connect(psu, SIGNAL(disconnected(bool)), masterBox, SLOT(set_event_icon(bool)));
 
-        QCheckBox * masterTrigger = new QCheckBox("Trigger", this);
+        QCheckBox * masterTrigger = new QCheckBox("Auto", this);
         connect(masterTrigger, SIGNAL(stateChanged(int)), psu, SLOT(set_master_trigger(int)));
 
-        masterGridLayout->addWidget(masterEnable, 0, 0);
+        masterGridLayout->addWidget(masterBox, 0, 0);
         masterGridLayout->addWidget(masterTrigger, 1, 0);
 
         masterBoxLayout->setLayout(masterGridLayout);
