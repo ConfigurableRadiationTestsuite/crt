@@ -189,6 +189,9 @@ bool PSU::check_network_connection() {
             emit disconnected(false);
             return true;
         }
+        else
+            return false;
     }
-    return false;
+
+    return true;
 }
