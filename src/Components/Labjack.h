@@ -66,6 +66,8 @@ private:
     void get_channel_names(const QString &input, QVector<QString> &output);
 
     QVector<QString> generate_header() override;
+
+    void create_dummy_data(int size, double * values);
 };
 
 inline int Labjack::get_main_resolution_address() {return 43903;}

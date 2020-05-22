@@ -7,6 +7,10 @@
 #include <LabJackM.h>
 #include <QElapsedTimer>
 
+#ifdef DUMMY_DATA
+#include <QRandomGenerator>
+#endif
+
 Labjack::Labjack(RunManager * runManager, const QString &config)
     : Component(runManager, config, 1000) {
 
@@ -157,12 +161,14 @@ void Labjack::set_samplerate(const QString &text) {
 }
 
 int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value) {
+#ifndef DUMMY_DATA
     if(is_connected == false)
         return 0;
+#endif
 
     value.reserve(address.size());
 
-    int err;
+    int err = 0;
     int errorAddress = INITIAL_ERR_ADDRESS;
 
     int *aAddresses = new int[address.size()];
@@ -175,8 +181,14 @@ int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector
         aValues[i] = 0.0;
     }
 
+#ifndef DUMMY_DATA
     err = LJM_eReadAddresses(handle, address.size(), aAddresses, aTypes, aValues, &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eReadAddresses");
+#endif
+
+#ifdef DUMMY_DATA
+    create_dummy_data(address.size(), aValues);
+#endif
 
     for(int i = 0; i < address.size(); i++)
         value[i] = aValues[i];
@@ -229,4 +241,9 @@ void Labjack::get_channel_names(const QString &input, QVector<QString> &output) 
         name.remove(' ');
         output.push_back(name);
     } while((position = input.indexOf(',', position) + 1) > 0);
+}
+
+void Labjack::create_dummy_data(int size, double *values) {
+    for(int i = 0; i < size; i++)
+        values[i] = double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
 }
