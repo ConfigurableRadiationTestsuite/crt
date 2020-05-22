@@ -20,6 +20,7 @@ public:
 public slots:
     void start_process();
     void update_device();
+    void stop();
 
 signals:
     void finished();

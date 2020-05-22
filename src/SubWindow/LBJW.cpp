@@ -67,7 +67,9 @@ void LBJW::create_layout() {
 
     /* EarlyLog button */
     QCheckBox *earlyLogBox = new QCheckBox;
+    earlyLogBox->setDisabled(!runManager->is_valid());
     connect(earlyLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_early_logging(int)));
+    connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogBox, SLOT(setDisabled(bool)));
     topLineLayout->addWidget(new QLabel("Early Logging"));
     topLineLayout->addWidget(earlyLogBox);
 

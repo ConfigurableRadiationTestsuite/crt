@@ -31,6 +31,10 @@ void RFIOUpdater::start_process() {
     }
 }
 
+void RFIOUpdater::stop() {
+    qDebug("Stopping");
+}
+
 void RFIOUpdater::update_device() {
     static int offset = 0;
     RFIOChannel * channel;

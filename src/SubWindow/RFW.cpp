@@ -75,6 +75,7 @@ void RFW::create_layout() {
         RFPlot *rfplot = new RFPlot(plot, channel);
         plot->setGeometry(QRect());
         plot->setMaximumHeight(512);
+        connect(channel, SIGNAL(destroyed()), rfplot, SLOT(deleteLater()));
         connect(channel, SIGNAL(finished()), rfplot, SLOT(update_plot()));
         channelHLayout->addWidget(plot);
         rfplot->update_layout();

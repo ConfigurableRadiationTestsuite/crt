@@ -41,10 +41,13 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 }
 
 RFIO::~RFIO() {
-    delete rfioUpdater;
+    RFIOChannel *channel;
+    foreach(channel, channel_list)
+        delete channel;
 
     process->kill();
     updateThread->quit();
+    delete rfioUpdater;
 }
 
 void RFIO::set_config() {
@@ -70,14 +73,13 @@ void RFIO::init() {
 
     rfioUpdater->moveToThread(updateThread);
     connect(updateThread, SIGNAL(started()), rfioUpdater, SLOT(start_process()));
-    connect(rfioUpdater, SIGNAL(finished()), updateThread, SLOT(quit()));
+/*    connect(rfioUpdater, SIGNAL(finished()), updateThread, SLOT(quit()));
 
-    connect(rfioUpdater, SIGNAL(finished()), rfioUpdater, SLOT(deleteLater()));
     connect(updateThread, SIGNAL(finished()), updateThread, SLOT(deleteLater()));
     connect(updateThread, SIGNAL(finished()), process, SLOT(deleteLater()));
 
     connect(updateThread, SIGNAL(destroyed()), this, SLOT(set_thread_destroyed()));
-
+*/
     updateThread->start();
 }
 
