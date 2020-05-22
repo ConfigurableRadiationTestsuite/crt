@@ -16,7 +16,7 @@ void LBJPlot::update_plot() {
     static long last_update = 0;
 
     /* Return if plot is either inactive or was updated within the last 10ms */
-    if(!plot_active || last_update+9 <= realTime->elapsed())
+    if(!plot_active || realTime->elapsed() <= last_update+9)
         return ;
 
     PlotElement *plotElement;
