@@ -15,7 +15,7 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
     : Component(runManager, config, 1000) {
 
     load_config(config);
-    assert(parse_config({"name" , "channel"}));
+    assert(parse_config({"name" , "channel", "con", "id"}));
 
     this->elementName = get_value("name");
     uint channel = get_value("channel").toUInt();

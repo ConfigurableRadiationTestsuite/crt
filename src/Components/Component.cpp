@@ -46,7 +46,7 @@ void Component::start_logging() {
 }
 
 void Component::stop_logging() {
-    if(!logging)
+    if(!logging || early_logging)
         return ;
 
     logging = false;
@@ -61,11 +61,11 @@ void Component::stop_logging() {
 void Component::set_early_logging(int early_logging) {
     if(early_logging > 0) {
         start_logging();
-        logging = true;
+        this->early_logging = true;
     }
     else {
         stop_logging();
-        logging = false;
+        this->early_logging = false;
     }
 }
 

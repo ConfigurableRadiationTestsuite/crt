@@ -41,6 +41,7 @@ protected:
 
     QTimer *logTimer = nullptr;
     bool logging = false;
+    bool early_logging = false;
 
     virtual QVector<QString> generate_header() = 0;
 
