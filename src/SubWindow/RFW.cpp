@@ -41,6 +41,8 @@ void RFW::create_layout() {
     QRadioButton * multiShot = new QRadioButton("Multi");
     shotGroup->addButton(singleShot);
     shotGroup->addButton(multiShot);
+    multiShot->setChecked(true);
+    rfio->set_multi_shot();
     connect(singleShot, SIGNAL(clicked()), rfio, SLOT(set_single_shot()));
     connect(multiShot, SIGNAL(clicked()), rfio, SLOT(set_multi_shot()));
 
@@ -88,6 +90,7 @@ void RFW::create_layout() {
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
         connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
+        connect(eventManager, SIGNAL(logging_disabled(bool)), evalBox, SLOT(setDisabled(bool)));
 
         connect(channel, SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(trigger_signal_list()));
 
