@@ -92,7 +92,12 @@ void Labjack::set_config() {
 }
 
 void Labjack::open_labjack() {
+#ifndef DUMMY_DATA
     is_connected = LJM_Open(LJM_dtANY, connectionType, identifier.toLocal8Bit(), &handle) == 0 ? true : false;
+#endif
+#ifdef DUMMY_DATA
+    is_connected = LJM_Open(LJM_dtANY, LJM_ctANY, LJM_DEMO_MODE, &handle) == 0 ? true : false;
+#endif
 }
 
 void Labjack::init() {
@@ -165,10 +170,8 @@ void Labjack::set_samplerate(const QString &text) {
 }
 
 int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value) {
-#ifndef DUMMY_DATA
     if(is_connected == false)
         return 0;
-#endif
 
     value.reserve(address.size());
 
