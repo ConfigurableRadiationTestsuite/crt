@@ -81,7 +81,7 @@ QTabWidget * MainLayout::create_window_tabs() {
     windowTabs->addTab(new LBJTab(configManager, runManager), "Labjack");
 
     //RF
-    windowTabs->addTab(new RFTab(configManager, runManager), "RF");
+    //windowTabs->addTab(new RFTab(configManager, runManager), "RF");
 
     //PROG
     windowTabs->addTab(new PROGTab(configManager, runManager), "PROG");
