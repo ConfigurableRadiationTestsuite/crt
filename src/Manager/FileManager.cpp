@@ -15,6 +15,8 @@ void FileManager::set_root_directory(const QString &directory) {
         dir.mkdir(directory);
 
     root_directory = directory;
+
+    update_root_directory();
 }
 
 void FileManager::register_component(const void * subComponent, const QString name) {
@@ -148,3 +150,13 @@ QString FileManager::escape_text(const QString &text) {
     return res;
 }
 
+void FileManager::update_root_directory() {
+    ComponentFile *file;
+    foreach(file, file_list) {
+        const void * subComponent = file->subComponent;
+        QString name = file->name;
+
+        deregister_component(subComponent);
+        register_component(subComponent, name);
+    }
+}

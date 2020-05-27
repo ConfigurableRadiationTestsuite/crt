@@ -25,6 +25,7 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
 
 Component::~Component() {
     runManager->set_run_mode(RemoveComponent, elementName);
+    runManager->deregister_component(this);
 
     delete logTimer;
 }

@@ -57,6 +57,8 @@ protected:
 
 private:
     QString escape_text(const QString &text);
+
+    void update_root_directory();
 };
 
 #endif // FILEMANAGER_H
