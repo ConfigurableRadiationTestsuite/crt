@@ -20,7 +20,7 @@ Q_OBJECT
 
 public:
     Labjack(RunManager * runManager, const QString &config);
-    Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel);
+    Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel);
     virtual ~Labjack() override;
 
     void set_config() override;
@@ -45,6 +45,8 @@ signals:
 private:
     int handle;
     bool is_connected;
+    int connectionType;
+    QString identifier;
 
     QVector<LabjackChannel*> channel_list;
     QVector<int> address_list;

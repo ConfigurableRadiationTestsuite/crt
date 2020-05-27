@@ -24,6 +24,8 @@ private slots:
 
 private:
     void create_add_subwindow_dialog() override;
+
+    int get_connectionType(const QString &text);
 };
 
 #endif // LBJTAB_H

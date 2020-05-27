@@ -19,6 +19,8 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 
     this->elementName = get_value("name");
     uint channel = get_value("channel").toUInt();
+    connectionType = get_value("con").toInt();
+    identifier = get_value("id");
 
     open_labjack();
 
@@ -38,8 +40,8 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
     update();
 }
 
-Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, const QString &pchannel, const QString &nchannel)
-    : Component(m_element_name, runManager, 1000) {
+Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel)
+    : Component(m_element_name, runManager, 1000), connectionType(connectionType), identifier(identifier) {
 
     this->elementName = m_element_name;
 
@@ -77,6 +79,8 @@ void Labjack::set_config() {
 
     set_value("name", elementName);
     set_value("channel", QString::number(channel_list.size()));
+    set_value("con", QString::number(connectionType));
+    set_value("id", identifier);
 
     for(int i = 0; i < channel_list.size(); i++) {
         set_value("c" + QString::number(i) + "n", channel_list[i]->get_name());
@@ -88,7 +92,7 @@ void Labjack::set_config() {
 }
 
 void Labjack::open_labjack() {
-    is_connected = LJM_Open(LJM_dtANY, LJM_ctANY, "LJM_idANY", &handle) == 0 ? true : false;
+    is_connected = LJM_Open(LJM_dtANY, connectionType, identifier.toLocal8Bit(), &handle) == 0 ? true : false;
 }
 
 void Labjack::init() {
