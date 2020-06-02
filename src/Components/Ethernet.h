@@ -21,32 +21,32 @@ Q_OBJECT
 
 public:
     Ethernet(RunManager *runManager, const QString &config);
-    Ethernet(RunManager *runManager, const QString &m_element_name, const QString &address, uint port, const QString &data_folder, long long timeout);
+    Ethernet(RunManager *runManager, const QString &m_element_name, uint port, long timeout);
     virtual ~Ethernet() override;
 
-    QString get_address() const {return address;}
     uint get_port() const {return port;}
-    long long get_timeout() const {return timeout;}
-    QString get_data_folder() const {return data_folder;}
+    long get_timeout() const {return timeout;}
 
-    long long get_timeout_timer();
+    long get_timeout_timer();
     void reset_timeout();
 
     void set_config() override;
 
-    void update() override {}
-    QVector<QString> generate_header() override {return {""};}
+    void update() override;
+
+public:
+    void start_logging();
+    void stop_logging();
 
 private:
-    QString address;
     uint port;
 
     QString data_folder;
 
-    long long timeout;
+    long timeout;
     QElapsedTimer *timer;
 
-    bool isReceiver;
+    QVector<QString> generate_header() override;
 };
 
 #endif // ETHERNET_H

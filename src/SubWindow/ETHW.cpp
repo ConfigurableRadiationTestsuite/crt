@@ -10,13 +10,6 @@
 ETHW::ETHW(RunManager *m_runManager, Ethernet *ethernet)
     : SubWindow(m_runManager, ethernet), ethernet(ethernet) {
 
-    /* Connect and register signals */
-/*    connect(this, SIGNAL(signal_on()), ethernet, SLOT(switch_on()));
-    eventManager->add_signal(psu->get_element_name() + " Switch On", SignalType::on, this, &SubWindow::signal_on);
-
-    connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
-    eventManager->add_signal(psu->get_element_name() + " Switch Off", SignalType::off, this, &SubWindow::signal_off);
-*/
     create_layout();
 }
 
