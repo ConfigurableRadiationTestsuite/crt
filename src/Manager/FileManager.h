@@ -32,6 +32,7 @@ public:
 
     QVector<ComponentFile*> get_file_list() const {return file_list;}
     struct ComponentFile * get_file(const void * subComponent);
+    QString get_root_directory() const {return root_directory;}
 
     void append_value_to_file(const void * subComponent, double value);
     void append_value_to_file(const void * subComponent, const QString &value);
