@@ -23,8 +23,10 @@ public:
     void set_config() override;
 
     QString get_path() const {return path;}
+    QString get_arguments();
 
 public slots:
+    void set_arguments(const QString &text);
     void set_path(const QString &text);
     void set_trigger(int trigger);
 
@@ -49,11 +51,18 @@ private:
     QProcess *process;
 
     QString path;
+    QStringList arguments;
     bool running = false;
     bool trigger = false;
 
     void init();
     QVector<QString> generate_header() override;
+
+    QStringList substitute_arguments();
 };
+
+inline QString ProgrammStarter::get_arguments() {
+    return arguments.join(' ');
+}
 
 #endif // PROGRAMMSTARTER_H

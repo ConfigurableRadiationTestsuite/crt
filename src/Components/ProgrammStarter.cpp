@@ -14,6 +14,7 @@ ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
 
     this->elementName = get_value("name");
     this->path = get_value("path");
+    set_arguments(get_value("arguments"));
 
     init();
 }
@@ -21,6 +22,8 @@ ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path)
     : Component(m_element_name, runManager), path(path) {
     this->elementName = m_element_name;
+
+    this->arguments = QStringList("$directory");
 
     init();
 }
@@ -35,11 +38,16 @@ void ProgrammStarter::set_config() {
 
     set_value("name", elementName);
     set_value("path", path);
+    set_value("arguments", get_arguments());
 }
 
 void ProgrammStarter::init() {
     process = new QProcess;
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
+}
+
+void ProgrammStarter::set_arguments(const QString &text) {
+    arguments = text.split(' ');
 }
 
 void ProgrammStarter::set_path(const QString &text) {
@@ -49,7 +57,6 @@ void ProgrammStarter::set_path(const QString &text) {
     path = text;
     emit announce_path(path);
 }
-
 
 void ProgrammStarter::set_trigger(int trigger) {
     if(running)
@@ -61,7 +68,7 @@ void ProgrammStarter::set_trigger(int trigger) {
 }
 
 void ProgrammStarter::execute_programm() {
-    process->start(path);
+    process->start(path, substitute_arguments());
     process->waitForStarted();
 
     running = true;
@@ -98,4 +105,18 @@ void ProgrammStarter::receive_data() {
         runManager->append_value_to_file(this, text);
 
     emit data_available(text);
+}
+
+QStringList ProgrammStarter::substitute_arguments() {
+    QStringList argList;
+
+    QString element;
+    foreach(element, arguments) {
+        if(element.contains("$directory"))
+            argList.push_back(runManager->get_root_directory());
+        else
+            argList.push_back(element);
+    }
+
+    return argList;
 }
