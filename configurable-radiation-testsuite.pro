@@ -45,10 +45,12 @@ SOURCES += \
     src/Plot/RFPlot.cpp \
     src/Plot/qcustomplot.cpp \
     src/SubWindow/DIOW.cpp \
+    src/SubWindow/ETHW.cpp \
     src/SubWindow/LBJW.cpp \
     src/SubWindow/PROGW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
+    src/Tabs/ETHTab.cpp \
     src/Tabs/LBJTab.cpp \
     src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
@@ -86,10 +88,12 @@ HEADERS += \
     src/Plot/RFPlot.h \
     src/Plot/qcustomplot.h \
     src/SubWindow/DIOW.h \
+    src/SubWindow/ETHW.h \
     src/SubWindow/LBJW.h \
     src/SubWindow/PROGW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
+    src/Tabs/ETHTab.h \
     src/Tabs/LBJTab.h \
     src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \

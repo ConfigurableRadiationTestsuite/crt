@@ -1,6 +1,7 @@
 #include "mainlayout.h"
 
 #include "src/Configuration/ConfigManager.h"
+#include "Tabs/ETHTab.h"
 #include "Tabs/LBJTab.h"
 #include "Tabs/PROGTab.h"
 #include "Tabs/PSUTab.h"
@@ -85,6 +86,9 @@ QTabWidget * MainLayout::create_window_tabs() {
 
     //PROG
     windowTabs->addTab(new PROGTab(configManager, runManager), "PROG");
+
+    //ETH
+    windowTabs->addTab(new ETHTab(configManager, runManager), "ETH");
 
     return windowTabs;
 }
