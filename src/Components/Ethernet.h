@@ -13,8 +13,12 @@
  */
 
 class QElapsedTimer;
+class QTcpServer;
+class QTcpSocket;
 
 #include "Component.h"
+
+enum EthernetStatus {Connected=1, Disconnected=0, Waiting=-1};
 
 class Ethernet : public Component {
 Q_OBJECT
@@ -27,24 +31,37 @@ public:
     uint get_port() const {return port;}
     long get_timeout() const {return timeout;}
 
-    long get_timeout_timer();
     void reset_timeout();
 
     void set_config() override;
 
     void update() override;
 
-public:
+public slots:
     void start_logging();
     void stop_logging();
 
-private:
-    uint port;
+    void accept_connection();
+    void accept_data();
 
+signals:
+    void files_changed(const QString &);
+    void bytes_changed(const QString &);
+    void status_changed(int);
+
+private:
+    int port;
+    long timeout;
     QString data_folder;
 
-    long timeout;
     QElapsedTimer *timer;
+    QTcpServer *server;
+    QTcpSocket *socket;
+
+    long bytes = 0;
+    long files = 0;
+
+    void init();
 
     QVector<QString> generate_header() override;
 };

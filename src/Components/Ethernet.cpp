@@ -1,6 +1,11 @@
 #include "Ethernet.h"
 
+#include <QDateTime>
 #include <QElapsedTimer>
+#include <QDir>
+#include <QFile>
+#include <QTcpSocket>
+#include <QTcpServer>
 
 Ethernet::Ethernet(RunManager *runManager, const QString &config)
     : Component(runManager, config) {
@@ -11,24 +16,16 @@ Ethernet::Ethernet(RunManager *runManager, const QString &config)
     port = get_value("port").toUInt();
     timeout = get_value("timeout").toLong();
 
-    timer = new QElapsedTimer;
-    timer->start();
+    init();
 }
 
 Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, uint port, long timeout)
     : Component(m_element_name, runManager), port(port), timeout(timeout) {
-    timer = new QElapsedTimer;
-    timer->start();
+
+    init();
 }
 
 Ethernet::~Ethernet() {}
-
-long Ethernet::get_timeout_timer() {
-    if(timer->elapsed() >= timeout)
-        return 0;
-
-    return (timeout - timer->elapsed());
-}
 
 void Ethernet::set_config() {
     config_entry_list.clear();
@@ -38,6 +35,86 @@ void Ethernet::set_config() {
     set_value("timeout", QString::number(timeout));
 }
 
+void Ethernet::init() {
+    emit status_changed(Waiting);
+
+    timer = new QElapsedTimer;
+    timer->start();
+
+    data_folder = runManager->get_root_directory() + "/" + elementName;
+
+    if(QDir(data_folder).exists())
+        QDir().mkdir(data_folder);
+}
+
+void Ethernet::update() {
+    if(timer->elapsed() > timeout)
+        emit status_changed(Disconnected);
+}
+
+void Ethernet::start_logging() {
+    /* Setup Server */
+    server = new QTcpServer(this);
+    connect(server, SIGNAL(newConnection()), this, SLOT(accept_connection()));
+
+    if(!server->listen(QHostAddress::Any, port))
+        emit status_changed(Disconnected);
+    else
+        emit status_changed(Connected);
+
+    /* Setup Log */
+    runManager->register_component(this, elementName);
+    runManager->set_file_header(this, generate_header());
+
+    runManager->set_run_mode(StartLog, elementName);
+    logging = true;
+    emit is_logging(true);
+}
+
+void Ethernet::stop_logging() {
+    logging = false;
+    emit is_logging(false);
+    emit status_changed(Waiting);
+
+    runManager->deregister_component(this);
+    runManager->set_run_mode(StopLog, elementName);
+
+    //Close socket and server
+    socket->close();
+    server->close();
+    delete socket;
+    delete server;
+}
+
+void Ethernet::accept_connection() {
+    socket = server->nextPendingConnection();
+    connect(socket, SIGNAL(readyRead()), this, SLOT(accept_data()));
+}
+
+void Ethernet::accept_data() {
+    QByteArray data = socket->readAll();
+
+    QString filename = data_folder + "/" + "Package_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+
+    QFile file(filename);
+    file.open(QIODevice::WriteOnly);
+    file.write(data);
+    file.close();
+
+    files++;
+    emit files_changed(QString::number(files));
+    bytes += data.size();
+    emit bytes_changed(QString::number(bytes));
+
+    runManager->append_values_to_file(this, {filename, QString::number(data.size())});
+
+    reset_timeout();
+}
+
 void Ethernet::reset_timeout() {
     timer->restart();
+}
+
+QVector<QString> Ethernet::generate_header() {
+    return {"File", "Bytes"};
 }
