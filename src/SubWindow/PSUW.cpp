@@ -60,7 +60,7 @@ void PSUW::create_layout() {
         connect(channel, SIGNAL(current_changed(const QString &)), currentLineEdit, SLOT(setText(const QString &)));
 
         /* Enable */
-        Indicator * enableBox = new Indicator(QIcon("../CRT/icon/PSU_on.png"), QIcon("../CRT/icon/PSU_off.png"), QIcon("../CRT/icon/PSU_disconnected.png"));
+        Indicator * enableBox = new Indicator(QIcon(":/icon/PSU_on.png"), QIcon(":icon/PSU_off.png"), QIcon(":icon/PSU_event.png"));
         psuGridLayout->addWidget(enableBox, 0, 2);
         connect(enableBox, SIGNAL(stateChanged(int)), channel, SLOT(set_enable(int)));
         connect(channel, SIGNAL(enable_changed(bool)), enableBox, SLOT(setChecked(bool)));
