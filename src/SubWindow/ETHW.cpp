@@ -58,7 +58,7 @@ void ETHW::create_layout() {
     QLabel *fileLabel = new QLabel("Files");
     QLineEdit *fileEdit = new QLineEdit("0");
     fileEdit->setDisabled(true);
-    connect(ethernet, SIGNAL(files_changed(const QString &)), byteEdit, SLOT(setText(const QString &)));
+    connect(ethernet, SIGNAL(files_changed(const QString &)), fileEdit, SLOT(setText(const QString &)));
     mainGridLayout->addWidget(fileLabel, 0, 4);
     mainGridLayout->addWidget(fileEdit, 1, 4);
 

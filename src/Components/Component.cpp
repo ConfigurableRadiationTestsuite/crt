@@ -57,7 +57,6 @@ void Component::stop_logging() {
     runManager->set_run_mode(StopLog, elementName);
 }
 
-
 void Component::set_early_logging(int early_logging) {
     if(early_logging > 0) {
         start_logging();

@@ -43,7 +43,7 @@ void Ethernet::init() {
 
     data_folder = runManager->get_root_directory() + "/" + elementName;
 
-    if(QDir(data_folder).exists())
+    if(!QDir(data_folder).exists())
         QDir().mkdir(data_folder);
 }
 
@@ -101,7 +101,7 @@ void Ethernet::accept_data() {
     file.write(data);
     file.close();
 
-    files++;
+    files += 1;
     emit files_changed(QString::number(files));
     bytes += data.size();
     emit bytes_changed(QString::number(bytes));
