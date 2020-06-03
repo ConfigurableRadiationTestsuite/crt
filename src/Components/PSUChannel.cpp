@@ -28,7 +28,8 @@ PSUChannel::~PSUChannel() {}
 void PSUChannel::set_enable(int enable) {
     this->enable = enable == 0 ? false : true;
 
-    update();
+    if(!update())
+        this->enable = false;
 
     emit enable_changed(this->enable);
 }
@@ -68,10 +69,10 @@ void PSUChannel::overcurrent_protection() {
     }
 }
 
-void PSUChannel::update() {
-    if(!eth->connectionOk()){
+bool PSUChannel::update() {
+    if(!eth->connectionOk()) {
         eth->retry();
-        return ;
+        return false;
     }
 
     overcurrent_protection();
@@ -84,20 +85,18 @@ void PSUChannel::update() {
 
 //    if(vd == vendor::vendor)
 //        update_vendor();
+    return true;
 }
 
 void PSUChannel::meas_voltage() {
-
 #ifdef DUMMY_DATA
-    voltage_meas = voltage_set + double(QRandomGenerator::global()->bounded(-qint16(100), qint16(100))) / double(2000);
+    voltage_meas = voltage_set + double(QRandomGenerator::global()->bounded(-qint16(100), qint16(100))) / double(200);
     voltage_meas = voltage_meas < 0 ? 0 : voltage_meas;
     return ;
 #endif
 
-    if(!eth->connectionOk()){
-        eth->retry();
+    if(!eth->connectionOk())
         return ;
-    }
 
     if(vd == vendor::rohdeSchwarz)
         meas_voltage_rohdeschwarz();
@@ -110,17 +109,14 @@ void PSUChannel::meas_voltage() {
 }
 
 void PSUChannel::meas_current() {
-
 #ifdef DUMMY_DATA
-    current_meas = current_set/2 * double(QRandomGenerator::global()->bounded(-qint16(100), qint16(100))) / double(1000);
+    current_meas = (current_set/2) * (double(QRandomGenerator::global()->bounded(qint16(80), qint16(120))) / double(100));
     current_meas = current_meas < 0 ? 0 : current_meas;
     return ;
 #endif
 
-    if(!eth->connectionOk()) {
-        eth->retry();
+    if(!eth->connectionOk())
         return ;
-    }
 
     if(vd == vendor::rohdeSchwarz)
         meas_current_rohdeschwarz();

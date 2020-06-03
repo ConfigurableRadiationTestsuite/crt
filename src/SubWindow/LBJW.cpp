@@ -117,6 +117,7 @@ void LBJW::create_layout() {
         QLineEdit *valueLine = new QLineEdit(QString::number(channel->get_value()));
         QTimer *timer = new QTimer;
         timer->start(500);
+        valueLine->setReadOnly(true);
         connect(timer, SIGNAL(timeout()), channel, SLOT(refresh_value()));
         connect(channel, SIGNAL(value_refreshed(const QString &)), valueLine, SLOT(setText(const QString &)));
 

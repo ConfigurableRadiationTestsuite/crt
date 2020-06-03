@@ -38,7 +38,7 @@ public slots:
     void set_voltage(const QString &voltage);
     void set_current(const QString &current);
 
-    void update();
+    bool update();
     void meas_voltage();
     void meas_current();
 

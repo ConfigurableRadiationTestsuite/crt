@@ -28,21 +28,21 @@ void ETHW::create_layout() {
     /* Name */
     QLabel *nameLabel = new QLabel("Name");
     QLineEdit *nameEdit = new QLineEdit(ethernet->get_element_name());
-    nameEdit->setDisabled(true);
+    nameEdit->setReadOnly(true);
     mainGridLayout->addWidget(nameLabel, 0, 0);
     mainGridLayout->addWidget(nameEdit, 1, 0);
 
     /* Address */
     QLabel *addressLabel = new QLabel("Address");
     QLineEdit *addressEdit = new QLineEdit;
-    addressEdit->setDisabled(true);
+    addressEdit->setReadOnly(true);
     mainGridLayout->addWidget(addressLabel, 0, 1);
     mainGridLayout->addWidget(addressEdit, 1, 1);
 
     /* Port */
     QLabel *portLabel = new QLabel("Port");
     QLineEdit *portEdit = new QLineEdit(QString::number(ethernet->get_port()));
-    portEdit->setDisabled(true);
+    portEdit->setReadOnly(true);
     mainGridLayout->addWidget(portLabel, 0, 2);
     mainGridLayout->addWidget(portEdit, 1, 2);
 

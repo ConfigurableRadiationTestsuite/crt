@@ -33,7 +33,6 @@ PSU::PSU(RunManager * runManager, const QString &config)
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
     : Component(m_element_name, runManager, 1000), address(address) {
-    qDebug("Create PSU from scratch");
 
     this->elementName = m_element_name;
     this->vd = check_vendor(vendor);
@@ -77,11 +76,9 @@ void PSU::set_config() {
 }
 
 void PSU::update() {
-#ifndef DUMMY_DATA
     //Check if the network connection is ok
     if(!check_network_connection())
         return ;
-#endif
 
     /* Gather data */
     QVector<double> values;
@@ -139,15 +136,18 @@ void PSU::init_ethernet(const QString &address) {
 }
 
 void PSU::set_master_enable(int master_enable) {
-    this->master_enable = master_enable == 0 ? false : true;
+    if(!check_network_connection())
+        return ;
 
-    emit master_changed(this->master_enable);
+    this->master_enable = master_enable == 0 ? false : true;
 
     if(vd == rohdeSchwarz)
         set_master_rohdeschwarz();
 
 //    if(vd == vendor)
 //        set_master_vendor();
+
+    emit master_changed(this->master_enable);
 }
 
 void PSU::set_master_trigger(int master_trigger) {
@@ -185,6 +185,7 @@ void PSU::switch_off() {
 }
 
 bool PSU::check_network_connection() {
+#ifndef DUMMY_DATA
     if(!eth->connectionOk()) {
         emit disconnected(true);
 
@@ -195,6 +196,6 @@ bool PSU::check_network_connection() {
         else
             return false;
     }
-
+#endif
     return true;
 }
