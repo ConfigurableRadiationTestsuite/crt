@@ -34,6 +34,11 @@ void Indicator::set_individual_icon(int ic) {
     }
 }
 
+void Indicator::setDisabled(bool disabled) {
+    setCheckable(!disabled);
+    set_event_icon(true);
+}
+
 void Indicator::set_event_icon(bool status) {
     if(status == true)
         setIcon(*eventIcon);

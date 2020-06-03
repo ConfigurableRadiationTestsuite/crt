@@ -4,15 +4,15 @@
 /*
  * Author: Mattis Jaksch
  *
- * Information on run status (not fully developed yet) and
- * run management (e.g. start/stop time and logging of components).
+ * Information on run status and run management
+ * (e.g. start/stop time and logging of components).
  *
  */
 
 class QElapsedTimer;
 
-#include "FileManager.h"
 #include "EventManager.h"
+#include "FileManager.h"
 
 #include <QWidget>
 
@@ -45,7 +45,7 @@ signals:
     void run_time_changed(const QString &);
     void run_mode_changed(enum RunMode);
 
-    void enable_run_button(bool enable);
+    void enable_runButton(bool);
 
     void isValid_changed(bool);
     void isInvalid_changed(bool);

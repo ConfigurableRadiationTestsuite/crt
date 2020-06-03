@@ -86,8 +86,8 @@ void ProgrammStarter::kill_programm() {
     emit announce_run(false);
 }
 
-QVector<QString> ProgrammStarter::generate_header() {
-    return {"line"};
+QStringList ProgrammStarter::generate_header() {
+    return {"Line"};
 }
 
 void ProgrammStarter::receive_data() {

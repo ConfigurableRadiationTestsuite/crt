@@ -56,7 +56,7 @@ private:
     bool trigger = false;
 
     void init();
-    QVector<QString> generate_header() override;
+    QStringList generate_header() override;
 
     QStringList substitute_arguments();
 };

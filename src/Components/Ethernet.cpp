@@ -115,6 +115,6 @@ void Ethernet::reset_timeout() {
     timer->restart();
 }
 
-QVector<QString> Ethernet::generate_header() {
+QStringList Ethernet::generate_header() {
     return {"File", "Bytes"};
 }

@@ -67,7 +67,7 @@ private:
     void get_channel_addresses(const QString &input, QVector<int> &output);
     void get_channel_names(const QString &input, QVector<QString> &output);
 
-    QVector<QString> generate_header() override;
+    QStringList generate_header() override;
 
     void create_dummy_data(int size, double * values);
 };

@@ -99,8 +99,9 @@ void PSU::update() {
         runManager->append_values_to_file(this, values);
 }
 
-QVector<QString> PSU::generate_header() {
-    QVector<QString> header;
+QStringList PSU::generate_header() {
+    QStringList header;
+
     PSUChannel * channel;
     foreach (channel, channel_list) {
         header.push_back("V" + QString::number(channel->get_number()));

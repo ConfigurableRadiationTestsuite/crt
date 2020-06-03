@@ -100,8 +100,8 @@ void RFIO::set_multi_shot() {
     is_single_shot = false;
 }
 
-QVector<QString> RFIO::generate_header() {
-    QVector<QString> header;
+QStringList RFIO::generate_header() {
+    QStringList header;
     header.push_back("Sample");
 
     RFIOChannel * channel;

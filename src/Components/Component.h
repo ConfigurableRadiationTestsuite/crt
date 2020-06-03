@@ -43,7 +43,7 @@ protected:
     bool logging = false;
     bool early_logging = false;
 
-    virtual QVector<QString> generate_header() = 0;
+    virtual QStringList generate_header() = 0;
 
     void configure_timer(uint time);
 };

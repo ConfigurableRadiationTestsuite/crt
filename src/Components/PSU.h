@@ -66,7 +66,7 @@ private:
     void set_master_rohdeschwarz();
     //void set_master_vendor();
 
-    QVector<QString> generate_header() override;
+    QStringList generate_header() override;
 };
 
 #endif // PSU_H

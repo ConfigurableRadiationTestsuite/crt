@@ -31,21 +31,18 @@ void RunManager::create_layout() {
     grey->setColor(QPalette::Text,Qt::black);
 
     /* Button to create a new run */
-    QPushButton *runButton = new QPushButton;
-    runButton->setText("New run");
+    QPushButton *runButton = new QPushButton("New Run");
     connect(runButton, SIGNAL(clicked()), this, SLOT(create_new_run()));
-    connect(this, SIGNAL(enable_run_button(bool)), runButton, SLOT(setEnabled(bool)));
+    connect(this, SIGNAL(enable_runButton(bool)), runButton, SLOT(setEnabled(bool)));
 
     /* Field for run folder */
-    QLineEdit *runNameLine = new QLineEdit;
-    runNameLine->setText("<NAME>");
+    QLineEdit *runNameLine = new QLineEdit("<NAME>");
     runNameLine->setReadOnly(true);
     runNameLine->setPalette(*grey);
     connect(this, SIGNAL(run_name_changed(const QString &)), runNameLine, SLOT(setText(const QString &)));
 
     /* Current run time */
-    QLineEdit *runTimeLine = new QLineEdit;
-    runTimeLine->setText("000:00:00");
+    QLineEdit *runTimeLine = new QLineEdit("000:00:00");
     runTimeLine->setReadOnly(true);
     runTimeLine->setPalette(*grey);
     connect(this, SIGNAL(run_time_changed(const QString &)), runTimeLine, SLOT(setText(const QString &)));
@@ -102,7 +99,7 @@ void RunManager::start_run() {
     if(running)
         return;
 
-    emit enable_run_button(false);
+    emit enable_runButton(false);
 
     runTime->start();
     running = true;
@@ -126,7 +123,7 @@ void RunManager::stop_run() {
 
     set_run_mode(RunMode::StopRun, "Run Manager");
 
-    emit enable_run_button(true);
+    emit enable_runButton(true);
 }
 
 void RunManager::set_run_mode(enum RunMode mode, const QString &component) {

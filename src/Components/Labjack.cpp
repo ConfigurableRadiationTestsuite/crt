@@ -221,8 +221,9 @@ int Labjack::read(int address, const int TYPE, double &value) {
     return LJM_eReadAddress(handle, address, TYPE, &value);
 }
 
-QVector<QString> Labjack::generate_header() {
-    QVector<QString> header;
+QStringList Labjack::generate_header() {
+    QStringList header;
+
     LabjackChannel * channel;
     foreach (channel, channel_list)
         header.push_back(channel->get_name());
@@ -251,6 +252,8 @@ void Labjack::get_channel_names(const QString &input, QVector<QString> &output) 
 }
 
 void Labjack::create_dummy_data(int size, double *values) {
+#ifdef DUMMY_DATA
     for(int i = 0; i < size; i++)
         values[i] = double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
+#endif
 }

@@ -81,22 +81,22 @@ void FileManager::append_values_to_file(const void * subComponent, const QVector
     get_file(subComponent)->file->flush();
 }
 
-void FileManager::append_values_to_file(const void * subComponent, const QVector<QString> &values) {
+void FileManager::append_values_to_file(const void * subComponent, const QStringList &values) {
     long long  time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
 
-    QVector<QString> internal_values;
+    QStringList internal_values;
     internal_values.push_back(QString::number(time));
     internal_values.append(values);
 
-    get_file(subComponent)->file->write((QString(vector_to_string(internal_values) + "\n")).toUtf8());
+    get_file(subComponent)->file->write((internal_values.join(';') + "\n").toUtf8());
     get_file(subComponent)->file->flush();
 }
 
-void FileManager::set_file_header(const void * subComponent, const QVector<QString> &header) {
-    QVector<QString> internal_header = {"Time"};
+void FileManager::set_file_header(const void * subComponent, const QStringList &header) {
+    QStringList internal_header = {"Time"};
     internal_header.append(header);
 
-    get_file(subComponent)->file->write((vector_to_string(internal_header) + "\n").toUtf8());
+    get_file(subComponent)->file->write((internal_header.join(';') + "\n").toUtf8());
     get_file(subComponent)->file->flush();
 }
 
@@ -106,8 +106,6 @@ struct ComponentFile * FileManager::get_file(const void * subComponent) {
         if(file->subComponent == subComponent)
             return file;
 
-    qDebug("Component is not registered!");
-
     return nullptr;
 }
 
@@ -116,15 +114,6 @@ QString FileManager::vector_to_string(const QVector<double> &vector) {
     QVectorIterator<double> it(vector);
     while(it.hasNext())
         msg += QString::number(it.next()) + (it.hasNext() ? ";" : "");
-
-    return msg;
-}
-
-QString FileManager::vector_to_string(const QVector<QString> &vector) {
-    QString msg = "";
-    QVectorIterator<QString> it(vector);
-    while(it.hasNext())
-        msg += it.next() + (it.hasNext() ? ";" : "");
 
     return msg;
 }

@@ -63,7 +63,7 @@ private:
 
     void init();
 
-    QVector<QString> generate_header() override;
+    QStringList generate_header() override;
 };
 
 #endif // ETHERNET_H
