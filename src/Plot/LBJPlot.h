@@ -38,6 +38,8 @@ private:
 
     bool plot_active = false;
 
+    QElapsedTimer *plot_timer;
+
     void create_layout() override;
 
     int get_total_maximum();

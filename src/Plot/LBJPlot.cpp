@@ -7,6 +7,9 @@ LBJPlot::LBJPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
 
     recreate_axis(standard_axis);
 
+    plot_timer = new QElapsedTimer;
+    plot_timer->start();
+
     create_layout();
 }
 
@@ -14,8 +17,10 @@ LBJPlot::~LBJPlot() {}
 
 void LBJPlot::update_plot() {
     /* Return if plot is inactive */
-    if(!plot_active)
+    if(!plot_active || plot_timer->elapsed() < 10)
         return ;
+
+    plot_timer->restart();
 
     PlotElement *plotElement;
 
