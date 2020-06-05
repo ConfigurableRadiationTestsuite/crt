@@ -54,6 +54,7 @@ private:
     QVector<double> value_list;
 
     QElapsedTimer *sampleTimer;
+    QElapsedTimer *testTimer;
     int samplerate = 1, maxSamplerate = 1;
     bool is_maximum;
 

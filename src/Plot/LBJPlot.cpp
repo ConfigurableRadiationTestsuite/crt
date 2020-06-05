@@ -13,11 +13,11 @@ LBJPlot::LBJPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
 LBJPlot::~LBJPlot() {}
 
 void LBJPlot::update_plot() {
-    static long last_update = 0;
-
-    /* Return if plot is either inactive or was updated within the last 10ms */
-    if(!plot_active || realTime->elapsed() <= last_update+9)
+    /* Return if plot is inactive */
+    if(!plot_active)
         return ;
+
+    //qDebug("Update plot at: " + (QString::number(realTime->elapsed())).toLatin1());
 
     PlotElement *plotElement;
 
@@ -56,7 +56,6 @@ void LBJPlot::update_plot() {
     plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
 
     plot->replot();
-    last_update = realTime->elapsed();
     counter++;
 }
 
@@ -128,5 +127,8 @@ int LBJPlot::get_total_minimum() {
 }
 
 void LBJPlot::set_plot_active(bool active) {
+    if(!plot_active)
+        recreate_time_axis();
+
     plot_active = active;
 }

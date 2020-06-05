@@ -111,9 +111,12 @@ void Labjack::init() {
     }
 
     sampleTimer = new QElapsedTimer;
+    testTimer = new QElapsedTimer();
+    testTimer->start();
 }
 
 void Labjack::update() {
+    //qDebug("Update query at: " + (QString::number(testTimer->elapsed())).toLatin1());
     sampleTimer->restart();
 
     /* Gather data */

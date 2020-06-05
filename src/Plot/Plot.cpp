@@ -15,19 +15,27 @@ Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
 Plot::~Plot() {}
 
 void Plot::update_time_axis() {
+    //qDebug("Current time: " + (QString::number(realTime->elapsed() / 1000.0)).toLatin1());
+
     if(counter >= datapoints) {
         long lastTimepoint = realTime->elapsed() + long(double(seconds * 1000) / double(datapoints));
         shift_into_vector(timeAxis, double(lastTimepoint) / 1000);
+        //qDebug("Shift Axis: " + (QString::number(timeAxis.last())).toLatin1());
     }
 }
 
 void Plot::recreate_time_axis() {
-    int lastTimepoint = int(realTime->elapsed() / 1000);
+    //qDebug("Current time: " + (QString::number(realTime->elapsed() / 1000.0)).toLatin1());
+
+    long lastTimepoint = realTime->elapsed();
     timeAxis.clear();
     timeAxis.reserve(datapoints);
 
-    for(int i = 0; i < datapoints; i++)
-        timeAxis.push_back(lastTimepoint + i * (double(seconds) / double(datapoints)));
+    for(int i = 0; i < datapoints; i++) {
+        timeAxis.push_back(lastTimepoint / 1000.0 + i * (double(seconds) / double(datapoints)));
+        //qDebug("Time Axis: " + (QString::number(timeAxis[i])).toLatin1());
+    }
+    //qDebug("Current time: " + (QString::number(realTime->elapsed() / 1000.0)).toLatin1());
 }
 
 void Plot::recreate_axis(QVector<double> &vec) {
