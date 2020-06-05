@@ -34,8 +34,10 @@ bool EthernetClient::read(QString &buffer) {
     if(!connection_ok)
         return false;
 
-    if(!socket->waitForReadyRead(1000))
+    if(!socket->waitForReadyRead(1000)) {
+        disconnected();
         return false;
+    }
 
     buffer = socket->readAll();
 
