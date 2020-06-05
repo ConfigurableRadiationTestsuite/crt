@@ -10,34 +10,37 @@
  *
  */
 
-#define RETRY_TIMEOUT 10
-#define CONNECTION_TIMEOUT 5
-#define READ_BUFFER_SIZE 1024
+class QTcpSocket;
 
-#include <netinet/in.h>
-#include <string>
+#include <QObject>
 
-class EthernetClient {
+class EthernetClient : public QObject {
+Q_OBJECT
+
 public:
-    EthernetClient(uint port, const std::string &server);
+    EthernetClient(uint port, const QString &address);
 	virtual ~EthernetClient();
 
-	bool write(const std::string &message);
-	std::string query(const std::string message);
+    bool write(const QString &message);
+    bool query(const QString &message, QString &buffer);
 
-    bool retry();
-    bool connectionOk() const {return connection_ok;}
+    bool is_connected() const {return connection_ok;}
+
+signals:
+    void connection_status(bool);
+
+private slots:
+    void connected();
+    void disconnected();
 
 private:
-    bool socket_ok, connection_ok;
-	struct sockaddr_in server_address;
     uint port;
-    int sock = 0;
-	std::string server;
+    QString address;
 
-	bool create_socket();
-	bool connect_to_server();
-    void disconnect_from_server();
+    bool connection_ok = false;
+    QTcpSocket *socket;
+
+    bool read(QString &buffer);
 };
 
 #endif // ETHERNETCLIENT_H

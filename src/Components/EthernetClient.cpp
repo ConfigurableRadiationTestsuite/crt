@@ -1,109 +1,63 @@
 #include "EthernetClient.h"
 
-#include <arpa/inet.h>
-#include <cstdlib>
-#include <cstring>
-#include <sys/socket.h>
-#include <unistd.h>
+#include <QTcpSocket>
 
-EthernetClient::EthernetClient(uint port, const std::string &server) : port(port), server(server) {
-    connection_ok = false;
+EthernetClient::EthernetClient(uint port, const QString &address) : port(port), address(address) {
+    socket = new QTcpSocket(this);
 
-    socket_ok = create_socket();
+    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
+    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
-    if(socket_ok)
-        connection_ok = connect_to_server();
+    socket->connectToHost(address, port);
 }
 
 EthernetClient::~EthernetClient() {
-    close(sock);
+    socket->close();
 }
 
-bool EthernetClient::retry() {
-    static long retry_clock = time(nullptr);
+void EthernetClient::connected() {
+    connection_ok = true;
+    emit connection_status(true);
+}
 
-    if(time(nullptr) - retry_clock < RETRY_TIMEOUT)
+void EthernetClient::disconnected() {
+    connection_ok = false;
+    emit connection_status(false);
+
+    /* Attempt to reconnect */
+    socket->reset();
+    socket->connectToHost(address, port);
+}
+
+bool EthernetClient::read(QString &buffer) {
+    if(!connection_ok)
         return false;
 
-    if(!socket_ok)
-        socket_ok = create_socket();
+    if(!socket->waitForReadyRead(1000))
+        return false;
 
-    if(socket_ok)
-        connection_ok = connect_to_server();
+    buffer = socket->readAll();
 
-    retry_clock = time(nullptr);
-
-    return connection_ok;
+    return true;
 }
 
-bool EthernetClient::create_socket() {
-	if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-        perror("Socket creation error");
-		//exit(EXIT_FAILURE);
-		return false;
-	}
+bool EthernetClient::write(const QString &message) {
+    if(!connection_ok)
+        return false;
 
-	memset(&server_address, '0', sizeof(server_address));
-
-	server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(uint16_t(port));
-
-    /* Send/receive timeout */
-    struct timeval tv;
-    tv.tv_sec = CONNECTION_TIMEOUT;
-    tv.tv_usec = 0;
-    setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof(tv));
-    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
-
-	return true;
+    return socket->write(message.toLocal8Bit()) == message.size();
 }
 
-bool EthernetClient::connect_to_server() {
-	if(inet_pton(AF_INET, server.c_str(), &server_address.sin_addr) < 0) {
-        perror("Invalid address");
-		//exit(EXIT_FAILURE);
-		return false;
-	}
+bool EthernetClient::query(const QString &message, QString &buffer) {
+    if(!connection_ok)
+        return false;
 
-	if(connect(sock, (struct sockaddr *)&server_address, sizeof(server_address)) < 0) {
-		perror("Connection failed");
-		//exit(EXIT_FAILURE);
-		return false;
-	}
-	return true;
-}
-
-bool EthernetClient::write(const std::string &message) {
-    ssize_t data_bytes = 0;
-
-	std::string tmp = message + "\r\n";
-
-    if(socket_ok && connection_ok)
-        data_bytes = send(sock, tmp.c_str(), strlen(tmp.c_str()), MSG_CONFIRM);
-
-    return data_bytes != -1 && size_t(data_bytes) == tmp.size();
-}
-
-std::string EthernetClient::query(const std::string message) {
     if(!write(message))
-        return "";
+        return false;
 
-    char output[READ_BUFFER_SIZE];
-    ssize_t data_bytes = ssize_t(recv(sock, output, READ_BUFFER_SIZE, 0));
+    if(!read(buffer))
+        return false;
 
-    if(data_bytes == -1) {
-        disconnect_from_server();
-        return "";
-    }
-
-    output[data_bytes] = '\0';
-    std::string buffer = output;
-
-    return buffer;
-}
-
-void EthernetClient::disconnect_from_server() {
-    connection_ok = false;
-    socket_ok = false;
-    close(sock);
+    return true;
 }

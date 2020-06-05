@@ -132,7 +132,7 @@ void PSU::init_ethernet(const QString &address) {
     QString ip_address = address.mid(0, address.indexOf(":"));
     uint port = (address.mid(address.indexOf(":") + 1, address.size() - address.indexOf(":") - 1)).toUInt();
 
-    eth = new EthernetClient(port, ip_address.toStdString());
+    eth = new EthernetClient(port, ip_address);
 }
 
 void PSU::set_master_enable(int master_enable) {
@@ -161,7 +161,7 @@ void PSU::update_settings() {
 }
 
 void PSU::set_master_rohdeschwarz() {
-    eth->write("OUTP:MAST " + std::string(master_enable ? "ON" : "OFF"));
+    eth->write("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
 }
 
 void PSU::switch_on() {
@@ -186,16 +186,12 @@ void PSU::switch_off() {
 
 bool PSU::check_network_connection() {
 #ifndef DUMMY_DATA
-    if(!eth->connectionOk()) {
+    if(!eth->is_connected()) {
         emit disconnected(true);
-
-        if(eth->retry()) {
-            emit disconnected(false);
-            return true;
-        }
-        else
-            return false;
+        return false;
     }
 #endif
+
+    emit disconnected(false);
     return true;
 }

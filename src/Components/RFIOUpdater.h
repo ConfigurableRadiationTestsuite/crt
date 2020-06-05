@@ -27,9 +27,9 @@ signals:
     void disconnected();
 
 private:
+    int port;
     QProcess * process;
     QVector<RFIOChannel *> *channel_list;
-    int port;
 
     int create_2b_number(char lsb, char msb);
     QByteArray dummy_iq(int period, int channel);

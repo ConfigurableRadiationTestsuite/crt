@@ -70,11 +70,6 @@ void PSUChannel::overcurrent_protection() {
 }
 
 bool PSUChannel::update() {
-    if(!eth->connectionOk()) {
-        eth->retry();
-        return false;
-    }
-
     overcurrent_protection();
 
     if(vd == vendor::rohdeSchwarz)
@@ -95,9 +90,6 @@ void PSUChannel::meas_voltage() {
     return ;
 #endif
 
-    if(!eth->connectionOk())
-        return ;
-
     if(vd == vendor::rohdeSchwarz)
         meas_voltage_rohdeschwarz();
 
@@ -115,9 +107,6 @@ void PSUChannel::meas_current() {
     return ;
 #endif
 
-    if(!eth->connectionOk())
-        return ;
-
     if(vd == vendor::rohdeSchwarz)
         meas_current_rohdeschwarz();
 
@@ -129,24 +118,27 @@ void PSUChannel::meas_current() {
 }
 
 void PSUChannel::update_rohdeschwarz() {
-    if(eth->write("INST OUT" + std::to_string(number + 1))) {
-        eth->write(("VOLT " + QString::number(voltage_set)).toStdString());
-        eth->write(("CURR " + QString::number(current_set/1000.0)).toStdString());
-        eth->write("OUTP:CHAN " + std::string(enable ? "ON" : "OFF"));
+    if(eth->write("INST OUT" + QString(number + 1))) {
+        eth->write(("VOLT " + QString::number(voltage_set)));
+        eth->write(("CURR " + QString::number(current_set/1000.0)));
+        eth->write("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
     }
 }
 
 void PSUChannel::meas_voltage_rohdeschwarz() {
-    if(eth->write("INST OUT" + std::to_string(number + 1))) {
-        QString output = QString::fromUtf8(eth->query("MEAS:VOLT ?").c_str());
-        voltage_meas = output.toDouble();
+    if(eth->write("INST OUT" + QString(number + 1))) {
+        QString output;
+
+        if(eth->query("MEAS:VOLT ?", output))
+           voltage_meas = output.toDouble();
     }
 }
 
 void PSUChannel::meas_current_rohdeschwarz() {
-    if(eth->write("INST OUT" + std::to_string(number + 1))) {
-        QString output = QString::fromUtf8(eth->query("MEAS:CURR ?").c_str());
-        current_meas = output.toDouble();
+    if(eth->write("INST OUT" + QString(number + 1))) {
+        QString output;
+        if(eth->query("MEAS:CURR ?", output))
+            current_meas = output.toDouble();
     }
 }
 
