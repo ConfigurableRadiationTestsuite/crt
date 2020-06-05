@@ -20,7 +20,7 @@ class LBJPlot : public Plot {
 Q_OBJECT
 
 public:
-    LBJPlot(QCustomPlot *m_plot, int m_datapoints=30, int m_seconds=10);
+    LBJPlot(QCustomPlot *m_plot, int m_datapoints=30, int m_seconds=30);
     virtual ~LBJPlot() override;
 
     void add_channel(LabjackChannel * channel, QColor color);

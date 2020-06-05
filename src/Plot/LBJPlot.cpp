@@ -17,8 +17,6 @@ void LBJPlot::update_plot() {
     if(!plot_active)
         return ;
 
-    //qDebug("Update plot at: " + (QString::number(realTime->elapsed())).toLatin1());
-
     PlotElement *plotElement;
 
     /* Fill either vector up or shift the whole vector to add one datapoint */
@@ -63,7 +61,7 @@ void LBJPlot::create_layout() {
     plot->xAxis->setLabel("[s]");
     plot->xAxis->setRange(0, datapoints);
     plot->xAxis->setAutoTickStep(false);
-    plot->xAxis->setTickStep(datapoints/3);
+    plot->xAxis->setTickStep(datapoints/10);
 
     plot->yAxis->setLabel("[ ]");
     plot->yAxis->setAutoTickStep(false);
