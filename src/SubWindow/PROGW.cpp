@@ -88,6 +88,7 @@ void PROGW::create_layout() {
     QLineEdit *arguments = new QLineEdit;
     arguments->setText(programmStarter->get_arguments());
     connect(runManager, SIGNAL(isRunning_changed(bool)), arguments, SLOT(setDisabled(bool)));
+    connect(arguments, SIGNAL(textChanged(const QString &)), programmStarter, SLOT(set_arguments(const QString &)));
 
     pathLayout->addWidget(setPath);
     pathLayout->addWidget(programmPath);
