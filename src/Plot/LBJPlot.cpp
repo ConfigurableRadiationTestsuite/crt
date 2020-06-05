@@ -17,7 +17,7 @@ LBJPlot::~LBJPlot() {}
 
 void LBJPlot::update_plot() {
     /* Return if plot is inactive */
-    if(!plot_active || plot_timer->elapsed() < 10)
+    if(!plot_active || plot_timer->elapsed() < 9)
         return ;
 
     plot_timer->restart();
