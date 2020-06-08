@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="ETH_event.svg">
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1550">
+      <stop
+         style="stop-color:#80ff80;stop-opacity:1;"
+         offset="0"
+         id="stop1546" />
+      <stop
+         style="stop-color:#80ff80;stop-opacity:0;"
+         offset="1"
+         id="stop1548" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1550"
+       id="radialGradient1552"
+       cx="10"
+       cy="292"
+       fx="10"
+       fy="292"
+       r="9"
+       gradientTransform="matrix(0.99999999,0,0,0.44444444,0,162.22222)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8.8148954"
+     inkscape:cx="39.441109"
+     inkscape:cy="1116.963"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1042"
+     inkscape:window-x="0"
+     inkscape:window-y="20"
+     inkscape:window-maximized="1"
+     inkscape:document-rotation="0">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3713" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       id="rect4522"
+       width="20"
+       height="10"
+       x="0"
+       y="287"
+       style="fill:#000000;fill-opacity:0.2536946;stroke:none;stroke-width:0.14219686;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-xdpi="656.77808"
+       inkscape:export-ydpi="656.77808" />
+    <rect
+       style="opacity:1;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.53265971;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1971"
+       width="18"
+       height="8"
+       x="1"
+       y="288"
+       ry="4" />
+    <rect
+       ry="4"
+       y="288"
+       x="1"
+       height="8"
+       width="18"
+       id="rect1971-3"
+       style="opacity:1;fill:url(#radialGradient1552);fill-opacity:1;stroke:none;stroke-width:0.532659;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       ry="0.25"
+       y="289.46872"
+       x="6.25"
+       height="2.5"
+       width="0.5"
+       id="rect880-7"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882" />
+    <rect
+       ry="0.25"
+       y="291.96872"
+       x="6.25"
+       height="2.5"
+       width="0.5"
+       id="rect880-76"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+       id="rect880-7-3"
+       width="0.5"
+       height="2.5"
+       x="11.25"
+       y="289.46872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+       id="rect880-76-9"
+       width="0.5"
+       height="2.5"
+       x="11.25"
+       y="291.96872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+       id="rect880-7-9"
+       width="0.5"
+       height="2.5"
+       x="16.249998"
+       y="289.46872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+       id="rect880-76-3"
+       width="0.5"
+       height="2.5"
+       x="16.249998"
+       y="291.96872"
+       ry="0.25" />
+  </g>
+</svg>
