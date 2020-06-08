@@ -16,7 +16,7 @@ void RFIOUpdater::start_process() {
     //connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update_device()));
 
 #ifndef DUMMY_DATA
-    process->start("/bin/ncat -l " + QString::number(port));
+    process->start("/bin/ncat -l " + QString::number(port), {""});
 #endif
 
 #ifdef DUMMY_DATA

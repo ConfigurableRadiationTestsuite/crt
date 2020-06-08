@@ -41,7 +41,7 @@ void PROGW::create_layout() {
     earlyLogging->setDisabled(!runManager->is_valid());
     optionLayout->addWidget(earlyLogging);
     connect(earlyLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_early_logging(int)));
-    connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogging, SLOT(setDisabled(bool)));
+    connect(runManager, SIGNAL(isInvalid_changed(bool)), earlyLogging, SLOT(setDisabled(bool)));
 
     /* Trigger */
     QCheckBox *trigger = new QCheckBox("Trigger");

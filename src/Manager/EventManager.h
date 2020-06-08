@@ -49,8 +49,6 @@ signals:
     void signal_added();
     void signal_deleted(struct RegisteredSignal * reg);
 
-    void logging_disabled(bool);
-
 private:
     QVector<struct RegisteredSignal*> signal_list;
 };

@@ -253,9 +253,9 @@ void Labjack::get_channel_names(const QString &input, QVector<QString> &output) 
     } while((position = input.indexOf(',', position) + 1) > 0);
 }
 
-void Labjack::create_dummy_data(int size, double *values) {
 #ifdef DUMMY_DATA
+void Labjack::create_dummy_data(int size, double *values) {
     for(int i = 0; i < size; i++)
         values[i] = channel_list[i]->get_value() + double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
-#endif
 }
+#endif
