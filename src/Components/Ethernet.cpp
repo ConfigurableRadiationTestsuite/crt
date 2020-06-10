@@ -41,15 +41,18 @@ void Ethernet::init() {
     timer = new QElapsedTimer;
     timer->start();
 
-    data_folder = runManager->get_root_directory() + "/" + elementName;
+    connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(set_data_folder()));
 
-    if(!QDir(data_folder).exists())
-        QDir().mkdir(data_folder);
+    if(runManager->is_valid())
+        set_data_folder();
 }
 
 void Ethernet::update() {
-    if(timer->elapsed() > timeout)
+    if(timer->elapsed() > timeout) {
+        emit connection_timed_out();
         emit status_changed(Disconnected);
+        timer->restart();
+    }
 }
 
 void Ethernet::start_logging() {
@@ -117,4 +120,11 @@ void Ethernet::reset_timeout() {
 
 QStringList Ethernet::generate_header() {
     return {"File", "Bytes"};
+}
+
+void Ethernet::set_data_folder() {
+    data_folder = runManager->get_root_directory() + "/" + elementName;
+
+    if(!QDir(data_folder).exists())
+        QDir().mkdir(data_folder);
 }

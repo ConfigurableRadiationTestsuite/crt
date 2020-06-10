@@ -20,9 +20,6 @@ IndicatorBox::~IndicatorBox() {
 }
 
 void IndicatorBox::set_individual_icon(int ic) {
-//    if(ic < 0)
-//        setIcon(*eventIcon);
-
     if(ic == 0) {
         setIcon(*offIcon);
         lastIcon = offIcon;

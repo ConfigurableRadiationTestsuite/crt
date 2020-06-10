@@ -1,50 +1,37 @@
 #include "IndicatorIcon.h"
-/*
-IndicatorIcon::IndicatorIcon(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
-    this->onIcon = new QIcon(onIcon);
-    this->offIcon = new QIcon(offIcon);
-    this->eventIcon = new QIcon(eventIcon);
 
-    this->setIconSize(QSize(40, 20));
-    this->set_event_icon()
+#include <QLabel>
+#include <QIcon>
+#include <QTimer>
 
-    setIcon(*this->offIcon);
-    lastIcon = this->offIcon;
+IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap event)
+    : name(name) {
 
-    connect(this, SIGNAL(stateChanged(int)), this, SLOT(set_individual_icon(int)));
+    this->connected = connected.scaled(QSize(48, 24));
+    this->disconnected = disconnected.scaled(QSize(48, 24));
+    this->event = event.scaled(QSize(48, 24));
+
+    setNewPixmap(this->disconnected);
+
+    eventTimer = new QTimer;
+    connect(eventTimer, SIGNAL(timeout()), this, SLOT(reset_icon()));
 }
 
-IndicatorIcon::~IndicatorIcon() {
-    delete onIcon;
-    delete offIcon;
-    delete eventIcon;
+IndicatorIcon::~IndicatorIcon() {}
+
+void IndicatorIcon::set_connected(int status) {
+    if(status == 0)
+        setNewPixmap(disconnected);
+    else
+        setNewPixmap(connected);
 }
 
-void IndicatorIcon::set_individual_icon(int ic) {
-    if(ic < 0)
-        setIcon(*eventIcon);
-
-    if(ic == 0) {
-        setIcon(*offIcon);
-        lastIcon = offIcon;
-    }
-
-    if(ic > 0) {
-        setIcon(*onIcon);
-        lastIcon = onIcon;
-    }
+void IndicatorIcon::reset_icon() {
+    eventTimer->stop();
+    setPixmap(last);
 }
 
-void IndicatorIcon::setDisabled(bool disabled) {
-    setCheckable(!disabled);
-    set_event_icon(true);
+void IndicatorIcon::set_event() {
+    setPixmap(event);
+    eventTimer->start(500);
 }
-
-void IndicatorIcon::set_event_icon(bool status) {
-    if(status == true)
-        setIcon(*eventIcon);
-
-    if(status == false)
-        setIcon(*lastIcon);
-}
-*/

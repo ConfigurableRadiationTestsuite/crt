@@ -1,33 +1,36 @@
 #ifndef INDICATORICON_H
 #define INDICATORICON_H
-/*
-#include <QIcon>
-#include <QWidget>
 
-class IndicatorIcon : public QWidget {
+#include <QLabel>
+
+class IndicatorIcon : public QLabel {
 Q_OBJECT
 
 public:
-    IndicatorIcon(QIcon onIcon, QIcon offIcon, QIcon eventIcon);
+    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap event);
     virtual ~IndicatorIcon();
 
-    void setIcon(const QIcon &icon);
-    void setSize(const QSize &size);
-
 public slots:
-    void set_individual_icon(int);
-    void set_event_icon(bool);
-    void setDisabled(bool);
+    void set_event();
+    void set_connected(int);
+
+private slots:
+    void reset_icon();
 
 private:
-    QIcon icon;
-    QIcon onIcon;
-    QIcon offIcon;
-    QIcon eventIcon;
+    QString name;
+    QPixmap connected;
+    QPixmap disconnected;
+    QPixmap event;
+    QPixmap last;
 
-    QSize size;
+    QTimer *eventTimer;
 
-    void updatePixmapLabel();
+    void setNewPixmap(const QPixmap &map);
 };
-*/
+
+inline void IndicatorIcon::setNewPixmap(const QPixmap &map) {
+    setPixmap(map);
+    last = map;
+}
 #endif

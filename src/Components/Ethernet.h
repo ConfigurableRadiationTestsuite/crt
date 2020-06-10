@@ -41,13 +41,16 @@ public slots:
     void start_logging();
     void stop_logging();
 
+private slots:
     void accept_connection();
     void accept_data();
+    void set_data_folder();
 
 signals:
     void files_changed(const QString &);
     void bytes_changed(const QString &);
     void status_changed(int);
+    void connection_timed_out();
 
 private:
     int port;

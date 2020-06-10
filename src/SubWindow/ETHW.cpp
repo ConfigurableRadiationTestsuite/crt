@@ -1,7 +1,7 @@
 #include "ETHW.h"
 
 #include "src/Components/Ethernet.h"
-#include "src/Components/IndicatorBox.h"
+#include "src/Components/IndicatorIcon.h"
 
 #include <QCheckBox>
 #include <QGridLayout>
@@ -63,10 +63,16 @@ void ETHW::create_layout() {
     mainGridLayout->addWidget(fileEdit, 1, 4);
 
     /* Activity Indicator */
+//    QLabel *activeLabel = new QLabel("Active");
+//    QLabel *placeHolder = new QLabel("<QIcon>");
     QLabel *activeLabel = new QLabel("Active");
-    QLabel *placeHolder = new QLabel("<QIcon>");
+    IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/ETH_connected.png"), QPixmap(":/icon/ETH_disconnected.png"), QPixmap(":/icon/ETH_event.png"));
+    connect(ethernet, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_connected(int)));
+    connect(ethernet, SIGNAL(files_changed(const QString &)), activeIndicator, SLOT(set_event()));
     mainGridLayout->addWidget(activeLabel, 0, 5);
-    mainGridLayout->addWidget(placeHolder, 1, 5);
+    mainGridLayout->addWidget(activeIndicator, 1, 5);
+
+    //Use void connection_timed_out() for signal activation
 
     setLayout(mainGridLayout);
 }
