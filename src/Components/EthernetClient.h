@@ -21,7 +21,7 @@ public:
     EthernetClient(uint port, const QString &address);
 	virtual ~EthernetClient();
 
-    bool write(const QString &message);
+    bool write(QString message);
     bool query(const QString &message, QString &buffer);
 
     bool is_connected() const {return connection_ok;}

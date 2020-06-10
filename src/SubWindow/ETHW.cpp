@@ -1,7 +1,7 @@
 #include "ETHW.h"
 
 #include "src/Components/Ethernet.h"
-#include "src/Components/Indicator.h"
+#include "src/Components/IndicatorBox.h"
 
 #include <QCheckBox>
 #include <QGridLayout>

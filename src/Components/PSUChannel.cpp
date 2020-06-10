@@ -103,7 +103,7 @@ void PSUChannel::meas_voltage() {
 void PSUChannel::meas_current() {
 #ifdef DUMMY_DATA
     current_meas = (current_set/2) * (double(QRandomGenerator::global()->bounded(qint16(80), qint16(120))) / double(100));
-    current_meas = current_meas < 0 ? 0 : current_meas;
+    current_meas = current_meas < 0 || !enable ? 0 : current_meas;
     return ;
 #endif
 
@@ -118,7 +118,7 @@ void PSUChannel::meas_current() {
 }
 
 void PSUChannel::update_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString(number + 1))) {
+    if(eth->write("INST OUT" + QString::number(number + 1))) {
         eth->write(("VOLT " + QString::number(voltage_set)));
         eth->write(("CURR " + QString::number(current_set/1000.0)));
         eth->write("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
@@ -126,7 +126,7 @@ void PSUChannel::update_rohdeschwarz() {
 }
 
 void PSUChannel::meas_voltage_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString(number + 1))) {
+    if(eth->write("INST OUT" + QString::number(number + 1))) {
         QString output;
 
         if(eth->query("MEAS:VOLT ?", output))
@@ -135,7 +135,7 @@ void PSUChannel::meas_voltage_rohdeschwarz() {
 }
 
 void PSUChannel::meas_current_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString(number + 1))) {
+    if(eth->write("INST OUT" + QString::number(number + 1))) {
         QString output;
         if(eth->query("MEAS:CURR ?", output))
             current_meas = output.toDouble();

@@ -1,14 +1,14 @@
-#ifndef INDICATOR_H
-#define INDICATOR_H
+#ifndef INDICATORBOX_H
+#define INDICATORBOX_H
 
 #include <QCheckBox>
 
-class Indicator : public QCheckBox {
+class IndicatorBox : public QCheckBox {
 Q_OBJECT
 
 public:
-    Indicator(QIcon onIcon, QIcon offIcon, QIcon eventIcon);
-    virtual ~Indicator();
+    IndicatorBox(QIcon onIcon, QIcon offIcon, QIcon eventIcon);
+    virtual ~IndicatorBox();
 
 public slots:
     void set_individual_icon(int);
@@ -23,4 +23,4 @@ private:
 
 };
 
-#endif // INDICATOR_H
+#endif

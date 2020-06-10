@@ -11,7 +11,7 @@ QMAKE_CXXFLAGS_RELEASE = -O2
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS DEBUG
-#DEFINES += DUMMY_DATA
+DEFINES += DUMMY_DATA
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -26,7 +26,8 @@ SOURCES += \
     src/Components/DIOM.cpp \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
-    src/Components/Indicator.cpp \
+    src/Components/IndicatorBox.cpp \
+    src/Components/IndicatorIcon.cpp \
     src/Components/Labjack.cpp \
     src/Components/LabjackChannel.cpp \
     src/Components/PSU.cpp \
@@ -69,7 +70,8 @@ HEADERS += \
     src/Components/DIOM.h \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
-    src/Components/Indicator.h \
+    src/Components/IndicatorBox.h \
+    src/Components/IndicatorIcon.h \
     src/Components/Labjack.h \
     src/Components/LabjackChannel.h \
     src/Components/PSU.h \

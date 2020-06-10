@@ -1,6 +1,6 @@
-#include "Indicator.h"
+#include "IndicatorBox.h"
 
-Indicator::Indicator(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
+IndicatorBox::IndicatorBox(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
     this->onIcon = new QIcon(onIcon);
     this->offIcon = new QIcon(offIcon);
     this->eventIcon = new QIcon(eventIcon);
@@ -13,15 +13,15 @@ Indicator::Indicator(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(set_individual_icon(int)));
 }
 
-Indicator::~Indicator() {
+IndicatorBox::~IndicatorBox() {
     delete onIcon;
     delete offIcon;
     delete eventIcon;
 }
 
-void Indicator::set_individual_icon(int ic) {
-    if(ic < 0)
-        setIcon(*eventIcon);
+void IndicatorBox::set_individual_icon(int ic) {
+//    if(ic < 0)
+//        setIcon(*eventIcon);
 
     if(ic == 0) {
         setIcon(*offIcon);
@@ -34,12 +34,12 @@ void Indicator::set_individual_icon(int ic) {
     }
 }
 
-void Indicator::setDisabled(bool disabled) {
+void IndicatorBox::setDisabled(bool disabled) {
     setCheckable(!disabled);
-    set_event_icon(true);
+    set_event_icon(disabled);
 }
 
-void Indicator::set_event_icon(bool status) {
+void IndicatorBox::set_event_icon(bool status) {
     if(status == true)
         setIcon(*eventIcon);
 

@@ -44,9 +44,11 @@ bool EthernetClient::read(QString &buffer) {
     return true;
 }
 
-bool EthernetClient::write(const QString &message) {
+bool EthernetClient::write(QString message) {
     if(!connection_ok)
         return false;
+
+    message += "\r\n";
 
     return socket->write(message.toLocal8Bit()) == message.size();
 }
