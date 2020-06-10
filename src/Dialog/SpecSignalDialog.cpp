@@ -18,14 +18,12 @@ void SpecSignalDialog::create_dialog() {
     QHBoxLayout * hlayout = new QHBoxLayout;
 
     QPushButton *okButton = new QPushButton("Ok");
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accpect()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
     hlayout->addWidget(okButton);
 
     QPushButton *cancleButton = new QPushButton("Cancel");
     connect(cancleButton, SIGNAL(clicked()), this, SLOT(reject()));
     hlayout->addWidget(cancleButton);
-
-    connect(cancleButton, SIGNAL(clicked()), this, SLOT(close()));
 
     QVBoxLayout * vlayout = new QVBoxLayout(this);
     vlayout->addLayout(buttonLayout);
