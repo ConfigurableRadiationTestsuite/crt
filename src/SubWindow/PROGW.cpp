@@ -44,7 +44,7 @@ void PROGW::create_layout() {
     connect(runManager, SIGNAL(isInvalid_changed(bool)), earlyLogging, SLOT(setDisabled(bool)));
 
     /* Trigger */
-    QCheckBox *trigger = new QCheckBox("Trigger");
+    QCheckBox *trigger = new QCheckBox("Auto");
     connect(trigger, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_trigger(int)));
     connect(programmStarter, SIGNAL(announce_run(bool)), trigger, SLOT(setDisabled(bool)));
 

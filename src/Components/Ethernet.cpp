@@ -39,7 +39,6 @@ void Ethernet::init() {
     emit status_changed(Waiting);
 
     timer = new QElapsedTimer;
-    timer->start();
 
     connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(set_data_folder()));
 
@@ -48,7 +47,7 @@ void Ethernet::init() {
 }
 
 void Ethernet::update() {
-    if(timer->elapsed() > timeout) {
+    if(timer->isValid() && timer->elapsed() > timeout) {
         emit connection_timed_out();
         emit status_changed(Disconnected);
         timer->restart();
@@ -71,11 +70,13 @@ void Ethernet::start_logging() {
 
     runManager->set_run_mode(StartLog, elementName);
     logging = true;
+    timer->start();
     emit is_logging(true);
 }
 
 void Ethernet::stop_logging() {
     logging = false;
+    timer->invalidate();
     emit is_logging(false);
     emit status_changed(Waiting);
 
