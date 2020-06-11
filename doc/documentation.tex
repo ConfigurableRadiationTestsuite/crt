@@ -84,8 +84,10 @@ The test-suite supports different devices (e.g. power supplies, ethernet clients
 	\begin{itemize}
 \item Power-supply
 \item Labjack
-\item RF (Reception client for the Analog Devices IIO-daemon)
-\item DIO (Digital I/O to switch relays, \textit{to be implemented})
+\item RF (Reception client for the Analog Devices IIO-daemon)\footnote{Deactivated}
+\item DIO (Digital I/O to switch relays)\footnote{Not implemented yet}
+\item PROG (Starts and external program including arguments; and records the output)
+\item ETH (Ethernet data reception)
 	\end{itemize}		
 	
 	\subsection{Testrun}	
@@ -231,7 +233,11 @@ EndSection
 		\end{table}	
 
 	\newpage
-	\subsection{RF Signals}
+	\subsection{RF Signals - Deactivated}
+	\textbf{Due to technical issues, this option is deactivated at the moment!}
+
+	\bigbreak
+	
 	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. An evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
 		
 		\begin{figure}[H]
@@ -277,7 +283,7 @@ EndSection
 		\centering
 		\begin{tabular}{c|cc|cc|cc|cc}
 		\toprule
-		Channel $n$	& \multicolumn{8}{c}{8 Byte}\\ \midrule
+		2 Channel	& \multicolumn{8}{c}{8 Byte}\\ \midrule
 		IQ-Data		& \multicolumn{4}{c|}{4 Byte} & \multicolumn{4}{c}{4 Byte} \\ \hline 
 		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c|}{2 Byte} & \multicolumn{4}{c}{} \\ 
 		Q	& \multicolumn{4}{c|}{} & \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{2 Byte} \\  \hline
@@ -288,8 +294,11 @@ EndSection
 		\end{table}
 		
 	\newpage
+	
 	\subsection{Programm}
-	To communicate with the DUT in an individual way or to initialize it, a specified program can be started. This is done in the program tab (see figure \ref{f:prog_example}). Here, the path to a program one want to use can be put in. It can then be either manual started early (and logged) or via the trigger mechanism, together with the rest of the test. So far, only console outputs are supported.
+	To communicate with the DUT in an individual way (or to initialize it), a specified program can be started. This is done in the program tab (see figure \ref{f:prog_example}). Here, the path to a program - one wants to use - can be put in. It can then be either started early manually (and logged) or via the trigger mechanism, together with the rest of the test. So far, only console applications are supported.
+	
+	Additional to the program, arguments can be added. To pass the current run directory the variable \textit{\$directory} can the be used.
 	
 	\begin{figure}[H]
 	\centering
@@ -309,11 +318,7 @@ EndSection
 		\end{figure}
 			
 		\subsubsection{Config Creation}
-		The RF is denoted in the configuration file in the \enquote{RF} section. First the name is defined, then the IPv4 address of the device and after that the number of channels. The individual channels are written with a prefix $c$, a number $X$ and their features as suffix:
-	
-	\begin{itemize}
-	\item $m$: margin
-	\end{itemize}
+		The program is denoted in the configuration file in the \enquote{PROG} section. First the name is defined, then the path to the program.
 	
 \begin{lstlisting}[caption=PROG Config]
 Section PROG
@@ -325,8 +330,40 @@ EndSection
 	
 	\newpage
 	\subsection{Ethernet}
-	Not implemented yet
-
+	The ethernet port can specify a port to be open for data reception. The name, port number and information on the reception are displayed. In figure \eqref{f:eth_example} an example is given. Once the test starts, the port is opened and data can be received. A timeout can be set to trigger other devices (added via \enquote{Add Signal}). On the right an indicator shows if the connection is (in-)active and lights up if data has been recently received. 
+	
+	\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./8_ETH_example.png}
+\caption{An example with a Rohde\&Schwarz 3-channel power supply}
+\label{f:eth_example}
+	\end{figure}	 
+	
+	\subsubsection{Manual Creation}	
+	\label{c:eth_manual_creation}
+	
+	The window for manual creation is presented in figure \eqref{f:eth_menu}. In the first row an individual (meaningful) name can be chosen. This is also the folder where the received files are stored later! In the second row the port number is given. At last an arbitrary timeout (in milliseconds) can be specified.
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./8_ETH_menu.png}
+	\caption{Creation menu for a power-supply}
+	\label{f:eth_menu}
+	\end{figure}
+	
+	\subsubsection{Config Creation}
+	
+	The ethernet is denoted in the configuration file in the \enquote{ETH} section. All three lines correspond to the manual creation in chapter \ref{c:eth_manual_creation}. 
+	
+\begin{lstlisting}[caption=PSU Config]
+Section PSU
+	name=PSU Links
+	port=9010
+	timeout=9999
+	signal=
+EndSection
+\end{lstlisting}
+	
 \newpage
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
