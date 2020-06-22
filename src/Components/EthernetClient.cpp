@@ -6,7 +6,7 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
     socket = new QTcpSocket(this);
 
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
+    //connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
     socket->connectToHost(address, port);

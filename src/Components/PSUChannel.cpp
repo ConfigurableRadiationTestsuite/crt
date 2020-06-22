@@ -138,7 +138,7 @@ void PSUChannel::meas_current_rohdeschwarz() {
     if(eth->write("INST OUT" + QString::number(number + 1))) {
         QString output;
         if(eth->query("MEAS:CURR ?", output))
-            current_meas = output.toDouble();
+            current_meas = output.toDouble()*1000;
     }
 }
 

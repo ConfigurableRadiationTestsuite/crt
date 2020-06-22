@@ -41,7 +41,7 @@ void LBJTab::create_subwindow_from_dialog() {
 void LBJTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Name", "Rotes T7");
     addDialog->add_entry("Connection", "USB");
-    addDialog->add_entry("Identifier", "40067898546");
+    addDialog->add_entry("Identifier", "470020243");
 
     addDialog->add_entry("Channel Name", "AIN62/68, AIN63");
     addDialog->add_entry("Channel Positive", "62, 63");
