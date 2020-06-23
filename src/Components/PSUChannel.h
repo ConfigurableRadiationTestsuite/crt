@@ -4,7 +4,8 @@
 /*
  * Author: Mattis Jaksch
  *
- * Single channel of a multi-channel PSU
+ * Single channel of a multi-channel PSU;
+ * Current is always milliampere
  *
  */
 
@@ -52,15 +53,12 @@ private:
     uint number;
     EthernetClient *eth;
     enum vendor vd;
-    bool enable;
-    bool trigger;
+    bool enable = false;
+    bool trigger = false;
 
-    double voltage_meas;
-    double current_meas;
-    double voltage_set;
-    double current_set;
-    double voltage_max;
-    double current_max;
+    double voltage_meas = 0, current_meas = 0;
+    double voltage_set, current_set;
+    double voltage_max, current_max;
 
     void overcurrent_protection();
 

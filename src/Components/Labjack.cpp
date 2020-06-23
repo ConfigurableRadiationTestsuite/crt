@@ -2,7 +2,6 @@
 
 #include "LabjackChannel.h"
 #include "LJM_Utilities.h"
-#include "src/Manager/RunManager.h"
 
 #include <LabJackM.h>
 #include <QElapsedTimer>
@@ -68,10 +67,11 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
 Labjack::~Labjack() {
     LJM_Close(handle);
 
-    delete sampleTimer;
-
     for(QVector<LabjackChannel*>::iterator it = channel_list.begin(); it != channel_list.end(); it++)
         delete (*it);
+
+    delete sampleTimer;
+    delete testTimer;
 }
 
 void Labjack::set_config() {

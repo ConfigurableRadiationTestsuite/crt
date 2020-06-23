@@ -26,8 +26,6 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
 Component::~Component() {
     runManager->set_run_mode(RemoveComponent, elementName);
     runManager->deregister_component(this);
-
-    delete logTimer;
 }
 
 void Component::start_logging() {
@@ -46,7 +44,7 @@ void Component::start_logging() {
 }
 
 void Component::stop_logging() {
-    if(!logging || early_logging)
+    if(!logging || permanent_logging)
         return ;
 
     logging = false;
@@ -57,20 +55,20 @@ void Component::stop_logging() {
     runManager->set_run_mode(StopLog, elementName);
 }
 
-void Component::set_early_logging(int early_logging) {
+void Component::set_permanent_logging(int early_logging) {
     if(early_logging > 0) {
         start_logging();
-        this->early_logging = true;
+        this->permanent_logging = true;
     }
     else {
         stop_logging();
-        this->early_logging = false;
+        this->permanent_logging = false;
     }
 }
 
 void Component::configure_timer(uint time) {
     if(logTimer == nullptr) {
-        logTimer = new QTimer;
+        logTimer = new QTimer(this);
         connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
     }
 

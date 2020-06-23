@@ -1,10 +1,9 @@
 #include "PSU.h"
 
 #include "EthernetClient.h"
-#include "src/Manager/RunManager.h"
 
 PSU::PSU(RunManager * runManager, const QString &config)
-    : Component(runManager, config, 1000) {
+    : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name", "vendor", "master", "address", "channel"}));
@@ -32,7 +31,7 @@ PSU::PSU(RunManager * runManager, const QString &config)
 }
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
-    : Component(m_element_name, runManager, 1000), address(address) {
+    : Component(m_element_name, runManager), address(address) {
 
     this->elementName = m_element_name;
     this->vd = check_vendor(vendor);

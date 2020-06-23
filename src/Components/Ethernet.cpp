@@ -25,7 +25,9 @@ Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, uint p
     init();
 }
 
-Ethernet::~Ethernet() {}
+Ethernet::~Ethernet() {
+    delete timer;
+}
 
 void Ethernet::set_config() {
     config_entry_list.clear();
@@ -80,14 +82,12 @@ void Ethernet::stop_logging() {
     emit is_logging(false);
     emit status_changed(Waiting);
 
-    runManager->deregister_component(this);
     runManager->set_run_mode(StopLog, elementName);
+    runManager->deregister_component(this);
 
     //Close socket and server
     socket->close();
     server->close();
-    delete socket;
-    delete server;
 }
 
 void Ethernet::accept_connection() {

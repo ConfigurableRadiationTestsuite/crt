@@ -1,7 +1,5 @@
 #include "ProgrammStarter.h"
 
-#include "src/Manager/RunManager.h"
-
 #include <QFileDialog>
 #include <QProcess>
 
@@ -28,10 +26,7 @@ ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_eleme
     init();
 }
 
-ProgrammStarter::~ProgrammStarter() {
-    qDebug("Destroy ProgrammStarter");
-    delete process;
-}
+ProgrammStarter::~ProgrammStarter() {}
 
 void ProgrammStarter::set_config() {
     config_entry_list.clear();
@@ -42,7 +37,7 @@ void ProgrammStarter::set_config() {
 }
 
 void ProgrammStarter::init() {
-    process = new QProcess;
+    process = new QProcess(this);
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
 }
 
@@ -101,7 +96,7 @@ void ProgrammStarter::receive_data() {
             text.remove(text.size()-1, 1);
     }
 
-    if(logging)
+    if(logging || permanent_logging)
         runManager->append_value_to_file(this, text);
 
     emit data_available(text);

@@ -16,11 +16,6 @@ PSUChannel::PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double
     this->current_max = current_max;
     this->voltage_set = voltage_set > voltage_max ? voltage_max : voltage_set;
     this->current_set = current_set > current_max ? current_max : current_set;
-    this->voltage_meas = 0;
-    this->current_meas = 0;
-
-    enable = false;
-    trigger = false;
 }
 
 PSUChannel::~PSUChannel() {}

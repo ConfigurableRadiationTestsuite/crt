@@ -28,7 +28,7 @@ public slots:
     void start_logging();
     void stop_logging();
 
-    void set_early_logging(int);
+    void set_permanent_logging(int);
 
 signals:
     void is_logging(bool);
@@ -41,7 +41,7 @@ protected:
 
     QTimer *logTimer = nullptr;
     bool logging = false;
-    bool early_logging = false;
+    bool permanent_logging = false;
 
     virtual QStringList generate_header() = 0;
 

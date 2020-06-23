@@ -4,9 +4,10 @@
 /*
  * Author: Mattis Jaksch
  *
+ * A path to an exection program can be specified;
+ * The output is logged into a file
+ *
  */
-
-class RunManager;
 
 class QProcess;
 
