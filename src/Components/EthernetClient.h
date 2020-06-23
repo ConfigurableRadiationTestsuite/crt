@@ -11,6 +11,7 @@
  */
 
 class QTcpSocket;
+class QTimer;
 
 #include <QObject>
 
@@ -37,8 +38,11 @@ private:
     uint port;
     QString address;
 
+    QTimer *reconnection_timer;
     bool connection_ok = false;
     QTcpSocket *socket;
+
+    static const int timeout = 10000;
 
     bool read(QString &buffer);
 };

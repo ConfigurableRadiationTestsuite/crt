@@ -1,15 +1,19 @@
 #include "EthernetClient.h"
 
 #include <QTcpSocket>
+#include <QTimer>
 
 EthernetClient::EthernetClient(uint port, const QString &address) : port(port), address(address) {
     socket = new QTcpSocket(this);
+    reconnection_timer = new QTimer(this);
 
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     //connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(reconnection_timer, SIGNAL(timeout()), this, SLOT(disconnected()));
 
     socket->connectToHost(address, port);
+    reconnection_timer->start(timeout);
 }
 
 EthernetClient::~EthernetClient() {
@@ -41,6 +45,9 @@ bool EthernetClient::read(QString &buffer) {
 
     buffer = socket->readAll();
 
+    if(buffer.size() > 0)
+        reconnection_timer->start(timeout);
+
     return true;
 }
 
@@ -49,8 +56,12 @@ bool EthernetClient::write(QString message) {
         return false;
 
     message += "\r\n";
+    int message_size = socket->write(message.toLocal8Bit());
 
-    return socket->write(message.toLocal8Bit()) == message.size();
+    if(message_size > 0 )
+        reconnection_timer->start(timeout);
+
+    return  message_size == message.size();
 }
 
 bool EthernetClient::query(const QString &message, QString &buffer) {
