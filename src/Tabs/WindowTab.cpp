@@ -36,7 +36,7 @@ void WindowTab::create_layout() {
         connect(window, SIGNAL(destroyed(SubWindow *)), this, SLOT(erase_window(SubWindow *)));
 
         /* Put everything together */
-        QHBoxLayout * windowHLayout = new QHBoxLayout(window);
+        QHBoxLayout * windowHLayout = new QHBoxLayout;
         windowHLayout->addWidget(window);
         windowHLayout->addWidget(deleteButton);
 
