@@ -37,9 +37,10 @@ protected:
 
     virtual void create_layout() = 0;
 
-    virtual int get_minimum(const QVector<double> &data, int minimum);
     virtual int get_maximum(const QVector<double> &data, int maximum);
+    virtual int get_minimum(const QVector<double> &data, int minimum);
     int maximum_function(int local_maximum, int absolute_maximum);
+    int minimum_function(int local_minimum, int absolute_minimum);
 
     void shift_into_vector(QVector<double> &vector, double value);
 

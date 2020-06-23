@@ -58,11 +58,27 @@ int Plot::maximum_function(int local_maximum, int absolut_maximum) {
     return absolut_maximum;
 }
 
+int Plot::minimum_function(int local_minimum, int absolute_minimum) {
+    int new_minimum = absolute_minimum;
+
+    while(0 < new_minimum) {
+        if(0.9*new_minimum < local_minimum)
+            return new_minimum;
+        new_minimum /= 2;
+    }
+
+    return absolute_minimum;
+}
+
 int Plot::get_maximum(const QVector<double> &data, int maximum) {
     return maximum_function(int(*std::max_element(data.begin(), data.end())), maximum);
 }
 
 int Plot::get_minimum(const QVector<double> &data, int minimum) {
     int local_minimum = int(*std::min_element(data.begin(), data.end()));
-    return maximum_function(int(qFabs(local_minimum)), minimum) * (local_minimum < 0 ? -1 : 1);
+
+    if(local_minimum > 0)
+        return minimum_function(local_minimum, minimum);
+
+    return maximum_function(int(qFabs(local_minimum)), minimum) * (-1);
 }
