@@ -55,8 +55,8 @@ void Component::stop_logging() {
     runManager->set_run_mode(StopLog, elementName);
 }
 
-void Component::set_permanent_logging(int early_logging) {
-    if(early_logging > 0) {
+void Component::set_permanent_logging(int permanent_logging) {
+    if(permanent_logging > 0) {
         start_logging();
         this->permanent_logging = true;
     }

@@ -65,13 +65,13 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(new QLabel("Maximum"));
     topLineLayout->addWidget(datarateBox);
 
-    /* EarlyLog button */
-    QCheckBox *earlyLogBox = new QCheckBox;
-    earlyLogBox->setDisabled(!runManager->is_valid());
-    connect(earlyLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_early_logging(int)));
-    connect(eventManager, SIGNAL(logging_disabled(bool)), earlyLogBox, SLOT(setDisabled(bool)));
-    topLineLayout->addWidget(new QLabel("Early Logging"));
-    topLineLayout->addWidget(earlyLogBox);
+    /* Permanent Logging */
+    QCheckBox *permanentLogBox = new QCheckBox;
+    permanentLogBox->setDisabled(!runManager->is_valid());
+    connect(permanentLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_permanent_logging(int)));
+    connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogBox, SLOT(setDisabled(bool)));
+    topLineLayout->addWidget(new QLabel("Permanent Logging"));
+    topLineLayout->addWidget(permanentLogBox);
 
     /* Signal button */
     QPushButton *signalButton = new QPushButton;

@@ -36,12 +36,12 @@ void PROGW::create_layout() {
 
     QHBoxLayout *optionLayout = new QHBoxLayout;
 
-    /* Early Logging */
-    QCheckBox * earlyLogging = new QCheckBox("Early Logging");
-    earlyLogging->setDisabled(!runManager->is_valid());
-    optionLayout->addWidget(earlyLogging);
-    connect(earlyLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_early_logging(int)));
-    connect(runManager, SIGNAL(isInvalid_changed(bool)), earlyLogging, SLOT(setDisabled(bool)));
+    /* Permanent Logging */
+    QCheckBox * permanentLogging = new QCheckBox("Permanent Logging");
+    permanentLogging->setDisabled(!runManager->is_valid());
+    optionLayout->addWidget(permanentLogging);
+    connect(permanentLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_permanent_logging(int)));
+    connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogging, SLOT(setDisabled(bool)));
 
     /* Trigger */
     QCheckBox *trigger = new QCheckBox("Auto");
