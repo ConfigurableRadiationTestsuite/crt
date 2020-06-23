@@ -62,7 +62,7 @@ int Plot::minimum_function(int local_minimum, int absolute_minimum) {
     int new_minimum = absolute_minimum;
 
     while(0 < new_minimum) {
-        if(0.9*new_minimum < local_minimum)
+        if(1.1*new_minimum < local_minimum)
             return new_minimum;
         new_minimum /= 2;
     }
