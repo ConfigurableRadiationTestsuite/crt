@@ -26,12 +26,12 @@ public:
     bool get_enable() const {return enable;}
     bool get_trigger() const {return trigger;}
 
-    double get_voltage_meas() {return voltage_meas;}
-    double get_current_meas() {return current_meas;}
-    double get_voltage_set() {return voltage_set;}
-    double get_current_set() {return current_set;}
-    double get_voltage_max() {return voltage_max;}
-    double get_current_max() {return current_max;}
+    double get_voltage_meas() const {return voltage_meas;}
+    double get_current_meas() const {return current_meas;}
+    double get_voltage_set() const {return voltage_set;}
+    double get_current_set() const {return current_set;}
+    double get_voltage_max() const {return voltage_max;}
+    double get_current_max() const {return current_max;}
 
 public slots:
     void set_enable(int enable);

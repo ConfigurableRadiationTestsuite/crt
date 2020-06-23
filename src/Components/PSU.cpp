@@ -76,23 +76,24 @@ void PSU::set_config() {
 
 void PSU::update() {
     //Check if the network connection is ok
-    if(!check_network_connection())
-        return ;
+    if(check_network_connection()) {
 
-    /* Gather data */
-    QVector<double> values;
-    PSUChannel * channel;
-    foreach (channel, channel_list) {
-        channel->meas_voltage();
-        channel->meas_current();
-        values.push_back(channel->get_voltage_meas());
-        values.push_back(channel->get_current_meas());
+        /* Gather data */
+        QVector<double> values;
+        values.reserve(channel_list.size()*2);
+        PSUChannel * channel;
+        foreach (channel, channel_list) {
+            channel->meas_voltage();
+            channel->meas_current();
+            values.push_back(channel->get_voltage_meas());
+            values.push_back(channel->get_current_meas());
+        }
+
+        if(logging)
+            runManager->append_values_to_file(this, values);
     }
 
     emit data_available();
-
-    if(logging)
-        runManager->append_values_to_file(this, values);
 }
 
 QStringList PSU::generate_header() {
