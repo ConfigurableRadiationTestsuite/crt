@@ -15,6 +15,8 @@ class QElapsedTimer;
 
 #include "Component.h"
 
+#include <LabJackM.h>
+
 class Labjack : public Component {
 Q_OBJECT
 
@@ -25,9 +27,9 @@ public:
 
     void set_config() override;
 
-    int get_main_resolution_address();
-    int get_main_range_address();
-    int get_main_settling_address();
+    int get_main_resolution_address() const {return 43903;}
+    int get_main_range_address() const {return 43900;}
+    int get_main_settling_address() const {return 43904;}
 
     QVector<LabjackChannel*> get_channel_list() const {return channel_list;}
 
@@ -73,8 +75,31 @@ private:
     void create_dummy_data(int size, double * values);
 };
 
-inline int Labjack::get_main_resolution_address() {return 43903;}
-inline int Labjack::get_main_range_address() {return 43900;}
-inline int Labjack::get_main_settling_address() {return 43904;}
+inline int Labjack::write(int address, const int TYPE, double value) {
+    return is_connected ? LJM_eWriteAddress(handle, address, TYPE, value) : 0;
+}
+
+inline int Labjack::read(int address, const int TYPE, double &value) {
+    return is_connected ? LJM_eReadAddress(handle, address, TYPE, &value) : 0;
+}
+
+inline void Labjack::set_maximum_samplerate(int is_maximum) {
+    this->is_maximum = is_maximum > 0 ? true : false;
+}
+
+inline void Labjack::set_main_settling(const QString &text) {
+    int index = text.toInt();
+#ifdef DEBUG
+    assert(0 < index && index <= 50000);
+#endif
+    write(get_main_settling_address(), LJM_FLOAT32, index);
+}
+
+inline void Labjack::set_main_resolution(int index) {
+#ifdef DEBUG
+    assert(0 < index && index <= 10);
+#endif
+    write(get_main_resolution_address(), LJM_UINT16, index);
+}
 
 #endif // LABJACK_H

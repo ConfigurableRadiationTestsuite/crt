@@ -3,7 +3,6 @@
 #include "LabjackChannel.h"
 #include "LJM_Utilities.h"
 
-#include <LabJackM.h>
 #include <QElapsedTimer>
 
 #ifdef DUMMY_DATA
@@ -148,21 +147,6 @@ void Labjack::update() {
         runManager->append_values_to_file(this, value_list);
 }
 
-void Labjack::set_maximum_samplerate(int is_maximum) {
-    this->is_maximum = is_maximum > 0 ? true : false;
-}
-
-void Labjack::set_main_settling(const QString &text) {
-    int index = text.toInt();
-    assert(0 < index && index <= 50000);
-    write(get_main_settling_address(), LJM_FLOAT32, index);
-}
-
-void Labjack::set_main_resolution(int index) {
-    assert(0 < index && index <= 10);
-    write(get_main_resolution_address(), LJM_UINT16, index);
-}
-
 void Labjack::set_samplerate(const QString &text) {
     samplerate = text.toInt() > maxSamplerate ? maxSamplerate : text.toInt();
     samplerate = samplerate > 0 ? samplerate : 1;
@@ -207,20 +191,6 @@ int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector
     delete[] aValues;
 
     return err;
-}
-
-int Labjack::write(int address, const int TYPE, double value) {
-    if(is_connected == false)
-        return 0;
-
-    return LJM_eWriteAddress(handle, address, TYPE, value);
-}
-
-int Labjack::read(int address, const int TYPE, double &value) {
-    if(is_connected == false)
-        return 0;
-
-    return LJM_eReadAddress(handle, address, TYPE, &value);
 }
 
 QStringList Labjack::generate_header() {

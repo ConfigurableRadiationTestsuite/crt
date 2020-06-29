@@ -10,6 +10,7 @@
 
 class QElapsedTimer;
 
+#include <LabJackM.h>
 #include <QWidget>
 
 class LabjackChannel : public QWidget {
@@ -74,5 +75,57 @@ private:
     int write(int address, const int TYPE, double value);
     int read(int address, const int TYPE, double &value);
 };
+
+inline int LabjackChannel::write(int address, const int TYPE, double value) {
+    if(*handle <= 0)
+        return -1;
+
+    return LJM_eWriteAddress(*handle, address, TYPE, value);
+}
+
+inline int LabjackChannel::read(int address, const int TYPE, double &value) {
+    if(*handle <= 0)
+        return -1;
+
+    return LJM_eReadAddress(*handle, address, TYPE, &value);
+}
+
+inline void LabjackChannel::update_value(double value) {
+    this->value = value;
+    check_boundary();
+    emit value_changed(QString::number(get_value()));
+}
+
+inline void LabjackChannel::refresh_value() {
+    emit value_refreshed(QString::number(get_value()));
+}
+
+inline void LabjackChannel::set_differential() {
+    write(get_pchan_negative_address(), LJM_UINT16, n_chan);
+}
+
+inline void LabjackChannel::set_boundary(const QString &text) {
+    boundary = text.toDouble();
+}
+
+inline void LabjackChannel::set_external_gain(const QString &text) {
+    external_gain = text.toInt();
+}
+
+inline void LabjackChannel::set_resolution(uint index) {
+#ifdef DEBUG
+    assert(0 < index && index <= 10);
+#endif
+    write(get_pchan_resolution_address(), LJM_UINT16, index);
+    write(get_nchan_resolution_address(), LJM_UINT16, index);
+}
+
+inline void LabjackChannel::set_settling(uint index) {
+#ifdef DEBUG
+    assert(0 < index && index <= 50000);
+#endif
+    write(get_pchan_settling_address(), LJM_UINT16, index);
+    write(get_nchan_settling_address(), LJM_UINT16, index);
+}
 
 #endif // LABJACKCHANNEL_H
