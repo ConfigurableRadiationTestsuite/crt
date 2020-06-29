@@ -31,7 +31,7 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
         double boundary = get_value("c" + QString::number(i) + "b").toDouble();
         int gain = get_value("c" + QString::number(i) + "g").toInt();
 
-        channel_list.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
+        channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
     }
 
     init();
@@ -57,7 +57,7 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
     open_labjack();
 
     for(int i = 0; i < m_name.size(); i++)
-        channel_list.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
+        channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
 
     init();
     update();
@@ -66,27 +66,31 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
 Labjack::~Labjack() {
     LJM_Close(handle);
 
-    for(QVector<LabjackChannel*>::iterator it = channel_list.begin(); it != channel_list.end(); it++)
+    for(QVector<LabjackChannel*>::iterator it = channel_vec.begin(); it != channel_vec.end(); it++)
         delete (*it);
 
     delete sampleTimer;
     delete testTimer;
+
+    delete[] aAddresses;
+    delete[] aTypes;
+    delete[] aValues;
 }
 
 void Labjack::set_config() {
     config_entry_list.clear();
 
     set_value("name", elementName);
-    set_value("channel", QString::number(channel_list.size()));
+    set_value("channel", QString::number(channel_vec.size()));
     set_value("con", QString::number(connectionType));
     set_value("id", identifier);
 
-    for(int i = 0; i < channel_list.size(); i++) {
-        set_value("c" + QString::number(i) + "n", channel_list[i]->get_name());
-        set_value("c" + QString::number(i) + "pc", QString::number(channel_list[i]->get_pchan()));
-        set_value("c" + QString::number(i) + "nc", QString::number(channel_list[i]->get_nchan()));
-        set_value("c" + QString::number(i) + "b", QString::number(channel_list[i]->get_boundary()));
-        set_value("c" + QString::number(i) + "g", QString::number(channel_list[i]->get_gain()));
+    for(int i = 0; i < channel_vec.size(); i++) {
+        set_value("c" + QString::number(i) + "n", channel_vec[i]->get_name());
+        set_value("c" + QString::number(i) + "pc", QString::number(channel_vec[i]->get_pchan()));
+        set_value("c" + QString::number(i) + "nc", QString::number(channel_vec[i]->get_nchan()));
+        set_value("c" + QString::number(i) + "b", QString::number(channel_vec[i]->get_boundary()));
+        set_value("c" + QString::number(i) + "g", QString::number(channel_vec[i]->get_gain()));
     }
 }
 
@@ -102,15 +106,28 @@ void Labjack::open_labjack() {
 void Labjack::init() {
     is_maximum = false;
 
+    /* Setup channel */
     LabjackChannel* channel;
-    foreach (channel, channel_list) {
-        address_list.push_back(channel->get_pchan_address());
-        type_list.push_back(LJM_FLOAT32);
-        value_list.push_back(0.0);
+    foreach (channel, channel_vec) {
+        address_vec.push_back(channel->get_pchan_address());
+        type_vec.push_back(LJM_FLOAT32);
+        value_vec.push_back(0.0);
     }
 
+    /* Setup labjack readout addresses */
+    aAddresses = new int[address_vec.size()];
+    aTypes = new int[address_vec.size()];
+    aValues = new double[address_vec.size()];
+
+    for(int i = 0; i < address_vec.size(); i++) {
+        aAddresses[i] = address_vec[i];
+        aTypes[i] = type_vec[i];
+        aValues[i] = 0.0;
+    }
+
+    /* Setup sample timer */
     sampleTimer = new QElapsedTimer;
-    testTimer = new QElapsedTimer();
+    testTimer = new QElapsedTimer;
     testTimer->start();
 }
 
@@ -118,12 +135,12 @@ void Labjack::update() {
     sampleTimer->restart();
 
     /* Gather data */
-    read(address_list, type_list, value_list);
+    read(value_vec);
 
     LabjackChannel* channel;
-    QVector<double>::iterator it = value_list.begin();
-    foreach (channel, channel_list) {
-        channel->update_value(it != value_list.end() ? *it++ : 0);
+    QVector<double>::iterator it = value_vec.begin();
+    foreach (channel, channel_vec) {
+        channel->update_value(it != value_vec.end() ? *it++ : 0);
         channel->set_range();
     }
 
@@ -144,7 +161,7 @@ void Labjack::update() {
 
     //Log data
     if(logging)
-        runManager->append_values_to_file(this, value_list);
+        runManager->append_values_to_file(this, value_vec);
 }
 
 void Labjack::set_samplerate(const QString &text) {
@@ -155,40 +172,25 @@ void Labjack::set_samplerate(const QString &text) {
     emit samplerate_changed(QString::number(samplerate));
 }
 
-int Labjack::read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value) {
+int Labjack::read(QVector<double> &value) {
     if(is_connected == false)
         return 0;
 
-    value.reserve(address.size());
-
     int err = 0;
-    int errorAddress = INITIAL_ERR_ADDRESS;
-
-    int *aAddresses = new int[address.size()];
-    int *aTypes = new int[address.size()];
-    double *aValues = new double[address.size()];
-
-    for(int i = 0; i < address.size(); i++) {
-        aAddresses[i] = address[i];
-        aTypes[i] = TYPE[i];
-        aValues[i] = 0.0;
-    }
 
 #ifndef DUMMY_DATA
+    int errorAddress = INITIAL_ERR_ADDRESS;
+
     err = LJM_eReadAddresses(handle, address.size(), aAddresses, aTypes, aValues, &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eReadAddresses");
 #endif
 
 #ifdef DUMMY_DATA
-    create_dummy_data(address.size(), aValues);
+    create_dummy_data(address_vec.size(), aValues);
 #endif
 
-    for(int i = 0; i < address.size(); i++)
+    for(int i = 0; i < address_vec.size(); i++)
         value[i] = aValues[i];
-
-    delete[] aAddresses;
-    delete[] aTypes;
-    delete[] aValues;
 
     return err;
 }
@@ -197,7 +199,7 @@ QStringList Labjack::generate_header() {
     QStringList header;
 
     LabjackChannel * channel;
-    foreach (channel, channel_list)
+    foreach (channel, channel_vec)
         header.push_back(channel->get_name());
 
     return header;
@@ -226,6 +228,6 @@ void Labjack::get_channel_names(const QString &input, QVector<QString> &output) 
 #ifdef DUMMY_DATA
 void Labjack::create_dummy_data(int size, double *values) {
     for(int i = 0; i < size; i++)
-        values[i] = channel_list[i]->get_value() + double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
+        values[i] = channel_vec[i]->get_value() + double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
 }
 #endif

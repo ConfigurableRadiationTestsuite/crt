@@ -105,7 +105,7 @@ void LBJW::create_layout() {
     channelLayout->addWidget(new QLabel("Graph"), 0, 4);
 
     LabjackChannel *channel; int cnt = 1;
-    foreach (channel, lbj->get_channel_list()) {
+    foreach (channel, lbj->get_channel_vec()) {
         //Name
         QLabel *channelLabel = new QLabel(channel->get_name());
 

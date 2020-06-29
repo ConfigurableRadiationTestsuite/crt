@@ -31,7 +31,7 @@ public:
     int get_main_range_address() const {return 43900;}
     int get_main_settling_address() const {return 43904;}
 
-    QVector<LabjackChannel*> get_channel_list() const {return channel_list;}
+    QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
 
 public slots:
     void update() override;
@@ -50,10 +50,14 @@ private:
     int connectionType;
     QString identifier;
 
-    QVector<LabjackChannel*> channel_list;
-    QVector<int> address_list;
-    QVector<int> type_list;
-    QVector<double> value_list;
+    QVector<LabjackChannel*> channel_vec;
+    QVector<int> address_vec;
+    QVector<int> type_vec;
+    QVector<double> value_vec;
+
+    int *aAddresses;
+    int *aTypes;
+    double *aValues;
 
     QElapsedTimer *sampleTimer;
     QElapsedTimer *testTimer;
@@ -65,7 +69,8 @@ private:
 
     int write(int address, const int TYPE, double value);
     int read(int address, const int TYPE, double &value);
-    int read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value);
+    int read(QVector<double> &value);
+//    int read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value);
 
     void get_channel_addresses(const QString &input, QVector<int> &output);
     void get_channel_names(const QString &input, QVector<QString> &output);
