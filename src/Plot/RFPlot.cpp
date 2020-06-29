@@ -32,12 +32,12 @@ void RFPlot::update_plot() {
 void RFPlot::update_layout() {
     modify_time_axis();
 
-    int max_i = get_maximum(i_axis, int(qPow(2, 16)));
-    int max_q = get_maximum(q_axis, int(qPow(2, 16)));
+    int max_i = get_maximum(i_axis);
+    int max_q = get_maximum(q_axis);
     int maximum = max_i > max_q ? max_i : max_q;
 
-    int min_i = get_minimum(i_axis, int(qPow(2, 16)));
-    int min_q = get_minimum(q_axis, int(qPow(2, 16)));
+    int min_i = get_minimum(i_axis);
+    int min_q = get_minimum(q_axis);
     int minimum = min_i > min_q ? min_i : min_q;
 
     plot->yAxis->setRange(minimum, maximum);

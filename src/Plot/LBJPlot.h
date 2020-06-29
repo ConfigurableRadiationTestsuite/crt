@@ -44,6 +44,7 @@ private:
 
     int get_total_maximum();
     int get_total_minimum();
+    int get_total_limit(bool maximum);
 };
 
 /* Connection between channel and its graphical representation */
@@ -75,5 +76,26 @@ private:
     QVector<double> axis;
     bool plot_enabled;
 };
+
+inline int LBJPlot::get_total_limit(bool maximum) {
+    int minmax = 0;
+    for(QVector<PlotElement *>::iterator it = plotElement_list.begin(); it != plotElement_list.end(); ++it) {
+        if((*it)->is_plotted()) {
+            if(maximum)
+                minmax = get_maximum((*it)->get_axis()) > minmax ? get_maximum((*it)->get_axis()) : minmax;
+            else
+                minmax = get_minimum((*it)->get_axis()) < minmax ? get_minimum((*it)->get_axis()) : minmax;
+        }
+    }
+
+    return minmax;
+}
+
+inline void LBJPlot::set_plot_active(bool active) {
+    if(!plot_active)
+        recreate_time_axis();
+
+    plot_active = active;
+}
 
 #endif // PSUPLOT_H

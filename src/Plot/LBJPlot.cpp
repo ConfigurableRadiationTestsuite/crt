@@ -37,8 +37,8 @@ void LBJPlot::update_plot() {
     update_time_axis();
 
     /* Set y-axis */
-    int maximum = get_total_maximum();
-    int minimum = get_total_minimum();
+    int maximum = get_total_limit(true);
+    int minimum = get_total_limit(false);
 
     plot->yAxis->setRange(minimum, maximum);
     plot->yAxis->setTickStep((maximum-minimum)/4);
@@ -99,39 +99,4 @@ void LBJPlot::set_datarate(const QString &datarate) {
         recreate_axis(plotElement->get_axis());
 
     counter = 0;
-}
-
-int LBJPlot::get_total_maximum() {
-    int maximum = 0;
-
-    PlotElement *plotElement;
-    foreach (plotElement, plotElement_list) {
-        int new_maximum = get_maximum(plotElement->get_axis(), int(qPow(2, LBJ_ADC_BITS)));
-
-        if(new_maximum > maximum)
-            maximum = new_maximum;
-    }
-
-    return maximum;
-}
-
-int LBJPlot::get_total_minimum() {
-    int minimum = 0;
-
-    PlotElement *plotElement;
-    foreach (plotElement, plotElement_list) {
-        int new_minimum = get_minimum(plotElement->get_axis(), int(qPow(2, LBJ_ADC_BITS)));
-
-        if(new_minimum < minimum)
-            minimum = new_minimum;
-    }
-
-    return minimum;
-}
-
-void LBJPlot::set_plot_active(bool active) {
-    if(!plot_active)
-        recreate_time_axis();
-
-    plot_active = active;
 }

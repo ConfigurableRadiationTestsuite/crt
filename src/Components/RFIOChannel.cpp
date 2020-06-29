@@ -215,10 +215,6 @@ bool RFIOChannel::is_transition(int value) {
     return false;
 }
 
-void RFIOChannel::set_sample_position(long long position) {
-    sample_position = position;
-}
-
 void RFIOChannel::set_margin(int margin) {
     this->margin = qPow(2, margin);
     margin_changed = true;

@@ -120,4 +120,9 @@ inline int RFIOChannel::position(int position, const QVector<int> &vec) {
         return vec.size()-1;
     return position;
 }
+
+inline void RFIOChannel::set_sample_position(long long position) {
+    sample_position = position;
+}
+
 #endif // RFIOCHANNEL_H

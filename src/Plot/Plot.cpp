@@ -1,10 +1,12 @@
 #include "Plot.h"
 
 #include <QElapsedTimer>
-#include <QtMath>
 
 Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
     : plot(plot), datapoints(datapoints), seconds(seconds) {
+
+    for(int i = 0; i < 16; ++i)
+       limits.append(qPow(2, i)*1.1);
 
     realTime = new QElapsedTimer;
     realTime->start();
@@ -13,13 +15,6 @@ Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
 }
 
 Plot::~Plot() {}
-
-void Plot::update_time_axis() {
-    if(counter >= datapoints) {
-        long lastTimepoint = realTime->elapsed() + long(double(seconds * 1000) / double(datapoints));
-        shift_into_vector(timeAxis, double(lastTimepoint) / 1000);
-    }
-}
 
 void Plot::recreate_time_axis() {
     long lastTimepoint = realTime->elapsed();
@@ -31,54 +26,12 @@ void Plot::recreate_time_axis() {
 }
 
 void Plot::recreate_axis(QVector<double> &vec) {
-    vec.clear();
     vec.reserve(datapoints);
 
-    for(int i = 0; i < datapoints; i++)
-        vec.push_back(0.0);
-}
-
-void Plot::shift_into_vector(QVector<double> &vector, double value) {
-    for(QVector<double>::iterator it = vector.begin(); it != vector.end()-1; it++) {
-        (*it) = (*(it+1));
+    for(int i = 0; i < datapoints; i++) {
+        if(datapoints < vec.size())
+            vec[i] = 0.0;
+        else
+            vec.push_back(0.0);
     }
-
-    vector[vector.size()-1] = value;
-}
-
-int Plot::maximum_function(int local_maximum, int absolut_maximum) {
-    int new_maximum = 1;
-
-    while(new_maximum < absolut_maximum) {
-        if(local_maximum < 0.9*new_maximum)
-            return new_maximum;
-        new_maximum *= 2;
-    }
-
-    return absolut_maximum;
-}
-
-int Plot::minimum_function(int local_minimum, int absolute_minimum) {
-    int new_minimum = absolute_minimum;
-
-    while(0 < new_minimum) {
-        if(1.1*new_minimum < local_minimum)
-            return new_minimum;
-        new_minimum /= 2;
-    }
-
-    return absolute_minimum;
-}
-
-int Plot::get_maximum(const QVector<double> &data, int maximum) {
-    return maximum_function(int(*std::max_element(data.begin(), data.end())), maximum);
-}
-
-int Plot::get_minimum(const QVector<double> &data, int minimum) {
-    int local_minimum = int(*std::min_element(data.begin(), data.end()));
-
-    if(local_minimum > 0)
-        return minimum_function(local_minimum, minimum);
-
-    return maximum_function(int(qFabs(local_minimum)), minimum) * (-1);
 }
