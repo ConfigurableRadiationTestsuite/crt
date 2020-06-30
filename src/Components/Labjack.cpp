@@ -181,7 +181,7 @@ int Labjack::read(QVector<double> &value) {
 #ifndef DUMMY_DATA
     int errorAddress = INITIAL_ERR_ADDRESS;
 
-    err = LJM_eReadAddresses(handle, address.size(), aAddresses, aTypes, aValues, &errorAddress);
+    err = LJM_eReadAddresses(handle, address_vec.size(), aAddresses, aTypes, aValues, &errorAddress);
     ErrorCheckWithAddress(err, errorAddress, "LJM_eReadAddresses");
 #endif
 
