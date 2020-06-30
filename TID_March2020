@@ -1,0 +1,81 @@
+Section PSU
+name=EGSE Links
+vendor=rohdeschwarz
+master=1
+address=192.168.3.103:5025
+channel=3
+c0vs=3.3
+c0cs=0
+c0vm=3.3
+c0cm=3000
+c1vs=1
+c1cs=0
+c1vm=1
+c1cm=3000
+c2vs=3.3
+c2cs=0
+c2vm=3.3
+c2cm=3000
+signal=
+EndSection
+
+Section PSU
+name=EGSE Rechts
+vendor=rohdeschwarz
+master=1
+address=192.168.3.123:5025
+channel=3
+c0vs=9
+c0cs=0
+c0vm=9
+c0cm=3000
+c1vs=17.5
+c1cs=0
+c1vm=17.5
+c1cm=3000
+c2vs=17.5
+c2cs=0
+c2vm=17.5
+c2cm=3000
+signal=
+EndSection
+
+Section PSU
+name=External
+vendor=rohdeschwarz
+master=1
+address=192.168.3.123:5025
+channel=3
+c0vs=17.5
+c0cs=0
+c0vm=17.5
+c0cm=3000
+c1vs=17.5
+c1cs=0
+c1vm=17.5
+c1cm=3000
+c2vs=0
+c2cs=0
+c2vm=0
+c2cm=0
+signal=
+EndSection
+
+Section LabJack
+name=Rotes T7
+channel=2
+con=1
+id=470020243
+c0n=AIN62/68
+c0pc=62
+c0nc=68
+c0b=0
+c0g=1000
+c1n=AIN63
+c1pc=63
+c1nc=199
+c1b=0
+c1g=1000
+signal=
+EndSection
+
