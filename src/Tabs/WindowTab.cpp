@@ -42,6 +42,7 @@ void WindowTab::create_layout() {
 
         windowGroupBox->setLayout(windowHLayout);
         mainTabLayout->addWidget(windowGroupBox);
+
     }
 
     /* Create add button */

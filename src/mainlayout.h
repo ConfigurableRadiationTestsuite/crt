@@ -12,6 +12,8 @@
 
 class ConfigManager;
 
+class LBJTab;
+
 class QAction;
 class QToolBar;
 class QTabWidget;
@@ -47,6 +49,8 @@ private:
 
     QTabWidget * create_window_tabs();
     QToolBar * create_toolbar();
+
+
 };
 
 #endif // MAINLAYOUT_H

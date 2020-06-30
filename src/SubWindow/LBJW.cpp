@@ -143,8 +143,14 @@ void LBJW::create_layout() {
 
     channelBox->setLayout(channelLayout);
 
+    /* Add scroll area */
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    scrollArea->setWidget(channelBox);
+
     mainVLayout->addWidget(settingsBox);
-    mainVLayout->addWidget(channelBox);
+    mainVLayout->addWidget(scrollArea);
     mainVLayout->addWidget(graphBox);
 
     setLayout(mainVLayout);

@@ -7,6 +7,7 @@
 #include "Tabs/PSUTab.h"
 #include "Tabs/RFTab.h"
 
+#include <QScrollArea>
 #include <QTabWidget>
 #include <QToolBar>
 #include <QToolButton>
