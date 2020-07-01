@@ -71,6 +71,7 @@ Labjack::~Labjack() {
 
     delete sampleTimer;
     delete rangeTimer;
+    delete dataTimer;
 
     delete[] aAddresses;
     delete[] aTypes;
@@ -128,6 +129,7 @@ void Labjack::init() {
     /* Setup sample timer */
     sampleTimer = new QElapsedTimer;
     rangeTimer = new QElapsedTimer;
+    dataTimer = new QElapsedTimer;
     rangeTimer->start();
 }
 
@@ -142,7 +144,6 @@ void Labjack::update() {
     foreach (channel, channel_vec)
         channel->update_value(*it++);
 
-    emit data_available();
     adapt_channel_range();
 
     //Log data
@@ -151,6 +152,13 @@ void Labjack::update() {
 
     /* Check and set the sample rate */
     adapt_sample_rate(sampleTimer->nsecsElapsed());
+
+    /* Distribute data */
+    dataTimer->restart();
+    emit data_available();
+
+    if(dataTimer->elapsed() > 1000/samplerate)
+        adapt_sample_rate(dataTimer->nsecsElapsed());
 }
 
 void Labjack::set_samplerate(const QString &text) {

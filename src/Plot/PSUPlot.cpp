@@ -35,9 +35,9 @@ void PSUPlot::update_plot() {
     max_current = max_current < 10 ? 10 : max_current;
 
     plot->yAxis->setRange(0, max_voltage);
-    plot->yAxis->setTickStep(max_voltage/3);
+    plot->yAxis->rescale();
     plot->yAxis2->setRange(0,max_current);
-    plot->yAxis2->setTickStep(max_current/3);
+    plot->yAxis2->rescale();
 
     plot->graph(0)->setData(timeAxis, voltage_axis);
     plot->graph(1)->setData(timeAxis, current_axis);
@@ -58,16 +58,11 @@ void PSUPlot::create_layout() {
 
     plot->xAxis->setLabel("t[s]");
     plot->xAxis->setRange(0, datapoints);
-    plot->xAxis->setAutoTickStep(false);
-    plot->xAxis->setTickStep(datapoints/3);
 
-    plot->yAxis->setLabel("[V]");
-    plot->yAxis->setAutoTickStep(false);
-    plot->yAxis->setRange(0, 30);
+    plot->yAxis->setLabel("[V]");    plot->yAxis->setRange(0, 30);
 
     plot->yAxis2->setLabel("[mA]");
     plot->yAxis2->setRange(0, 3000);
-    plot->yAxis2->setAutoTickStep(false);
     plot->yAxis2->setVisible(true);
 
     plot->replot();

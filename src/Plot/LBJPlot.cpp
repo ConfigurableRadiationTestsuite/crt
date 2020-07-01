@@ -41,35 +41,30 @@ void LBJPlot::update_plot() {
     int minimum = get_total_limit(false);
 
     plot->yAxis->setRange(minimum, maximum);
-    plot->yAxis->setTickStep((maximum-minimum)/4);
+    plot->yAxis->rescale();
 
     /* Plot active elements */
-    int element_counter = 0;
     plot_active = false;
-    foreach (plotElement, plotElement_list) {
-        if(plotElement->is_plotted()) {
-            plot->graph(element_counter)->setData(timeAxis, plotElement->get_axis());
+    for(int i = 0; i < plotElement_list.size(); ++i) {
+        if(plotElement_list[i]->is_plotted()) {
+            plot->graph(i)->setData(timeAxis, plotElement_list[i]->get_axis());
             plot_active = true;
         }
         else
-            plot->graph(element_counter)->setData(timeAxis, standard_axis);
-        element_counter++;
+            plot->graph(i)->setData(timeAxis, standard_axis);
     }
 
     plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
+    plot->replot(QCustomPlot::RefreshPriority::rpQueuedRefresh);
 
-    plot->replot();
     counter++;
 }
 
 void LBJPlot::create_layout() {
     plot->xAxis->setLabel("[s]");
     plot->xAxis->setRange(0, datapoints);
-    plot->xAxis->setAutoTickStep(false);
-    plot->xAxis->setTickStep(datapoints/10);
 
     plot->yAxis->setLabel("[ ]");
-    plot->yAxis->setAutoTickStep(false);
     plot->yAxis->setRange(-10, 10);
 
     plot->replot();

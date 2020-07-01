@@ -61,6 +61,7 @@ private:
 
     QElapsedTimer *sampleTimer;
     QElapsedTimer *rangeTimer;
+    QElapsedTimer *dataTimer;
     int samplerate = 1, maxSamplerate = 1;
     bool is_maximum;
 
@@ -116,6 +117,8 @@ inline void Labjack::adapt_sample_rate(qint64 nsecs) {
 
     if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
         samplerate = maxSamplerate;
+        logTimer->start(1000/samplerate);
+
         emit samplerate_changed(QString::number(samplerate));
     }
 }

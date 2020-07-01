@@ -41,7 +41,7 @@ void RFPlot::update_layout() {
     int minimum = min_i > min_q ? min_i : min_q;
 
     plot->yAxis->setRange(minimum, maximum);
-    plot->yAxis->setTickStep((maximum-minimum)/8);
+    plot->yAxis->rescale();
 
     plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
     plot->xAxis->setRange(0, timeAxis.size());
@@ -62,11 +62,8 @@ void RFPlot::create_layout() {
 
     plot->xAxis->setLabel("Sample");
     plot->xAxis->setRange(0, datapoints);
-    plot->xAxis->setAutoTickStep(true);
-    plot->xAxis->setTickStep(datapoints/4);
 
     plot->yAxis->setLabel("I / Q");
-    plot->yAxis->setAutoTickStep(false);
     plot->yAxis->setRange(-128, 128);
 
     plot->replot();

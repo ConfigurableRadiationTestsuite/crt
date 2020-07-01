@@ -26,6 +26,7 @@ void Plot::recreate_time_axis() {
 }
 
 void Plot::recreate_axis(QVector<double> &vec) {
+    vec.clear();
     vec.reserve(datapoints);
 
     for(int i = 0; i < datapoints; i++) {

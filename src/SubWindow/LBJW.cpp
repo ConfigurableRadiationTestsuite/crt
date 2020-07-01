@@ -129,7 +129,7 @@ void LBJW::create_layout() {
         QCheckBox *graphCheckBox = new QCheckBox;
         graphCheckBox->setStyleSheet("color: " + color_list[cnt%color_list.size()].name + " ;");
         lbjplot->add_channel(channel, color_list[cnt%color_list.size()].color);
-        connect(graphCheckBox, SIGNAL(stateChanged(int)), lbjplot->get_plotelement_list().last(), SLOT(set_plot_active(int)));
+        connect(graphCheckBox, SIGNAL(stateChanged(int)), lbjplot->get_plotelement_list().last(), SLOT(set_plot_active(int)));        
 
         channelLayout->addWidget(channelLabel, cnt, 0);
         channelLayout->addWidget(boundaryLine, cnt, 1);
