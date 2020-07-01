@@ -70,7 +70,7 @@ Labjack::~Labjack() {
         delete (*it);
 
     delete sampleTimer;
-    delete testTimer;
+    delete rangeTimer;
 
     delete[] aAddresses;
     delete[] aTypes;
@@ -127,8 +127,8 @@ void Labjack::init() {
 
     /* Setup sample timer */
     sampleTimer = new QElapsedTimer;
-    testTimer = new QElapsedTimer;
-    testTimer->start();
+    rangeTimer = new QElapsedTimer;
+    rangeTimer->start();
 }
 
 void Labjack::update() {
@@ -139,29 +139,18 @@ void Labjack::update() {
 
     LabjackChannel* channel;
     QVector<double>::iterator it = value_vec.begin();
-    foreach (channel, channel_vec) {
-        channel->update_value(it != value_vec.end() ? *it++ : 0);
-        channel->set_range();
-    }
+    foreach (channel, channel_vec)
+        channel->update_value(*it++);
 
     emit data_available();
-
-    /* Check and set the sample rate */
-    maxSamplerate = 1000 / (sampleTimer->elapsed() + 1);
-
-    if(maxSamplerate < samplerate) {
-        samplerate = maxSamplerate;
-        emit samplerate_changed(QString::number(samplerate));
-    }
-
-    if(is_maximum && samplerate != maxSamplerate) {
-        samplerate = maxSamplerate;
-        emit samplerate_changed(QString::number(samplerate));
-    }
+    adapt_channel_range();
 
     //Log data
     if(logging)
         runManager->append_values_to_file(this, value_vec);
+
+    /* Check and set the sample rate */
+    adapt_sample_rate(sampleTimer->nsecsElapsed());
 }
 
 void Labjack::set_samplerate(const QString &text) {
@@ -223,6 +212,18 @@ void Labjack::get_channel_names(const QString &input, QVector<QString> &output) 
         name.remove(' ');
         output.push_back(name);
     } while((position = input.indexOf(',', position) + 1) > 0);
+}
+
+
+void Labjack::adapt_channel_range() {
+    if(rangeTimer->elapsed() < 1000)
+        return;
+
+    LabjackChannel *channel;
+    foreach(channel, channel_vec)
+        channel->set_range();
+
+    rangeTimer->restart();
 }
 
 #ifdef DUMMY_DATA

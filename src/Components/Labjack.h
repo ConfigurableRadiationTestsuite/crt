@@ -27,9 +27,9 @@ public:
 
     void set_config() override;
 
-    int get_main_resolution_address() const {return 43903;}
-    int get_main_range_address() const {return 43900;}
-    int get_main_settling_address() const {return 43904;}
+    constexpr static int get_main_resolution_address() {return 43903;}
+    constexpr static int get_main_range_address() {return 43900;}
+    constexpr static int get_main_settling_address() {return 43904;}
 
     QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
 
@@ -60,7 +60,7 @@ private:
     double *aValues;
 
     QElapsedTimer *sampleTimer;
-    QElapsedTimer *testTimer;
+    QElapsedTimer *rangeTimer;
     int samplerate = 1, maxSamplerate = 1;
     bool is_maximum;
 
@@ -76,6 +76,9 @@ private:
     void get_channel_names(const QString &input, QVector<QString> &output);
 
     QStringList generate_header() override;
+
+    void adapt_channel_range();
+    void adapt_sample_rate(qint64 time);
 
     void create_dummy_data(int size, double * values);
 };
@@ -105,6 +108,16 @@ inline void Labjack::set_main_resolution(int index) {
     assert(0 < index && index <= 10);
 #endif
     write(get_main_resolution_address(), LJM_UINT16, index);
+}
+
+inline void Labjack::adapt_sample_rate(qint64 nsecs) {
+    /* Convert to sample per second */
+    maxSamplerate = 1000*1000*1000 / (2*nsecs);
+
+    if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
+        samplerate = maxSamplerate;
+        emit samplerate_changed(QString::number(samplerate));
+    }
 }
 
 #endif // LABJACK_H
