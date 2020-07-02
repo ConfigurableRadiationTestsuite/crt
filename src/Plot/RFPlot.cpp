@@ -20,8 +20,8 @@ RFPlot::~RFPlot() {
 }
 
 void RFPlot::update_plot() {
-    i_axis = channel->get_i_plot_data();
-    q_axis = channel->get_q_plot_data();
+    channel->get_plot_data().get_i(i_axis);
+    channel->get_plot_data().get_q(q_axis);
 
     plot->graph(0)->setData(timeAxis, i_axis);
     plot->graph(1)->setData(timeAxis, q_axis);

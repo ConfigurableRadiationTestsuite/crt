@@ -27,6 +27,7 @@ SOURCES += \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
     src/Components/IQSample.cpp \
+    src/Components/IQVector.cpp \
     src/Components/IndicatorBox.cpp \
     src/Components/IndicatorIcon.cpp \
     src/Components/Labjack.cpp \
@@ -72,6 +73,7 @@ HEADERS += \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
     src/Components/IQSample.h \
+    src/Components/IQVector.h \
     src/Components/IndicatorBox.h \
     src/Components/IndicatorIcon.h \
     src/Components/Labjack.h \

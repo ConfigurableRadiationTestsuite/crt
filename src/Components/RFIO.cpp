@@ -83,23 +83,6 @@ void RFIO::init() {
     updateThread->start();
 }
 
-void RFIO::set_thread_destroyed() {
-    is_destroyed = true;
-}
-
-void RFIO::reconnect() {
-    if(is_destroyed)
-        init();
-}
-
-void RFIO::set_single_shot() {
-    is_single_shot = true;
-}
-
-void RFIO::set_multi_shot() {
-    is_single_shot = false;
-}
-
 QStringList RFIO::generate_header() {
     QStringList header;
     header.push_back("Sample");

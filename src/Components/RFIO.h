@@ -55,4 +55,21 @@ private:
    QStringList generate_header() override;
 };
 
+inline void RFIO::set_thread_destroyed() {
+    is_destroyed = true;
+}
+
+inline void RFIO::reconnect() {
+    if(is_destroyed)
+        init();
+}
+
+inline void RFIO::set_single_shot() {
+    is_single_shot = true;
+}
+
+inline void RFIO::set_multi_shot() {
+    is_single_shot = false;
+}
+
 #endif // RFIO_H

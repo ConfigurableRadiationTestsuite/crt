@@ -15,7 +15,6 @@ class RFIOUpdater : public QObject {
 
 public:
     RFIOUpdater(int port, QProcess * process, QVector<RFIOChannel *> *channel_list);
-    virtual ~RFIOUpdater();
 
 public slots:
     void start_process();
@@ -31,7 +30,6 @@ private:
     QProcess * process;
     QVector<RFIOChannel *> *channel_list;
 
-    int create_2b_number(char lsb, char msb);
     QByteArray dummy_iq(int period, int channel);
 };
 

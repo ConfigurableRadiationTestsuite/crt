@@ -2,217 +2,115 @@
 
 #include "src/Manager/RunManager.h"
 
-#include <QtMath>
-
-RFIOChannel::RFIOChannel(int number, int margin)
-    : number(number), margin(margin) {
-}
-
-RFIOChannel::~RFIOChannel() {}
-
-void RFIOChannel::set_data_analyze(int analyze) {
-    if(data_valid)
-        data_analyze = analyze > 0 ? true : false;
-}
-
 void RFIOChannel::analyze_data() {
     /* Create plot data */
-    clear_data(i_plot_data);
-    int start = get_zero(i_data);
-    generate_plot_data(start, i_data, i_plot_data);
-    clear_data(q_plot_data);
-    generate_plot_data(start, q_data, q_plot_data);
+    QPair<int, int> start = raw_data.get_zero();
+    generate_plot_data(start, raw_data, plot_data);
 
     /* Generate ref_data */
     if(margin_changed && data_valid) {
-        generate_ref_data(i_data);
+        generate_ref_data(raw_data);
         margin_changed = false;
     }
 
     /* Huge evaluation */
     if(data_valid && data_analyze) {
         bool ok = true;
-        ok &= evaluate_data(i_data);
-        ok &= evaluate_data(q_data);
+        ok &= evaluate_vector(raw_data);
 
         if(!ok)
-            emit error(i_data, q_data, number);
+            emit error(raw_data, number);
     }
 
     /* Data valid check */
-    if(!data_valid && get_data_valid(i_data) && get_data_valid(q_data)) {
-        generate_ref_data(i_data);
+    if(!data_valid && raw_data.is_valid()) {
+        generate_ref_data(raw_data);
         data_valid = true;
     }
 
     /* Delete data */
-    clear_data(i_data);
-    clear_data(q_data);
+    clear_data(raw_data);
 
     emit announce_data_valid(!data_valid);
 
     emit finished();
 }
 
-int RFIOChannel::get_zero(const QVector<int> &data) {
-    int minimum = 0;
-    int maximum = 0;
-    int min_point = 0;
-    int max_point = 0;
-
-    /* Search minimum */
-    for(int i = 0; i < data.size(); i++) {
-
-        if(minimum == 0 && data[i] > -qPow(2, BITS_TO_IGNORE))
-            continue;
-
-        if(data[i] < minimum) {
-            minimum = data[i];
-            min_point = i;
-            continue;
-        }
-
-        if(data[i] > 0) {
-            break;
-        }
-    }
-
-    /* Search maximum */
-    for(int i = min_point; i < data.size(); i++) {
-
-        if(maximum == 0 && data[i] < qPow(2, BITS_TO_IGNORE))
-            continue;
-
-        if(data[i] > maximum) {
-            maximum = data[i];
-            max_point = i;
-            continue;
-        }
-
-        if(data[i] < 0) {
-            break;
-        }
-    }
-
-    int zero_point = min_point + (max_point - min_point) / 2;
-
-    /* Check one point before / after */
-    if(qAbs(data[position(zero_point-1, data)]) < qAbs(data[zero_point]))
-        return zero_point-1;
-
-    if(qAbs(data[position(zero_point+1, data)]) < qAbs(data[zero_point]))
-        return zero_point+1;
-
-    return zero_point;
-}
-
-bool RFIOChannel::get_data_valid(const QVector<int> &data) {
-    bool ok = true;
-
-    /* Check if there is possibly valid data */
-    ok &= MIN_DATAPOINTS < get_period(data);
-    ok &= get_maximum(data) > qPow(2, BITS_TO_IGNORE);
-    ok &= get_minimum(data) < - qPow(2, BITS_TO_IGNORE);
-
-    return ok;
-}
-
-int RFIOChannel::get_period(const QVector<int> &data) {
-    int period = 0, cnt = 0, samples = 0;
-    bool sign = true;
-
-    for(int i = get_zero(data); i < data.size(); i++) {
-        //10 Half-Periods should be enough
-        if(cnt > 9)
-            break;
-
-        //Ignore values near zero
-        if(-qPow(2, BITS_TO_IGNORE) < data[i] && data[i] < qPow(2, BITS_TO_IGNORE)) {
-            samples++;
-            continue;
-        }
-
-        //Check if the sign has changed
-        if(sign != (data[i] > 0 ? true : false)) {
-            period += samples;
-            samples = 0;
-            cnt++;
-            sign = !sign;
-        }
-        samples++;
-    }
-
-    if(cnt <= 1)
-        return 0;
-
-    return 2 * period / cnt;
-}
-
-bool RFIOChannel::evaluate_data(const QVector<int> &input) {
+bool RFIOChannel::evaluate_vector(const IQVector &input) {
     int ref_i = 0;
 
     reset_transition();
 
-    for(int i = get_zero(input); i < input.size(); i++) {
-        if(is_transition(input[i])) {
+    for(int i = input.get_zero().first; i < input.size(); i++) {
+        int res = evaluate_sample(input.at(i).get_i(), ref_data_low[i].get_i(), ref_data_high[i].get_i());
+
+        if(res == 1) {
             reset_transition();
-            i = qAbs(input[position(i-1, input)]) < qAbs(input[i]) ? i-1 : i;
+            i = qAbs(input.position(i-1)) < qAbs(input[i].get_i()) ? i-1 : i;
             ref_i = 0;
         }
 
-        if(ref_i >= ref_data.size())
+        if(res == -1)
             return false;
+        ref_i++;
+    }
 
-        if(input[i] < ref_data[ref_i].bottom || ref_data[ref_i].top < input[i])
+    for(int i = input.get_zero().second; i < input.size(); i++) {
+        int res = evaluate_sample(input.at(i).get_q(), ref_data_low[i].get_q(), ref_data_high[i].get_q());
+
+        if(res == 1) {
+            reset_transition();
+            i = qAbs(input.position(i-1)) < qAbs(input[i].get_q()) ? i-1 : i;
+            ref_i = 0;
+        }
+
+        if(res == -1)
             return false;
-
         ref_i++;
     }
 
     return true;
 }
 
-void RFIOChannel::generate_ref_data(const QVector<int> &input) {
-    int period = get_period(input);
-    int min = get_minimum(input);
-    int max = get_maximum(input);
-    int amplitude = (qAbs(min) + qAbs(max)) / 2;
+void RFIOChannel::generate_ref_data(const IQVector &input) {
+    QPair<int, int> period = input.get_period();
+    int m_period = period.first < period.second ? period.second : period.first;
 
-    ref_data.clear();
-    ref_data.reserve(period);
+    QPair<int, int> maximum = input.get_maximum();
+    QPair<int, int> minimum = input.get_minimum();
 
-    for(int i = 0; i < period*1.5; i++) {
-        int top = amplitude * qSin(float(i) / float(period) * 2 * M_PI) + margin;
-        int bottom = amplitude * qSin(float(i) / float(period) * 2 * M_PI) - margin;
-        ref_data.push_back(ReferencePoint{top, bottom});
+    QPair<int, int> amplitude;
+    amplitude.first = (qAbs(maximum.first) + qAbs(minimum.first)) / 2;
+    amplitude.second = (qAbs(maximum.second) + qAbs(minimum.second)) / 2;
 
-        if(i >= period && ref_data[i].top < 0) {
-            ref_data.pop_back();
-            break;
-        }
+    ref_data_low.resize(m_period*1.5);
+    ref_data_high.resize(m_period*1.5);
+
+    for(int i = 0; i < m_period*1.5; i++) {
+        QPair<int, int> high;
+        high.first = amplitude.first * qSin(float(i) / float(period.first) * 2 * M_PI) + margin;
+        high.second = amplitude.second * qSin(float(i) / float(period.second) * 2 * M_PI) + margin;
+        ref_data_high[i] = IQSample(high.first, high.second);
+
+        QPair<int, int> low;
+        low.first = amplitude.first * qSin(float(i) / float(period.first) * 2 * M_PI) + margin;
+        low.second = amplitude.second * qSin(float(i) / float(period.second) * 2 * M_PI) - margin;
+        ref_data_low[i] = IQSample(low.first, low.second);
     }
 }
 
-void RFIOChannel::generate_plot_data(int start, const QVector<int> &input, QVector<double> &output) {
-    int period = get_period(input);
+void RFIOChannel::generate_plot_data(QPair<int, int> start, const IQVector &input, IQVector &output) {
+    QPair<int, int> period = input.get_period();
+    int m_period = period.first < period.second ? period.second : period.first;
+    int m_start = (start.first < start.second ? start.first : start.second);
 
-    for(int i = start; i < input.size(); i++) {
-        if((period*4 + start) < i)
+    output.resize(4 * m_period);
+
+    for(int i = m_start; i < input.size(); i++) {
+        if((4 * m_period + m_start) < i)
             return ;
-        output.push_back(input[i]);
+        output.append(input.at(i));
     }
-}
-
-bool RFIOChannel::is_transition(int value) {
-    if(!capture_transition && value < -qPow(2, BITS_TO_IGNORE))
-        capture_transition = true;
-
-    if(capture_transition && value > qPow(2, BITS_TO_IGNORE)) {
-        capture_transition = false;
-        return true;
-    }
-
-    return false;
 }
 
 void RFIOChannel::set_margin(int margin) {
