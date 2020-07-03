@@ -1,10 +1,10 @@
 #include "IQVector.h"
 
 QPair<int, int> IQVector::get_zero() const {
-    QPair<int, int> minimum;
+    QPair<int, int> minimum(0, 0);
     QPair<int, int> min_point(0, 0);
 
-    QPair<int, int> maximum;
+    QPair<int, int> maximum(0, 0);
     QPair<int, int> max_point(0, 0);
 
     /* Search minimum */
@@ -36,10 +36,10 @@ QPair<int, int> IQVector::get_zero() const {
     if(qAbs(at(position(zero_point.second-1)).get_q()) < qAbs(at(zero_point.second).get_q()))
         zero_point.second -= 1;
 
-    if(qAbs(at(position(zero_point.first-1)).get_i()) > qAbs(at(zero_point.first).get_i()))
+    if(qAbs(at(position(zero_point.first+1)).get_i()) < qAbs(at(zero_point.first).get_i()))
         zero_point.first += 1;
 
-    if(qAbs(at(position(zero_point.second-1)).get_q()) > qAbs(at(zero_point.second).get_q()))
+    if(qAbs(at(position(zero_point.second+1)).get_q()) < qAbs(at(zero_point.second).get_q()))
         zero_point.second += 1;
 
     return zero_point;

@@ -6,6 +6,7 @@ void RFIOChannel::analyze_data() {
     /* Create plot data */
     QPair<int, int> start = raw_data.get_zero();
     generate_plot_data(start, raw_data, plot_data);
+    emit plot_data_changed(plot_data.get_i(), plot_data.get_q());
 
     /* Generate ref_data */
     if(margin_changed && data_valid) {
@@ -54,6 +55,8 @@ bool RFIOChannel::evaluate_vector(const IQVector &input) {
             return false;
         ref_i++;
     }
+
+    reset_transition();
 
     for(int i = input.get_zero().second; i < input.size(); i++) {
         int res = evaluate_sample(input.at(i).get_q(), ref_data_low[i].get_q(), ref_data_high[i].get_q());
@@ -107,9 +110,9 @@ void RFIOChannel::generate_plot_data(QPair<int, int> start, const IQVector &inpu
     output.resize(4 * m_period);
 
     for(int i = m_start; i < input.size(); i++) {
-        if((4 * m_period + m_start) < i)
+        if((4 * m_period + m_start) <= i)
             return ;
-        output.append(input.at(i));
+        output[i-m_start] = input[i];
     }
 }
 

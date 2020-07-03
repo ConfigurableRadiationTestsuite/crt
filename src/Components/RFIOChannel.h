@@ -49,6 +49,7 @@ signals:
    void announce_data_valid(bool);
    void finished();
    void announce_margin_changed(const QString &text);
+   void plot_data_changed(const QVector<int> &i, const QVector<int> &q);
 
 private:
    int number;

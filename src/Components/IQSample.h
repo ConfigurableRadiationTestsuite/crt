@@ -64,9 +64,9 @@ inline bool operator< (const IQSample& a, const IQSample& b) {
 inline int IQSample::get_iq(const QByteArray &arr) {
     int result = static_cast<int8_t>(arr.back());
 
-    for(QByteArray::const_iterator it = arr.end() - 1; it != arr.begin(); --it) {
+    for(int i = arr.size()-2; i >= 0; --i) {
         result <<= 8;
-        result += static_cast<uint8_t>(*it);
+        result += static_cast<uint8_t>(arr[i]);
     }
 
     return result;

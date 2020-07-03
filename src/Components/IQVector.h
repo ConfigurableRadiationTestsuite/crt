@@ -20,8 +20,10 @@ public:
 
     template<typename T>
     void get_i(QVector<T> &output) const;
+    QVector<int> get_i() const;
     template<typename T>
     void get_q(QVector<T> &output) const;
+    QVector<int> get_q() const;
 
     int position(int position) const;
 
@@ -60,16 +62,16 @@ inline bool IQVector::minimum_search(int &minimum, int &point, int value, int lo
 }
 
 inline bool IQVector::maximum_search(int &maximum, int &point, int value, int location) const {
-    if(maximum == 0 && value > -qPow(2, BITS_TO_IGNORE))
+    if(maximum == 0 && value < qPow(2, BITS_TO_IGNORE))
         return true;
 
-    if(value < maximum) {
+    if(value > maximum) {
         maximum = value;
         point = location;
         return true;
     }
 
-    if(value > 0)
+    if(value < 0)
         return false;
 
     return true;
@@ -117,6 +119,16 @@ inline void IQVector::get_i(QVector<T> &output) const {
         output.push_back((*it).get_i());
 }
 
+inline QVector<int> IQVector::get_i() const {
+    QVector<int> output;
+    output.reserve(size());
+
+    for(IQVector::const_iterator it = begin(); it != end(); ++it)
+        output.push_back((*it).get_i());
+
+    return output;
+}
+
 template<typename T>
 inline void IQVector::get_q(QVector<T> &output) const {
     output.reserve(size());
@@ -125,4 +137,13 @@ inline void IQVector::get_q(QVector<T> &output) const {
         output.push_back((*it).get_q());
 }
 
+inline QVector<int> IQVector::get_q() const {
+    QVector<int> output;
+    output.reserve(size());
+
+    for(IQVector::const_iterator it = begin(); it != end(); ++it)
+        output.push_back((*it).get_q());
+
+    return output;
+}
 #endif // IQVECTOR_H

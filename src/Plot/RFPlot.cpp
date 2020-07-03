@@ -12,16 +12,21 @@ RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
     connect(layoutUpdateTimer, SIGNAL(timeout()), this, SLOT(update_layout()));
     layoutUpdateTimer->start(1000);
 
+    plotUpdateTimer = new QTimer;
+    connect(plotUpdateTimer, SIGNAL(timeout()), this, SLOT(update_plot()));
+    plotUpdateTimer->start(200);
+
     create_layout();
 }
 
 RFPlot::~RFPlot() {
     delete layoutUpdateTimer;
+    delete plotUpdateTimer;
 }
 
 void RFPlot::update_plot() {
-    channel->get_plot_data().get_i(i_axis);
-    channel->get_plot_data().get_q(q_axis);
+    if(i_axis.size() != timeAxis.size())
+        modify_time_axis();
 
     plot->graph(0)->setData(timeAxis, i_axis);
     plot->graph(1)->setData(timeAxis, q_axis);
@@ -55,6 +60,7 @@ void RFPlot::create_layout() {
     plot->addGraph();
     //Assign I-Data
     plot->graph(0)->setPen(QPen(Qt::blue));
+    plot->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
 
     //Assign Q-Data
     plot->addGraph();
@@ -62,9 +68,10 @@ void RFPlot::create_layout() {
 
     plot->xAxis->setLabel("Sample");
     plot->xAxis->setRange(0, datapoints);
+    plot->graph(1)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
 
     plot->yAxis->setLabel("I / Q");
-    plot->yAxis->setRange(-128, 128);
+    plot->yAxis->setRange(-1024, 1024);
 
     plot->replot();
 }
