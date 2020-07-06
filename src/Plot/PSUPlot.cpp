@@ -35,9 +35,7 @@ void PSUPlot::update_plot() {
     max_current = max_current < 10 ? 10 : max_current;
 
     plot->yAxis->setRange(0, max_voltage);
-    plot->yAxis->rescale();
     plot->yAxis2->setRange(0,max_current);
-    plot->yAxis2->rescale();
 
     plot->graph(0)->setData(timeAxis, voltage_axis);
     plot->graph(1)->setData(timeAxis, current_axis);
