@@ -4,6 +4,7 @@
 
 #include <QGroupBox>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QVBoxLayout>
 
 WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
@@ -41,8 +42,14 @@ void WindowTab::create_layout() {
         windowHLayout->addWidget(deleteButton);
 
         windowGroupBox->setLayout(windowHLayout);
-        mainTabLayout->addWidget(windowGroupBox);
 
+        /* Scroll area */
+        QScrollArea *scrollArea = new QScrollArea;
+        scrollArea->setWidgetResizable(true);
+        scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        scrollArea->setWidget(windowGroupBox);
+
+        mainTabLayout->addWidget(scrollArea);
     }
 
     /* Create add button */
