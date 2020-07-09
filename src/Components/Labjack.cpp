@@ -164,9 +164,9 @@ void Labjack::update() {
 void Labjack::set_samplerate(const QString &text) {
     samplerate = text.toInt() > maxSamplerate ? maxSamplerate : text.toInt();
     samplerate = samplerate > 0 ? samplerate : 1;
-    logTimer->start(1000/samplerate);
+    fixedSamplerate = samplerate;
 
-    emit samplerate_changed(QString::number(samplerate));
+    change_samplerate();
 }
 
 int Labjack::read(QVector<double> &value) {

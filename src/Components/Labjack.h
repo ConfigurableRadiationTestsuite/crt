@@ -62,7 +62,7 @@ private:
     QElapsedTimer *sampleTimer;
     QElapsedTimer *rangeTimer;
     QElapsedTimer *dataTimer;
-    int samplerate = 1, maxSamplerate = 1;
+    int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
     bool is_maximum;
 
     void init();
@@ -80,6 +80,7 @@ private:
 
     void adapt_channel_range();
     void adapt_sample_rate(qint64 time);
+    void change_samplerate();
 
     void create_dummy_data(int size, double * values);
 };
@@ -117,10 +118,18 @@ inline void Labjack::adapt_sample_rate(qint64 nsecs) {
 
     if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
         samplerate = maxSamplerate;
-        logTimer->start(1000/samplerate);
-
-        emit samplerate_changed(QString::number(samplerate));
+        change_samplerate();
     }
+
+    if(!is_maximum && samplerate != fixedSamplerate) {
+        samplerate = maxSamplerate < fixedSamplerate ? maxSamplerate : fixedSamplerate;
+        change_samplerate();
+    }
+}
+
+inline void Labjack::change_samplerate() {
+    logTimer->start(1000/samplerate);
+    emit samplerate_changed(QString::number(samplerate));
 }
 
 #endif // LABJACK_H
