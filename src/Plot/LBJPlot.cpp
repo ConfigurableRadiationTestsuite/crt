@@ -41,7 +41,6 @@ void LBJPlot::update_plot() {
     int minimum = get_total_limit(false);
 
     plot->yAxis->setRange(minimum, maximum);
-    plot->yAxis->rescale();
 
     /* Plot active elements */
     plot_active = false;
