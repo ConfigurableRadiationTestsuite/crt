@@ -67,14 +67,16 @@ inline QVector<double> Plot::abs_vec(const QVector<double> &vec) {
 }
 
 inline int Plot::max_function(const QVector<double> &data, bool compare(int value, int limit)) {
-    int pos = 0;
-    while(compare(limits[++pos], int(*std::max_element(data.begin(), data.end()))));
+    int pos = -1;
+    while(pos < (limits.size()-1) && compare(limits[++pos], int(*std::max_element(data.begin(), data.end()))));
+
     return limits[pos];
 }
 
 inline int Plot::min_function(const QVector<double> &data, bool compare(int value, int limit)) {
     int pos = limits.size();
-    while(compare(limits[--pos], int(*std::min_element(data.begin(), data.end()))));
+    while(pos > 0 && compare(limits[--pos], int(*std::min_element(data.begin(), data.end()))));
+
     return limits[pos];
 }
 

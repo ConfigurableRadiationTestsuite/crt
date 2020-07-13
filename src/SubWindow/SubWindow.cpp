@@ -4,6 +4,7 @@
 
 #include <QCheckBox>
 #include <QPushButton>
+#include <QThread>
 
 SubWindow::SubWindow(RunManager *runManager, Component *component)
     : runManager(runManager), component(component) {
