@@ -11,9 +11,6 @@ SubWindow::SubWindow(RunManager *runManager, Component *component)
 
     this->eventManager = runManager->get_eventManager();
 
-    QThread *componentThread = new QThread;
-    component->moveToThread(componentThread);
-
     /* Announce logging */
     connect(this, SIGNAL(signal_start_log()), component, SLOT(start_logging()));
     eventManager->add_signal(component->get_element_name() + " Start Log", SignalType::start_log, this, &SubWindow::signal_start_log);
@@ -24,8 +21,6 @@ SubWindow::SubWindow(RunManager *runManager, Component *component)
     /* Post config management */
     connect(eventManager, SIGNAL(signal_added()), this, SLOT(post_init()));
     connect(eventManager, SIGNAL(signal_deleted(struct RegisteredSignal *)), this, SLOT(delete_signal(struct RegisteredSignal *)));
-
-    componentThread->start();
 }
 
 SubWindow::~SubWindow() {
