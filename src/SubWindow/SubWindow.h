@@ -70,4 +70,12 @@ protected:
 
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}
 
+inline bool SubWindow::is_signal_in_list(struct RegisteredSignal * reg) {
+    RegisteredSignal * signal;
+    foreach (signal, signal_list)
+        if(reg == signal)
+            return true;
+
+    return false;
+}
 #endif // SUBWINDOW_H

@@ -17,8 +17,8 @@ RFW::~RFW() {
 }
 
 void RFW::create_layout() {
-    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    QVBoxLayout *mainVLayout = new QVBoxLayout;
+    //this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     /* Header */
     QHBoxLayout *headerHLayout = new QHBoxLayout;

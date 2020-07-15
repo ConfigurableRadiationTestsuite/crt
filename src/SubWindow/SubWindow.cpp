@@ -48,15 +48,6 @@ QString SubWindow::get_signal_list() {
     return list;
 }
 
-bool SubWindow::is_signal_in_list(struct RegisteredSignal * reg) {
-    RegisteredSignal * signal;
-    foreach (signal, signal_list)
-        if(reg == signal)
-            return true;
-
-    return false;
-}
-
 void SubWindow::post_init() {
     QString signal_names = component->get_value("signal");
 
