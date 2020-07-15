@@ -19,7 +19,7 @@ WindowTab::WindowTab(ConfigManager *configManager, RunManager *runManager)
 WindowTab::~WindowTab() {}
 
 void WindowTab::create_layout() {
-    mainTabLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainTabLayout = new QVBoxLayout;
 
     SubWindow *window;
     foreach (window, subWindow_list) {
@@ -44,10 +44,11 @@ void WindowTab::create_layout() {
 
         /* Scroll area */
         QScrollArea *scrollArea = new QScrollArea;
+        connect(this, SIGNAL(clean_layout()), scrollArea, SLOT(deleteLater()));
+
         scrollArea->setWidgetResizable(true);
         scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         scrollArea->setWidget(windowGroupBox);
-        connect(this, SIGNAL(clean_layout()), scrollArea, SLOT(deleteLater()));
 
         mainTabLayout->addWidget(scrollArea);
     }
@@ -67,10 +68,7 @@ void WindowTab::create_layout() {
 
 void WindowTab::update_layout() {
     emit clean_layout();
-
-    delete mainTabLayout;
     delete layout();
-
     create_layout();
 }
 
@@ -121,5 +119,4 @@ void WindowTab::load_from_config() {
     }
 
     update_layout();
-
 }

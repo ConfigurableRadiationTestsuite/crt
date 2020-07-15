@@ -52,10 +52,7 @@ protected:
     ConfigManager *configManager;
     RunManager *runManager;
 
-    QVBoxLayout *mainTabLayout;
-
     QList<SubWindow *> subWindow_list;
-
     SpecAddDialog *addDialog = nullptr;
 
     void clear_subwindow_list();

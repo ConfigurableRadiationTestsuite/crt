@@ -8,8 +8,6 @@ PROGTab::PROGTab(ConfigManager *m_configManager, RunManager *m_runManager)
     sectionName = "PROG";
 }
 
-PROGTab::~PROGTab() {}
-
 void PROGTab::push_new_subwindow(const QString &config) {
     subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, config)));
 }

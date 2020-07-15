@@ -8,8 +8,6 @@ PSUTab::PSUTab(ConfigManager *m_configManager, RunManager *m_runManager)
     sectionName = "PSU";
 }
 
-PSUTab::~PSUTab() {}
-
 void PSUTab::push_new_subwindow(const QString &config) {
     subWindow_list.push_back(new PSUW(runManager, new PSU(runManager, config)));
 }

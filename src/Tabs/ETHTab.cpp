@@ -8,8 +8,6 @@ ETHTab::ETHTab(ConfigManager *m_configManager, RunManager *m_runManager)
     sectionName = "ETH";
 }
 
-ETHTab::~ETHTab() {}
-
 void ETHTab::push_new_subwindow(const QString &config) {
     subWindow_list.push_back(new ETHW(runManager, new Ethernet(runManager, config)));
 }

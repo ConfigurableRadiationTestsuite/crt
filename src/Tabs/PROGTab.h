@@ -16,7 +16,6 @@ Q_OBJECT
 
 public:
     PROGTab(ConfigManager *m_configManager, RunManager *m_runManager);
-    virtual ~PROGTab() override;
 
 private slots:
     void push_new_subwindow(const QString &config) override;

@@ -10,8 +10,6 @@ LBJTab::LBJTab(ConfigManager *m_configManager, RunManager *m_runManager)
     sectionName = "LabJack";
 }
 
-LBJTab::~LBJTab() {}
-
 void LBJTab::push_new_subwindow(const QString &config) {
     subWindow_list.push_back(new LBJW(runManager, new Labjack(runManager, config)));
 }

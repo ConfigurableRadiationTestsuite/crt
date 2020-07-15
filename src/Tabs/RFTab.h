@@ -16,7 +16,6 @@ Q_OBJECT
 
 public:
     RFTab(ConfigManager *m_configManager, RunManager *m_runManager);
-    virtual ~RFTab() override;
 
 private slots:
     void push_new_subwindow(const QString &config) override;

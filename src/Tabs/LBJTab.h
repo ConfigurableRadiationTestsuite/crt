@@ -15,7 +15,6 @@ Q_OBJECT
 
 public:
     LBJTab(ConfigManager *m_configManager, RunManager *m_runManager);
-    virtual ~LBJTab() override;
 
 private slots:
     void push_new_subwindow(const QString &config) override;

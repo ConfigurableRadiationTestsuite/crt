@@ -8,8 +8,6 @@ RFTab::RFTab(ConfigManager *m_configManager, RunManager *m_runManager)
     sectionName = "RF";
 }
 
-RFTab::~RFTab() {}
-
 void RFTab::push_new_subwindow(const QString &config) {
     subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, config)));
 }
