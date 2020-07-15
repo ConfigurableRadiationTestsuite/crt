@@ -20,7 +20,6 @@ Q_OBJECT
 
 public:
     PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
-    virtual ~PSUChannel();
 
     uint get_number() const {return number;}
     bool get_enable() const {return enable;}
@@ -78,6 +77,8 @@ private:
     //void meas_current_vendor();
 };
 
-inline void PSUChannel::set_trigger(int trigger) {this->trigger = trigger > 0 ? true : false;}
+inline void PSUChannel::set_trigger(int trigger) {
+    this->trigger = trigger > 0 ? true : false;
+}
 
 #endif // PSUCHANNEL_H

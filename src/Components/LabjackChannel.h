@@ -8,8 +8,6 @@
  *
  */
 
-class QElapsedTimer;
-
 #include <LabJackM.h>
 #include <QWidget>
 
@@ -61,7 +59,7 @@ private:
     QString name;
     int* handle;
     int p_chan, n_chan;
-    double boundary, range;
+    double boundary, range = 0;
     int external_gain;
     bool is_input, is_differential;
     double value = 0.0;
@@ -113,17 +111,11 @@ inline void LabjackChannel::set_external_gain(const QString &text) {
 }
 
 inline void LabjackChannel::set_resolution(uint index) {
-#ifdef DEBUG
-    assert(0 < index && index <= 10);
-#endif
     write(get_pchan_resolution_address(), LJM_UINT16, index);
     write(get_nchan_resolution_address(), LJM_UINT16, index);
 }
 
 inline void LabjackChannel::set_settling(uint index) {
-#ifdef DEBUG
-    assert(0 < index && index <= 50000);
-#endif
     write(get_pchan_settling_address(), LJM_UINT16, index);
     write(get_nchan_settling_address(), LJM_UINT16, index);
 }

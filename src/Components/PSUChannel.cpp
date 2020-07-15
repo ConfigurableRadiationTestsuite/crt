@@ -18,8 +18,6 @@ PSUChannel::PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double
     this->current_set = current_set > current_max ? current_max : current_set;
 }
 
-PSUChannel::~PSUChannel() {}
-
 void PSUChannel::set_enable(int enable) {
     this->enable = enable == 0 ? false : true;
 

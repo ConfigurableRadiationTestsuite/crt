@@ -3,7 +3,8 @@
 #include <QElapsedTimer>
 #include <QtMath>
 
-LabjackChannel::LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan, int gain, double boundary) : name(name), handle(handle), p_chan(p_chan), n_chan(n_chan), boundary(boundary), external_gain(gain) {
+LabjackChannel::LabjackChannel(QString const &name, int* handle, int p_chan, int n_chan, int gain, double boundary)
+    : name(name), handle(handle), p_chan(p_chan), n_chan(n_chan), boundary(boundary), external_gain(gain) {
     this->is_input = true;
     this->is_differential = n_chan == 199 ? false : true;
 
@@ -22,10 +23,7 @@ void LabjackChannel::update() {
 }
 
 bool LabjackChannel::check_boundary() {
-    if(boundary == 0)
-        return true;
-
-    if(qFabs(boundary) < qFabs(get_value())) {
+    if(boundary != 0 && qFabs(boundary) < qFabs(get_value())) {
         emit boundary_check_failed();
         return false;
     }
@@ -34,8 +32,7 @@ bool LabjackChannel::check_boundary() {
 }
 
 void LabjackChannel::set_range() {
-    double available_range;
-    foreach (available_range, range_list) {
+    foreach (double available_range, range_list) {
         if(value < 0.9 * available_range) {
             if(range == available_range)
                 return ;
