@@ -10,16 +10,8 @@ PSUTab::PSUTab(ConfigManager *m_configManager, RunManager *m_runManager)
 
 PSUTab::~PSUTab() {}
 
-void PSUTab::load_from_config() {
-    clear_subwindow_list();
-
-    QString section_content;
-    while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PSUW(runManager, new PSU(runManager, section_content)));
-        section_content.clear();
-    }
-
-    update_layout();
+void PSUTab::push_new_subwindow(const QString &config) {
+    subWindow_list.push_back(new PSUW(runManager, new PSU(runManager, config)));
 }
 
 void PSUTab::create_subwindow_from_dialog() {

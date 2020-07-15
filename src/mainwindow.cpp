@@ -15,6 +15,5 @@ void MainWindow::create_layout() {
     setMinimumSize(1024,768);
 
     setCentralWidget(new MainLayout);
-
 }
 

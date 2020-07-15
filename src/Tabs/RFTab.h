@@ -19,7 +19,7 @@ public:
     virtual ~RFTab() override;
 
 private slots:
-    void load_from_config() override;
+    void push_new_subwindow(const QString &config) override;
     void create_subwindow_from_dialog() override;
 
 private:

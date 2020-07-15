@@ -5,8 +5,6 @@
  * Author: Mattis Jaksch
  *
  * Tab containing multiple powersupplies.
- * They can be either added via button and dialog
- * or with a provided configuration file.
  *
  */
 
@@ -20,7 +18,7 @@ public:
     virtual ~PSUTab() override;
 
 private slots:
-    void load_from_config() override;
+    void push_new_subwindow(const QString &config) override;
     void create_subwindow_from_dialog() override;
 
 private:

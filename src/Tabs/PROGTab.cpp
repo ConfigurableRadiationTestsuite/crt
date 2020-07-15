@@ -10,17 +10,8 @@ PROGTab::PROGTab(ConfigManager *m_configManager, RunManager *m_runManager)
 
 PROGTab::~PROGTab() {}
 
-void PROGTab::load_from_config() {
-    clear_subwindow_list();
-
-    QString section_content;
-    while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, section_content)));
-        section_content.clear();
-    }
-
-    update_layout();
-
+void PROGTab::push_new_subwindow(const QString &config) {
+    subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, config)));
 }
 
 void PROGTab::create_subwindow_from_dialog() {

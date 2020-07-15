@@ -12,23 +12,14 @@ LBJTab::LBJTab(ConfigManager *m_configManager, RunManager *m_runManager)
 
 LBJTab::~LBJTab() {}
 
-void LBJTab::load_from_config() {
-    clear_subwindow_list();
-
-    QString section_content;
-    while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new LBJW(runManager, new Labjack(runManager, section_content)));
-        section_content.clear();
-    }
-
-    update_layout();
+void LBJTab::push_new_subwindow(const QString &config) {
+    subWindow_list.push_back(new LBJW(runManager, new Labjack(runManager, config)));
 }
 
 void LBJTab::create_subwindow_from_dialog() {
     QString name = addDialog->get_entry_list()[0].input_value->text();
     int connectionType = get_connectionType(addDialog->get_entry_list()[1].input_value->text());
     QString identifier = addDialog->get_entry_list()[2].input_value->text();
-
     QString channel_name = addDialog->get_entry_list()[3].input_value->text();
     QString pchannel = addDialog->get_entry_list()[4].input_value->text();
     QString nchannel = addDialog->get_entry_list()[5].input_value->text();

@@ -32,7 +32,9 @@ protected slots:
 
     void update_layout();
 
-    virtual void load_from_config() = 0;
+    virtual void load_from_config();
+    virtual void push_new_subwindow(const QString &config) = 0;
+
     void save_to_config();
 
     virtual void create_subwindow_from_dialog() = 0;

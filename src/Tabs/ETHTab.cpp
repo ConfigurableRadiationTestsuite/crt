@@ -5,21 +5,13 @@
 
 ETHTab::ETHTab(ConfigManager *m_configManager, RunManager *m_runManager)
     : WindowTab(m_configManager, m_runManager) {
-    sectionName = "PSU";
+    sectionName = "ETH";
 }
 
 ETHTab::~ETHTab() {}
 
-void ETHTab::load_from_config() {
-    clear_subwindow_list();
-
-    QString section_content;
-    while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new ETHW(runManager, new Ethernet(runManager, section_content)));
-        section_content.clear();
-    }
-
-    update_layout();
+void ETHTab::push_new_subwindow(const QString &config) {
+    subWindow_list.push_back(new ETHW(runManager, new Ethernet(runManager, config)));
 }
 
 void ETHTab::create_subwindow_from_dialog() {

@@ -110,3 +110,16 @@ void WindowTab::add_subwindow_from_dialog() {
 
     addDialog->show();
 }
+
+void WindowTab::load_from_config() {
+    clear_subwindow_list();
+
+    QString section_content;
+    while(configManager->get_config_section(sectionName, section_content)) {
+        push_new_subwindow(section_content);
+        section_content.clear();
+    }
+
+    update_layout();
+
+}

@@ -10,16 +10,8 @@ RFTab::RFTab(ConfigManager *m_configManager, RunManager *m_runManager)
 
 RFTab::~RFTab() {}
 
-void RFTab::load_from_config() {
-    clear_subwindow_list();
-
-    QString section_content;
-    while(configManager->get_config_section(sectionName, section_content)) {
-        subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, section_content)));
-        section_content.clear();
-    }
-
-    update_layout();
+void RFTab::push_new_subwindow(const QString &config) {
+    subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, config)));
 }
 
 void RFTab::create_subwindow_from_dialog() {
