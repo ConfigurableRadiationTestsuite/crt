@@ -25,7 +25,6 @@ void WindowTab::create_layout() {
     foreach (window, subWindow_list) {
         /* Main Box for the window */
         QGroupBox * windowGroupBox = new QGroupBox(window->get_component()->get_element_name());
-        connect(this, SIGNAL(clean_layout()), windowGroupBox, SLOT(deleteLater()));
 
         /* Create delete button */
         QPushButton * deleteButton = new QPushButton(window);
@@ -48,6 +47,7 @@ void WindowTab::create_layout() {
         scrollArea->setWidgetResizable(true);
         scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         scrollArea->setWidget(windowGroupBox);
+        connect(this, SIGNAL(clean_layout()), scrollArea, SLOT(deleteLater()));
 
         mainTabLayout->addWidget(scrollArea);
     }
