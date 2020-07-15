@@ -78,4 +78,5 @@ inline bool SubWindow::is_signal_in_list(struct RegisteredSignal * reg) {
 
     return false;
 }
+
 #endif // SUBWINDOW_H
