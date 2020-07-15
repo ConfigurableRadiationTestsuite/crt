@@ -1,7 +1,6 @@
 #include "Ethernet.h"
 
 #include <QDateTime>
-#include <QElapsedTimer>
 #include <QDir>
 #include <QFile>
 #include <QTcpSocket>
@@ -25,10 +24,6 @@ Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, uint p
     init();
 }
 
-Ethernet::~Ethernet() {
-    delete timer;
-}
-
 void Ethernet::set_config() {
     config_entry_list.clear();
 
@@ -40,20 +35,13 @@ void Ethernet::set_config() {
 void Ethernet::init() {
     emit status_changed(Waiting);
 
-    timer = new QElapsedTimer;
+    timeoutTimer = new QTimer(this);
+    connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(handle_disconnection()));
 
     connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(set_data_folder()));
 
     if(runManager->is_valid())
         set_data_folder();
-}
-
-void Ethernet::update() {
-    if(timer->isValid() && timer->elapsed() > timeout) {
-        emit connection_timed_out();
-        emit status_changed(Disconnected);
-        timer->restart();
-    }
 }
 
 void Ethernet::start_logging() {
@@ -72,13 +60,13 @@ void Ethernet::start_logging() {
 
     runManager->set_run_mode(StartLog, elementName);
     logging = true;
-    timer->start();
+    timeoutTimer->start(timeout);
     emit is_logging(true);
 }
 
 void Ethernet::stop_logging() {
     logging = false;
-    timer->invalidate();
+    timeoutTimer->stop();
     emit is_logging(false);
     emit status_changed(Waiting);
 
@@ -115,17 +103,15 @@ void Ethernet::accept_data() {
     reset_timeout();
 }
 
-void Ethernet::reset_timeout() {
-    timer->restart();
-}
-
-QStringList Ethernet::generate_header() {
-    return {"File", "Bytes"};
-}
-
 void Ethernet::set_data_folder() {
     data_folder = runManager->get_root_directory() + "/" + elementName;
 
     if(!QDir(data_folder).exists())
         QDir().mkdir(data_folder);
+}
+
+void Ethernet::handle_disconnection() {
+    emit connection_timed_out();
+    emit status_changed(Disconnected);
+    timeoutTimer->stop();
 }

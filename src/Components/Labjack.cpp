@@ -105,11 +105,8 @@ void Labjack::open_labjack() {
 }
 
 void Labjack::init() {
-    is_maximum = false;
-
     /* Setup channel */
-    LabjackChannel* channel;
-    foreach (channel, channel_vec) {
+    foreach (LabjackChannel* channel, channel_vec) {
         address_vec.push_back(channel->get_pchan_address());
         type_vec.push_back(LJM_FLOAT32);
         value_vec.push_back(0.0);
@@ -139,18 +136,16 @@ void Labjack::update() {
     /* Gather data */
     read(value_vec);
 
-    LabjackChannel* channel;
     QVector<double>::iterator it = value_vec.begin();
-    foreach (channel, channel_vec)
+    foreach (LabjackChannel* channel, channel_vec)
         channel->update_value(*it++);
-
-    adapt_channel_range();
 
     //Log data
     if(logging)
         runManager->append_values_to_file(this, value_vec);
 
-    /* Check and set the sample rate */
+    /* Check and adapt */
+    adapt_channel_range();
     adapt_sample_rate(sampleTimer->nsecsElapsed());
 
     /* Distribute data */
@@ -192,16 +187,6 @@ int Labjack::read(QVector<double> &value) {
     return err;
 }
 
-QStringList Labjack::generate_header() {
-    QStringList header;
-
-    LabjackChannel * channel;
-    foreach (channel, channel_vec)
-        header.push_back(channel->get_name());
-
-    return header;
-}
-
 /* Reconstruct individual channels from user input */
 void Labjack::get_channel_addresses(const QString &input, QVector<int> &output) {
     int position = 0;
@@ -227,8 +212,7 @@ void Labjack::adapt_channel_range() {
     if(rangeTimer->elapsed() < 1000)
         return;
 
-    LabjackChannel *channel;
-    foreach(channel, channel_vec)
+    foreach(LabjackChannel *channel, channel_vec)
         channel->set_range();
 
     rangeTimer->restart();
@@ -240,3 +224,12 @@ void Labjack::create_dummy_data(int size, double *values) {
         values[i] = channel_vec[i]->get_value() + double(QRandomGenerator::global()->bounded(-qint16(4096), qint16(4096))) / double(1024);
 }
 #endif
+
+QStringList Labjack::generate_header() {
+    QStringList header;
+
+    foreach (LabjackChannel * channel, channel_vec)
+        header.push_back(channel->get_name());
+
+    return header;
+}

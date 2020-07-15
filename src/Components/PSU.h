@@ -69,4 +69,13 @@ private:
     QStringList generate_header() override;
 };
 
+inline void PSU::set_master_trigger(int master_trigger) {
+    this->master_trigger = master_trigger > 0 ? true : false;
+}
+
+inline void PSU::update_settings() {
+    foreach (PSUChannel * channel, channel_list)
+        channel->update();
+}
+
 #endif // PSU_H

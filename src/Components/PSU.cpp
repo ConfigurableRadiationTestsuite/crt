@@ -50,8 +50,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 PSU::~PSU() {
     delete eth;
 
-    PSUChannel *channel;
-    foreach(channel, channel_list)
+    foreach(PSUChannel *channel, channel_list)
         delete channel;
 }
 
@@ -96,18 +95,6 @@ void PSU::update() {
     emit data_available();
 }
 
-QStringList PSU::generate_header() {
-    QStringList header;
-
-    PSUChannel * channel;
-    foreach (channel, channel_list) {
-        header.push_back("V" + QString::number(channel->get_number()));
-        header.push_back("mA" + QString::number(channel->get_number()));
-    }
-
-    return header;
-}
-
 enum vendor PSU::check_vendor(const QString &vendor) {
     if(vendor.contains("rohde", Qt::CaseInsensitive) || vendor.contains("schwarz", Qt::CaseInsensitive))
         return rohdeSchwarz;
@@ -150,23 +137,12 @@ void PSU::set_master_enable(int master_enable) {
     emit master_changed(this->master_enable);
 }
 
-void PSU::set_master_trigger(int master_trigger) {
-    this->master_trigger = master_trigger > 0 ? true : false;
-}
-
-void PSU::update_settings() {
-    PSUChannel * channel;
-    foreach (channel, channel_list)
-        channel->update();
-}
-
 void PSU::set_master_rohdeschwarz() {
     eth->write("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
 }
 
 void PSU::switch_on() {
-    PSUChannel * channel;
-    foreach (channel, channel_list)
+    foreach (PSUChannel * channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(true);
 
@@ -178,8 +154,7 @@ void PSU::switch_off() {
     if(has_master_switch() && master_trigger)
         set_master_enable(0);
 
-    PSUChannel * channel;
-    foreach (channel, channel_list)
+    foreach (PSUChannel * channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(false);
 }
@@ -194,4 +169,15 @@ bool PSU::check_network_connection() {
 
     emit disconnected(false);
     return true;
+}
+
+QStringList PSU::generate_header() {
+    QStringList header;
+
+    foreach (PSUChannel * channel, channel_list) {
+        header.push_back("V" + QString::number(channel->get_number()));
+        header.push_back("mA" + QString::number(channel->get_number()));
+    }
+
+    return header;
 }

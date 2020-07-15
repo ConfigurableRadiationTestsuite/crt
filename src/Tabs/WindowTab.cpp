@@ -49,6 +49,7 @@ void WindowTab::create_layout() {
         scrollArea->setWidgetResizable(true);
         scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         scrollArea->setWidget(windowGroupBox);
+        scrollArea->setMaximumHeight(windowGroupBox->sizeHint().height()*1.1);
 
         mainTabLayout->addWidget(scrollArea);
     }

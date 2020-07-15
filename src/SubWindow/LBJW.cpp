@@ -60,17 +60,15 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(datarateLine);
 
     /* Maximum button */
-    QCheckBox *datarateBox = new QCheckBox;
+    QCheckBox *datarateBox = new QCheckBox("Maximum");
     connect(datarateBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_maximum_samplerate(int)));
-    topLineLayout->addWidget(new QLabel("Maximum"));
     topLineLayout->addWidget(datarateBox);
 
     /* Permanent Logging */
-    QCheckBox *permanentLogBox = new QCheckBox;
+    QCheckBox *permanentLogBox = new QCheckBox("Permanent Logging");
     permanentLogBox->setDisabled(!runManager->is_valid());
     connect(permanentLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_permanent_logging(int)));
     connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogBox, SLOT(setDisabled(bool)));
-    topLineLayout->addWidget(new QLabel("Permanent Logging"));
     topLineLayout->addWidget(permanentLogBox);
 
     /* Signal button */

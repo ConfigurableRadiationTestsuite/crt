@@ -63,7 +63,7 @@ private:
     QElapsedTimer *rangeTimer;
     QElapsedTimer *dataTimer;
     int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
-    bool is_maximum;
+    bool is_maximum = false;
 
     void init();
     void open_labjack();
@@ -98,17 +98,10 @@ inline void Labjack::set_maximum_samplerate(int is_maximum) {
 }
 
 inline void Labjack::set_main_settling(const QString &text) {
-    int index = text.toInt();
-#ifdef DEBUG
-    assert(0 < index && index <= 50000);
-#endif
-    write(get_main_settling_address(), LJM_FLOAT32, index);
+    write(get_main_settling_address(), LJM_FLOAT32, text.toInt());
 }
 
 inline void Labjack::set_main_resolution(int index) {
-#ifdef DEBUG
-    assert(0 < index && index <= 10);
-#endif
     write(get_main_resolution_address(), LJM_UINT16, index);
 }
 

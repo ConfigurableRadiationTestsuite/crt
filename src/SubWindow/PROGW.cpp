@@ -32,9 +32,14 @@ PROGW::~PROGW() {
 }
 
 void PROGW::create_layout() {
-    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainVLayout = new QVBoxLayout;
 
     QHBoxLayout *optionLayout = new QHBoxLayout;
+
+    /* Trigger */
+    QCheckBox *trigger = new QCheckBox("Auto");
+    connect(trigger, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_trigger(int)));
+    connect(programmStarter, SIGNAL(announce_run(bool)), trigger, SLOT(setDisabled(bool)));
 
     /* Permanent Logging */
     QCheckBox * permanentLogging = new QCheckBox("Permanent Logging");
@@ -42,11 +47,6 @@ void PROGW::create_layout() {
     optionLayout->addWidget(permanentLogging);
     connect(permanentLogging, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_permanent_logging(int)));
     connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogging, SLOT(setDisabled(bool)));
-
-    /* Trigger */
-    QCheckBox *trigger = new QCheckBox("Auto");
-    connect(trigger, SIGNAL(stateChanged(int)), programmStarter, SLOT(set_trigger(int)));
-    connect(programmStarter, SIGNAL(announce_run(bool)), trigger, SLOT(setDisabled(bool)));
 
     /* Start / Stop */
     QPushButton *startButton = new QPushButton("Start");
@@ -67,7 +67,6 @@ void PROGW::create_layout() {
     optionLayout->addSpacerItem(space);
 
     /* Second Row */
-
     QHBoxLayout *pathLayout = new QHBoxLayout;
 
     /* Programmpath */

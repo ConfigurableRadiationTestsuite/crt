@@ -18,6 +18,8 @@ class QTcpSocket;
 
 #include "Component.h"
 
+#include <QElapsedTimer>
+
 enum EthernetStatus {Connected=1, Disconnected=0, Waiting=-1};
 
 class Ethernet : public Component {
@@ -26,7 +28,6 @@ Q_OBJECT
 public:
     Ethernet(RunManager *runManager, const QString &config);
     Ethernet(RunManager *runManager, const QString &m_element_name, uint port, long timeout);
-    virtual ~Ethernet() override;
 
     uint get_port() const {return port;}
     long get_timeout() const {return timeout;}
@@ -35,16 +36,19 @@ public:
 
     void set_config() override;
 
-    void update() override;
+    void update() override {}
 
 public slots:
-    void start_logging();
-    void stop_logging();
+    void start_logging() override;
+    void stop_logging() override;
 
 private slots:
     void accept_connection();
     void accept_data();
+
     void set_data_folder();
+
+    void handle_disconnection();
 
 signals:
     void files_changed(const QString &);
@@ -57,7 +61,7 @@ private:
     long timeout;
     QString data_folder;
 
-    QElapsedTimer *timer;
+    QTimer *timeoutTimer;
     QTcpServer *server;
     QTcpSocket *socket;
 
@@ -69,4 +73,11 @@ private:
     QStringList generate_header() override;
 };
 
+inline void Ethernet::reset_timeout() {
+    timeoutTimer->start(timeout);
+}
+
+inline QStringList Ethernet::generate_header() {
+    return {"File", "Bytes"};
+}
 #endif // ETHERNET_H

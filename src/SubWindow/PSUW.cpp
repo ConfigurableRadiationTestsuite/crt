@@ -33,7 +33,7 @@ PSUW::~PSUW() {
 }
 
 void PSUW::create_layout() {
-    QHBoxLayout *mainHLayout = new QHBoxLayout(this);
+    QHBoxLayout *mainHLayout = new QHBoxLayout;
 
     PSUChannel * channel;
     foreach (channel, psu->get_channel_list()) {

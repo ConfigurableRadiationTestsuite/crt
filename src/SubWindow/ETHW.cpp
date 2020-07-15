@@ -16,15 +16,11 @@ ETHW::ETHW(RunManager *m_runManager, Ethernet *ethernet)
 }
 
 ETHW::~ETHW() {
-    /* Degregister signals */
-    eventManager->delete_signal(&SubWindow::signal_on);
-    eventManager->delete_signal(&SubWindow::signal_off);
-
     delete ethernet;
 }
 
 void ETHW::create_layout() {
-    QGridLayout *mainGridLayout = new QGridLayout(this);
+    QGridLayout *mainGridLayout = new QGridLayout;
     int pos = 0;
 
     /* Signal button */
@@ -72,8 +68,6 @@ void ETHW::create_layout() {
     mainGridLayout->addWidget(fileEdit, 1, pos++);
 
     /* Activity Indicator */
-//    QLabel *activeLabel = new QLabel("Active");
-//    QLabel *placeHolder = new QLabel("<QIcon>");
     QLabel *activeLabel = new QLabel("Active");
     IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/ETH_connected.png"), QPixmap(":/icon/ETH_disconnected.png"), QPixmap(":/icon/ETH_event.png"));
     connect(ethernet, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_connected(int)));

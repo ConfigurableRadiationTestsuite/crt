@@ -19,7 +19,6 @@ Q_OBJECT
 public:
     ProgrammStarter(RunManager * runManager, const QString &config);
     ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path);
-    virtual ~ProgrammStarter();
 
     void set_config() override;
 
@@ -64,6 +63,14 @@ private:
 
 inline QString ProgrammStarter::get_arguments() {
     return arguments.join(' ');
+}
+
+inline QStringList ProgrammStarter::generate_header() {
+    return {"Line"};
+}
+
+inline void ProgrammStarter::set_arguments(const QString &text) {
+    arguments = text.split(' ');
 }
 
 #endif // PROGRAMMSTARTER_H

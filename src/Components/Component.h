@@ -4,6 +4,10 @@
 /*
  * Author: Mattis Jaksch
  *
+ * Abstract class for managing components
+ * (e.g. PSU, Labjack, ...)
+ * Provides logging and update functionality
+ *
  */
 
 #include "src/Configuration/ConfigElement.h"
@@ -25,8 +29,8 @@ public:
 public slots:
     virtual void update() = 0;
 
-    void start_logging();
-    void stop_logging();
+    virtual void start_logging();
+    virtual void stop_logging();
 
     void set_permanent_logging(int);
 

@@ -5,7 +5,6 @@
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
-    qDebug("Create ProgammStarter from Config");
 
     load_config(config);
     assert(parse_config({"name", "path"}));
@@ -26,8 +25,6 @@ ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_eleme
     init();
 }
 
-ProgrammStarter::~ProgrammStarter() {}
-
 void ProgrammStarter::set_config() {
     config_entry_list.clear();
 
@@ -39,10 +36,6 @@ void ProgrammStarter::set_config() {
 void ProgrammStarter::init() {
     process = new QProcess(this);
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
-}
-
-void ProgrammStarter::set_arguments(const QString &text) {
-    arguments = text.split(' ');
 }
 
 void ProgrammStarter::set_path(const QString &text) {
@@ -79,10 +72,6 @@ void ProgrammStarter::kill_programm() {
     stop_logging();
 
     emit announce_run(false);
-}
-
-QStringList ProgrammStarter::generate_header() {
-    return {"Line"};
 }
 
 void ProgrammStarter::receive_data() {
