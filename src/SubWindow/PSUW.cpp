@@ -25,15 +25,11 @@ PSUW::PSUW(RunManager *m_runManager, PSU *psu)
 }
 
 PSUW::~PSUW() {
-    qDebug("Destroying PSUW");
-
     /* Degregister signals */
     eventManager->delete_signal(&SubWindow::signal_on);
     eventManager->delete_signal(&SubWindow::signal_off);
 
     delete psu;
-
-    qDebug("PSUW destroyed");
 }
 
 void PSUW::create_layout() {

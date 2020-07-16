@@ -102,6 +102,8 @@ void LBJW::create_layout() {
     channelLayout->addWidget(new QLabel("Gain"), 0, 3);
     channelLayout->addWidget(new QLabel("Graph"), 0, 4);
 
+    QTimer *timer = new QTimer;
+
     LabjackChannel *channel; int cnt = 1;
     foreach (channel, lbj->get_channel_vec()) {
         //Name
@@ -113,8 +115,6 @@ void LBJW::create_layout() {
 
         /* Value */
         QLineEdit *valueLine = new QLineEdit(QString::number(channel->get_value()));
-        QTimer *timer = new QTimer;
-        timer->start(500);
         valueLine->setReadOnly(true);
         connect(timer, SIGNAL(timeout()), channel, SLOT(refresh_value()));
         connect(channel, SIGNAL(value_refreshed(const QString &)), valueLine, SLOT(setText(const QString &)));
@@ -144,6 +144,8 @@ void LBJW::create_layout() {
     mainVLayout->addWidget(settingsBox);
     mainVLayout->addWidget(channelBox);
     mainVLayout->addWidget(graphBox);
+
+    timer->start(500);
 
     setLayout(mainVLayout);
 }

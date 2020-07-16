@@ -24,11 +24,8 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
 }
 
 Component::~Component() {
-    qDebug("Destroying Component");
     runManager->set_run_mode(RemoveComponent, elementName);
     runManager->deregister_component(this);
-
-    qDebug("Component destroyed");
 }
 
 void Component::start_logging() {

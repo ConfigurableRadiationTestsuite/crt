@@ -32,6 +32,9 @@ public slots:
     virtual void start_logging();
     virtual void stop_logging();
 
+    void start_log_timer(long msec) {logTimer->start(msec);}
+    void stop_log_timer() {logTimer->stop();}
+
     void set_permanent_logging(int);
 
 signals:
@@ -43,11 +46,12 @@ protected:
     RunManager *runManager;
     QString elementName;
 
-    QTimer *logTimer = nullptr;
     bool logging = false;
     bool permanent_logging = false;
 
     virtual QStringList generate_header() = 0;
+
+    QTimer *logTimer = nullptr;
 
     void configure_timer(uint time);
 };
