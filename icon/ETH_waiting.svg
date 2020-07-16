@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="ETH_disconnected.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 210 297"
+   height="297mm"
+   width="210mm">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:window-maximized="1"
+     inkscape:window-y="20"
+     inkscape:window-x="0"
+     inkscape:window-height="1042"
+     inkscape:window-width="1920"
+     showgrid="true"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="1108.1574"
+     inkscape:cx="40.874201"
+     inkscape:zoom="18.622863"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       id="grid3713"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       inkscape:export-ydpi="656.77808"
+       inkscape:export-xdpi="656.77808"
+       style="fill:#000000;fill-opacity:0.2536946;stroke:none;stroke-width:0.14219686;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       y="287"
+       x="0"
+       height="10"
+       width="20"
+       id="rect4522" />
+    <rect
+       ry="4"
+       y="288"
+       x="1"
+       height="8"
+       width="18"
+       id="rect1971"
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.53265971;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882"
+       id="rect880-5"
+       width="0.5"
+       height="2.5"
+       x="3.25"
+       y="291.96872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882"
+       id="rect880-9"
+       width="0.5"
+       height="2.5"
+       x="3.25"
+       y="289.46872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882"
+       id="rect880-7"
+       width="0.5"
+       height="2.5"
+       x="6.25"
+       y="289.46872"
+       ry="0.25" />
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882"
+       id="rect880-76"
+       width="0.5"
+       height="2.5"
+       x="6.25"
+       y="291.96872"
+       ry="0.25" />
+    <rect
+       transform="rotate(-90)"
+       ry="0.25"
+       y="3.75"
+       x="-294.71872"
+       height="2.5"
+       width="0.5"
+       id="rect880-73-6"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882" />
+    <rect
+       transform="rotate(-90)"
+       ry="0.25"
+       y="3.75"
+       x="-289.75"
+       height="2.5"
+       width="0.5"
+       id="rect880-73"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944882" />
+    <g
+       id="g1022"
+       transform="translate(-2.041667,8.1450806)">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-5-5"
+         width="0.5"
+         height="2.5"
+         x="10.291667"
+         y="283.82364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-9-6"
+         width="0.5"
+         height="2.5"
+         x="10.291667"
+         y="281.32364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-7-3"
+         width="0.5"
+         height="2.5"
+         x="13.291667"
+         y="281.32364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-76-9"
+         width="0.5"
+         height="2.5"
+         x="13.291667"
+         y="283.82364"
+         ry="0.25" />
+      <rect
+         transform="rotate(-90)"
+         ry="0.25"
+         y="10.791667"
+         x="-286.57364"
+         height="2.5"
+         width="0.5"
+         id="rect880-73-6-4"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883" />
+      <rect
+         transform="rotate(-90)"
+         ry="0.25"
+         y="10.791667"
+         x="-281.60492"
+         height="2.5"
+         width="0.5"
+         id="rect880-73-8"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883" />
+    </g>
+    <g
+       id="g1046"
+       transform="translate(-1.010417,8.1450806)">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-5-1"
+         width="0.5"
+         height="2.5"
+         x="14.260417"
+         y="283.82364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-9-2"
+         width="0.5"
+         height="2.5"
+         x="14.260417"
+         y="281.32364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-7-9"
+         width="0.5"
+         height="2.5"
+         x="17.260416"
+         y="281.32364"
+         ry="0.25" />
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883"
+         id="rect880-76-3"
+         width="0.5"
+         height="2.5"
+         x="17.260416"
+         y="283.82364"
+         ry="0.25" />
+      <rect
+         transform="rotate(-90)"
+         ry="0.25"
+         y="14.760417"
+         x="-286.57364"
+         height="2.5"
+         width="0.5"
+         id="rect880-73-6-9"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883" />
+      <rect
+         transform="rotate(-90)"
+         ry="0.25"
+         y="14.760417"
+         x="-281.60492"
+         height="2.5"
+         width="0.5"
+         id="rect880-73-0"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.944883" />
+    </g>
+  </g>
+</svg>
