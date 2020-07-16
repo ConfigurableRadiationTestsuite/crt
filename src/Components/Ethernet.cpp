@@ -33,7 +33,7 @@ void Ethernet::set_config() {
 }
 
 void Ethernet::init() {
-    emit status_changed(Waiting);
+    set_status(Waiting);
 
     timeoutTimer = new QTimer(this);
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(handle_disconnection()));
@@ -50,9 +50,9 @@ void Ethernet::start_logging() {
     connect(server, SIGNAL(newConnection()), this, SLOT(accept_connection()));
 
     if(!server->listen(QHostAddress::Any, port))
-        emit status_changed(Disconnected);
+        set_status(Disconnected);
     else
-        emit status_changed(Connected);
+        set_status(Connected);
 
     /* Setup Log */
     runManager->register_component(this, elementName);
@@ -68,7 +68,7 @@ void Ethernet::stop_logging() {
     logging = false;
     timeoutTimer->stop();
     emit is_logging(false);
-    emit status_changed(Waiting);
+    set_status(Waiting);
 
     runManager->set_run_mode(StopLog, elementName);
     runManager->deregister_component(this);
@@ -112,6 +112,6 @@ void Ethernet::set_data_folder() {
 
 void Ethernet::handle_disconnection() {
     emit connection_timed_out();
-    emit status_changed(Disconnected);
+    set_status(Disconnected);
     timeoutTimer->stop();
 }

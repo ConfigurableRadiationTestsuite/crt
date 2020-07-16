@@ -7,12 +7,12 @@ class IndicatorIcon : public QLabel {
 Q_OBJECT
 
 public:
-    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap event);
+    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap waiting, QPixmap event);
     virtual ~IndicatorIcon();
 
 public slots:
     void set_event();
-    void set_connected(int);
+    void set_status(int);
 
 private slots:
     void reset_icon();
@@ -21,6 +21,7 @@ private:
     QString name;
     QPixmap connected;
     QPixmap disconnected;
+    QPixmap waiting;
     QPixmap event;
     QPixmap last;
 

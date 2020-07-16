@@ -31,6 +31,7 @@ public:
 
     uint get_port() const {return port;}
     long get_timeout() const {return timeout;}
+    EthernetStatus get_status() const {return status;}
 
     void reset_timeout();
 
@@ -41,6 +42,7 @@ public:
 public slots:
     void start_logging() override;
     void stop_logging() override;
+    void set_status(EthernetStatus status);
 
 private slots:
     void accept_connection();
@@ -65,6 +67,8 @@ private:
     QTcpServer *server;
     QTcpSocket *socket;
 
+    EthernetStatus status;
+
     long bytes = 0;
     long files = 0;
 
@@ -80,4 +84,10 @@ inline void Ethernet::reset_timeout() {
 inline QStringList Ethernet::generate_header() {
     return {"File", "Bytes"};
 }
+
+inline void Ethernet::set_status(EthernetStatus status) {
+    this->status = status;
+    emit status_changed(status);
+}
+
 #endif // ETHERNET_H
