@@ -4,11 +4,8 @@
 #include <QFileDialog>
 #include <QTextStream>
 
-ConfigManager::ConfigManager() {}
-
-ConfigManager::ConfigManager(QString &configName) : configName(configName) {}
-
-ConfigManager::~ConfigManager() {}
+const QString ConfigManager::sectionStart = "Section";
+const QString ConfigManager::sectionEnd = "EndSection";
 
 bool ConfigManager::get_config_section(QString name, QString &section) {
     QFile file(configName);
@@ -21,7 +18,7 @@ bool ConfigManager::get_config_section(QString name, QString &section) {
     while(!in.atEnd()) {
         line = in.readLine();
 
-        if(line.contains("Section") && !line.contains("EndSection"))
+        if(line.contains(sectionStart) && !line.contains(sectionEnd))
             if(line.contains(name)) {
                 //Check section position
                 if(check_section_position(name, pos))
@@ -40,7 +37,7 @@ bool ConfigManager::get_config_section(QString name, QString &section) {
     while(!in.atEnd()) {
         line = in.readLine();
 
-        if(line.contains("EndSection"))
+        if(line.contains(sectionEnd))
             break;
         else
             section += line + "\n";
@@ -53,7 +50,7 @@ bool ConfigManager::get_config_section(QString name, QString &section) {
 
 /* Check how many sections of the same kind have already been found */
 bool ConfigManager::check_section_position(const QString &name, int pos) {
-    for(QVector<struct section_position>::iterator i = section_position_list.begin(); i != section_position_list.end(); i++) {
+    for(QVector<Section>::iterator i = section_positions.begin(); i != section_positions.end(); i++) {
         if((*i).sectionName == name) {
             if((*i).pos < pos) {
                 (*i).pos++;
@@ -65,7 +62,7 @@ bool ConfigManager::check_section_position(const QString &name, int pos) {
     }
 
     //Add if the section is not yet in the list
-    section_position_list.push_back({name, pos});
+    section_positions.push_back({name, pos});
     return true;
 }
 
@@ -81,7 +78,7 @@ void ConfigManager::load_config() {
     //Validate config
     assert(parse_config());
 
-    section_position_list.clear();
+    section_positions.clear();
 
     emit loading_config();
 }
@@ -133,25 +130,25 @@ bool ConfigManager::parse_config() {
             continue;
 
         //Check if there is code outside of sections
-        if(!in_section && !line.contains("Section") && !line.contains("EndSection"))
+        if(!in_section && !line.contains(sectionStart) && !line.contains(sectionEnd))
             return false;
 
         //Check if a 'Section' is followed by 'EndSection'
-        if(!in_section && line.contains("EndSection"))
+        if(!in_section && line.contains(sectionEnd))
             return false;
-        if(in_section && !line.contains("EndSection") && line.contains("Section"))
+        if(in_section && !line.contains(sectionEnd) && line.contains(sectionStart))
             return false;
 
         //Get into section
-        if(line.contains("Section") && !line.contains("EndSection")) {
+        if(line.contains(sectionStart) && !line.contains(sectionEnd)) {
             in_section = true;
 
             //Check if section has a name of at least 3 characters
-            if(line.length() < QString("Section").length()+3)
+            if(line.length() < QString(sectionStart).length()+3)
                 return false;
         }
 
-        if(line.contains("EndSection"))
+        if(line.contains(sectionEnd))
             in_section = false;
     }
 

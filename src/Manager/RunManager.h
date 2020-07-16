@@ -24,7 +24,7 @@ Q_OBJECT
 
 public:
     RunManager(EventManager *eventManager);
-    virtual ~RunManager();
+    virtual ~RunManager() {}
 
     EventManager * get_eventManager() {return eventManager;}
 

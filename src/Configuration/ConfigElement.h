@@ -18,10 +18,12 @@ struct config_entry {
     QString value;
 };
 
+typedef struct config_entry Entry;
+
 class ConfigElement {
 public:
-    ConfigElement();
-    virtual ~ConfigElement();
+    ConfigElement() {}
+    virtual ~ConfigElement() {}
 
     QString get_config();
     QString get_value(const QString &name);
@@ -31,11 +33,32 @@ public:
     void load_config(const QString &content);
 
 protected:
-    QVector<struct config_entry> config_entry_list;
+    QVector<Entry> config_entry_list;
 
-    struct config_entry * get_entry(const QString &name);
+    Entry *get_entry(const QString &name);
 
     virtual bool parse_config(const QVector<QString> &entries);
 };
+
+inline QString ConfigElement::get_value(const QString &name) {
+    return (get_entry(name) != nullptr) ? get_entry(name)->value : "";
+}
+
+inline void ConfigElement::set_value(const QString &name, const QString &value) {
+    Entry *entry = get_entry(name);
+
+    if(entry == nullptr)
+        config_entry_list.push_back({name, value});
+    else
+        entry->value = value;
+}
+
+inline Entry *ConfigElement::get_entry(const QString &name) {
+   for(QVector<struct config_entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
+        if((*it).name.contains(name))
+            return &(*it);
+
+    return nullptr;
+}
 
 #endif // CONFIGELEMENT_H

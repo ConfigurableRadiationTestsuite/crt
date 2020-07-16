@@ -8,8 +8,6 @@
  * Other objects can call for their config section
  * and also pass a saveable config section
  *
- * TODO: Improve config saving management
- *
  */
 
 #include <QWidget>
@@ -19,13 +17,17 @@ struct section_position {
     int pos;
 };
 
+typedef struct section_position Section;
+
 class ConfigManager : public QWidget {
 Q_OBJECT
 
 public:
-    ConfigManager();
-    ConfigManager(QString &configName);
-    virtual ~ConfigManager();
+    ConfigManager() {}
+    ConfigManager(QString &configName)
+        : configName(configName) {}
+
+    virtual ~ConfigManager() {}
 
     void set_new_config(const QString &configName);
     bool get_config_section(QString name, QString &section);
@@ -41,9 +43,11 @@ signals:
     void saving_config();
 
 private:
-    QVector<struct section_position> section_position_list;
+    QVector<Section> section_positions;
     QString configName = ".cfg";
     QString content;
+
+    static const QString sectionStart, sectionEnd;
 
     bool parse_config();
     bool check_section_position(const QString &name, int pos);
@@ -54,7 +58,7 @@ inline void ConfigManager::set_new_config(const QString &configName) {
 }
 
 inline void ConfigManager::append_content(const QString &section, const QString &content) {
-    this->content += "Section " + section + "\n" + content + "EndSection\n\n";
+    this->content += sectionStart + " " + section + "\n" + content + sectionEnd + "\n\n";
 }
 
 #endif // CONFIGMANAGER_H

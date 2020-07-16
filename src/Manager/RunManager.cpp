@@ -20,8 +20,6 @@ RunManager::RunManager(EventManager *eventManager) : eventManager(eventManager) 
     create_layout();
 }
 
-RunManager::~RunManager() {}
-
 void RunManager::create_layout() {
     QHBoxLayout *mainLayout = new QHBoxLayout;
 
