@@ -69,8 +69,8 @@ void ETHW::create_layout() {
 
     /* Activity Indicator */
     QLabel *activeLabel = new QLabel("Active");
-    IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/ETH_connected.png"), QPixmap(":/icon/ETH_disconnected.png"), QPixmap(":/icon/ETH_event.png"));
-    connect(ethernet, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_connected(int)));
+    IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/ETH_connected.png"), QPixmap(":/icon/ETH_disconnected.png"), QPixmap(":/icon/ETH_waiting.png"), QPixmap(":/icon/ETH_event.png"));
+    connect(ethernet, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_status(int)));
     connect(ethernet, SIGNAL(files_changed(const QString &)), activeIndicator, SLOT(set_event()));
     mainGridLayout->addWidget(activeLabel, 0, pos);
     mainGridLayout->addWidget(activeIndicator, 1, pos++);
