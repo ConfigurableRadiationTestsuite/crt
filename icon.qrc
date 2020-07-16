@@ -12,5 +12,6 @@
         <file>icon/ETH_connected.png</file>
         <file>icon/ETH_disconnected.png</file>
         <file>icon/ETH_event.png</file>
+        <file>icon/ETH_waiting.png</file>
     </qresource>
 </RCC>
