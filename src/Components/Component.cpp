@@ -24,8 +24,11 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
 }
 
 Component::~Component() {
+    qDebug("Destroying Component");
     runManager->set_run_mode(RemoveComponent, elementName);
     runManager->deregister_component(this);
+
+    qDebug("Component destroyed");
 }
 
 void Component::start_logging() {
@@ -68,7 +71,7 @@ void Component::set_permanent_logging(int permanent_logging) {
 
 void Component::configure_timer(uint time) {
     if(logTimer == nullptr) {
-        logTimer = new QTimer(this);
+        logTimer = new QTimer;
         connect(logTimer, SIGNAL(timeout()), this, SLOT(update()));
     }
 

@@ -41,8 +41,7 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 }
 
 RFIO::~RFIO() {
-    RFIOChannel *channel;
-    foreach(channel, channel_list)
+    foreach(RFIOChannel *channel, channel_list)
         delete channel;
 
     process->kill();

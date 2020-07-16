@@ -17,7 +17,8 @@ class QElapsedTimer;
 #include <QWidget>
 
 enum RunMode {Creation=0, Init=1, StartRun=3, StartLog=4, StopLog=5,
-              AddComponent=6, RemoveComponent=7, Event=8, StopRun=255};
+                  AddComponent=6, RemoveComponent=7, Event=8, StopRun=255};
+Q_DECLARE_METATYPE(RunMode)
 
 class RunManager : public QWidget, public FileManager {
 Q_OBJECT

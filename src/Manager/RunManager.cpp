@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QTimer>
 
+
 RunManager::RunManager(EventManager *eventManager) : eventManager(eventManager) {
     runTime = new QElapsedTimer;
     offsetTime = 0;
@@ -16,6 +17,8 @@ RunManager::RunManager(EventManager *eventManager) : eventManager(eventManager) 
     updateTime = new QTimer;
     updateTime->start(1000);
     connect(updateTime, SIGNAL(timeout()), this, SLOT(update_run()));
+
+    qRegisterMetaType<RunMode>("RunMode");
 
     create_layout();
 }

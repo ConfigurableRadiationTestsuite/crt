@@ -17,7 +17,11 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
 }
 
 EthernetClient::~EthernetClient() {
+    qDebug("Destroying EthernetClient");
     socket->close();
+
+    reconnection_timer->stop();
+    qDebug("EthernetClient destroyed");
 }
 
 void EthernetClient::connected() {

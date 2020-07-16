@@ -20,6 +20,7 @@ Q_OBJECT
 
 public:
     PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
+    ~PSUChannel() {qDebug("Destroyed Channel");}
 
     uint get_number() const {return number;}
     bool get_enable() const {return enable;}

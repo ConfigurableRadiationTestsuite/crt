@@ -48,10 +48,13 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 }
 
 PSU::~PSU() {
+    qDebug("Destroying PSU");
     delete eth;
 
     foreach(PSUChannel *channel, channel_list)
         delete channel;
+
+    qDebug("PSU destroyed");
 }
 
 void PSU::set_config() {
