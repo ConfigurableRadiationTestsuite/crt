@@ -23,16 +23,14 @@ struct ComponentFile {
     long long creationTime;
 };
 
-typedef struct ComponentFile Component;
-
 class FileManager {
 
 public:
     FileManager() {}
     virtual ~FileManager() {}
 
-    QVector<Component*> get_file_list() const {return file_list;}
-    Component * get_file(const void * subComponent);
+    QVector<ComponentFile*> get_file_list() const {return file_list;}
+    ComponentFile * get_file(const void * subComponent);
     QString get_root_directory() const {return root_directory;}
 
     void append_value_to_file(const void * subComponent, double value);
@@ -50,7 +48,7 @@ public:
 protected:
     QString root_directory;
 
-    QVector<Component*> file_list;
+    QVector<ComponentFile*> file_list;
 
     bool file_exists(const QFile * ref_file);
 
@@ -70,8 +68,8 @@ inline bool FileManager::file_exists(const QFile * ref_file) {
     return false;
 }
 
-inline Component * FileManager::get_file(const void * subComponent) {
-    foreach (Component * file, file_list)
+inline ComponentFile * FileManager::get_file(const void * subComponent) {
+    foreach (ComponentFile * file, file_list)
         if(file->subComponent == subComponent)
             return file;
 

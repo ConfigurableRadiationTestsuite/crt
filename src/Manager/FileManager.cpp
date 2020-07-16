@@ -15,7 +15,7 @@ void FileManager::set_root_directory(const QString &directory) {
 }
 
 void FileManager::update_root_directory() {
-    foreach(Component *file, file_list) {
+    foreach(ComponentFile *file, file_list) {
         const void * subComponent = file->subComponent;
         QString name = file->name;
 
