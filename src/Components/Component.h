@@ -32,10 +32,9 @@ public slots:
     virtual void start_logging();
     virtual void stop_logging();
 
-    void start_log_timer(long msec) {logTimer->start(msec);}
-    void stop_log_timer() {logTimer->stop();}
-
     void set_permanent_logging(int);
+
+    void configure_timer(uint time=1000);
 
 signals:
     void is_logging(bool);
@@ -52,13 +51,6 @@ protected:
     virtual QStringList generate_header() = 0;
 
     QTimer *logTimer = nullptr;
-
-    void configure_timer(uint time);
-};
-
-class ComponentUpdater : public Component {
-public:
-    virtual void update() = 0;
 };
 
 #endif // COMPONENT_H

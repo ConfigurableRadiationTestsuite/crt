@@ -61,6 +61,7 @@ protected:
     SpecSignalDialog *signalDialog = nullptr;
 
     Component *component;
+    QThread *thread;
 
     QString get_signal_list();
     bool is_signal_in_list(struct RegisteredSignal * reg);
