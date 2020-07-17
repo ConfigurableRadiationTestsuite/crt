@@ -3,7 +3,9 @@
 Component::Component(const QString &elementName, RunManager *runManager, uint time)
     : runManager(runManager), elementName(elementName) {
 
-//    configure_timer(time);
+#ifndef MULTITHREAD_TEST
+    configure_timer(time);
+#endif
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);
@@ -17,7 +19,9 @@ Component::Component(RunManager *runManager, const QString &config, uint time)
 
     elementName = get_value("name");
 
-//    configure_timer(time);
+#ifndef MULTITHREAD_TEST
+    configure_timer(time);
+#endif
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);

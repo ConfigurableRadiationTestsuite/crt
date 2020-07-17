@@ -52,11 +52,11 @@ bool IQVector::is_valid() const {
     ok &= MIN_DATAPOINTS < get_period().first;
     ok &= MIN_DATAPOINTS < get_period().second;
 
-    ok &= get_maximum().first > qPow(2, BITS_TO_IGNORE);
-    ok &= get_maximum().second > qPow(2, BITS_TO_IGNORE);
+    ok &= get_maximum(get_i()) > qPow(2, BITS_TO_IGNORE);
+    ok &= get_maximum(get_q()) > qPow(2, BITS_TO_IGNORE);
 
-    ok &= get_minimum().first < - qPow(2, BITS_TO_IGNORE);
-    ok &= get_minimum().second < - qPow(2, BITS_TO_IGNORE);
+    ok &= get_minimum(get_i()) < -qPow(2, BITS_TO_IGNORE);
+    ok &= get_minimum(get_q()) < -qPow(2, BITS_TO_IGNORE);
 
     return ok;
 }

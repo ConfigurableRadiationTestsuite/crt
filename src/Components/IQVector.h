@@ -19,6 +19,11 @@ public:
     QPair<int, int> get_maximum() const;
 
     template<typename T>
+    int get_minimum(const QVector<T> &input) const;
+    template<typename T>
+    int get_maximum(const QVector<T> &input) const;
+
+    template<typename T>
     void get_i(QVector<T> &output) const;
     QVector<int> get_i() const;
     template<typename T>
@@ -34,6 +39,16 @@ private:
     bool maximum_search(int &maximum, int &point, int value, int location) const;
     bool period_search(int &cnt, int &samples, int &period, bool &sign, int value) const;
 };
+template<typename T>
+inline int IQVector::get_minimum(const QVector<T> &input) const {
+    int min = *std::min_element(input.begin(), input.end());
+    return min;
+}
+
+template<typename T>
+inline int IQVector::get_maximum(const QVector<T> &input) const {
+    return *std::max_element(input.begin(), input.end());
+}
 
 inline QPair<int, int> IQVector::get_minimum() const {
     IQSample min = *std::min_element(begin(), end());

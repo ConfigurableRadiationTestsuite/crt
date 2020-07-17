@@ -56,13 +56,13 @@ void RFW::create_layout() {
     headerHLayout->addWidget(line_2);
 
     /* Resume */
-    QPushButton * resumeButton = new QPushButton;
-    resumeButton->setText("Resume");
-    headerHLayout->addWidget(resumeButton);
-    connect(resumeButton, SIGNAL(clicked()), rfio, SLOT(reconnect()));
+//    QPushButton * resumeButton = new QPushButton;
+//    resumeButton->setText("Resume");
+//    headerHLayout->addWidget(resumeButton);
+//    connect(resumeButton, SIGNAL(clicked()), rfio, SLOT(reconnect()));
 
-    QSpacerItem *space = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    headerHLayout->addSpacerItem(space);
+//    QSpacerItem *space = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
+//    headerHLayout->addSpacerItem(space);
 
     /* Channel */
     QHBoxLayout *subHLayout = new QHBoxLayout;
@@ -90,9 +90,9 @@ void RFW::create_layout() {
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
         connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
-        connect(eventManager, SIGNAL(logging_disabled(bool)), evalBox, SLOT(setDisabled(bool)));
+        connect(runManager, SIGNAL(isInvalid_changed(bool)), evalBox, SLOT(setDisabled(bool)));
 
-        connect(channel, SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(trigger_signal_list()));
+        connect(channel, SIGNAL(error(QVector<IQSample>, int)), this, SLOT(trigger_signal_list()));
 
         /* Margin info */
         QLabel *marginLabel = new QLabel("Margin");

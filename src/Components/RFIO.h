@@ -6,11 +6,13 @@
 *
 */
 
-class RFIOChannel;
-class RFIOUpdater;
+#define BYTE_PER_SAMPLE 2
+#define BYTE_PER_CHANNEL 4
 
 class QProcess;
 class QThread;
+
+#include "RFIOChannel.h"
 
 #include "Component.h"
 
@@ -27,15 +29,13 @@ public:
    void set_config() override;
 
 public slots:
-   void update() override {}
+   void update() override;
 
    void set_single_shot();
    void set_multi_shot();
 
 private slots:
-   void reconnect();
-   void handle_error(QVector<int> i_data, QVector<int> q_data, int number);
-   void set_thread_destroyed();
+   void handle_error(QVector<IQSample> data, int number);
 
 private:
    QString address;
@@ -43,9 +43,7 @@ private:
    bool is_single_shot = false;
    bool is_destroyed;
 
-   RFIOUpdater *rfioUpdater;
    QProcess *process;
-   QThread *updateThread;
    QVector<RFIOChannel *> channel_list;
 
    int channel;
@@ -53,16 +51,9 @@ private:
    void init();
 
    QStringList generate_header() override;
+
+   QByteArray dummy_iq(int period, int channel);
 };
-
-inline void RFIO::set_thread_destroyed() {
-    is_destroyed = true;
-}
-
-inline void RFIO::reconnect() {
-    if(is_destroyed)
-        init();
-}
 
 inline void RFIO::set_single_shot() {
     is_single_shot = true;
