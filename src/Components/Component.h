@@ -56,4 +56,9 @@ protected:
     void configure_timer(uint time);
 };
 
+class ComponentUpdater : public Component {
+public:
+    virtual void update() = 0;
+};
+
 #endif // COMPONENT_H
