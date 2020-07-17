@@ -90,7 +90,6 @@ void RFW::create_layout() {
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
         connect(evalBox, SIGNAL(stateChanged(int)), channel, SLOT(set_data_analyze(int)));
-        connect(runManager, SIGNAL(isInvalid_changed(bool)), evalBox, SLOT(setDisabled(bool)));
 
         connect(channel, SIGNAL(error(QVector<IQSample>, int)), this, SLOT(trigger_signal_list()));
 

@@ -11,7 +11,6 @@ class RunManager;
 #include "IQVector.h"
 
 #include <QObject>
-#include <QtMath>
 
 class RFIOChannel : public QObject {
 Q_OBJECT

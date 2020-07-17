@@ -71,11 +71,6 @@ void RFIO::init() {
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
 
     process->waitForStarted();
-
-/*    while(process->state() == QProcess::Running) {
-        if(process->waitForReadyRead())
-            update();
-    }*/
 }
 
 void RFIO::update() {
@@ -95,7 +90,7 @@ void RFIO::update() {
     for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++) {
         chan = 0;
         foreach(channel, channel_list) {
-            channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE, 4));
+            channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
             chan++;
         }
     }

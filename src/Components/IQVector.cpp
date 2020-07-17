@@ -49,14 +49,16 @@ bool IQVector::is_valid() const {
     bool ok = true;
 
     /* Check if there is possibly valid data */
-    ok &= MIN_DATAPOINTS < get_period().first;
-    ok &= MIN_DATAPOINTS < get_period().second;
+    QPair<int, int> period = get_period();
 
-    ok &= get_maximum(get_i()) > qPow(2, BITS_TO_IGNORE);
-    ok &= get_maximum(get_q()) > qPow(2, BITS_TO_IGNORE);
+    ok &= MIN_DATAPOINTS < period.first;
+    ok &= MIN_DATAPOINTS < period.second;
 
-    ok &= get_minimum(get_i()) < -qPow(2, BITS_TO_IGNORE);
-    ok &= get_minimum(get_q()) < -qPow(2, BITS_TO_IGNORE);
+    ok &= get_maximum(get_i().mid(0, period.first*2)) > qPow(2, BITS_TO_IGNORE);
+    ok &= get_maximum(get_q().mid(0, period.second*2)) > qPow(2, BITS_TO_IGNORE);
+
+    ok &= get_minimum(get_i().mid(0, period.first*2)) < -qPow(2, BITS_TO_IGNORE);
+    ok &= get_minimum(get_q().mid(0, period.second*2)) < -qPow(2, BITS_TO_IGNORE);
 
     return ok;
 }

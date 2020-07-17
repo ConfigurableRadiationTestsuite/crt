@@ -41,8 +41,7 @@ private:
 };
 template<typename T>
 inline int IQVector::get_minimum(const QVector<T> &input) const {
-    int min = *std::min_element(input.begin(), input.end());
-    return min;
+    return *std::min_element(input.begin(), input.end());
 }
 
 template<typename T>
