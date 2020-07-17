@@ -107,7 +107,10 @@ inline void Labjack::set_main_resolution(int index) {
 
 inline void Labjack::adapt_sample_rate(qint64 nsecs) {
     /* Convert to sample per second */
-    maxSamplerate = 1000*1000*1000 / (2*nsecs);
+    if(nsecs < 1000*1000)
+        maxSamplerate = 1000;
+    else
+        maxSamplerate = 1000*1000*1000 / (2*nsecs);
 
     if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
         samplerate = maxSamplerate;
