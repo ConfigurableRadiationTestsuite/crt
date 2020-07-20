@@ -41,6 +41,7 @@ SOURCES += \
     src/Components/ProgrammStarter.cpp \
     src/Components/RFIO.cpp \
     src/Components/RFIOChannel.cpp \
+    src/Components/Sequencer.cpp \
     src/Dialog/SpecAddDialog.cpp \
     src/Dialog/SpecSignalDialog.cpp \
     src/Manager/EventManager.cpp \
@@ -57,11 +58,13 @@ SOURCES += \
     src/SubWindow/PROGW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
+    src/SubWindow/SEQW.cpp \
     src/Tabs/ETHTab.cpp \
     src/Tabs/LBJTab.cpp \
     src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
     src/Tabs/RFTab.cpp \
+    src/Tabs/Seqtab.cpp \
     src/mainwindow.cpp \
     src/Configuration/ConfigElement.cpp \
     src/Configuration/ConfigManager.cpp \
@@ -86,6 +89,7 @@ HEADERS += \
     src/Components/ProgrammStarter.h \
     src/Components/RFIO.h \
     src/Components/RFIOChannel.h \
+    src/Components/Sequencer.h \
     src/Dialog/SpecAddDialog.h \
     src/Dialog/SpecSignalDialog.h \
     src/Manager/EventManager.h \
@@ -102,11 +106,13 @@ HEADERS += \
     src/SubWindow/PROGW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
+    src/SubWindow/SEQW.h \
     src/Tabs/ETHTab.h \
     src/Tabs/LBJTab.h \
     src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \
     src/Tabs/RFTab.h \
+    src/Tabs/Seqtab.h \
     src/mainwindow.h \
     src/Configuration/ConfigElement.h \
     src/Configuration/ConfigManager.h \
