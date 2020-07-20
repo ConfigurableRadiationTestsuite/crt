@@ -33,8 +33,6 @@ public:
     double get_voltage_max() const {return voltage_max;}
     double get_current_max() const {return current_max;}
 
-    void set_ethernet(EthernetClient *eth) {this->eth = eth;}
-
 public slots:
     void set_enable(int enable);
     void set_trigger(int trigger);

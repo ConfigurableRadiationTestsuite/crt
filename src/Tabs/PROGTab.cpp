@@ -9,16 +9,20 @@ PROGTab::PROGTab(ConfigManager *m_configManager, RunManager *m_runManager)
 }
 
 void PROGTab::push_new_subwindow(const QString &config) {
-    subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, config)));
+    PROGW *progw = new PROGW(runManager, new ProgrammStarter(runManager, config));
+    subWindow_list.push_back(progw);
+
+    layout_updater(progw);
 }
 
 void PROGTab::create_subwindow_from_dialog() {
     QString name = addDialog->get_entry_list()[0].input_value->text();
     QString path = addDialog->get_entry_list()[1].input_value->text();
 
-    subWindow_list.push_back(new PROGW(runManager, new ProgrammStarter(runManager, name, path)));
+    PROGW *progw = new PROGW(runManager, new ProgrammStarter(runManager, name, path));
+    subWindow_list.push_back(progw);
 
-    update_layout();
+    layout_updater(progw);
 }
 
 void PROGTab::create_add_subwindow_dialog() {

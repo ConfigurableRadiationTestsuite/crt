@@ -9,7 +9,10 @@ ETHTab::ETHTab(ConfigManager *m_configManager, RunManager *m_runManager)
 }
 
 void ETHTab::push_new_subwindow(const QString &config) {
-    subWindow_list.push_back(new ETHW(runManager, new Ethernet(runManager, config)));
+    ETHW *ethw = new ETHW(runManager, new Ethernet(runManager, config));
+    subWindow_list.push_back(ethw);
+
+    layout_updater(ethw);
 }
 
 void ETHTab::create_subwindow_from_dialog() {
@@ -17,9 +20,10 @@ void ETHTab::create_subwindow_from_dialog() {
     uint port = addDialog->get_entry_list()[1].input_value->text().toUInt();
     long long timeout = addDialog->get_entry_list()[2].input_value->text().toULongLong();
 
-    subWindow_list.push_back(new ETHW(runManager, new Ethernet(runManager, name, port, timeout)));
+    ETHW *ethw = new ETHW(runManager, new Ethernet(runManager, name, port, timeout));
+    subWindow_list.push_back(ethw);
 
-    update_layout();
+    layout_updater(ethw);
 }
 
 void ETHTab::create_add_subwindow_dialog() {

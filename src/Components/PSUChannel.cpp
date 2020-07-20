@@ -63,9 +63,6 @@ void PSUChannel::overcurrent_protection() {
 }
 
 bool PSUChannel::update() {
-    if(eth == nullptr)
-        return false;
-
     overcurrent_protection();
 
     if(vd == vendor::rohdeSchwarz)

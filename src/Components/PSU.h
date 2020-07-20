@@ -52,6 +52,8 @@ protected:
     bool master_switch;
     bool master_enable = false;
     bool master_trigger = false;
+    uint channel_max = 0;
+    double voltage_max = 0, current_max = 0;
     EthernetClient *eth;
 
     QVector<PSUChannel *> channel_list;

@@ -20,8 +20,6 @@ PSUW::PSUW(RunManager *m_runManager, PSU *psu)
 
     connect(this, SIGNAL(signal_off()), psu, SLOT(switch_off()));
     eventManager->add_signal(psu->get_element_name() + " Switch Off", SignalType::off, this, &SubWindow::signal_off);
-
-    create_layout();
 }
 
 PSUW::~PSUW() {

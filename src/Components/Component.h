@@ -42,6 +42,8 @@ signals:
 
     void data_available();
 
+    void init_done();
+
 protected:
     RunManager *runManager;
     QString elementName;
