@@ -1,6 +1,6 @@
 #include "Component.h"
 
-Component::Component(const QString &elementName, RunManager *runManager, uint time)
+Component::Component(const QString &elementName, RunManager *runManager)
     : runManager(runManager), elementName(elementName) {
 
 #ifndef MULTITHREAD_TEST
@@ -11,7 +11,7 @@ Component::Component(const QString &elementName, RunManager *runManager, uint ti
     runManager->set_run_mode(AddComponent, elementName);
 }
 
-Component::Component(RunManager *runManager, const QString &config, uint time)
+Component::Component(RunManager *runManager, const QString &config)
     : runManager(runManager) {
 
     load_config(config);

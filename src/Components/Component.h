@@ -20,13 +20,14 @@ class Component : public QObject, public ConfigElement {
 Q_OBJECT
 
 public:
-    Component(const QString &elementName, RunManager *runManager, uint time=1000);
-    Component(RunManager *runManager, const QString &config, uint time=1000);
+    Component(const QString &elementName, RunManager *runManager);
+    Component(RunManager *runManager, const QString &config);
     virtual ~Component() override;
 
     QString get_element_name() const {return elementName;}
 
 public slots:
+    virtual void init() = 0;
     virtual void update() = 0;
 
     virtual void start_logging();

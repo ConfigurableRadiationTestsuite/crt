@@ -10,7 +10,7 @@
 #endif
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
-    : Component(runManager, config, 1000) {
+    : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name" , "channel", "con", "id"}));
@@ -33,13 +33,10 @@ Labjack::Labjack(RunManager * runManager, const QString &config)
 
         channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
     }
-
-    init();
-    update();
 }
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel)
-    : Component(m_element_name, runManager, 1000), connectionType(connectionType), identifier(identifier) {
+    : Component(m_element_name, runManager), connectionType(connectionType), identifier(identifier) {
 
     this->elementName = m_element_name;
 
@@ -58,9 +55,6 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
 
     for(int i = 0; i < m_name.size(); i++)
         channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
-
-    init();
-    update();
 }
 
 Labjack::~Labjack() {
@@ -128,6 +122,8 @@ void Labjack::init() {
     rangeTimer = new QElapsedTimer;
     dataTimer = new QElapsedTimer;
     rangeTimer->start();
+
+    update();
 }
 
 void Labjack::update() {

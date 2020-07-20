@@ -34,6 +34,7 @@ public:
     QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
 
 public slots:
+    void init() override;
     void update() override;
 
     void set_main_settling(const QString &text);
@@ -65,7 +66,6 @@ private:
     int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
     bool is_maximum = false;
 
-    void init();
     void open_labjack();
 
     int write(int address, const int TYPE, double value);

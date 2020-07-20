@@ -16,6 +16,7 @@ SubWindow::SubWindow(RunManager *runManager, Component *component)
     component->moveToThread(thread);
 
     connect(thread, SIGNAL(started()), component, SLOT(configure_timer()));
+    connect(thread, SIGNAL(started()), component, SLOT(init()));
 
     thread->start();
 #endif

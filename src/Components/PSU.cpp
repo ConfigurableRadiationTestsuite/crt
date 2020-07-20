@@ -12,8 +12,6 @@ PSU::PSU(RunManager * runManager, const QString &config)
     this->master_switch = get_value("master").toInt();
     this->address = get_value("address");
 
-    init_ethernet(address);
-
     uint channel_max = get_value("channel").toUInt();
 
     for(uint i = 0; i < channel_max; i++) {
@@ -24,10 +22,8 @@ PSU::PSU(RunManager * runManager, const QString &config)
         double voltage_max = get_value("c" + QString::number(i) + "vm").toDouble();
         double current_max = get_value("c" + QString::number(i) + "cm").toDouble();
 
-        channel_list.push_back(new PSUChannel{i, eth, vd, voltage_set, current_set, voltage_max, current_max});
+        channel_list.push_back(new PSUChannel{i, nullptr, vd, voltage_set, current_set, voltage_max, current_max});
     }
-
-    update_settings();
 }
 
 PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max)
@@ -36,15 +32,12 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
     this->elementName = m_element_name;
     this->vd = check_vendor(vendor);
 
-    init_ethernet(address);
-
     if(vd == rohdeSchwarz) // || vendor)
         master_switch = true;
 
     for(uint i = 0; i < channel_max; i++)
-        channel_list.push_back(new PSUChannel{i, eth, vd, 0, 0, voltage_max, current_max});
+        channel_list.push_back(new PSUChannel{i, nullptr, vd, 0, 0, voltage_max, current_max});
 
-    update_settings();
 }
 
 PSU::~PSU() {
@@ -70,7 +63,7 @@ void PSU::set_config() {
         set_value("c" + QString::number(i) + "cm", QString::number(channel_list[i]->get_current_max()));
     }
 
-    update_settings();
+//    update_settings();
 }
 
 void PSU::update() {
@@ -115,11 +108,17 @@ QString PSU::check_vendor(enum vendor vd) {
     return "none";
 }
 
-void PSU::init_ethernet(const QString &address) {
+void PSU::init() {
+    /* Setup ethernet */
     QString ip_address = address.mid(0, address.indexOf(":"));
     uint port = (address.mid(address.indexOf(":") + 1, address.size() - address.indexOf(":") - 1)).toUInt();
 
     eth = new EthernetClient(port, ip_address);
+
+    foreach(PSUChannel *channel, channel_list)
+        channel->set_ethernet(eth);
+
+    update_settings();
 }
 
 void PSU::set_master_enable(int master_enable) {

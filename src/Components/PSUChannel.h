@@ -19,7 +19,7 @@ class PSUChannel : public QWidget {
 Q_OBJECT
 
 public:
-    PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
+    PSUChannel(uint number, EthernetClient *eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
     ~PSUChannel() {}
 
     uint get_number() const {return number;}
@@ -32,6 +32,8 @@ public:
     double get_current_set() const {return current_set;}
     double get_voltage_max() const {return voltage_max;}
     double get_current_max() const {return current_max;}
+
+    void set_ethernet(EthernetClient *eth) {this->eth = eth;}
 
 public slots:
     void set_enable(int enable);
