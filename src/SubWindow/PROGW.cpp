@@ -20,8 +20,6 @@ PROGW::PROGW(RunManager *m_runManager, ProgrammStarter *programmStarter)
 
     connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Kill", SignalType::off, this, &SubWindow::signal_off);
-
-    create_layout();
 }
 
 PROGW::~PROGW() {

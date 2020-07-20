@@ -19,6 +19,7 @@ Q_OBJECT
 public:
     ProgrammStarter(RunManager * runManager, const QString &config);
     ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path);
+    virtual ~ProgrammStarter();
 
     void set_config() override;
 
@@ -26,6 +27,8 @@ public:
     QString get_arguments();
 
 public slots:
+    void init() override;
+
     void set_arguments(const QString &text);
     void set_path(const QString &text);
     void set_trigger(int trigger);
@@ -55,7 +58,6 @@ private:
     bool running = false;
     bool trigger = false;
 
-    void init();
     QStringList generate_header() override;
 
     QStringList substitute_arguments();

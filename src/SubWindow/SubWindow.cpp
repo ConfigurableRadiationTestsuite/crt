@@ -11,16 +11,13 @@ SubWindow::SubWindow(RunManager *runManager, Component *component)
 
     this->eventManager = runManager->get_eventManager();
 
-#ifdef MULTITHREAD_TEST
+    /* Thread management */
     thread = new QThread;
     component->moveToThread(thread);
-
-    connect(thread, SIGNAL(started()), component, SLOT(configure_timer()));
     connect(thread, SIGNAL(started()), component, SLOT(init()));
     connect(component, SIGNAL(init_done()), this, SLOT(create_layout()));
 
     thread->start();
-#endif
 
     /* Announce logging */
     connect(this, SIGNAL(signal_start_log()), component, SLOT(start_logging()));
@@ -38,9 +35,7 @@ SubWindow::~SubWindow() {
     eventManager->delete_signal(&SubWindow::signal_start_log);
     eventManager->delete_signal(&SubWindow::signal_stop_log);
 
-#ifdef MULTITHREAD_TEST
     thread->quit();
-#endif
 
     //Notify the WindowTab
     emit destroyed(this);

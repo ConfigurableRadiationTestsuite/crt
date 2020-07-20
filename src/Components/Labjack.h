@@ -51,10 +51,16 @@ private:
     int connectionType;
     QString identifier;
 
+    QVector<QString> m_name;
+    QVector<int> m_pchannel;
+    QVector<int> m_nchannel;
+
+    uint channel;
     QVector<LabjackChannel*> channel_vec;
     QVector<int> address_vec;
     QVector<int> type_vec;
     QVector<double> value_vec;
+
 
     int *aAddresses;
     int *aTypes;

@@ -3,9 +3,7 @@
 Component::Component(const QString &elementName, RunManager *runManager)
     : runManager(runManager), elementName(elementName) {
 
-#ifndef MULTITHREAD_TEST
-    configure_timer(time);
-#endif
+    connect(this, SIGNAL(init_done()), this, SLOT(configure_timer()));
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);
@@ -14,14 +12,12 @@ Component::Component(const QString &elementName, RunManager *runManager)
 Component::Component(RunManager *runManager, const QString &config)
     : runManager(runManager) {
 
+    connect(this, SIGNAL(init_done()), this, SLOT(configure_timer()));
+
     load_config(config);
     assert(parse_config({"name"}));
 
     elementName = get_value("name");
-
-#ifndef MULTITHREAD_TEST
-    configure_timer(time);
-#endif
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);

@@ -18,7 +18,6 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
 
 EthernetClient::~EthernetClient() {
     socket->close();
-    reconnection_timer->stop();
 
     delete socket;
     delete reconnection_timer;

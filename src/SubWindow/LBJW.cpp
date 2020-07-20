@@ -15,9 +15,7 @@
 #include <QSlider>
 #include <QVBoxLayout>
 
-LBJW::LBJW(RunManager *m_runManager, Labjack *lbj) : SubWindow(m_runManager, lbj), lbj(lbj) {
-    create_layout();
-}
+LBJW::LBJW(RunManager *m_runManager, Labjack *lbj) : SubWindow(m_runManager, lbj), lbj(lbj) {}
 
 LBJW::~LBJW() {
     delete lbj;

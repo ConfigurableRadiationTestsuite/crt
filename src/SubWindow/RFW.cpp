@@ -8,9 +8,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-RFW::RFW(RunManager *m_runManager, RFIO *rfio) : SubWindow(m_runManager, rfio), rfio(rfio) {
-    create_layout();
-}
+RFW::RFW(RunManager *m_runManager, RFIO *rfio) : SubWindow(m_runManager, rfio), rfio(rfio) {}
 
 RFW::~RFW() {
     delete rfio;
