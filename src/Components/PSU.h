@@ -35,6 +35,7 @@ public slots:
     void set_master_enable(int master_enable);
     void set_master_trigger(int master_trigger);
 
+    void init() override;
     void update() override;
     void update_settings();
 
@@ -51,13 +52,13 @@ protected:
     bool master_switch;
     bool master_enable = false;
     bool master_trigger = false;
+    uint channel_max = 0;
+    double voltage_max = 0, current_max = 0;
     EthernetClient *eth;
 
     QVector<PSUChannel *> channel_list;
 
 private:
-    void init_ethernet(const QString &address);
-
     enum vendor check_vendor(const QString &vendor);
     QString check_vendor(enum vendor vd);
 

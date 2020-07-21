@@ -4,8 +4,8 @@
 #include <QTimer>
 
 EthernetClient::EthernetClient(uint port, const QString &address) : port(port), address(address) {
-    socket = new QTcpSocket(this);
-    reconnection_timer = new QTimer(this);
+    socket = new QTcpSocket;
+    reconnection_timer = new QTimer;
 
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     //connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
@@ -18,7 +18,9 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
 
 EthernetClient::~EthernetClient() {
     socket->close();
-    reconnection_timer->stop();
+
+    delete socket;
+    delete reconnection_timer;
 }
 
 void EthernetClient::connected() {

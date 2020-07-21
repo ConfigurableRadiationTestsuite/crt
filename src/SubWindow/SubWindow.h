@@ -42,6 +42,8 @@ protected slots:
 
     void trigger_signal_list();
 
+    virtual void create_layout() = 0;
+
 signals:
     /* Event / Signal management */
     void signal_on();
@@ -61,11 +63,10 @@ protected:
     SpecSignalDialog *signalDialog = nullptr;
 
     Component *component;
+    QThread *thread;
 
     QString get_signal_list();
     bool is_signal_in_list(struct RegisteredSignal * reg);
-
-    virtual void create_layout() = 0;
 };
 
 inline void SubWindow::trigger_signal_list() {eventManager->call_trigger(signal_list);}

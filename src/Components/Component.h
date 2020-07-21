@@ -20,27 +20,29 @@ class Component : public QObject, public ConfigElement {
 Q_OBJECT
 
 public:
-    Component(const QString &elementName, RunManager *runManager, uint time=1000);
-    Component(RunManager *runManager, const QString &config, uint time=1000);
+    Component(const QString &elementName, RunManager *runManager);
+    Component(RunManager *runManager, const QString &config);
     virtual ~Component() override;
 
     QString get_element_name() const {return elementName;}
 
 public slots:
+    virtual void init() = 0;
     virtual void update() = 0;
 
     virtual void start_logging();
     virtual void stop_logging();
 
-    void start_log_timer(long msec) {logTimer->start(msec);}
-    void stop_log_timer() {logTimer->stop();}
-
     void set_permanent_logging(int);
+
+    void configure_timer(uint time=1000);
 
 signals:
     void is_logging(bool);
 
     void data_available();
+
+    void init_done();
 
 protected:
     RunManager *runManager;
@@ -52,8 +54,6 @@ protected:
     virtual QStringList generate_header() = 0;
 
     QTimer *logTimer = nullptr;
-
-    void configure_timer(uint time);
 };
 
 #endif // COMPONENT_H

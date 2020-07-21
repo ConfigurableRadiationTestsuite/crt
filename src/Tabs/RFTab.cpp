@@ -9,7 +9,10 @@ RFTab::RFTab(ConfigManager *m_configManager, RunManager *m_runManager)
 }
 
 void RFTab::push_new_subwindow(const QString &config) {
-    subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, config)));
+    RFW * rfw = new RFW(runManager, new RFIO(runManager, config));
+    subWindow_list.push_back(rfw);
+
+    layout_updater(rfw);
 }
 
 void RFTab::create_subwindow_from_dialog() {
@@ -17,9 +20,10 @@ void RFTab::create_subwindow_from_dialog() {
     QString address = addDialog->get_entry_list()[1].input_value->text();
     int channel = addDialog->get_entry_list()[2].input_value->text().toInt();
 
-    subWindow_list.push_back(new RFW(runManager, new RFIO(runManager, name, address, channel)));
+    RFW *rfw = new RFW(runManager, new RFIO(runManager, name, address, channel));
+    subWindow_list.push_back(rfw);
 
-    update_layout();
+    layout_updater(rfw);
 }
 
 void RFTab::create_add_subwindow_dialog() {

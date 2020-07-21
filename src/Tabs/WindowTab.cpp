@@ -118,6 +118,8 @@ void WindowTab::load_from_config() {
         push_new_subwindow(section_content);
         section_content.clear();
     }
+}
 
-    update_layout();
+void WindowTab::layout_updater(SubWindow *sub) {
+    connect(sub->get_component(), SIGNAL(init_done()), this, SLOT(update_layout()));
 }

@@ -28,6 +28,7 @@ Q_OBJECT
 public:
     Ethernet(RunManager *runManager, const QString &config);
     Ethernet(RunManager *runManager, const QString &m_element_name, uint port, long timeout);
+    virtual ~Ethernet();
 
     uint get_port() const {return port;}
     long get_timeout() const {return timeout;}
@@ -40,6 +41,8 @@ public:
     void update() override {}
 
 public slots:
+    void init() override;
+
     void start_logging() override;
     void stop_logging() override;
     void set_status(EthernetStatus status);
@@ -64,15 +67,13 @@ private:
     QString data_folder;
 
     QTimer *timeoutTimer;
-    QTcpServer *server;
-    QTcpSocket *socket;
+    QTcpServer *server = nullptr;
+    QTcpSocket *socket = nullptr;
 
     EthernetStatus status;
 
     long bytes = 0;
     long files = 0;
-
-    void init();
 
     QStringList generate_header() override;
 };

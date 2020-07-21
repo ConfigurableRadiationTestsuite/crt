@@ -34,6 +34,7 @@ public:
     QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
 
 public slots:
+    void init() override;
     void update() override;
 
     void set_main_settling(const QString &text);
@@ -50,10 +51,16 @@ private:
     int connectionType;
     QString identifier;
 
+    QVector<QString> m_name;
+    QVector<int> m_pchannel;
+    QVector<int> m_nchannel;
+
+    uint channel;
     QVector<LabjackChannel*> channel_vec;
     QVector<int> address_vec;
     QVector<int> type_vec;
     QVector<double> value_vec;
+
 
     int *aAddresses;
     int *aTypes;
@@ -65,7 +72,6 @@ private:
     int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
     bool is_maximum = false;
 
-    void init();
     void open_labjack();
 
     int write(int address, const int TYPE, double value);
@@ -107,7 +113,10 @@ inline void Labjack::set_main_resolution(int index) {
 
 inline void Labjack::adapt_sample_rate(qint64 nsecs) {
     /* Convert to sample per second */
-    maxSamplerate = 1000*1000*1000 / (2*nsecs);
+    if(nsecs < 1000*1000)
+        maxSamplerate = 1000;
+    else
+        maxSamplerate = 1000*1000*1000 / (2*nsecs);
 
     if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
         samplerate = maxSamplerate;

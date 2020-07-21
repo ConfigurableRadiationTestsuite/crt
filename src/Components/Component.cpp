@@ -1,23 +1,23 @@
 #include "Component.h"
 
-Component::Component(const QString &elementName, RunManager *runManager, uint time)
+Component::Component(const QString &elementName, RunManager *runManager)
     : runManager(runManager), elementName(elementName) {
 
-    configure_timer(time);
+    connect(this, SIGNAL(init_done()), this, SLOT(configure_timer()));
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);
 }
 
-Component::Component(RunManager *runManager, const QString &config, uint time)
+Component::Component(RunManager *runManager, const QString &config)
     : runManager(runManager) {
+
+    connect(this, SIGNAL(init_done()), this, SLOT(configure_timer()));
 
     load_config(config);
     assert(parse_config({"name"}));
 
     elementName = get_value("name");
-
-    configure_timer(time);
 
     /* RunManager info */
     runManager->set_run_mode(AddComponent, elementName);

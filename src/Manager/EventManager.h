@@ -30,7 +30,8 @@ public:
     EventManager();
     virtual ~EventManager();
 
-    QVector<struct RegisteredSignal*> get_signal_list() {return signal_list;}
+    QVector<RegisteredSignal*> get_signal_list() {return signal_list;}
+    RegisteredSignal* get_signal(const QString &name) const;
 
     void add_signal(const QString &name, SignalType st, SubWindow *sub, void (SubWindow::*sp)(void));
     void delete_signal(void (SubWindow::*sp)(void));
@@ -42,12 +43,12 @@ public slots:
     void trigger_stop_log();
     void trigger_special();
 
-    void call_trigger(const QVector<struct RegisteredSignal*> &signal_list);
-    void call_trigger(enum SignalType st, const QVector<struct RegisteredSignal*> &signal_list);
+    void call_trigger(const QVector<RegisteredSignal*> &signal_list);
+    void call_trigger(enum SignalType st, const QVector<RegisteredSignal*> &signal_list);
 
 signals:
     void signal_added();
-    void signal_deleted(struct RegisteredSignal * reg);
+    void signal_deleted(RegisteredSignal * reg);
 
 private:
     QVector<struct RegisteredSignal*> signal_list;

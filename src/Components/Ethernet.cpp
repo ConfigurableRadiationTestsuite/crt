@@ -14,14 +14,22 @@ Ethernet::Ethernet(RunManager *runManager, const QString &config)
     elementName = get_value("name");
     port = get_value("port").toUInt();
     timeout = get_value("timeout").toLong();
-
-    init();
 }
 
 Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, uint port, long timeout)
-    : Component(m_element_name, runManager), port(port), timeout(timeout) {
+    : Component(m_element_name, runManager), port(port), timeout(timeout) {}
 
-    init();
+Ethernet::~Ethernet() {
+    if(server != nullptr) {
+        server->close();
+        delete server;
+    }
+    if(socket != nullptr) {
+        socket->close();
+        delete socket;
+    }
+
+    delete timeoutTimer;
 }
 
 void Ethernet::set_config() {
@@ -35,18 +43,20 @@ void Ethernet::set_config() {
 void Ethernet::init() {
     set_status(Waiting);
 
-    timeoutTimer = new QTimer(this);
+    timeoutTimer = new QTimer;
     connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(handle_disconnection()));
 
     connect(runManager, SIGNAL(run_name_changed(const QString &)), this, SLOT(set_data_folder()));
 
     if(runManager->is_valid())
         set_data_folder();
+
+    emit init_done();
 }
 
 void Ethernet::start_logging() {
     /* Setup Server */
-    server = new QTcpServer(this);
+    server = new QTcpServer;
     connect(server, SIGNAL(newConnection()), this, SLOT(accept_connection()));
 
     if(!server->listen(QHostAddress::Any, port))

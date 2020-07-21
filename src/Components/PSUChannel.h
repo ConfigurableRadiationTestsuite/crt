@@ -19,7 +19,7 @@ class PSUChannel : public QWidget {
 Q_OBJECT
 
 public:
-    PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
+    PSUChannel(uint number, EthernetClient *eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
     ~PSUChannel() {}
 
     uint get_number() const {return number;}

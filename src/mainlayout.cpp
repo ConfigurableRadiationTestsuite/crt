@@ -67,6 +67,8 @@ QToolBar * MainLayout::create_toolbar() {
     connect(runManager, SIGNAL(run_mode_changed(enum RunMode)), this, SLOT(set_stop_button(enum RunMode)));
     connect(runManager, SIGNAL(isInvalid_changed(bool)), stopTestButton, SLOT(setDisabled(bool)));
 
+    toolbar->addSeparator();
+
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setIconSize(QSize(16, 16));
 
@@ -83,7 +85,7 @@ QTabWidget * MainLayout::create_window_tabs() {
     windowTabs->addTab(new LBJTab(configManager, runManager), "Labjack");
 
     //RF
-    //windowTabs->addTab(new RFTab(configManager, runManager), "RF");
+    windowTabs->addTab(new RFTab(configManager, runManager), "RF");
 
     //PROG
     windowTabs->addTab(new PROGTab(configManager, runManager), "PROG");

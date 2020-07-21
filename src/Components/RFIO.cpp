@@ -1,11 +1,9 @@
 #include "RFIO.h"
 
 #include "src/Manager/RunManager.h"
-#include "RFIOChannel.h"
-#include "RFIOUpdater.h"
 
 #include <QProcess>
-#include <QThread>
+#include <QRandomGenerator>
 
 RFIO::RFIO(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
@@ -34,7 +32,7 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 
     for(int i = 0; i < channel; i++) {
         channel_list.push_back(new RFIOChannel(i));
-        connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
+        connect(channel_list[i], SIGNAL(error(QVector<IQSample>, int)), this, SLOT(handle_error(QVector<IQSample>, int)));
     }
 
     init();
@@ -45,8 +43,7 @@ RFIO::~RFIO() {
         delete channel;
 
     process->kill();
-    updateThread->quit();
-    delete rfioUpdater;
+    delete process;
 }
 
 void RFIO::set_config() {
@@ -58,28 +55,82 @@ void RFIO::set_config() {
 
     for(int i = 0; i < channel; i++)
         set_value("c" + QString::number(i) + "m", QString::number(channel_list[i]->get_margin()));
-
 }
 
 void RFIO::init() {
     //Create reception process
-    process = new QProcess(this);
+    process = new QProcess;
+#ifndef DUMMY_DATA
+    process->start("/bin/ncat -l " + QString::number(port), {""});
+#endif
 
-    /* Create and start update thread */
-    updateThread = new QThread;
-    is_destroyed = false;
-    rfioUpdater = new RFIOUpdater(port, process, &channel_list);
+#ifdef DUMMY_DATA
+    process->start("/bin/cat", {"/dev/urandom"});
+#endif
 
-    rfioUpdater->moveToThread(updateThread);
-    connect(updateThread, SIGNAL(started()), rfioUpdater, SLOT(start_process()));
-/*    connect(rfioUpdater, SIGNAL(finished()), updateThread, SLOT(quit()));
+    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
 
-    connect(updateThread, SIGNAL(finished()), updateThread, SLOT(deleteLater()));
-    connect(updateThread, SIGNAL(finished()), process, SLOT(deleteLater()));
+    process->waitForStarted();
+}
 
-    connect(updateThread, SIGNAL(destroyed()), this, SLOT(set_thread_destroyed()));
-*/
-    updateThread->start();
+void RFIO::update() {
+    static int offset = 0;
+    RFIOChannel * channel;
+
+    //Read data from QProcess
+#ifndef DUMMY_DATA
+    QByteArray data = process->readAllStandardOutput();
+#endif
+#ifdef DUMMY_DATA
+    QByteArray data = dummy_iq(30, channel_list.size());
+#endif
+
+    /* Distribute it to the data to the channels */
+    int i, chan;
+    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++) {
+        chan = 0;
+        foreach(channel, channel_list) {
+            channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
+            chan++;
+        }
+    }
+
+    offset = i * BYTE_PER_CHANNEL * channel_list.size() - data.size();
+
+    //Analyize it
+    foreach (channel, channel_list) {
+        channel->analyze_data();
+        channel->set_sample_position(channel->get_sample_position()+i*BYTE_PER_CHANNEL);
+    }
+}
+
+QByteArray RFIO::dummy_iq(int period, int channel) {
+    QByteArray data;
+    qint8 high_byte;
+    qint8 low_byte;
+    qint16 result;
+
+    for(int i = 0; i < period*12; ++i) {
+
+        for(int j = 0; j < channel; ++j) {
+            /* IQ-Data */
+            result = qSin(float(i)/float(period) * 2 * M_PI) * qPow(2, 10) + QRandomGenerator::global()->bounded(-qint16(qPow(2, 4)), qint16(qPow(2, 4)));
+            high_byte = (result & 0b1111111100000000) >> 8;
+            low_byte = result & 0b0000000011111111;
+
+            data.push_back(low_byte);
+            data.push_back(high_byte);
+
+            result = qCos(float(i)/float(period) * 2 * M_PI) * qPow(2, 10) + QRandomGenerator::global()->bounded(-qint16(qPow(2, 4)), qint16(qPow(2, 4)));
+            high_byte = (result & 0b1111111100000000) >> 8;
+            low_byte = result & 0b0000000011111111;
+
+            data.push_back(low_byte);
+            data.push_back(high_byte);
+        }
+    }
+
+    return data;
 }
 
 QStringList RFIO::generate_header() {
@@ -95,24 +146,23 @@ QStringList RFIO::generate_header() {
     return header;
 }
 
-void RFIO::handle_error(QVector<int> i_data, QVector<int> q_data, int number) {
+void RFIO::handle_error(QVector<IQSample> data, int number) {
     /* Write the raw data to the runManager */
     if(!logging)
         return;
 
     if(is_single_shot) {
         process->kill();
-        updateThread->quit();
     }
 
-    for(int i = 0; i < i_data.size(); i++) {
+    for(int i = 0; i < data.size(); i++) {
         QVector<double> row;
         row.push_back(i);
 
         for(int j = 0; j < channel_list.size(); j++) {
             if(j == number) {
-                row.push_back(i_data[i]);
-                row.push_back(q_data[i]);
+                row.push_back(data[i].get_i());
+                row.push_back(data[i].get_q());
             }
             else {
                 row.push_back(0);

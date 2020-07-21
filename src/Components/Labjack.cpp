@@ -10,42 +10,21 @@
 #endif
 
 Labjack::Labjack(RunManager * runManager, const QString &config)
-    : Component(runManager, config, 1000) {
+    : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name" , "channel", "con", "id"}));
 
     this->elementName = get_value("name");
-    uint channel = get_value("channel").toUInt();
+    channel = get_value("channel").toUInt();
     connectionType = get_value("con").toInt();
     identifier = get_value("id");
-
-    open_labjack();
-
-    for(uint i = 0; i < channel; i++) {
-        QString name = get_value("c" + QString::number(i) + "n");
-
-        int p_chan = get_value("c" + QString::number(i) + "pc").toInt();
-        int n_chan = get_value("c" + QString::number(i) + "nc").toInt();
-
-        double boundary = get_value("c" + QString::number(i) + "b").toDouble();
-        int gain = get_value("c" + QString::number(i) + "g").toInt();
-
-        channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
-    }
-
-    init();
-    update();
 }
 
 Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel)
-    : Component(m_element_name, runManager, 1000), connectionType(connectionType), identifier(identifier) {
+    : Component(m_element_name, runManager), connectionType(connectionType), identifier(identifier) {
 
     this->elementName = m_element_name;
-
-    QVector<QString> m_name;
-    QVector<int> m_pchannel;
-    QVector<int> m_nchannel;
 
     get_channel_names(channel_name, m_name);
     get_channel_addresses(pchannel, m_pchannel);
@@ -54,13 +33,7 @@ Labjack::Labjack(RunManager * runManager, const QString &m_element_name, const Q
     assert(m_pchannel.size() == m_nchannel.size());
     assert(m_name.size() == m_pchannel.size());
 
-    open_labjack();
-
-    for(int i = 0; i < m_name.size(); i++)
-        channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
-
-    init();
-    update();
+    channel = m_name.size();
 }
 
 Labjack::~Labjack() {
@@ -105,7 +78,27 @@ void Labjack::open_labjack() {
 }
 
 void Labjack::init() {
+    open_labjack();
+
     /* Setup channel */
+    for(uint i = 0; i < channel; i++) {
+        if(is_empty())
+            channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
+
+        else {
+            QString name = get_value("c" + QString::number(i) + "n");
+
+            int p_chan = get_value("c" + QString::number(i) + "pc").toInt();
+            int n_chan = get_value("c" + QString::number(i) + "nc").toInt();
+
+            double boundary = get_value("c" + QString::number(i) + "b").toDouble();
+            int gain = get_value("c" + QString::number(i) + "g").toInt();
+
+            channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
+        }
+    }
+
+    /* Setup labjack access channel */
     foreach (LabjackChannel* channel, channel_vec) {
         address_vec.push_back(channel->get_pchan_address());
         type_vec.push_back(LJM_FLOAT32);
@@ -128,6 +121,10 @@ void Labjack::init() {
     rangeTimer = new QElapsedTimer;
     dataTimer = new QElapsedTimer;
     rangeTimer->start();
+
+    update();
+
+    emit init_done();
 }
 
 void Labjack::update() {

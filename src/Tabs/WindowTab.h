@@ -58,6 +58,7 @@ protected:
     void clear_subwindow_list();
 
     virtual void create_add_subwindow_dialog() = 0;
+    void layout_updater(SubWindow *sub);
 };
 
 #endif // WINDOWTAB_H

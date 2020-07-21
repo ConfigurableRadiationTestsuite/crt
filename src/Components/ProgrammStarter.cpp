@@ -10,19 +10,19 @@ ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
     assert(parse_config({"name", "path"}));
 
     this->elementName = get_value("name");
-    this->path = get_value("path");
+    path = get_value("path");
     set_arguments(get_value("arguments"));
-
-    init();
 }
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path)
     : Component(m_element_name, runManager), path(path) {
     this->elementName = m_element_name;
 
-    this->arguments = QStringList("$directory");
+    arguments = QStringList("$directory");
+}
 
-    init();
+ProgrammStarter::~ProgrammStarter() {
+    delete process;
 }
 
 void ProgrammStarter::set_config() {
@@ -34,7 +34,7 @@ void ProgrammStarter::set_config() {
 }
 
 void ProgrammStarter::init() {
-    process = new QProcess(this);
+    process = new QProcess;
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
 }
 

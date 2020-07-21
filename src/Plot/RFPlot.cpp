@@ -46,7 +46,6 @@ void RFPlot::update_layout() {
     int minimum = min_i > min_q ? min_i : min_q;
 
     plot->yAxis->setRange(minimum, maximum);
-    plot->yAxis->rescale();
 
     plot->xAxis->setRange(*std::min_element(timeAxis.begin(), timeAxis.end()), *std::max_element(timeAxis.begin(), timeAxis.end()));
     plot->xAxis->setRange(0, timeAxis.size());

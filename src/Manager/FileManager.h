@@ -11,6 +11,7 @@
  */
 
 #include <QFile>
+#include <QMutex>
 #include <QVector>
 
 struct ComponentFile {
@@ -55,6 +56,8 @@ protected:
     QString vector_to_string(const QVector<double> &vector);
 
 private:
+    QMutex mutex;
+
     QString escape_text(const QString &text);
 
     void update_root_directory();

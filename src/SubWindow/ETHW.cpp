@@ -10,10 +10,7 @@
 #include <QPushButton>
 
 ETHW::ETHW(RunManager *m_runManager, Ethernet *ethernet)
-    : SubWindow(m_runManager, ethernet), ethernet(ethernet) {
-
-    create_layout();
-}
+    : SubWindow(m_runManager, ethernet), ethernet(ethernet) {}
 
 ETHW::~ETHW() {
     delete ethernet;

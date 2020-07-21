@@ -2,6 +2,7 @@
 
 #include <QCheckBox>
 #include <QHBoxLayout>
+#include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -14,6 +15,9 @@ void SpecSignalDialog::create_dialog() {
 
     for(QVector<struct RegisteredSignalBox>::iterator i = registeredSignal_list.begin(); i != registeredSignal_list.end(); i++)
         buttonLayout->addWidget((*i).checkBox);
+
+    if(registeredSignal_list.empty())
+        buttonLayout->addWidget(new QLabel("No Signals available!"));
 
     QHBoxLayout * hlayout = new QHBoxLayout;
 

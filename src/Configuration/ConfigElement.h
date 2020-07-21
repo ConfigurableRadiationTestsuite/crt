@@ -32,6 +32,8 @@ public:
     virtual void set_config() = 0;
     void load_config(const QString &content);
 
+    bool is_empty() const {return config_entry_list.empty();}
+
 protected:
     QVector<Entry> config_entry_list;
 

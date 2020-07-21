@@ -34,6 +34,7 @@ void FileManager::register_component(const void * subComponent, const QString na
 }
 
 void FileManager::deregister_component(const void * subComponent) {
+    QMutexLocker locker(&mutex);
     for(int i = 0; i < file_list.size(); i++) {
         if(file_list[i]->subComponent == subComponent) {
             file_list[i]->file->close();
