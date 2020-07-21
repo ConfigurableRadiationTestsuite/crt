@@ -3,9 +3,70 @@
 
 #include "Component.h"
 
+class Task;
+
 class Sequencer : public Component {
+Q_OBJECT
+
 public:
     Sequencer(RunManager *runManager, const QString &config);
+    Sequencer(RunManager *runManager, const QString &m_element_name, int task_number);
+    ~Sequencer() override;
+
+    void set_config() override;
+
+    QVector<Task*> get_task_vec() const {return task_vec;}
+
+signals:
+    void task_vec_changed();
+
+public slots:
+    void init() override;
+    void update() override;
+
+    void set_loop(int);
+    void set_signal();
+
+private slots:
+    void update_task_vec();
+
+private:
+    int task_number = 0;
+    QVector<Task*> task_vec;
+    QVector<Task*>::iterator task_it;
+
+    bool loop = false;
+
+    QStringList generate_header() override;
+};
+
+inline QStringList Sequencer::generate_header() {
+    return {"number", "time", "signal"};
+}
+
+inline void Sequencer::set_loop(int loop) {
+    this->loop = loop == 0 ? false : true;
+}
+
+class Task : public QObject {
+Q_OBJECT
+
+uint number;
+uint time;
+QString signal_name;
+struct RegisteredSignal *sig;
+
+public:
+    Task(uint number, uint time, QString signal_name, RegisteredSignal *sig)
+        : number(number), time(time), signal_name(signal_name), sig(sig) {}
+
+    uint get_number() const {return number;}
+    uint get_time() const {return time;}
+    QString get_signal_name() const {return signal_name;}
+    RegisteredSignal * get_signal() const {return sig;}
+
+public slots:
+    void set_signal(RegisteredSignal *sig);
 };
 
 #endif // SEQUENCER_H

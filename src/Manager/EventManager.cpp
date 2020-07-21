@@ -23,14 +23,20 @@ void EventManager::delete_signal(void (SubWindow::*sp)(void)) {
 }
 
 void EventManager::call_trigger(const QVector<struct RegisteredSignal*> &signal_list) {
-    RegisteredSignal * signal;
-    foreach (signal, signal_list)
+    foreach (RegisteredSignal * signal, signal_list)
             emit ((signal->sub)->*(signal->sp))();
 }
 
 void EventManager::call_trigger(enum SignalType st, const QVector<struct RegisteredSignal*> &signal_list) {
-    RegisteredSignal * signal;
-    foreach (signal, signal_list)
+    foreach (RegisteredSignal * signal, signal_list)
         if(signal->st == st)
             emit ((signal->sub)->*(signal->sp))();
+}
+
+RegisteredSignal * EventManager::get_signal(const QString &name) const {
+    foreach (RegisteredSignal *signal, signal_list)
+        if(signal->name == name)
+            return signal;
+
+    return nullptr;
 }

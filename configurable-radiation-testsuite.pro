@@ -64,7 +64,7 @@ SOURCES += \
     src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
     src/Tabs/RFTab.cpp \
-    src/Tabs/Seqtab.cpp \
+    src/Tabs/SEQTab.cpp \
     src/mainwindow.cpp \
     src/Configuration/ConfigElement.cpp \
     src/Configuration/ConfigManager.cpp \
@@ -112,7 +112,7 @@ HEADERS += \
     src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \
     src/Tabs/RFTab.h \
-    src/Tabs/Seqtab.h \
+    src/Tabs/SEQTab.h \
     src/mainwindow.h \
     src/Configuration/ConfigElement.h \
     src/Configuration/ConfigManager.h \

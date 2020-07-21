@@ -1,4 +1,7 @@
-#include "Seqtab.h"
+#include "SEQTab.h"
+
+#include "src/Components/Sequencer.h"
+#include "src/SubWindow/SEQW.h"
 
 SEQTab::SEQTab(ConfigManager *m_configManager, RunManager * m_runManager)
     : WindowTab(m_configManager, m_runManager) {
@@ -6,10 +9,10 @@ SEQTab::SEQTab(ConfigManager *m_configManager, RunManager * m_runManager)
 }
 
 void SEQTab::push_new_subwindow(const QString &config) {
-/*    RFW * rfw = new RFW(runManager, new RFIO(runManager, config));
-    subWindow_list.push_back(rfw);
+    SEQW *seq = new SEQW(runManager, new Sequencer(runManager, config));
+    subWindow_list.push_back(seq);
 
-    layout_updater(rfw);*/
+    layout_updater(seq);
 }
 
 void SEQTab::create_subwindow_from_dialog() {

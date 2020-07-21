@@ -31,6 +31,7 @@ public:
     virtual ~EventManager();
 
     QVector<RegisteredSignal*> get_signal_list() {return signal_list;}
+    RegisteredSignal* get_signal(const QString &name) const;
 
     void add_signal(const QString &name, SignalType st, SubWindow *sub, void (SubWindow::*sp)(void));
     void delete_signal(void (SubWindow::*sp)(void));
