@@ -7,7 +7,8 @@ class IndicatorIcon : public QLabel {
 Q_OBJECT
 
 public:
-    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap waiting, QPixmap event);
+    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QSize size);
+    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap waiting, QPixmap event, QSize size);
     virtual ~IndicatorIcon();
 
 public slots:

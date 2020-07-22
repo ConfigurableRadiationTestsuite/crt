@@ -3,6 +3,7 @@
 #include "../Components/Sequencer.h"
 
 #include "src/Dialog/TaskDialog.h"
+#include "src/Components/IndicatorIcon.h"
 
 #include <QCheckBox>
 #include <QGroupBox>
@@ -64,14 +65,14 @@ void SEQW::create_layout() {
         connect(timeEdit, SIGNAL(textChanged(const QString&)), task, SLOT(set_time(const QString &)));
 
         //Aktiv
-        //IndicatorIcon (Green Dot)
-        //connect(is aktiv? -> green dot)
+        IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/task_active.png"), QPixmap(":/icon/task_inactive.png"), QSize(24, 24));
+        connect(task, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_status(int)));
 
         taskLayout->addWidget(signalButton, cnt, 0);
         taskLayout->addWidget(numberLabel, cnt, 1);
         taskLayout->addWidget(nameEdit, cnt, 2);
         taskLayout->addWidget(timeEdit, cnt, 3);
-        //taskLayout->addWidget(aktiv, cnt, 3);
+        taskLayout->addWidget(activeIndicator, cnt, 4);
         cnt++;
     }
 

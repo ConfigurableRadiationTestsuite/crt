@@ -41,9 +41,12 @@ void Sequencer::init() {
 
             task_vec.push_back(new Task{(uint)i, time, signal_name, sig});
         }
+
+        task_vec.last()->set_active(false);
     }
 
     task_it = task_vec.begin();
+    (*task_it)->set_active(true);
 
     emit init_done();
 }
@@ -54,6 +57,7 @@ void Sequencer::update() {
 
     /* Stop timer */
     logTimer->stop();
+    (*task_it)->set_active(true);
 
     /* Send signal */
     RegisteredSignal *sig = (*task_it)->get_signal();
@@ -70,8 +74,10 @@ void Sequencer::update() {
     if(loop && task_it == task_vec.end())
         task_it = task_vec.begin();
 
-    if(task_it != task_vec.end())
-        logTimer->start((*task_it)->get_time());
+    if(task_it != task_vec.end()) {
+        logTimer->start((*task_it)->get_time());   
+        (*task_it)->set_active(false);
+    }
 }
 
 void Sequencer::update_task_vec() {

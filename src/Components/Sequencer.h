@@ -54,6 +54,7 @@ uint number;
 uint time;
 QString signal_name;
 struct RegisteredSignal *sig;
+bool active = false;
 
 public:
     Task(uint number, uint time, QString signal_name, RegisteredSignal *sig)
@@ -65,6 +66,7 @@ public:
     RegisteredSignal * get_signal() const {return sig;}
 
 public slots:
+    void set_active(bool);
     void set_signal(RegisteredSignal *);
     void set_time(const QString &time) {this->time = time.toUInt()*1000;}
 
@@ -73,7 +75,14 @@ public slots:
 signals:
     void update_task(Task *);
     void signal_name_changed(const QString &);
+    void status_changed(int);
 };
+
+inline void Task::set_active(bool active) {
+    this->active = active;
+
+    emit status_changed(active ? 1 : 0);
+}
 
 inline void Task::set_signal(RegisteredSignal *sig) {
     this->sig = sig;

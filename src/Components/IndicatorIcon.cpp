@@ -4,13 +4,25 @@
 #include <QIcon>
 #include <QTimer>
 
-IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected,  QPixmap waiting, QPixmap event)
+IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QSize size)
     : name(name) {
 
-    this->connected = connected.scaled(QSize(48, 24));
-    this->disconnected = disconnected.scaled(QSize(48, 24));
-    this->waiting = waiting.scaled(QSize(48, 24));
-    this->event = event.scaled(QSize(48, 24));
+    this->connected = connected.scaled(size);
+    this->disconnected = disconnected.scaled(size);
+
+    setNewPixmap(this->disconnected);
+
+    eventTimer = new QTimer;
+    connect(eventTimer, SIGNAL(timeout()), this, SLOT(reset_icon()));
+}
+
+IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected,  QPixmap waiting, QPixmap event, QSize size)
+    : name(name) {
+
+    this->connected = connected.scaled(size);
+    this->disconnected = disconnected.scaled(size);
+    this->waiting = waiting.scaled(size);
+    this->event = event.scaled(size);
 
     setNewPixmap(this->waiting);
 
