@@ -25,7 +25,6 @@ public slots:
     void update() override;
 
     void set_loop(int);
-    void set_signal();
 
 private slots:
     void update_task_vec();
@@ -66,7 +65,24 @@ public:
     RegisteredSignal * get_signal() const {return sig;}
 
 public slots:
-    void set_signal(RegisteredSignal *sig);
+    void set_signal(RegisteredSignal *);
+    void set_time(const QString &time) {this->time = time.toUInt();}
+
+    void signal_button_clicked() {emit update_task(this);}
+
+signals:
+    void update_task(Task *);
+    void signal_name_changed(const QString &);
 };
+
+inline void Task::set_signal(RegisteredSignal *sig) {
+    this->sig = sig;
+
+    if(sig != nullptr) {
+        this->signal_name = sig->name;
+
+        emit signal_name_changed(this->signal_name);
+    }
+}
 
 #endif // SEQUENCER_H

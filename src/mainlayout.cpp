@@ -6,6 +6,7 @@
 #include "Tabs/PROGTab.h"
 #include "Tabs/PSUTab.h"
 #include "Tabs/RFTab.h"
+#include "Tabs/SEQTab.h"
 
 #include <QScrollArea>
 #include <QTabWidget>
@@ -92,6 +93,9 @@ QTabWidget * MainLayout::create_window_tabs() {
 
     //ETH
     windowTabs->addTab(new ETHTab(configManager, runManager), "ETH");
+
+    //SEQ
+    windowTabs->addTab(new SEQTab(configManager, runManager), "SEQ");
 
     return windowTabs;
 }

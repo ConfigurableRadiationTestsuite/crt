@@ -17,13 +17,15 @@ void SEQTab::push_new_subwindow(const QString &config) {
 
 void SEQTab::create_subwindow_from_dialog() {
     QString name = addDialog->get_entry_list()[0].input_value->text();
+    uint tasks = addDialog->get_entry_list()[1].input_value->text().toUInt();
 
-/*    RFW *rfw = new RFW(runManager, new RFIO(runManager, name, address, channel));
-    subWindow_list.push_back(rfw);
+    SEQW *seq = new SEQW(runManager, new Sequencer(runManager, name, tasks));
+    subWindow_list.push_back(seq);
 
-    layout_updater(rfw);*/
+    layout_updater(seq);
 }
 
 void SEQTab::create_add_subwindow_dialog() {
-    addDialog->add_entry("Name", "DUT - AD9361");
+    addDialog->add_entry("Name", "Power Cycle");
+    addDialog->add_entry("Tasks", "4");
 }
