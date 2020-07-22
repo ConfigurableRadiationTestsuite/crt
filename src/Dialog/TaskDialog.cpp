@@ -17,6 +17,9 @@ void TaskDialog::create_layout() {
     QButtonGroup *buttonGroup = new QButtonGroup;
 
     foreach (RegisteredSignal *signal, signal_list) {
+        if(signal->st == SignalType::start_log || signal->st == SignalType::stop_log)
+            continue;
+
         TaskRadioButton *button = new TaskRadioButton(signal);
         connect(button, SIGNAL(toggled(RegisteredSignal *)), this, SLOT(set_selected_signal(RegisteredSignal *)));
 
