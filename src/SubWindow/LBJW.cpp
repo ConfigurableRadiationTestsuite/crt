@@ -23,7 +23,7 @@ LBJW::~LBJW() {
 }
 
 void LBJW::create_layout() {
-    QVBoxLayout *mainVLayout = new QVBoxLayout(this);
+    QVBoxLayout *mainVLayout = new QVBoxLayout;
 
     QHBoxLayout * topLineLayout = new QHBoxLayout;
     QGroupBox * settingsBox = new QGroupBox("Settings");

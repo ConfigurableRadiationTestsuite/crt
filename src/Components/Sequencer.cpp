@@ -28,8 +28,8 @@ void Sequencer::set_config() {
 
 void Sequencer::init() {
 
-    connect(runManager, SIGNAL(signal_added()), this, SLOT(update_task_vec()));
-    connect(runManager, SIGNAL(signal_deleted(RegisteredSignal *)), this, SLOT(update_task_vec()));
+    connect(runManager->get_eventManager(), SIGNAL(signal_added()), this, SLOT(update_task_vec()));
+    connect(runManager->get_eventManager(), SIGNAL(signal_deleted(RegisteredSignal *)), this, SLOT(update_task_vec()));
 
     for(int i = 0; i < task_number; ++i) {
         if(is_empty())
@@ -44,6 +44,8 @@ void Sequencer::init() {
     }
 
     task_it = task_vec.begin();
+
+    emit init_done();
 }
 
 void Sequencer::update() {
@@ -58,7 +60,9 @@ void Sequencer::update() {
 
     if(sig != nullptr) {
         runManager->append_values_to_file(this, {QString::number((*task_it)->get_number()), QString::number((*task_it)->get_time()), (*task_it)->get_signal_name()});
-        emit ((sig->sub)->*(sig->sp))();
+
+        if(sig->sub != nullptr && sig->sp != nullptr)
+            emit ((sig->sub)->*(sig->sp))();
     }
 
     /* Start next timer */

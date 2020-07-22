@@ -44,6 +44,7 @@ SOURCES += \
     src/Components/Sequencer.cpp \
     src/Dialog/SpecAddDialog.cpp \
     src/Dialog/SpecSignalDialog.cpp \
+    src/Dialog/TaskDialog.cpp \
     src/Manager/EventManager.cpp \
     src/Manager/FileManager.cpp \
     src/Manager/RunManager.cpp \
@@ -92,6 +93,7 @@ HEADERS += \
     src/Components/Sequencer.h \
     src/Dialog/SpecAddDialog.h \
     src/Dialog/SpecSignalDialog.h \
+    src/Dialog/TaskDialog.h \
     src/Manager/EventManager.h \
     src/Manager/FileManager.h \
     src/Manager/RunManager.h \
