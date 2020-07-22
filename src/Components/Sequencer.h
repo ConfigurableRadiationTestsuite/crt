@@ -66,7 +66,7 @@ public:
 
 public slots:
     void set_signal(RegisteredSignal *);
-    void set_time(const QString &time) {this->time = time.toUInt();}
+    void set_time(const QString &time) {this->time = time.toUInt()*1000;}
 
     void signal_button_clicked() {emit update_task(this);}
 
