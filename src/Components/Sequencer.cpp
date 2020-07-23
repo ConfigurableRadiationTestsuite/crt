@@ -33,7 +33,7 @@ void Sequencer::init() {
 
     for(int i = 0; i < task_number; ++i) {
         if(is_empty())
-            task_vec.push_back(new Task{(uint)i, 0, "", nullptr});
+            task_vec.push_back(new Task{(uint)i, 1, "", nullptr});
         else {
             uint time = get_value("T" + QString::number(i) + "t").toUInt();
             QString signal_name = get_value("T" + QString::number(i) + "s");

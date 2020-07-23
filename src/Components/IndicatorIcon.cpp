@@ -1,7 +1,7 @@
 #include "IndicatorIcon.h"
 
-#include <QLabel>
 #include <QIcon>
+#include <QLabel>
 #include <QTimer>
 
 IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QSize size)

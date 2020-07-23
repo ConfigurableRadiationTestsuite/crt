@@ -38,22 +38,22 @@ public slots:
     void configure_timer(uint time=1000);
 
 signals:
+    void init_done();
+
     void is_logging(bool);
 
     void data_available();
-
-    void init_done();
 
 protected:
     RunManager *runManager;
     QString elementName;
 
+    QTimer *logTimer = nullptr;
+
     bool logging = false;
     bool permanent_logging = false;
 
     virtual QStringList generate_header() = 0;
-
-    QTimer *logTimer = nullptr;
 };
 
 #endif // COMPONENT_H

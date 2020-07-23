@@ -24,7 +24,7 @@ public:
     PSU(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &vendor, uint channel_max, double voltage_max, double current_max);
     virtual ~PSU() override;
 
-    enum vendor get_vendor() {return vd;}
+    enum PSUChannel::vendor get_vendor() {return vd;}
     QVector<PSUChannel *> get_channel_list() const {return channel_list;}
     bool get_master_enable() const {return master_enable;}
     bool has_master_switch() const {return master_switch;}
@@ -48,7 +48,7 @@ signals:
 
 protected:
     QString address;
-    enum vendor vd;
+    enum PSUChannel::vendor vd;
     bool master_switch;
     bool master_enable = false;
     bool master_trigger = false;
@@ -59,8 +59,8 @@ protected:
     QVector<PSUChannel *> channel_list;
 
 private:
-    enum vendor check_vendor(const QString &vendor);
-    QString check_vendor(enum vendor vd);
+    enum PSUChannel::vendor check_vendor(const QString &vendor);
+    QString check_vendor(enum PSUChannel::vendor vd);
 
     bool check_network_connection();
 

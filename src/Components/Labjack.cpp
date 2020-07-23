@@ -1,6 +1,5 @@
 #include "Labjack.h"
 
-#include "LabjackChannel.h"
 #include "LJM_Utilities.h"
 
 #include <QElapsedTimer>

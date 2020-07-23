@@ -1,6 +1,13 @@
 #ifndef INDICATORBOX_H
 #define INDICATORBOX_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * Checkbox together with an icon to indicate the status
+ *
+*/
+
 #include <QCheckBox>
 
 class IndicatorBox : public QCheckBox {
@@ -20,7 +27,6 @@ private:
     QIcon *onIcon;
     QIcon *offIcon;
     QIcon *eventIcon;
-
 };
 
 #endif

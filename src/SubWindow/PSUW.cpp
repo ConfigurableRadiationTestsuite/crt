@@ -1,9 +1,8 @@
 #include "PSUW.h"
 
-#include "src/Components/PSU.h"
 #include "src/Components/IndicatorBox.h"
+#include "src/Components/PSU.h"
 #include "src/Plot/PSUPlot.h"
-#include "src/Plot/qcustomplot.h"
 
 #include <QCheckBox>
 #include <QGroupBox>

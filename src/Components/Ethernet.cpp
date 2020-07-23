@@ -3,8 +3,8 @@
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
-#include <QTcpSocket>
 #include <QTcpServer>
+#include <QTcpSocket>
 
 Ethernet::Ethernet(RunManager *runManager, const QString &config)
     : Component(runManager, config) {

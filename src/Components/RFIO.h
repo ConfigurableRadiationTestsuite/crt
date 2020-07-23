@@ -4,17 +4,19 @@
 /*
 * Author: Mattis Jaksch
 *
+* Presents an RF device with multiple channels;
+* data is received via netcat, distributed to the channels
+* and eventually evaluated
+*
 */
 
-#define BYTE_PER_SAMPLE 2
-#define BYTE_PER_CHANNEL 4
-
 class QProcess;
-class QThread;
-
-#include "RFIOChannel.h"
 
 #include "Component.h"
+#include "RFIOChannel.h"
+
+constexpr int BYTE_PER_SAMPLE = 2;
+constexpr int BYTE_PER_CHANNEL = 4;
 
 class RFIO : public Component {
 Q_OBJECT
@@ -29,6 +31,7 @@ public:
    void set_config() override;
 
 public slots:
+   void init() override;
    void update() override;
 
    void set_single_shot();
@@ -47,8 +50,6 @@ private:
    QVector<RFIOChannel *> channel_list;
 
    int channel;
-
-   void init();
 
    QStringList generate_header() override;
 

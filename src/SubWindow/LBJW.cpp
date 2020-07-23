@@ -1,8 +1,6 @@
 #include "LBJW.h"
 
 #include "src/Components/Labjack.h"
-#include "src/Components/LabjackChannel.h"
-#include "src/Plot/qcustomplot.h"
 #include "src/Plot/LBJPlot.h"
 
 #include <QCheckBox>

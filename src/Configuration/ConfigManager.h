@@ -17,8 +17,6 @@ struct section_position {
     int pos;
 };
 
-typedef struct section_position Section;
-
 class ConfigManager : public QWidget {
 Q_OBJECT
 
@@ -43,7 +41,7 @@ signals:
     void saving_config();
 
 private:
-    QVector<Section> section_positions;
+    QVector<section_position> section_positions;
     QString configName = ".cfg";
     QString content;
 

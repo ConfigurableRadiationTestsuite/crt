@@ -24,11 +24,11 @@ public:
     SpecAddDialog();
     virtual ~SpecAddDialog();
 
+    QVector<struct LineEntry> get_entry_list() const {return line_entry_list;}
+
     void add_entry(const QString &display_name);
     void add_entry(const QString &display_name, const QString &standard_value);
     void create_dialog();
-
-    QVector<struct LineEntry> get_entry_list() const {return line_entry_list;}
 
 private:
     QVector<struct LineEntry> line_entry_list;

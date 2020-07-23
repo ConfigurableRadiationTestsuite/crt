@@ -30,10 +30,10 @@ public:
     SpecSignalDialog();
     virtual ~SpecSignalDialog();
 
+    QVector<struct RegisteredSignalBox> get_registeredSignal_list() const {return registeredSignal_list;}
+
     void add_entry(bool isChecked, struct RegisteredSignal *sig);
     void create_dialog();
-
-    QVector<struct RegisteredSignalBox> get_registeredSignal_list() const {return registeredSignal_list;}
 
 private:
     QVector<struct RegisteredSignalBox> registeredSignal_list;

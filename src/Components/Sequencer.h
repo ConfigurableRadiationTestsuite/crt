@@ -1,9 +1,18 @@
 #ifndef SEQUENCER_H
 #define SEQUENCER_H
 
-#include "Component.h"
+/*
+ * Author: Mattis Jaksch
+ *
+ * Holds a number of task which are routed
+ * to available SubWindow signals (e.g. PSU switch off)
+ * together with a waiting / sleep timer
+ *
+*/
 
 class Task;
+
+#include "Component.h"
 
 class Sequencer : public Component {
 Q_OBJECT
@@ -13,12 +22,9 @@ public:
     Sequencer(RunManager *runManager, const QString &m_element_name, int task_number);
     ~Sequencer() override;
 
-    void set_config() override;
-
     QVector<Task*> get_task_vec() const {return task_vec;}
 
-signals:
-    void task_vec_changed();
+    void set_config() override;
 
 public slots:
     void init() override;
@@ -29,10 +35,13 @@ public slots:
 private slots:
     void update_task_vec();
 
+signals:
+    void task_vec_changed();
+
 private:
-    int task_number = 0;
     QVector<Task*> task_vec;
     QVector<Task*>::iterator task_it;
+    int task_number = 0;
 
     bool loop = false;
 

@@ -11,7 +11,6 @@ constexpr int MIN_DATAPOINTS = 10;
 
 class IQVector : public QVector<IQSample> {
 public:
-
     QPair<int, int> get_period() const;
     QPair<int, int> get_zero() const;
 

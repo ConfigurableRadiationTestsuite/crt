@@ -1,6 +1,14 @@
 #ifndef TASKDIALOG_H
 #define TASKDIALOG_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * Dialog to present signals for
+ * individual task in the sequencer
+ *
+*/
+
 #include "src/Manager/EventManager.h"
 
 #include <QDialog>

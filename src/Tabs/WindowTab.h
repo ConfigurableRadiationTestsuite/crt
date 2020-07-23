@@ -10,13 +10,13 @@
  *
  */
 
-#include "src/Configuration/ConfigManager.h"
-#include "src/Manager/RunManager.h"
-#include "src/Dialog/SpecAddDialog.h"
-
 class SubWindow;
 
 class QVBoxLayout;
+
+#include "src/Configuration/ConfigManager.h"
+#include "src/Manager/RunManager.h"
+#include "src/Dialog/SpecAddDialog.h"
 
 #include <QWidget>
 
@@ -28,9 +28,9 @@ public:
     virtual ~WindowTab();
 
 protected slots:
-    virtual void create_layout();
-
     void update_layout();
+
+    virtual void create_layout();
 
     virtual void load_from_config();
     virtual void push_new_subwindow(const QString &config) = 0;

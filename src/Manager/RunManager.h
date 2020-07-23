@@ -38,19 +38,19 @@ public slots:
     void set_run_mode(enum RunMode mode, const QString &component);
 
 private slots:
-    void create_new_run();
     void update_run();
+    void create_new_run();
 
 signals:
+    void isValid_changed(bool);
+    void isInvalid_changed(bool);
+    void isRunning_changed(bool);
+
     void run_name_changed(const QString &);
     void run_time_changed(const QString &);
     void run_mode_changed(enum RunMode);
 
     void enable_runButton(bool);
-
-    void isValid_changed(bool);
-    void isInvalid_changed(bool);
-    void isRunning_changed(bool);
 
 private:
     QString runName;
@@ -64,8 +64,9 @@ private:
     bool valid = false;
     bool running = false;
 
-    void create_layout();
     void set_run_valid(bool valid);
+
+    void create_layout();
 };
 
 #endif // RUNMANAGER_H

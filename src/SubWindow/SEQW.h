@@ -1,6 +1,14 @@
 #ifndef SEQW_H
 #define SEQW_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * Holds a sequencer with multiple tasks
+ * that get executed during the run
+ *
+*/
+
 class Sequencer;
 class Task;
 

@@ -4,7 +4,8 @@
 /*
  * Author: Mattis Jaksch
  *
- * Labjack (T7) Channel Manager
+ * Manages Labjack T7 channels regarding address,
+ * differential, (interal/external) gain, boundary and resolution
  *
  */
 

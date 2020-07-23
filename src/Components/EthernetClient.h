@@ -22,10 +22,10 @@ public:
     EthernetClient(uint port, const QString &address);
 	virtual ~EthernetClient();
 
+    bool is_connected() const {return connection_ok;}
+
     bool write(QString message);
     bool query(const QString &message, QString &buffer);
-
-    bool is_connected() const {return connection_ok;}
 
 signals:
     void connection_status(bool);

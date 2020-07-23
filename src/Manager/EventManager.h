@@ -27,8 +27,8 @@ class EventManager : public QObject {
 Q_OBJECT
 
 public:
-    EventManager();
-    virtual ~EventManager();
+    EventManager() {}
+    virtual ~EventManager() {}
 
     QVector<RegisteredSignal*> get_signal_list() {return signal_list;}
     RegisteredSignal* get_signal(const QString &name) const;

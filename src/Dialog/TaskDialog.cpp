@@ -1,8 +1,8 @@
 #include "TaskDialog.h"
 
-#include <QRadioButton>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <QRadioButton>
 #include <QVBoxLayout>
 
 TaskDialog::TaskDialog(const QVector<RegisteredSignal*> &signal_list)

@@ -5,10 +5,9 @@
 #include <QElapsedTimer>
 #include <QFileDialog>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QLineEdit>
+#include <QPushButton>
 #include <QTimer>
-
 
 RunManager::RunManager(EventManager *eventManager) : eventManager(eventManager) {
     runTime = new QElapsedTimer;

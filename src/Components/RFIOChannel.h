@@ -4,6 +4,9 @@
 /*
 * Author: Mattis Jaksch
 *
+* Presents one channel for RF data;
+* contains an IQ vector and evaluation capability
+*
 */
 
 class RunManager;

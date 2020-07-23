@@ -20,7 +20,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
     this->elementName = m_element_name;
     this->vd = check_vendor(vendor);
 
-    if(vd == rohdeSchwarz) // || vendor)
+    if(vd == PSUChannel::rohdeSchwarz) // || vendor)
         master_switch = true;
 }
 
@@ -69,21 +69,21 @@ void PSU::update() {
     emit data_available();
 }
 
-enum vendor PSU::check_vendor(const QString &vendor) {
+enum PSUChannel::vendor PSU::check_vendor(const QString &vendor) {
     if(vendor.contains("rohde", Qt::CaseInsensitive) || vendor.contains("schwarz", Qt::CaseInsensitive))
-        return rohdeSchwarz;
+        return PSUChannel::rohdeSchwarz;
 
     if(vendor.contains("tti", Qt::CaseInsensitive))
-        return tti;
+        return PSUChannel::tti;
 
-    return none;
+    return PSUChannel::none;
 }
 
-QString PSU::check_vendor(enum vendor vd) {
-    if(vd == tti)
+QString PSU::check_vendor(enum PSUChannel::vendor vd) {
+    if(vd == PSUChannel::tti)
         return "tti";
 
-    if(vd == rohdeSchwarz)
+    if(vd == PSUChannel::rohdeSchwarz)
         return "rohdeschwarz";
 
     return "none";
@@ -124,7 +124,7 @@ void PSU::set_master_enable(int master_enable) {
 
     this->master_enable = master_enable == 0 ? false : true;
 
-    if(vd == rohdeSchwarz)
+    if(vd == PSUChannel::rohdeSchwarz)
         set_master_rohdeschwarz();
 
 //    if(vd == vendor)

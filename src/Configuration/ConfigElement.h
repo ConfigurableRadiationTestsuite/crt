@@ -18,8 +18,6 @@ struct config_entry {
     QString value;
 };
 
-typedef struct config_entry Entry;
-
 class ConfigElement {
 public:
     ConfigElement() {}
@@ -30,14 +28,15 @@ public:
 
     void set_value(const QString &name, const QString &value);
     virtual void set_config() = 0;
-    void load_config(const QString &content);
 
     bool is_empty() const {return config_entry_list.empty();}
 
-protected:
-    QVector<Entry> config_entry_list;
+    void load_config(const QString &content);
 
-    Entry *get_entry(const QString &name);
+protected:
+    QVector<config_entry> config_entry_list;
+
+    config_entry *get_entry(const QString &name);
 
     virtual bool parse_config(const QVector<QString> &entries);
 };
@@ -47,7 +46,7 @@ inline QString ConfigElement::get_value(const QString &name) {
 }
 
 inline void ConfigElement::set_value(const QString &name, const QString &value) {
-    Entry *entry = get_entry(name);
+    config_entry *entry = get_entry(name);
 
     if(entry == nullptr)
         config_entry_list.push_back({name, value});
@@ -55,7 +54,7 @@ inline void ConfigElement::set_value(const QString &name, const QString &value) 
         entry->value = value;
 }
 
-inline Entry *ConfigElement::get_entry(const QString &name) {
+inline config_entry *ConfigElement::get_entry(const QString &name) {
    for(QVector<struct config_entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
         if((*it).name.contains(name))
             return &(*it);

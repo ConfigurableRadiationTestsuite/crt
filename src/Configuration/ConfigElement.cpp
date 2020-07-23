@@ -3,7 +3,7 @@
 QString ConfigElement::get_config() {
     QString config = "";
 
-    for(QVector<Entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
+    for(QVector<config_entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
         config += (*it).name + "=" + (*it).value + "\n";
 
     return config;

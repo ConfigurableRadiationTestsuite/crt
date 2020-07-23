@@ -50,7 +50,7 @@ bool ConfigManager::get_config_section(QString name, QString &section) {
 
 /* Check how many sections of the same kind have already been found */
 bool ConfigManager::check_section_position(const QString &name, int pos) {
-    for(QVector<Section>::iterator i = section_positions.begin(); i != section_positions.end(); i++) {
+    for(QVector<section_position>::iterator i = section_positions.begin(); i != section_positions.end(); i++) {
         if((*i).sectionName == name) {
             if((*i).pos < pos) {
                 (*i).pos++;

@@ -59,7 +59,7 @@ void SEQW::create_layout() {
 
         //Sleep
         QLineEdit *timeEdit = new QLineEdit;
-        QIntValidator *timeValid = new QIntValidator(0, 60*60*24);
+        QIntValidator *timeValid = new QIntValidator(1, 60*60*24);
         timeEdit->setValidator(timeValid);
         timeEdit->setText(QString::number(task->get_time()));
         connect(timeEdit, SIGNAL(textChanged(const QString&)), task, SLOT(set_time(const QString &)));

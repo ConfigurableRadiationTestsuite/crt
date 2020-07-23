@@ -21,13 +21,14 @@ public:
     ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path);
     virtual ~ProgrammStarter();
 
-    void set_config() override;
-
     QString get_path() const {return path;}
     QString get_arguments();
 
+    void set_config() override;
+
 public slots:
     void init() override;
+    void update() override {} //Mix with receive data
 
     void set_arguments(const QString &text);
     void set_path(const QString &text);
@@ -35,8 +36,6 @@ public slots:
 
     void execute_programm();
     void kill_programm();
-
-    void update() override {} //Mix with receive data
 
 private slots:
     void receive_data();

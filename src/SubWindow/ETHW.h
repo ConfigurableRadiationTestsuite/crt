@@ -4,6 +4,9 @@
 /*
  * Author: Mattis Jaksch
  *
+ * Shows ethernet packages being send / received
+ * and the number of transmitted files / bytes
+ *
  */
 
 class Ethernet;

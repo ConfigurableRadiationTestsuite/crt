@@ -1,6 +1,13 @@
 #ifndef INDICATORICON_H
 #define INDICATORICON_H
 
+/*
+ * Author: Mattis Jaksch
+ *
+ * Icon to indicate the current/last status
+ *
+*/
+
 #include <QLabel>
 
 class IndicatorIcon : public QLabel {

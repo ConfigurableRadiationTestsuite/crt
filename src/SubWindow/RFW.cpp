@@ -1,8 +1,6 @@
 #include "RFW.h"
 
-#include "src/Plot/qcustomplot.h"
 #include "src/Components/RFIO.h"
-#include "src/Components/RFIOChannel.h"
 #include "src/Plot/RFPlot.h"
 
 #include <QHBoxLayout>

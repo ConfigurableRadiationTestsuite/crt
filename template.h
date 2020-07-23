@@ -18,6 +18,8 @@ class global;
 
 namespace acroynm {
 
+constexpr type name = value;
+
 struct StructureName {
 	int variable;
 }
@@ -43,6 +45,12 @@ public:
 	void arbitrary_method();
 
 	void quick_method();
+	
+public slots:
+
+private slots:
+
+signals:
 	
 private:
 	OtherClass *otherclass;

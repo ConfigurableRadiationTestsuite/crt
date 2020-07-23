@@ -34,17 +34,16 @@ public:
     ComponentFile * get_file(const void * subComponent);
     QString get_root_directory() const {return root_directory;}
 
+    void set_file_header(const void * subComponent, const QStringList &header);
+    void set_root_directory(const QString &directory);
+
     void append_value_to_file(const void * subComponent, double value);
     void append_value_to_file(const void * subComponent, const QString &value);
     void append_values_to_file(const void * subComponent, const QVector<double> &values);
     void append_values_to_file(const void * subComponent, const QStringList &values);
 
-    void set_file_header(const void * subComponent, const QStringList &header);
-
     void register_component(const void * subComponent, const QString name);
     void deregister_component(const void * subComponent);
-
-    void set_root_directory(const QString &directory);
 
 protected:
     QString root_directory;

@@ -9,11 +9,11 @@
  *
  */
 
-class LabjackChannel;
 
 class QElapsedTimer;
 
 #include "Component.h"
+#include "LabjackChannel.h"
 
 #include <LabJackM.h>
 
@@ -25,13 +25,13 @@ public:
     Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel);
     virtual ~Labjack() override;
 
-    void set_config() override;
-
     constexpr static int get_main_resolution_address() {return 43903;}
     constexpr static int get_main_range_address() {return 43900;}
     constexpr static int get_main_settling_address() {return 43904;}
 
     QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
+
+    void set_config() override;
 
 public slots:
     void init() override;
@@ -72,17 +72,17 @@ private:
     int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
     bool is_maximum = false;
 
+    void get_channel_addresses(const QString &input, QVector<int> &output);
+    void get_channel_names(const QString &input, QVector<QString> &output);
+
+    QStringList generate_header() override;
+
     void open_labjack();
 
     int write(int address, const int TYPE, double value);
     int read(int address, const int TYPE, double &value);
     int read(QVector<double> &value);
 //    int read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value);
-
-    void get_channel_addresses(const QString &input, QVector<int> &output);
-    void get_channel_names(const QString &input, QVector<QString> &output);
-
-    QStringList generate_header() override;
 
     void adapt_channel_range();
     void adapt_sample_rate(qint64 time);

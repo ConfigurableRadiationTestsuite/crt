@@ -9,12 +9,12 @@
  *
  */
 
-#define LBJ_ADC_BITS 14
-
 class LabjackChannel;
 class PlotElement;
 
 #include "Plot.h"
+
+constexpr int LBJ_ADC_BITS = 4;
 
 class LBJPlot : public Plot {
 Q_OBJECT
@@ -23,8 +23,9 @@ public:
     LBJPlot(QCustomPlot *m_plot, int m_datapoints=30, int m_seconds=30);
     virtual ~LBJPlot() override;
 
-    void add_channel(LabjackChannel * channel, QColor color);
     QVector<PlotElement *> get_plotelement_list() {return plotElement_list;}
+
+    void add_channel(LabjackChannel * channel, QColor color);
 
 public slots:
     void update_plot() override;
@@ -40,11 +41,11 @@ private:
 
     QElapsedTimer *plot_timer;
 
-    void create_layout() override;
-
     int get_total_maximum();
     int get_total_minimum();
     int get_total_limit(bool maximum);
+
+    void create_layout() override;
 };
 
 /* Connection between channel and its graphical representation */
