@@ -45,7 +45,7 @@
 \newpage
 
 \section{Overview}
-This testsuite is developed to automate various test procedures, like thermal-vacuum, radiation or just general long-term tests. The use is made to be as easy as possible to have a comprehensive and fast test setup. It offers interfaces to gather all the needed data, together with some measurements to protect the device under test (DUT) and act in unsafe situations.
+This test-suite is developed to automate various test procedures, like thermal-vacuum, radiation or just general long-term tests. The use is made to be as easy as possible to have a comprehensive and fast test setup. It offers interfaces to gather all the needed data, together with some measurements to protect the device under test (DUT) and act in unsafe situations.
 
 \bigbreak
 
@@ -84,10 +84,11 @@ The test-suite supports different devices (e.g. power supplies, ethernet clients
 	\begin{itemize}
 \item Power-supply
 \item Labjack
-\item RF (Reception client for the Analog Devices IIO-daemon)\footnote{Deactivated}
+\item RF (Reception client for the Analog Devices IIO-daemon)
 \item DIO (Digital I/O to switch relays)\footnote{Not implemented yet}
 \item PROG (Starts and external program including arguments; and records the output)
 \item ETH (Ethernet data reception)
+\item SEQ (Sequencer to send signals on a timetable)
 	\end{itemize}		
 	
 	\subsection{Testrun}	
@@ -110,7 +111,7 @@ The test-suite supports different devices (e.g. power supplies, ethernet clients
 Here the various components, corresponding to the tabs, are explained. The description includes a function overview, an example and two creation procedures (manual / config) as well as the currently supported devices.
 
 	\subsection{Power-Supply}
-	The power supply tab controls a given device remotely. An arbitrary maximum voltage / current can be set to avoid unwanted change and damage. In figure \eqref{f:psu_example} an supply example is given. The psu can be easily controlled via voltage and current line edits. Also every channel can be enabled / disabled individually and also by a signal (e.g. with the \enquote{Start Test} / \enquote{Stop Test}). Also, a time-line of the voltage and current is given on a small graph for each channel in steps of 1 second over an interval of 30 seconds. 	
+	The power supply tab controls a given device remotely. An arbitrary maximum voltage / current can be set to avoid unwanted change and damage. In figure \eqref{f:psu_example} a supply example is given. The psu can be easily controlled via voltage and current line edits. Every channel can be enabled / disabled individually and also by a signal (e.g. with the \enquote{Start Test} / \enquote{Stop Test}). Also, a time-line of the voltage and current is given on a small graph for each channel in steps of 1 second over an interval of 30 seconds. 	
 	
 	\begin{figure}[H]
 \centering
@@ -133,13 +134,13 @@ Here the various components, corresponding to the tabs, are explained. The descr
 	
 	\subsubsection{Config Creation}
 	
-	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first three lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that, the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix, with $vs$ for voltage-set, $cs$ current-set, $vm$ voltage-max and $cm$ current-max. Therefore the maximum settings can be defined individually here, in contrast to the manual creation.
+	The power-supply is denoted in the configuration file in the \enquote{PSU} section. The first three lines correspond to the manual creation in chapter \ref{c:psu_manual_creation}. After that, the latest channel settings are brought up. They have a prefix $c$, a number $X$ as identifier and a suffix, with $vs$ for voltage-set, $cs$ current-set, $vm$ voltage-max and $cm$ current-max. Therefore the maximum settings can be defined individually for every channel, in contrast to the manual creation.
 	
 \begin{lstlisting}[caption=PSU Config]
 Section PSU
 	name=PSU Links
 	address=192.168.3.103:5025
-	channel=3
+	channel=2
 	c0vs=12
 	c0cs=500
 	c0vm=30
@@ -160,7 +161,7 @@ EndSection
 		\begin{tabular}{ll}
 		\toprule
 		Supplier			& Model \\ \midrule
-		Rhode\&Schwarz		& HMC8043 \\
+		Rhode\&Schwarz		& HMC804X \\
 		TTI					& (?) \\
 		\bottomrule
 		\end{tabular}			
@@ -169,7 +170,7 @@ EndSection
 \newpage
 	
 	\subsection{Labjack}
-	The Labjack is a data acquisition device to measure voltages in a range of $\SI{10}{\milli\volt}$ to $\SI{10}{\volt}$. As a consequence, the available resolution is dependant on the chosen measurement range. The same goes for the data rate which depends on the settling time (see low-pass filter) and for the chosen resolution. In the figure \eqref{f:lbj_example} a Labjack with two channels (one differential, one single-ended) are shown. In the top row, the mentioned data-rate, resolution and settling time can be chosen. The \enquote{Maximum} check box allows to set the data-rate to the available maximum. Below presented are the two channels with a boundary (\enquote{0} means \enquote{not set}), their latest value and the chosen gain (only post-processing). At the bottom a graph is presented containing all plotted channels. To display the channels in the graph, they can be switched on or off by the corresponding check box. 
+	The Labjack is a data acquisition device to measure voltages in a range of $\SI{10}{\milli\volt}$ to $\SI{10}{\volt}$. As a consequence, the available resolution is dependant on the chosen measurement range. The same goes for the data-rate which depends on the settling time (see low-pass filter) and for the chosen resolution. In the figure \eqref{f:lbj_example} a Labjack with two channels (one differential, one single-ended) is shown. In the top row, the mentioned data-rate, resolution and settling time can be chosen. The \enquote{Maximum} check box allows to set the data-rate to the available maximum. Below presented are the two channels with a boundary (\enquote{0} means \enquote{not set}), their latest value and the chosen gain (only post-processing). At the bottom a graph is gets drawn containing all plotted channels. To display the channels in the graph, they can be switched on or off by the corresponding check box. 
 	
 	\begin{figure}[H]
 	\centering
@@ -233,12 +234,8 @@ EndSection
 		\end{table}	
 
 	\newpage
-	\subsection{RF Signals - Deactivated}
-	\textbf{Due to technical issues, this option is deactivated at the moment!}
-
-	\bigbreak
-	
-	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit. An evaluation margin in exponents of 2 can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
+	\subsection{RF Signals}	
+	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit per sample. An evaluation margin in exponents of 2 (e.g. $x^2$) can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
 		
 		\begin{figure}[H]
 \centering
@@ -277,7 +274,7 @@ EndSection
 \end{lstlisting}
 	
 		\subsubsection{Data Reception}
-		The current implementation uses the simple \textit{ncat}\footnote{Refer to \url{de.wikipedia.org/wiki/Netcat}} command to receive raw data over Ethernet. This makes it rather independent. The current data protocol is given in table (\ref{t:rf_data}):
+		The current implementation uses the simple \textit{ncat}\footnote{Refer to \url{de.wikipedia.org/wiki/Netcat}} command to receive raw data over Ethernet. This makes it rather independent. The current data protocol (e.g. with two channel) is given in table (\ref{t:rf_data}):
 		
 		\begin{table}[H]
 		\centering
@@ -285,8 +282,8 @@ EndSection
 		\toprule
 		2 Channel	& \multicolumn{8}{c}{8 Byte}\\ \midrule
 		IQ-Data		& \multicolumn{4}{c|}{4 Byte} & \multicolumn{4}{c}{4 Byte} \\ \hline 
-		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c|}{2 Byte} & \multicolumn{4}{c}{} \\ 
-		Q	& \multicolumn{4}{c|}{} & \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{2 Byte} \\  \hline
+		I	& \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c|}{} & \multicolumn{2}{c}{2 Byte} & \multicolumn{2}{c}{} \\ 
+		Q	& \multicolumn{2}{c}{} & \multicolumn{2}{c|}{2 Byte} & \multicolumn{2}{c}{} & \multicolumn{2}{c}{2 Byte} \\  \hline
 		Byte		& LSB & MSB & LSB & MSB & LSB & MSB & LSB & MSB \\ \bottomrule
 		\end{tabular}
 		\caption{Data structure of the RF IQ-data}
@@ -330,12 +327,12 @@ EndSection
 	
 	\newpage
 	\subsection{Ethernet}
-	The ethernet port can specify a port to be open for data reception. The name, port number and information on the reception are displayed. In figure \eqref{f:eth_example} an example is given. Once the test starts, the port is opened and data can be received. A timeout can be set to trigger other devices (added via \enquote{Add Signal}). On the right an indicator shows if the connection is (in-)active and lights up if data has been recently received. 
+	The Ethernet can specify a port to be open for data reception. The name, port number and information on the reception are displayed. In figure \eqref{f:eth_example} an example is given. Once the test starts, the port is opened and data can be received. A timeout can be set to trigger other devices (added via \enquote{Add Signal}). On the right an indicator shows if the connection is (in-)active and lights up if data has been recently received. 
 	
 	\begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{./8_ETH_example.png}
-\caption{An example with a Rohde\&Schwarz 3-channel power supply}
+\caption{Reception of temperature data files}
 \label{f:eth_example}
 	\end{figure}	 
 	
@@ -347,23 +344,64 @@ EndSection
 	\begin{figure}[H]
 	\centering
 	\includegraphics[width=0.4\textwidth]{./8_ETH_menu.png}
-	\caption{Creation menu for a power-supply}
+	\caption{Creation menu for a Ethernet reception}
 	\label{f:eth_menu}
 	\end{figure}
 	
 	\subsubsection{Config Creation}
 	
-	The ethernet is denoted in the configuration file in the \enquote{ETH} section. All three lines correspond to the manual creation in chapter \ref{c:eth_manual_creation}. 
+	The Ethernet is denoted in the configuration file in the \enquote{ETH} section. All three lines correspond to the manual creation in chapter \ref{c:eth_manual_creation}. 
 	
-\begin{lstlisting}[caption=PSU Config]
-Section PSU
-	name=PSU Links
+\begin{lstlisting}[caption=ETH Config]
+Section ETH
+	name=Temperature Data
 	port=9010
 	timeout=9999
 	signal=
 EndSection
 \end{lstlisting}
 	
+	\newpage
+	\subsection{Sequence}
+	The sequence carries an arbitrary amount of tasks / signals to execute (see figure \ref{f:seq_example}. After every signal, a timeslot is presented showing specifying the waiting time after the signal has been send. One can set the signals to be send by hitting the \enquote{Set Signal} Button. Additionally to the normal available signals, a \enquote{sleep} signal is added in the menu. In the top row, the checkbox \enquote{loop} can be set to run the sequence infinitely.
+	
+	\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./9_SEQ_example.png}
+\caption{Sequence for a power cycle}
+\label{f:seq_example}
+	\end{figure}	 
+	
+	\subsubsection{Manual Creation}	
+	\label{c:seq_manual_creation}
+	
+	The window for manual creation is presented in figure \eqref{f:seq_menu}. In the first row an individual name can be chosen. In the second row the number of tasks can be set.
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./9_SEQ_menu.png}
+	\caption{Creation menu for a sequence}
+	\label{f:seq_menu}
+	\end{figure}
+	
+	\subsubsection{Config Creation}
+	
+	The sequencer is denoted in the configuration file in the \enquote{SEQ} section. The first two lines correspond to the manual creation in chapter \ref{c:seq_manual_creation}. After that, the individual tasks are specified with a prefix $t$, a number $X$ and their waiting time $t$ as well as the signal $s$ as suffix.
+	
+\begin{lstlisting}[caption=SEQ Config]
+Section SEQ
+name=Powercycle
+tasks=4
+t0t=1
+t0s=PSU Links Switch On
+t1t=1
+t1s=PSU Links Switch Off
+signal=
+EndSection
+\end{lstlisting}
+
+	%TODO
+
 \newpage
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
@@ -470,7 +508,8 @@ const QVector<struct RegisteredSignal*> &signal_list) {
 		\paragraph{Code Example}
 
 		First, in the derived subclass the used signals have to be registered to inform the \textit{EventManager} (and therefore the outer world) about it. In this example we announce from our power-supply the signals \enquote{on} and \enquote{off}. Which means that our power-supply is listening and will turn itself on or off if one of these signals are emitted:
-		
+
+\newpage		
 \begin{lstlisting}[caption=PSU.cpp]
 PSU::PSU() {
  connect(this, SIGNAL(signal_on()), psu, SLOT(switch_on()));
