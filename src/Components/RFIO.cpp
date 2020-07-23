@@ -14,24 +14,12 @@ RFIO::RFIO(RunManager * runManager, const QString &config)
     this->elementName = get_value("name");
     this->address = get_value("address");
     this->channel = get_value("channel").toInt();
-
-    for(int i = 0; i < channel; i++) {
-        assert(parse_config({"c" + QString::number(i) + "m"}));
-
-        channel_list.push_back(new RFIOChannel(i, get_value("c" + QString::number(i) + "m").toInt()));
-        connect(channel_list[i], SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
-    }
 }
 
 RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel)
     : Component(m_element_name, runManager), address(address), channel(channel) {
 
     this->elementName = m_element_name;
-
-    for(int i = 0; i < channel; i++) {
-        channel_list.push_back(new RFIOChannel(i));
-        connect(channel_list[i], SIGNAL(error(QVector<IQSample>, int)), this, SLOT(handle_error(QVector<IQSample>, int)));
-    }
 }
 
 RFIO::~RFIO() {
@@ -54,12 +42,27 @@ void RFIO::set_config() {
 }
 
 void RFIO::init() {
-    //Create reception process
+    /* Create channel */
+    for(int i = 0; i < channel; i++) {
+        if(is_empty()) {
+            channel_list.push_back(new RFIOChannel(i));
+            connect(channel_list.last(), SIGNAL(error(QVector<IQSample>, int)), this, SLOT(handle_error(QVector<IQSample>, int)));
+        }
+
+        else {
+            assert(parse_config({"c" + QString::number(i) + "m"}));
+
+            channel_list.push_back(new RFIOChannel(i, get_value("c" + QString::number(i) + "m").toInt()));
+            connect(channel_list.last(), SIGNAL(error(QVector<int>, QVector<int>, int)), this, SLOT(handle_error(QVector<int>, QVector<int>, int)));
+        }
+    }
+
+    /* Create reception process */
     process = new QProcess;
+
 #ifndef DUMMY_DATA
     process->start("/bin/ncat -l " + QString::number(port), {""});
 #endif
-
 #ifdef DUMMY_DATA
     process->start("/bin/cat", {"/dev/urandom"});
 #endif

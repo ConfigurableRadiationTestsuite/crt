@@ -45,11 +45,11 @@ private:
    int port;
    bool is_single_shot = false;
    bool is_destroyed;
+   int channel;
 
    QProcess *process;
    QVector<RFIOChannel *> channel_list;
 
-   int channel;
 
    QStringList generate_header() override;
 
