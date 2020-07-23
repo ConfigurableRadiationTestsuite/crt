@@ -27,7 +27,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 PSU::~PSU() {
     delete eth;
 
-    foreach(PSUChannel *channel, channel_list)
+    foreach (PSUChannel *channel, channel_list)
         delete channel;
 }
 

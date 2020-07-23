@@ -88,8 +88,7 @@ void LBJPlot::set_datarate(const QString &datarate) {
     recreate_time_axis();
     recreate_axis(standard_axis);
 
-    PlotElement *plotElement;
-    foreach (plotElement, plotElement_list)
+    foreach (PlotElement *plotElement, plotElement_list)
         recreate_axis(plotElement->get_axis());
 
     counter = 0;

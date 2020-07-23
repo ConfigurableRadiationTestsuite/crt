@@ -1,5 +1,4 @@
 #include "Labjack.h"
-
 #include "LJM_Utilities.h"
 
 #include <QElapsedTimer>
@@ -208,7 +207,7 @@ void Labjack::adapt_channel_range() {
     if(rangeTimer->elapsed() < 1000)
         return;
 
-    foreach(LabjackChannel *channel, channel_vec)
+    foreach (LabjackChannel *channel, channel_vec)
         channel->set_range();
 
     rangeTimer->restart();

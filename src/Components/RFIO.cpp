@@ -35,7 +35,7 @@ RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString
 }
 
 RFIO::~RFIO() {
-    foreach(RFIOChannel *channel, channel_list)
+    foreach (RFIOChannel *channel, channel_list)
         delete channel;
 
     process->kill();
@@ -85,7 +85,7 @@ void RFIO::update() {
     int i, chan;
     for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++) {
         chan = 0;
-        foreach(channel, channel_list) {
+        foreach (channel, channel_list) {
             channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
             chan++;
         }
@@ -133,8 +133,7 @@ QStringList RFIO::generate_header() {
     QStringList header;
     header.push_back("Sample");
 
-    RFIOChannel * channel;
-    foreach (channel, channel_list) {
+    foreach (RFIOChannel * channel, channel_list) {
         header.push_back("I" + QString::number(channel->get_channel_number()));
         header.push_back("Q" + QString::number(channel->get_channel_number()));
     }

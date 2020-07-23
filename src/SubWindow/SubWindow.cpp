@@ -51,7 +51,7 @@ QString SubWindow::get_config() {
 QString SubWindow::get_signal_list() {
     QString list = "";
 
-    foreach (struct RegisteredSignal *signal, signal_list)
+    foreach (RegisteredSignal *signal, signal_list)
         list += signal->name + ";";
 
     return list;
@@ -63,7 +63,7 @@ void SubWindow::post_init() {
     if(signal_names.count(";") == signal_list.size())
         return ;
 
-    foreach (struct RegisteredSignal * signal, eventManager->get_signal_list())
+    foreach (RegisteredSignal * signal, eventManager->get_signal_list())
         if(signal_names.contains(signal->name) && !is_signal_in_list(signal))
             signal_list.push_back(signal);
 }
@@ -75,7 +75,7 @@ void SubWindow::show_signal_dialog() {
     signalDialog = new SpecSignalDialog;
 
     /* Check every signal thats already listed */
-    foreach (struct RegisteredSignal * signal, eventManager->get_signal_list()) {
+    foreach (RegisteredSignal * signal, eventManager->get_signal_list()) {
         if(signal->st != SignalType::start_log && signal->st != SignalType::stop_log)
             is_signal_in_list(signal) ? signalDialog->add_entry(true, signal) : signalDialog->add_entry(false, signal);
     }

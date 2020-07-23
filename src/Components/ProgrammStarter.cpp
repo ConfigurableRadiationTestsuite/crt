@@ -94,8 +94,7 @@ void ProgrammStarter::receive_data() {
 QStringList ProgrammStarter::substitute_arguments() {
     QStringList argList;
 
-    QString element;
-    foreach(element, arguments) {
+    foreach (QString element, arguments) {
         if(element.contains("$directory"))
             argList.push_back(runManager->get_root_directory());
         else

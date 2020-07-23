@@ -63,8 +63,7 @@ void RFW::create_layout() {
     /* Channel */
     QHBoxLayout *subHLayout = new QHBoxLayout;
 
-    RFIOChannel * channel;
-    foreach (channel, rfio->get_channel_list()) {
+    foreach (RFIOChannel * channel, rfio->get_channel_list()) {
         QGroupBox * channelGroupBox = new QGroupBox("Channel: " + QString::number(channel->get_channel_number()));
         QHBoxLayout *channelHLayout = new QHBoxLayout;
 

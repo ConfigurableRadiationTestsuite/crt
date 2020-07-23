@@ -100,8 +100,8 @@ void LBJW::create_layout() {
 
     QTimer *timer = new QTimer;
 
-    LabjackChannel *channel; int cnt = 1;
-    foreach (channel, lbj->get_channel_vec()) {
+    int cnt = 1;
+    foreach (LabjackChannel *channel, lbj->get_channel_vec()) {
         //Name
         QLabel *channelLabel = new QLabel(channel->get_name());
 

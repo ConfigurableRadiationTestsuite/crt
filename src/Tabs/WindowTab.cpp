@@ -21,8 +21,7 @@ WindowTab::~WindowTab() {}
 void WindowTab::create_layout() {
     QVBoxLayout *mainTabLayout = new QVBoxLayout;
 
-    SubWindow *window;
-    foreach (window, subWindow_list) {
+    foreach (SubWindow *window, subWindow_list) {
         /* Main Box for the window */
         QGroupBox * windowGroupBox = new QGroupBox(window->get_component()->get_element_name());
 

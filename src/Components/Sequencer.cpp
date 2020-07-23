@@ -13,16 +13,17 @@ Sequencer::Sequencer(RunManager *runManager, const QString &m_element_name, int 
     : Component(m_element_name, runManager), task_number(task_number) {}
 
 Sequencer::~Sequencer() {
-    foreach(Task *task, task_vec)
+    foreach (Task *task, task_vec)
         delete task;
 }
 
 void Sequencer::set_config() {
-    set_value("Tasks", QString::number(task_vec.size()));
+    set_value("name", elementName);
+    set_value("tasks", QString::number(task_vec.size()));
 
     for(int i = 0; i < task_vec.size(); ++i) {
-        set_value("T" + QString::number(i) + "t", QString::number(task_vec[i]->get_time()));
-        set_value("T" + QString::number(i) + "s", task_vec[i]->get_signal_name());
+        set_value("t" + QString::number(i) + "t", QString::number(task_vec[i]->get_time()));
+        set_value("t" + QString::number(i) + "s", task_vec[i]->get_signal_name());
     }
 }
 
