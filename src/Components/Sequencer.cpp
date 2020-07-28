@@ -49,6 +49,10 @@ void Sequencer::init() {
     task_it = task_vec.begin();
     (*task_it)->set_active(true);
 
+    taskTimer = new QTimer;
+    connect(taskTimer, SIGNAL(timeout()), this, SLOT(update()));
+    connect(runManager, SIGNAL(is_running_changed(bool)), taskTimer, SLOT(activate_timer(bool)));
+
     emit init_done();
 }
 
@@ -57,7 +61,7 @@ void Sequencer::update() {
         return ;
 
     /* Stop timer */
-    logTimer->stop();
+    taskTimer->stop();
     (*task_it)->set_active(true);
 
     /* Send signal */
@@ -76,7 +80,7 @@ void Sequencer::update() {
         task_it = task_vec.begin();
 
     if(task_it != task_vec.end()) {
-        logTimer->start((*task_it)->get_time());   
+        taskTimer->start((*task_it)->get_time());
         (*task_it)->set_active(false);
     }
 }
@@ -87,4 +91,15 @@ void Sequencer::update_task_vec() {
         task->set_signal(runManager->get_eventManager()->get_signal(task->get_signal_name()));
 
     emit task_vec_changed();
+}
+
+void Sequencer::activate_timer(bool activate) {
+    if(activate) {
+        task_it = task_vec.begin();
+        taskTimer->start((*task_it)->get_time());
+    }
+    else {
+        (*task_it)->set_active(false);
+        taskTimer->stop();
+    }
 }

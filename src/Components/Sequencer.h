@@ -35,6 +35,8 @@ public slots:
 private slots:
     void update_task_vec();
 
+    void activate_timer(bool);
+
 signals:
     void task_vec_changed();
 
@@ -44,6 +46,8 @@ private:
     int task_number = 0;
 
     bool loop = false;
+
+    QTimer *taskTimer = nullptr;
 
     QStringList generate_header() override;
 };
