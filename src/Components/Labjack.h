@@ -130,7 +130,11 @@ inline void Labjack::adapt_sample_rate(qint64 nsecs) {
 }
 
 inline void Labjack::change_samplerate() {
-    logTimer->start(1000/samplerate);
+    if(samplerate > 0)
+        logTimer->start(1000/samplerate);
+    else
+        logTimer->start(1000);
+
     emit samplerate_changed(QString::number(samplerate));
 }
 
