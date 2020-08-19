@@ -50,7 +50,6 @@ void PROGW::create_layout() {
     QPushButton *startButton = new QPushButton("Start");
     connect(startButton, SIGNAL(clicked()), programmStarter, SLOT(execute_programm()));
     connect(programmStarter, SIGNAL(announce_trigger(bool)), startButton, SLOT(setDisabled(bool)));
-    connect(programmStarter, SIGNAL(announce_run(bool)), startButton, SLOT(setDisabled(bool)));
 
     QPushButton *stopButton = new QPushButton("Stop");
     connect(stopButton, SIGNAL(clicked()), programmStarter, SLOT(kill_programm()));
