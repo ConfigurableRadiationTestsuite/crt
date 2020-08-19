@@ -15,10 +15,10 @@ PROGW::PROGW(RunManager *m_runManager, ProgrammStarter *programmStarter)
     : SubWindow(m_runManager, programmStarter), programmStarter(programmStarter) {
 
     /* Connect and register signals */
-    connect(this, SIGNAL(signal_on()), programmStarter, SLOT(execute_programm()));
+    connect(this, SIGNAL(signal_on()), programmStarter, SLOT(start_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Execute", SignalType::on, this, &SubWindow::signal_on);
 
-    connect(this, SIGNAL(signal_off()), programmStarter, SLOT(kill_programm()));
+    connect(this, SIGNAL(signal_off()), programmStarter, SLOT(stop_programm()));
     eventManager->add_signal(programmStarter->get_element_name() + " Kill", SignalType::off, this, &SubWindow::signal_off);
 }
 

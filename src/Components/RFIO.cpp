@@ -70,6 +70,8 @@ void RFIO::init() {
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
 
     process->waitForStarted();
+
+    emit init_done();
 }
 
 void RFIO::update() {

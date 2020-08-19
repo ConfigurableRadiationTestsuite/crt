@@ -36,6 +36,8 @@ void ProgrammStarter::set_config() {
 void ProgrammStarter::init() {
     process = new QProcess;
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
+
+    emit init_done();
 }
 
 void ProgrammStarter::set_path(const QString &text) {
@@ -56,6 +58,9 @@ void ProgrammStarter::set_trigger(int trigger) {
 }
 
 void ProgrammStarter::execute_programm() {
+    if(running)
+        return ;
+
     process->start(path, substitute_arguments());
     process->waitForStarted();
 
@@ -65,6 +70,9 @@ void ProgrammStarter::execute_programm() {
 }
 
 void ProgrammStarter::kill_programm() {
+    if(!running)
+            return ;
+
     process->kill();
 
     running = false;
@@ -95,8 +103,10 @@ QStringList ProgrammStarter::substitute_arguments() {
     QStringList argList;
 
     foreach (QString element, arguments) {
-        if(element.contains("$directory"))
-            argList.push_back(runManager->get_root_directory());
+        if(element.contains("$directory")) {
+            QString suffix = element.mid(element.indexOf("/"));
+            argList.push_back(runManager->get_root_directory() + suffix);
+        }
         else
             argList.push_back(element);
     }

@@ -34,6 +34,9 @@ public slots:
     void set_path(const QString &text);
     void set_trigger(int trigger);
 
+    void start_programm();
+    void stop_programm();
+
     void execute_programm();
     void kill_programm();
 
@@ -72,6 +75,16 @@ inline QStringList ProgrammStarter::generate_header() {
 
 inline void ProgrammStarter::set_arguments(const QString &text) {
     arguments = text.split(' ');
+}
+
+inline void ProgrammStarter::start_programm() {
+    if(trigger)
+        execute_programm();
+}
+
+inline void ProgrammStarter::stop_programm() {
+    if(trigger)
+        kill_programm();
 }
 
 #endif // PROGRAMMSTARTER_H

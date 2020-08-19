@@ -1,0 +1,28 @@
+Section PSU
+name=PSU Links
+vendor=rohdeschwarz
+master=1
+address=192.168.3.103:5025
+channel=3
+c0vs=5
+c0cs=1500
+c0vm=5
+c0cm=1500
+c1vs=5
+c1cs=1500
+c1vm=5
+c1cm=1500
+c2vs=5
+c2cs=1500
+c2vm=5
+c2cm=1500
+signal=
+EndSection
+
+Section PROG
+name=Test Programm
+path=/home/sphinx/git/frame-tester/bin/Release/frame-tester
+arguments=11 /dev/null $directory/frames
+signal=
+EndSection
+
