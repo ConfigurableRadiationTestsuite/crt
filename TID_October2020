@@ -21,8 +21,8 @@ EndSection
 
 Section PROG
 name=Test Programm
-path=/home/sphinx/git/frame-tester/bin/Release/frame-tester
-arguments=11 /dev/null $directory/frames
+path=/home/obc/TestSoftware/frame-tester/08_Berlin_Oktober20/frame-tester
+arguments=11 /dev/USB0 $directory/frames
 signal=
 EndSection
 
