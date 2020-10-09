@@ -22,7 +22,7 @@ EndSection
 Section PROG
 name=Test Programm
 path=/home/obc/TestSoftware/08_Berlin_Oktober20/frame-tester
-arguments=11 /dev/USB0 $directory/frames
+arguments=0x111 /dev/FRAME /dev/COMM $directory/frames
 signal=
 EndSection
 
