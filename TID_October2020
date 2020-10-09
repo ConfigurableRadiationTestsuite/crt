@@ -22,7 +22,7 @@ EndSection
 Section PROG
 name=Test Programm
 path=/home/obc/TestSoftware/08_Berlin_Oktober20/frame-tester
-arguments=0x111 /dev/FRAME /dev/COMM $directory/frames
+arguments=0x11 /dev/FRAME /dev/COMM $directory/frames
 signal=
 EndSection
 
@@ -201,3 +201,16 @@ c32b=0
 c32g=1
 EndSection
 
+Section SEQ
+name=Power Cycle
+tasks=4
+t0t=3
+t0s=PSU Links Switch On
+t1t=30
+t1s=Test Programm Execute
+t2t=1800
+t2s=Test Programm Kill
+t3t=3
+t3s=PSU Links Switch Off
+signal=
+EndSection

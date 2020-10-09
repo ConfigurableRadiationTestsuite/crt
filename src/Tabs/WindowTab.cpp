@@ -120,5 +120,5 @@ void WindowTab::load_from_config() {
 }
 
 void WindowTab::layout_updater(SubWindow *sub) {
-    connect(sub->get_component(), SIGNAL(init_done()), this, SLOT(update_layout()));
+    connect(sub, SIGNAL(layout_done()), this, SLOT(update_layout()));
 }

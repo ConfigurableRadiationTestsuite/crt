@@ -144,4 +144,6 @@ void LBJW::create_layout() {
     timer->start(500);
 
     setLayout(mainVLayout);
+
+    emit layout_done();
 }

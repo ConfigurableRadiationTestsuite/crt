@@ -73,4 +73,6 @@ void ETHW::create_layout() {
     mainGridLayout->addWidget(activeIndicator, 1, pos++);
 
     setLayout(mainGridLayout);
+
+    emit layout_done();
 }

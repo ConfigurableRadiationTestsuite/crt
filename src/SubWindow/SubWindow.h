@@ -55,6 +55,8 @@ signals:
     //Override for WindowTab
     void destroyed(SubWindow * subWindow);
 
+    void layout_done();
+
 protected:
     /* Event and signal management */
     RunManager *runManager;

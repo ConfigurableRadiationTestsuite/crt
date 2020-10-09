@@ -4,9 +4,9 @@ Sequencer::Sequencer(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
 
     load_config(config);
-    assert(parse_config({"Tasks"}));
+    assert(parse_config({"tasks"}));
 
-    this->task_number = get_value("Tasks").toInt();
+    this->task_number = get_value("tasks").toInt();
 }
 
 Sequencer::Sequencer(RunManager *runManager, const QString &m_element_name, int task_number)
@@ -36,8 +36,8 @@ void Sequencer::init() {
         if(is_empty())
             task_vec.push_back(new Task{(uint)i, 1, "", nullptr});
         else {
-            uint time = get_value("T" + QString::number(i) + "t").toUInt();
-            QString signal_name = get_value("T" + QString::number(i) + "s");
+            uint time = get_value("t" + QString::number(i) + "t").toUInt();
+            QString signal_name = get_value("t" + QString::number(i) + "s");
             RegisteredSignal *sig = runManager->get_eventManager()->get_signal(signal_name);
 
             task_vec.push_back(new Task{(uint)i, time, signal_name, sig});
@@ -47,13 +47,13 @@ void Sequencer::init() {
     }
 
     task_it = task_vec.begin();
-    (*task_it)->set_active(true);
 
     taskTimer = new QTimer;
     connect(taskTimer, SIGNAL(timeout()), this, SLOT(update()));
     connect(runManager, SIGNAL(is_running_changed(bool)), taskTimer, SLOT(activate_timer(bool)));
 
     emit init_done();
+    logTimer->stop();
 }
 
 void Sequencer::update() {
@@ -62,7 +62,6 @@ void Sequencer::update() {
 
     /* Stop timer */
     taskTimer->stop();
-    (*task_it)->set_active(true);
 
     /* Send signal */
     RegisteredSignal *sig = (*task_it)->get_signal();
@@ -74,15 +73,17 @@ void Sequencer::update() {
             emit ((sig->sub)->*(sig->sp))();
     }
 
+    //Deactivated task
+    (*task_it)->set_active(false);
+
     /* Start next timer */
     task_it++;
     if(loop && task_it == task_vec.end())
         task_it = task_vec.begin();
 
-    if(task_it != task_vec.end()) {
-        taskTimer->start((*task_it)->get_time());
-        (*task_it)->set_active(false);
-    }
+    taskTimer->start((*task_it)->get_time());
+
+    (*task_it)->set_active(true);
 }
 
 void Sequencer::update_task_vec() {
@@ -93,7 +94,7 @@ void Sequencer::update_task_vec() {
     emit task_vec_changed();
 }
 
-void Sequencer::activate_timer(bool activate) {
+/*void Sequencer::activate_timer(bool activate) {
     if(activate) {
         task_it = task_vec.begin();
         taskTimer->start((*task_it)->get_time());
@@ -102,4 +103,18 @@ void Sequencer::activate_timer(bool activate) {
         (*task_it)->set_active(false);
         taskTimer->stop();
     }
+}
+*/
+
+void Sequencer::start_seq() {
+    task_it = task_vec.begin();
+
+    (*task_it)->set_active(true);
+    taskTimer->start((*task_it)->get_time());
+}
+
+void Sequencer::stop_seq() {
+    (*task_it)->set_active(false);
+
+    taskTimer->stop();
 }

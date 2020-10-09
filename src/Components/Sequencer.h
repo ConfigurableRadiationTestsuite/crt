@@ -32,10 +32,13 @@ public slots:
 
     void set_loop(int);
 
+    void start_seq();
+    void stop_seq();
+
 private slots:
     void update_task_vec();
 
-    void activate_timer(bool);
+    //void activate_timer(bool);
 
 signals:
     void task_vec_changed();
@@ -77,6 +80,8 @@ public:
     uint get_time() const {return time;}
     QString get_signal_name() const {return signal_name;}
     RegisteredSignal * get_signal() const {return sig;}
+
+    bool is_active() const {return active;}
 
 public slots:
     void set_active(bool);

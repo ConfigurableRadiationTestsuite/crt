@@ -16,9 +16,18 @@
 SEQW::SEQW(RunManager *m_runManager, Sequencer *seq)
     : SubWindow(m_runManager, seq), seq(seq) {
 
+    connect(this, SIGNAL(signal_on()), seq, SLOT(start_seq()));
+    eventManager->add_signal(seq->get_element_name() + " Start sequence", SignalType::on, this, &SubWindow::signal_on);
+
+    connect(this, SIGNAL(signal_off()), seq, SLOT(stop_seq()));
+    eventManager->add_signal(seq->get_element_name() + " Stop sequence", SignalType::off, this, &SubWindow::signal_off);
 }
 
 SEQW::~SEQW() {
+    /* Degregister signals */
+    eventManager->delete_signal(&SubWindow::signal_on);
+    eventManager->delete_signal(&SubWindow::signal_off);
+
     delete seq;
 }
 
@@ -66,6 +75,7 @@ void SEQW::create_layout() {
 
         //Aktiv
         IndicatorIcon *activeIndicator = new IndicatorIcon("<Icon>", QPixmap(":/icon/task_active.png"), QPixmap(":/icon/task_inactive.png"), QSize(24, 24));
+        activeIndicator->set_status(task->is_active());
         connect(task, SIGNAL(status_changed(int)), activeIndicator, SLOT(set_status(int)));
 
         taskLayout->addWidget(signalButton, cnt, 0);
@@ -82,6 +92,8 @@ void SEQW::create_layout() {
     mainVLayout->addWidget(taskBox);
 
     setLayout(mainVLayout);
+
+    emit layout_done();
 }
 
 void SEQW::set_task(Task *task) {

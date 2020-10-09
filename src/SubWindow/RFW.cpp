@@ -118,4 +118,6 @@ void RFW::create_layout() {
     mainVLayout->addLayout(subHLayout);
 
     setLayout(mainVLayout);
+
+    emit layout_done();
 }

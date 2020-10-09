@@ -99,6 +99,8 @@ void PROGW::create_layout() {
     mainVLayout->addWidget(consoleText);
 
     setLayout(mainVLayout);
+
+    emit layout_done();
 }
 
 void PROGW::path_dialog() {

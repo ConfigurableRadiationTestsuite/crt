@@ -105,4 +105,6 @@ void PSUW::create_layout() {
     }
 
     setLayout(mainHLayout);
+
+    emit layout_done();
 }
