@@ -1,0 +1,55 @@
+Section PSU
+name=PSU Links
+vendor=rohdeschwarz
+master=1
+address=192.168.3.103:5025
+channel=3
+c0vs=5
+c0cs=1500
+c0vm=5
+c0cm=1500
+c1vs=5
+c1cs=1500
+c1vm=5
+c1cm=1500
+c2vs=5
+c2cs=1500
+c2vm=5
+c2cm=1500
+signal=
+EndSection
+
+Section LabJack
+name=Rotes T7
+channel=1
+con=1
+id=470020243
+c0n=AIN94 (TPS3106_1_RSTSENSE)
+c0pc=94
+c0nc=199
+c0b=0
+c0g=1
+signal=
+EndSection
+
+Section PROG
+name=Test Programm
+path=/home/obc/TestSoftware/08_Berlin_Oktober20/frame-tester
+arguments=0x11 /dev/FRAME /dev/COMM $directory/frames
+signal=
+EndSection
+
+Section SEQ
+name=Power Cycle
+tasks=4
+t0t=5000
+t0s=PSU Links Switch On
+t1t=5000
+t1s=PSU Links Switch Off
+t2t=5000
+t2s=Test Programm Execute
+t3t=5000
+t3s=Test Programm Kill
+signal=
+EndSection
+
