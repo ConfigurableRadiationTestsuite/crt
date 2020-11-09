@@ -229,6 +229,5 @@ name=Test Programm
 path=/home/obc/TestSoftware/08_Berlin_Oktober20/frame-tester
 arguments=0x11 /dev/ttyUSB3 /dev/ttyUSB1 $directory/frames
 signal=
-signal=
 EndSection
 
