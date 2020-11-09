@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <QProcess>
+#include <QThread>
 
 ProgrammStarter::ProgrammStarter(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
@@ -36,6 +37,8 @@ void ProgrammStarter::set_config() {
 void ProgrammStarter::init() {
     process = new QProcess;
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
+
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(handle_finished_process()));
 
     emit init_done();
 }
@@ -73,13 +76,28 @@ void ProgrammStarter::kill_programm() {
     if(!running)
             return ;
 
-    process->kill();
-
     running = false;
+
+    process->kill();
 
     stop_logging();
 
     emit announce_run(false);
+}
+
+void ProgrammStarter::handle_finished_process() {
+    if(!running)
+        return;
+
+    //Stop process (once and for all)
+    kill_programm();
+
+    //Wait
+    QThread::sleep(30);
+
+    //Start process and logging (again)
+    execute_programm();
+    start_logging();
 }
 
 void ProgrammStarter::receive_data() {

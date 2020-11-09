@@ -42,6 +42,7 @@ public slots:
 
 private slots:
     void receive_data();
+    void handle_finished_process();
 
 signals:
     void data_available(const QString &);
