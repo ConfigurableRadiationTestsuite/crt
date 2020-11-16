@@ -30,6 +30,7 @@ SOURCES += \
     src/Components/DIOM.cpp \
     src/Components/Ethernet.cpp \
     src/Components/EthernetClient.cpp \
+    src/Components/Fieldfox.cpp \
     src/Components/IQSample.cpp \
     src/Components/IQVector.cpp \
     src/Components/IndicatorBox.cpp \
@@ -55,12 +56,14 @@ SOURCES += \
     src/Plot/qcustomplot.cpp \
     src/SubWindow/DIOW.cpp \
     src/SubWindow/ETHW.cpp \
+    src/SubWindow/FFOXW.cpp \
     src/SubWindow/LBJW.cpp \
     src/SubWindow/PROGW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
     src/SubWindow/SEQW.cpp \
     src/Tabs/ETHTab.cpp \
+    src/Tabs/FFOXTab.cpp \
     src/Tabs/LBJTab.cpp \
     src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
@@ -79,6 +82,7 @@ HEADERS += \
     src/Components/DIOM.h \
     src/Components/Ethernet.h \
     src/Components/EthernetClient.h \
+    src/Components/Fieldfox.h \
     src/Components/IQSample.h \
     src/Components/IQVector.h \
     src/Components/IndicatorBox.h \
@@ -104,12 +108,14 @@ HEADERS += \
     src/Plot/qcustomplot.h \
     src/SubWindow/DIOW.h \
     src/SubWindow/ETHW.h \
+    src/SubWindow/FFOXW.h \
     src/SubWindow/LBJW.h \
     src/SubWindow/PROGW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
     src/SubWindow/SEQW.h \
     src/Tabs/ETHTab.h \
+    src/Tabs/FFOXTab.h \
     src/Tabs/LBJTab.h \
     src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \

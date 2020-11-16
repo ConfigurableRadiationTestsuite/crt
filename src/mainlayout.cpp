@@ -7,6 +7,7 @@
 #include "Tabs/PSUTab.h"
 #include "Tabs/RFTab.h"
 #include "Tabs/SEQTab.h"
+#include "Tabs/FFOXTab.h"
 
 #include <QScrollArea>
 #include <QTabWidget>
@@ -96,6 +97,9 @@ QTabWidget * MainLayout::create_window_tabs() {
 
     //SEQ
     windowTabs->addTab(new SEQTab(configManager, runManager), "SEQ");
+
+    //FOX
+    windowTabs->addTab(new FFOXTab(configManager, runManager), "FOX");
 
     return windowTabs;
 }
