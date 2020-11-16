@@ -22,6 +22,7 @@ public:
     ulong get_start_freq() const {return start_freq;}
     ulong get_stop_freq() const {return stop_freq;}
     ulong get_points() const {return points;}
+    QVector<double> get_data() const {return data;}
 
     void set_config() override;
 
@@ -29,15 +30,28 @@ public slots:
     void init() override;
     void update() override;
 
+    void set_start_freq(QString const &text);
+    void set_stop_freq(QString const &text);
+    void set_points(QString const &text);
+
 signals:
+
+private slots:
+    void update_settings(bool ok);
 
 private:
     QString address, mode;
     ulong start_freq, stop_freq, points;
+    bool settings_ok = false;
+
+    QVector<double> data;
 
     EthernetClient *eth;
 
-    QVector<int> measure();
+    bool update_measure();
+
+    void set_format();
+    void set_trace(uint trace);
 
     QStringList generate_header() override;
 };

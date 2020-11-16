@@ -36,7 +36,7 @@ void FFOXTab::create_subwindow_from_dialog() {
 
 void FFOXTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Name", "Fieldfox N");
-    addDialog->add_entry("Address", "192.168.3.141");
+    addDialog->add_entry("Address", "192.168.3.141:5025");
 
     addDialog->add_entry("Mode", "Unused");
     addDialog->get_entry_list()[2].input_value->setReadOnly(true);

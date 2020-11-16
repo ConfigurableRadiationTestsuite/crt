@@ -46,7 +46,12 @@ bool EthernetClient::read(QString &buffer) {
         return false;
     }
 
-    buffer = socket->readAll();
+    qDebug("Socket: " + (QString::number(socket->size())).toLatin1());
+    do {
+        buffer.append(socket->readAll());
+    }
+    while(socket->waitForReadyRead(100));
+    qDebug("Buffer: " + (QString::number(buffer.size())).toLatin1());
 
     if(buffer.size() > 0)
         reconnection_timer->start(timeout);
