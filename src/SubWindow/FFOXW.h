@@ -4,6 +4,8 @@
 /*
  * Author: Mattis Jaksch
  *
+ * Controls one fieldfox unit in SA mode
+ *
  */
 
 class Fieldfox;

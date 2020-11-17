@@ -37,7 +37,7 @@ void FFOXW::create_layout() {
 
     /* Points */
     QLineEdit *pointLine = new QLineEdit;
-    pointLine->setText(QString::number(fox->get_points()));
+    pointLine->setText(QString::number(fox->get_datapoints()));
     pointLine->setDisabled(true);
     topLineLayout->addWidget(new QLabel("Points"));
     topLineLayout->addWidget(pointLine);
@@ -48,7 +48,7 @@ void FFOXW::create_layout() {
     QCustomPlot *plot = new QCustomPlot(this);
     plot->setGeometry(QRect());
     plot->setMinimumHeight(256);
-    foxplot = new FFOXPlot(plot, fox->get_points());
+    foxplot = new FFOXPlot(plot, fox->get_datapoints());
     graphLayout->addWidget(plot);
     graphBox->setLayout(graphLayout);
     connect(fox, SIGNAL(data_available(const QVector<double> &)), foxplot, SLOT(update_data(const QVector<double> &)));

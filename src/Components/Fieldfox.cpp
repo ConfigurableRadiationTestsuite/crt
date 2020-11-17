@@ -17,11 +17,11 @@ Fieldfox::Fieldfox(RunManager * runManager, const QString &config)
     this->mode = get_value("mode");
     this->start_freq = get_value("start_freq").toUInt();
     this->stop_freq = get_value("stop_freq").toUInt();
-    this->points = get_value("points").toUInt();
+    this->datapoints = get_value("points").toUInt();
 }
 
-Fieldfox::Fieldfox(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &mode, ulong start_freq, ulong stop_freq, ulong points)
-    : Component(m_element_name, runManager), address(address), mode(mode), start_freq(start_freq), stop_freq(stop_freq), points(points) {
+Fieldfox::Fieldfox(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &mode, ulong start_freq, ulong stop_freq, uint datapoints)
+    : Component(m_element_name, runManager), address(address), mode(mode), start_freq(start_freq), stop_freq(stop_freq), datapoints(datapoints) {
 
     this->elementName = m_element_name;
 }
@@ -38,11 +38,24 @@ void Fieldfox::set_config() {
     set_value("mode", mode);
     set_value("start_freq", QString::number(start_freq));
     set_value("stop_freq", QString::number(stop_freq));
-    set_value("points", QString::number(points));
+    set_value("points", QString::number(datapoints));
 }
 
 void Fieldfox::update() {
-    update_measure();
+#ifdef DUMMY_DATA
+    create_dummy_data(data);
+    emit data_available(data);
+
+    return ;
+#endif
+
+    if(!settings_ok)
+        return ;
+
+    if(!eth->is_connected())
+        return ;
+
+    update_measurement();
 }
 
 void Fieldfox::init() {
@@ -56,31 +69,23 @@ void Fieldfox::init() {
     emit init_done();
 }
 
-bool Fieldfox::update_measure() {
-#ifdef DUMMY_DATA
-    create_dummy_data(data);
-    emit data_available(data);
-
-    return true;
-#endif
-
-    if(!settings_ok)
-        return false;
-
-    if(!eth->is_connected())
-        return false;
-
+bool Fieldfox::update_measurement() {
+    /* Pull data */
     QString buffer;
     eth->query("TRAC1:DATA?", buffer);
 
-    int pos = 0, i = 0;
-    while(pos < buffer.size() && i < points) {
-        if(buffer.indexOf(",", pos) <= 0)
+    //TODO: Last one is not found
+    uint pos = 0, i = 0;
+    while((int)pos < buffer.size() && i < datapoints) {
+        if(buffer.indexOf(",", pos) <= 0) {
+            //Get last datapoint
+            data[i] = buffer.mid(pos).toDouble();
+
             break;
+        }
 
         int value_size = buffer.indexOf(",", pos) - pos;
-        double value = buffer.mid(pos, value_size).toDouble();
-        data[i] = value;
+        data[i] = buffer.mid(pos, value_size).toDouble();
 
         pos += value_size + 1;
         i++;
@@ -108,20 +113,12 @@ void Fieldfox::set_stop_freq(QString const &text) {
 }
 
 void Fieldfox::set_points(QString const &text) {
-    points = text.toULong();
+    datapoints = text.toULong();
 
-    eth->write("SENS:SWE:POIN " + QString::number(points));
+    eth->write("SENS:SWE:POIN " + QString::number(datapoints));
 
-    data.resize(points);
+    data.resize(datapoints);
 }
-
-/*void Fieldfox::set_format() {
-    eth->write("FORM ASCii,0");
-}
-
-void Fieldfox::set_trace(uint trace) {
-    eth->write("CALC:PAR" + QString::number(trace) + ":SEL");
-}*/
 
 void Fieldfox::update_settings(bool ok) {
     if(!ok) {
@@ -131,10 +128,7 @@ void Fieldfox::update_settings(bool ok) {
 
     set_start_freq(QString::number(start_freq));
     set_stop_freq(QString::number(stop_freq));
-    set_points(QString::number(points));
-
-    //set_format();
-    //set_trace(1);
+    set_points(QString::number(datapoints));
 
     configure_timer(10000);
 
@@ -154,9 +148,9 @@ QStringList Fieldfox::generate_header() {
     QStringList frequency_list;
 
     ulong frequency = start_freq;
-    while(frequency < stop_freq) {
+    while(frequency <= stop_freq) {
         frequency_list.push_back(QString::number(frequency));
-        frequency += (stop_freq - start_freq) / (points - 1);
+        frequency += (stop_freq - start_freq) / (datapoints - 1);
     }
 
     return frequency_list;

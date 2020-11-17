@@ -4,6 +4,10 @@
 /*
  * Author: Mattis Jaksch
  *
+ * Keysight fieldfox is a network analyzer for
+ * high frequency applications. Here the setup is
+ * done and data is pulled
+ *
  */
 
 class EthernetClient;
@@ -15,13 +19,13 @@ Q_OBJECT
 
 public:
     Fieldfox(RunManager * runManager, const QString &config);
-    Fieldfox(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &mode, ulong start_freq, ulong stop_freq, ulong points);
+    Fieldfox(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &mode, ulong start_freq, ulong stop_freq, uint datapoints);
     virtual ~Fieldfox() override;
 
     QString get_address() const {return address;}
     ulong get_start_freq() const {return start_freq;}
     ulong get_stop_freq() const {return stop_freq;}
-    ulong get_points() const {return points;}
+    ulong get_datapoints() const {return datapoints;}
     QVector<double> get_data() const {return data;}
 
     void set_config() override;
@@ -38,21 +42,19 @@ signals:
     void data_available(const QVector<double> &);
 
 private slots:
-    void update_settings(bool ok);
+    void update_settings(bool connection_status);
 
 private:
     QString address, mode;
-    ulong start_freq, stop_freq, points;
+    ulong start_freq, stop_freq;
+    uint datapoints;
     bool settings_ok = false;
 
     QVector<double> data;
 
     EthernetClient *eth;
 
-    bool update_measure();
-
-    void set_format();
-    void set_trace(uint trace);
+    bool update_measurement();
 
     void create_dummy_data(QVector<double> &data);
 
