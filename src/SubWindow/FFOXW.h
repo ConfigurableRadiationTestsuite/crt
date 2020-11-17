@@ -7,6 +7,7 @@
  */
 
 class Fieldfox;
+class FFOXPlot;
 
 #include "SubWindow.h"
 
@@ -20,6 +21,7 @@ public:
 
 private:
     Fieldfox *fox;
+    FFOXPlot *foxplot;
 
     void create_layout() override;
 };

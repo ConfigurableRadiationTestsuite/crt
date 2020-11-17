@@ -22,13 +22,23 @@ Fieldfox::Fieldfox(RunManager * runManager, const QString &config)
 
 Fieldfox::Fieldfox(RunManager * runManager, const QString &m_element_name, const QString &address, const QString &mode, ulong start_freq, ulong stop_freq, ulong points)
     : Component(m_element_name, runManager), address(address), mode(mode), start_freq(start_freq), stop_freq(stop_freq), points(points) {
+
+    this->elementName = m_element_name;
 }
 
-Fieldfox::~Fieldfox() {}
+Fieldfox::~Fieldfox() {
+    delete  eth;
+}
 
 void Fieldfox::set_config() {
     config_entry_list.clear();
 
+    set_value("name", elementName);
+    set_value("address", address);
+    set_value("mode", mode);
+    set_value("start_freq", QString::number(start_freq));
+    set_value("stop_freq", QString::number(stop_freq));
+    set_value("points", QString::number(points));
 }
 
 void Fieldfox::update() {
@@ -47,7 +57,17 @@ void Fieldfox::init() {
 }
 
 bool Fieldfox::update_measure() {
+#ifdef DUMMY_DATA
+    create_dummy_data(data);
+    emit data_available(data);
+
+    return true;
+#endif
+
     if(!settings_ok)
+        return false;
+
+    if(!eth->is_connected())
         return false;
 
     QString buffer;
@@ -69,6 +89,8 @@ bool Fieldfox::update_measure() {
     //Save to vector
     if(logging)
         runManager->append_values_to_file(this, data);
+
+    emit data_available(data);
 
     return true;
 }
@@ -114,10 +136,19 @@ void Fieldfox::update_settings(bool ok) {
     //set_format();
     //set_trace(1);
 
-    configure_timer(3000);
+    configure_timer(10000);
 
     settings_ok = true;
 }
+
+#ifdef DUMMY_DATA
+void Fieldfox::create_dummy_data(QVector<double> &data) {
+    data.resize(points);
+
+    for(int i = 0; i < data.size(); i++)
+        data[i] = double(QRandomGenerator::global()->bounded(-qint16(100), qint16(0)));
+}
+#endif
 
 QStringList Fieldfox::generate_header() {
     QStringList frequency_list;

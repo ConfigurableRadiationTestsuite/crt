@@ -1,6 +1,12 @@
 #include "FFOXW.h"
 
 #include "src/Components/Fieldfox.h"
+#include "src/Plot/FFOXPlot.h"
+
+#include <QLabel>
+#include <QLineEdit>
+#include <QGroupBox>
+#include <QVBoxLayout>
 
 FFOXW::FFOXW(RunManager *m_runManager, Fieldfox *fox)
     : SubWindow(m_runManager, fox), fox(fox) {}
@@ -10,129 +16,50 @@ FFOXW::~FFOXW() {
 }
 
 void FFOXW::create_layout() {
-//    QVBoxLayout *mainVLayout = new QVBoxLayout;
+    QVBoxLayout *mainVLayout = new QVBoxLayout;
 
-//    QHBoxLayout * topLineLayout = new QHBoxLayout;
-//    QGroupBox * settingsBox = new QGroupBox("Settings");
+    QHBoxLayout *topLineLayout = new QHBoxLayout;
+    QGroupBox *settingsBox = new QGroupBox("Settings");
 
-//    /* Precision slider from 1 to 10 */
-//    QSlider *precisionSlide = new QSlider(Qt::Horizontal);
-//    precisionSlide->setRange(1, 10);
-//    precisionSlide->setTickPosition(QSlider::TicksBelow);
-//    precisionSlide->setTickInterval(1);
-//    precisionSlide->setValue(1);
-//    connect(precisionSlide, SIGNAL(valueChanged(int)), lbj, SLOT(set_main_resolution(int)));
-//    topLineLayout->addWidget(new QLabel("Resolution"));
-//    topLineLayout->addWidget(precisionSlide);
+    /* Start frequency */
+    QLineEdit *startFreqLine = new QLineEdit;
+    startFreqLine->setText(QString::number(fox->get_start_freq()));
+    startFreqLine->setDisabled(true);
+    topLineLayout->addWidget(new QLabel("Start Frequency"));
+    topLineLayout->addWidget(startFreqLine);
 
-//    /* Measurement settling time */
-//    QLineEdit *settlingLine = new QLineEdit;
-//    QIntValidator *settlingValid = new QIntValidator(1, 50000, this);
-//    settlingLine->setText(QString::number(10000));
-//    settlingLine->setValidator(settlingValid);
-//    connect(settlingLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_main_settling(const QString &)));
-//    topLineLayout->addWidget(new QLabel("Settling [us]:"));
-//    topLineLayout->addWidget(settlingLine);
+    /* Stop frequency */
+    QLineEdit *stopFreqLine = new QLineEdit;
+    stopFreqLine->setText(QString::number(fox->get_stop_freq()));
+    stopFreqLine->setDisabled(true);
+    topLineLayout->addWidget(new QLabel("Stop Frequency"));
+    topLineLayout->addWidget(stopFreqLine);
 
-//    /* Measurement datarate */
-//    QLineEdit *datarateLine = new QLineEdit;
-//    QIntValidator *datarateValid = new QIntValidator(1, 1000, this);
-//    datarateLine->setText(QString::number(1));
-//    datarateLine->setValidator(datarateValid);
-//    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_samplerate(const QString &)));
-//    connect(lbj, SIGNAL(samplerate_changed(const QString &)), datarateLine, SLOT(setText(const QString &)));
-//    topLineLayout->addWidget(new QLabel("Datarate [S/s]:"));
-//    topLineLayout->addWidget(datarateLine);
+    /* Points */
+    QLineEdit *pointLine = new QLineEdit;
+    pointLine->setText(QString::number(fox->get_points()));
+    pointLine->setDisabled(true);
+    topLineLayout->addWidget(new QLabel("Points"));
+    topLineLayout->addWidget(pointLine);
 
-//    /* Maximum button */
-//    QCheckBox *datarateBox = new QCheckBox("Maximum");
-//    connect(datarateBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_maximum_samplerate(int)));
-//    topLineLayout->addWidget(datarateBox);
+    /* Graph */
+    QVBoxLayout *graphLayout = new QVBoxLayout;
+    QGroupBox *graphBox = new QGroupBox("Plot");
+    QCustomPlot *plot = new QCustomPlot(this);
+    plot->setGeometry(QRect());
+    plot->setMinimumHeight(256);
+    foxplot = new FFOXPlot(plot, fox->get_points());
+    graphLayout->addWidget(plot);
+    graphBox->setLayout(graphLayout);
+    connect(fox, SIGNAL(data_available(const QVector<double> &)), foxplot, SLOT(update_data(const QVector<double> &)));
 
-//    /* Permanent Logging */
-//    QCheckBox *permanentLogBox = new QCheckBox("Permanent Logging");
-//    permanentLogBox->setDisabled(!runManager->is_valid());
-//    connect(permanentLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_permanent_logging(int)));
-//    connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogBox, SLOT(setDisabled(bool)));
-//    topLineLayout->addWidget(permanentLogBox);
+    /* Assemble */
+    settingsBox->setLayout(topLineLayout);
 
-//    /* Signal button */
-//    QPushButton *signalButton = new QPushButton;
-//    signalButton->setText("Add Signal");
-//    connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
-//    topLineLayout->addWidget(signalButton);
+    mainVLayout->addWidget(settingsBox);
+    mainVLayout->addWidget(graphBox);
 
-//    settingsBox->setLayout(topLineLayout);
-
-//    /* Plot for the channels */
-//    QVBoxLayout *graphLayout = new QVBoxLayout;
-//    QGroupBox *graphBox = new QGroupBox("Plot");
-//    QCustomPlot *plot = new QCustomPlot(this);
-//    plot->setGeometry(QRect());
-//    plot->setMinimumHeight(256);
-//    lbjplot = new LBJPlot(plot);
-//    graphLayout->addWidget(plot);
-//    graphBox->setLayout(graphLayout);
-//    connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
-//    connect(lbj, SIGNAL(data_available()), lbjplot, SLOT(update_plot()));
-
-//    /* Channel Layout */
-//    QGridLayout *channelLayout = new QGridLayout;
-//    QGroupBox * channelBox = new QGroupBox("Channel");
-
-//    /* Channel header */
-//    channelLayout->addWidget(new QLabel("Name"), 0, 0);
-//    channelLayout->addWidget(new QLabel("Boundary"), 0, 1);
-//    channelLayout->addWidget(new QLabel("Value"), 0, 2);
-//    channelLayout->addWidget(new QLabel("Gain"), 0, 3);
-//    channelLayout->addWidget(new QLabel("Graph"), 0, 4);
-
-//    QTimer *timer = new QTimer;
-
-//    int cnt = 1;
-//    foreach (LabjackChannel *channel, lbj->get_channel_vec()) {
-//        //Name
-//        QLabel *channelLabel = new QLabel(channel->get_name());
-
-//        //Boundary
-//        QLineEdit *boundaryLine = new QLineEdit(QString::number(channel->get_boundary()));
-//        connect(boundaryLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_boundary(const QString &)));
-
-//        /* Value */
-//        QLineEdit *valueLine = new QLineEdit(QString::number(channel->get_value()));
-//        valueLine->setReadOnly(true);
-//        connect(timer, SIGNAL(timeout()), channel, SLOT(refresh_value()));
-//        connect(channel, SIGNAL(value_refreshed(const QString &)), valueLine, SLOT(setText(const QString &)));
-
-//        //Gain
-//        QLineEdit *gainLine = new QLineEdit(QString::number(channel->get_gain()));
-//        connect(gainLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_external_gain(const QString &)));
-
-//        /* Graph */
-//        QCheckBox *graphCheckBox = new QCheckBox;
-//        graphCheckBox->setStyleSheet("color: " + color_list[cnt%color_list.size()].name + " ;");
-//        lbjplot->add_channel(channel, color_list[cnt%color_list.size()].color);
-//        connect(graphCheckBox, SIGNAL(stateChanged(int)), lbjplot->get_plotelement_list().last(), SLOT(set_plot_active(int)));
-
-//        channelLayout->addWidget(channelLabel, cnt, 0);
-//        channelLayout->addWidget(boundaryLine, cnt, 1);
-//        channelLayout->addWidget(valueLine, cnt, 2);
-//        channelLayout->addWidget(gainLine, cnt, 3);
-//        channelLayout->addWidget(graphCheckBox, cnt, 4);
-//        cnt++;
-
-//        connect(channel, SIGNAL(boundary_check_failed()), this, SLOT(trigger_signal_list()));
-//    }
-
-//    channelBox->setLayout(channelLayout);
-
-//    mainVLayout->addWidget(settingsBox);
-//    mainVLayout->addWidget(channelBox);
-//    mainVLayout->addWidget(graphBox);
-
-//    timer->start(500);
-
-//    setLayout(mainVLayout);
+    setLayout(mainVLayout);
 
     emit layout_done();
 }

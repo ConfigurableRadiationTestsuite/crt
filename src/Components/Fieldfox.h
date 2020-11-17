@@ -35,6 +35,7 @@ public slots:
     void set_points(QString const &text);
 
 signals:
+    void data_available(const QVector<double> &);
 
 private slots:
     void update_settings(bool ok);
@@ -52,6 +53,8 @@ private:
 
     void set_format();
     void set_trace(uint trace);
+
+    void create_dummy_data(QVector<double> &data);
 
     QStringList generate_header() override;
 };

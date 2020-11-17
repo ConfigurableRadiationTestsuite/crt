@@ -49,6 +49,7 @@ SOURCES += \
     src/Manager/EventManager.cpp \
     src/Manager/FileManager.cpp \
     src/Manager/RunManager.cpp \
+    src/Plot/FFOXPlot.cpp \
     src/Plot/LBJPlot.cpp \
     src/Plot/PSUPlot.cpp \
     src/Plot/Plot.cpp \
@@ -101,6 +102,7 @@ HEADERS += \
     src/Manager/EventManager.h \
     src/Manager/FileManager.h \
     src/Manager/RunManager.h \
+    src/Plot/FFOXPlot.h \
     src/Plot/LBJPlot.h \
     src/Plot/PSUPlot.h \
     src/Plot/Plot.h \

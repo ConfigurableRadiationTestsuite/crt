@@ -47,7 +47,7 @@ protected:
     void shift_into_vector(QVector<double> &vector, double value);
 
     void recreate_time_axis();
-    void recreate_axis(QVector<double> &vec);
+    virtual void recreate_axis(QVector<double> &vec);
 
 };
 
