@@ -132,7 +132,13 @@ void Fieldfox::set_frequency_resolution(const QString &text) {
 
 void Fieldfox::set_sweep_time(const QString &text) {
     double sweep_time = text.toDouble();
-    eth->write("SWE:TIME " + QString::number(sweep_time));
+    eth->write("SWE:ACQ " + QString::number(sweep_time));
+}
+
+void Fieldfox::set_mode(const QString &text) {
+    eth->write("INST:SEL \"" + text + "\"");
+    QString buffer;
+    eth->query("*OPC?", buffer);
 }
 
 void Fieldfox::update_settings(bool ok) {
@@ -141,11 +147,16 @@ void Fieldfox::update_settings(bool ok) {
         return ;
     }
 
+    set_mode("SA");
+
     set_start_freq(QString::number(start_freq));
     set_stop_freq(QString::number(stop_freq));
     set_points(QString::number(datapoints));
 
-    configure_timer(10000);
+    set_frequency_resolution("100");
+    set_sweep_time("1");
+
+    configure_timer(5000);
 
     settings_ok = true;
 }

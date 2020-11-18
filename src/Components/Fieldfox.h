@@ -41,6 +41,7 @@ public slots:
     void set_frequency_span(const QString &text);
     void set_frequency_resolution(const QString &text);
     void set_sweep_time(const QString &text);
+    void set_mode(const QString &text);
 
 signals:
     void data_available(const QVector<double> &);

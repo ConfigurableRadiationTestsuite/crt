@@ -13,8 +13,8 @@ FFOXPlot::~FFOXPlot() {}
 
 void FFOXPlot::update_plot() {
     /* Set y-axis */
-    int minimum = get_minimum(data);
-    plot->yAxis->setRange(minimum, 0);
+    //int minimum = get_minimum(data);
+    //plot->yAxis->setRange(minimum, 0);
 
     //Set data
     plot->graph(0)->setData(xAxis, data);
@@ -39,7 +39,7 @@ void FFOXPlot::create_layout() {
     plot->xAxis->setRange(0, datapoints);
 
     plot->yAxis->setLabel("[dBm]");
-    plot->yAxis->setRange(-100, 0);
+    plot->yAxis->setRange(-120, 0);
 
     plot->replot();
 }
