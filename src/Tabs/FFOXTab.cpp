@@ -41,7 +41,7 @@ void FFOXTab::create_add_subwindow_dialog() {
     addDialog->add_entry("Mode", "Unused");
     addDialog->get_entry_list()[2].input_value->setReadOnly(true);
 
-    addDialog->add_entry("Start Frequency", "2400 000 000");
-    addDialog->add_entry("Stop Frequency", "2404 000 000");
+    addDialog->add_entry("Start Frequency", "2401 990 000");
+    addDialog->add_entry("Stop Frequency", "2402 010 000");
     addDialog->add_entry("Points", "256");
 }

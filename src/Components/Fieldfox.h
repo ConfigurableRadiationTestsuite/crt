@@ -34,9 +34,13 @@ public slots:
     void init() override;
     void update() override;
 
-    void set_start_freq(QString const &text);
-    void set_stop_freq(QString const &text);
-    void set_points(QString const &text);
+    void set_start_freq(const QString &text);
+    void set_stop_freq(const QString &text);
+    void set_points(const QString &text);
+
+    void set_frequency_span(const QString &text);
+    void set_frequency_resolution(const QString &text);
+    void set_sweep_time(const QString &text);
 
 signals:
     void data_available(const QVector<double> &);

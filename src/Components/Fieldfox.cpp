@@ -120,6 +120,21 @@ void Fieldfox::set_points(QString const &text) {
     data.resize(datapoints);
 }
 
+void Fieldfox::set_frequency_span(const QString &text) {
+    ulong frequency_span = (QString(text)).remove(" ").toULong();
+    eth->write("FREQ:SPAN " + QString::number(frequency_span));
+}
+
+void Fieldfox::set_frequency_resolution(const QString &text) {
+    ulong frequency_resolution = (QString(text)).remove(" ").toULong();
+    eth->write("BAND " + QString::number(frequency_resolution));
+}
+
+void Fieldfox::set_sweep_time(const QString &text) {
+    double sweep_time = text.toDouble();
+    eth->write("SWE:TIME " + QString::number(sweep_time));
+}
+
 void Fieldfox::update_settings(bool ok) {
     if(!ok) {
         settings_ok = false;
