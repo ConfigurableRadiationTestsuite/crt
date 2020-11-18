@@ -25,7 +25,7 @@ public:
     bool is_connected() const {return connection_ok;}
 
     bool write(QString message);
-    bool query(const QString &message, QString &buffer);
+    bool query(const QString &message, QString &buffer, int size=0);
 
 signals:
     void connection_status(bool);
@@ -42,9 +42,9 @@ private:
     bool connection_ok = false;
     QTcpSocket *socket;
 
-    static const int timeout = 10000;
+    static const int timeout = 30000;
 
-    bool read(QString &buffer);
+    bool read(QString &buffer, int size);
 };
 
 #endif // ETHERNETCLIENT_H

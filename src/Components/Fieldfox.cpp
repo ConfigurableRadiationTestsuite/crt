@@ -72,7 +72,7 @@ void Fieldfox::init() {
 bool Fieldfox::update_measurement() {
     /* Pull data */
     QString buffer;
-    eth->query("TRAC1:DATA?", buffer);
+    eth->query("TRAC1:DATA?", buffer, 16*datapoints);
 
     //TODO: Last one is not found
     uint pos = 0, i = 0;
@@ -156,7 +156,7 @@ void Fieldfox::update_settings(bool ok) {
     set_frequency_resolution("100");
     set_sweep_time("1");
 
-    configure_timer(5000);
+    configure_timer(10000);
 
     settings_ok = true;
 }

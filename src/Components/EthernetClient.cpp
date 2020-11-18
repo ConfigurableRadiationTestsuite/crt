@@ -37,7 +37,7 @@ void EthernetClient::disconnected() {
     socket->connectToHost(address, port);
 }
 
-bool EthernetClient::read(QString &buffer) {
+bool EthernetClient::read(QString &buffer, int size) {
     if(!connection_ok)
         return false;
 
@@ -47,11 +47,15 @@ bool EthernetClient::read(QString &buffer) {
     }
 
     qDebug("Socket: " + (QString::number(socket->size())).toLatin1());
-    do {
-        buffer.append(socket->readAll());
+
+    buffer = socket->readAll();
+
+    while(buffer.size() < size) {
+        if(socket->waitForReadyRead(100))
+            buffer.append(socket->readAll());
     }
-    while(socket->waitForReadyRead(100));
-    qDebug("Buffer: " + (QString::number(buffer.size())).toLatin1());
+
+    qDebug("Test: " + (QString::number(buffer.size())).toLatin1());
 
     if(buffer.size() > 0)
         reconnection_timer->start(timeout);
@@ -72,14 +76,14 @@ bool EthernetClient::write(QString message) {
     return  message_size == message.size();
 }
 
-bool EthernetClient::query(const QString &message, QString &buffer) {
+bool EthernetClient::query(const QString &message, QString &buffer, int size) {
     if(!connection_ok)
         return false;
 
     if(!write(message))
         return false;
 
-    if(!read(buffer))
+    if(!read(buffer, size))
         return false;
 
     return true;
