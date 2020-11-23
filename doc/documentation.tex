@@ -400,8 +400,47 @@ signal=
 EndSection
 \end{lstlisting}
 
-	%TODO
-
+\newpage
+	
+	\subsection{Fieldfox}
+	Fieldfox is a multi-tool for RF network and spectrum analysis. In the GUI only the Spectrum Analyser mode is supported so far (see figure \ref{f:fox_example}).
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\textwidth]{./10_FOX_example.png}
+	\caption{An example with a Fieldfox in Spectrum Analyser mode}
+	\label{f:fox_example}
+	\end{figure}
+	
+	\subsubsection{Manual Creation}	
+	
+	The window for manual creation is presented in figure (\ref{f:fox_menu}). In the first row an individual name can be chosen. In the second one an IPv4 address and the respective port have to be put in. After that, the start and stop frequency are chosen and a number of measurement points is set. The possibility of choosing a operation mode is not implemented yet.
+	
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./10_FOX_menu.png}
+	\caption{Creation menu for a Fieldfox}
+	\label{f:fox_menu}
+	\end{figure}
+	
+	\subsubsection{Config Creation}	
+	The Fieldfox is denoted in the configuration file in the \enquote{FOX} section. First again the name is denoted and in the second line the address. The mode is not implemented yet. After that start and stop frequency are given and the number of measurement points.
+	
+\begin{lstlisting}[caption=FOX Config]
+Section FOX
+name=Fieldfox N
+address=192.168.3.141:5025
+mode=Unused
+start_freq=2400991500
+stop_freq=2401011500
+points=1001
+signal=
+EndSection
+\end{lstlisting}
+	
+		\subsubsection{Supported devices}
+		So far only one device (N9917A) has been programmed and tested. But as the SCPI are common in between different models, a easy portability should be possible.
+	
 \newpage
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
