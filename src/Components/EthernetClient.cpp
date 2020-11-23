@@ -10,7 +10,7 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     //connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(reconnection_timer, SIGNAL(timeout()), this, SLOT(disconnected()));
+    //connect(reconnection_timer, SIGNAL(timeout()), this, SLOT(disconnected()));
 
     socket->connectToHost(address, port);
     reconnection_timer->start(timeout);
@@ -46,16 +46,17 @@ bool EthernetClient::read(QString &buffer, int size) {
         return false;
     }
 
-    qDebug("Socket: " + (QString::number(socket->size())).toLatin1());
-
     buffer = socket->readAll();
 
-    while(buffer.size() < size) {
+    qDebug("Expected size: " + (QString::number(size)).toLatin1());
+    int terminator = 0;
+    while(terminator < 3 && buffer.size() < size) {
         if(socket->waitForReadyRead(100))
             buffer.append(socket->readAll());
+        else
+            terminator++;
     }
-
-    qDebug("Test: " + (QString::number(buffer.size())).toLatin1());
+    qDebug("Received size: " + (QString::number(buffer.size())).toLatin1());
 
     if(buffer.size() > 0)
         reconnection_timer->start(timeout);
