@@ -7,7 +7,7 @@
 
 FFOXTab::FFOXTab(ConfigManager *m_configManager, RunManager *m_runManager)
     : WindowTab(m_configManager, m_runManager) {
-    sectionName = "LabJack";
+    sectionName = "Fieldfox";
 }
 
 void FFOXTab::push_new_subwindow(const QString &config) {
