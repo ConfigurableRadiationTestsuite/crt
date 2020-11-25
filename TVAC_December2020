@@ -1,0 +1,17 @@
+Section PROG
+name=Test Programm
+path=/home/obc/git/frame-tester/bin/Release/frame-tester
+arguments=11 /dev/ttyUSB1 /dev/ttyUSB0 $directory/frames
+signal=
+EndSection
+
+Section Fieldfox
+name=Fieldfox N
+address=192.168.3.141:5025
+mode=Unused
+start_freq=2400991500
+stop_freq=2401011500
+points=10001
+signal=
+EndSection
+
