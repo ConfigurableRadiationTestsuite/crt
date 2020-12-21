@@ -72,7 +72,7 @@ void Fieldfox::init() {
 bool Fieldfox::update_measurement() {
     /* Pull data */
     QString buffer;
-    eth->query("TRAC1:DATA?", buffer, 16*datapoints);
+    eth->query("TRAC1:DATA?", buffer, 17*datapoints);
 
     //TODO: Last one is not found
     uint pos = 0, i = 0;
