@@ -10,9 +10,11 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
     connect(socket, SIGNAL(connected()), this, SLOT(connected()));
     //connect(socket, SIGNAL(errorOccurred(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    //connect(reconnection_timer, SIGNAL(timeout()), this, SLOT(disconnected()));
+    connect(reconnection_timer, SIGNAL(timeout()), this, SLOT(disconnected()));
 
     socket->connectToHost(address, port);
+    qDebug((QString::number(socket->state())).toLatin1());
+
     reconnection_timer->start(timeout);
 }
 
@@ -24,11 +26,13 @@ EthernetClient::~EthernetClient() {
 }
 
 void EthernetClient::connected() {
+    qDebug((QString::number(socket->state())).toLatin1());
     connection_ok = true;
     emit connection_status(true);
 }
 
 void EthernetClient::disconnected() {
+    qDebug((QString::number(socket->state())).toLatin1());
     connection_ok = false;
     emit connection_status(false);
 
@@ -41,6 +45,8 @@ bool EthernetClient::read(QString &buffer, int size) {
     if(!connection_ok)
         return false;
 
+    static int reads = 0;
+
     if(!socket->waitForReadyRead(1000)) {
         disconnected();
         return false;
@@ -48,18 +54,23 @@ bool EthernetClient::read(QString &buffer, int size) {
 
     buffer = socket->readAll();
 
-    qDebug("Expected size: " + (QString::number(size)).toLatin1());
+    //qDebug("Expected size: " + (QString::number(size)).toLatin1());
     int terminator = 0;
     while(terminator < 3 && buffer.size() < size) {
-        if(socket->waitForReadyRead(100))
+        if(socket->waitForReadyRead(10)) {
             buffer.append(socket->readAll());
+            terminator = 0;
+        }
         else
             terminator++;
     }
-    qDebug("Received size: " + (QString::number(buffer.size())).toLatin1());
+    //qDebug("Received size: " + (QString::number(buffer.size())).toLatin1());
 
     if(buffer.size() > 0)
         reconnection_timer->start(timeout);
+
+    reads++;
+    qDebug("Successfull read number: " + (QString::number(reads)).toLatin1());
 
     return true;
 }

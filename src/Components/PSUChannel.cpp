@@ -119,22 +119,20 @@ void PSUChannel::update_rohdeschwarz() {
 }
 
 void PSUChannel::meas_voltage_rohdeschwarz() {
-/*    if(eth->write("INST OUT" + QString::number(number + 1))) {
+    if(eth->write("INST OUT" + QString::number(number + 1))) {
         QString output;
 
-        if(eth->query("MEAS:VOLT ?", output))
+        if(eth->query("MEAS:VOLT ?", output, 11))
            voltage_meas = output.toDouble();
-    }*/
-    voltage_meas = 0;
+    }
 }
 
 void PSUChannel::meas_current_rohdeschwarz() {
-/*    if(eth->write("INST OUT" + QString::number(number + 1))) {
+    if(eth->write("INST OUT" + QString::number(number + 1))) {
         QString output;
-        if(eth->query("MEAS:CURR ?", output))
+        if(eth->query("MEAS:CURR ?", output, 11))
             current_meas = output.toDouble()*1000;
-    }*/
-    current_meas = 0;
+    }
 }
 
 void PSUChannel::update_tti() {
