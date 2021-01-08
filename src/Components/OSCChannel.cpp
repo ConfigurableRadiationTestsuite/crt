@@ -13,11 +13,38 @@ OSCChannel::OSCChannel(uint number, EthernetClient * eth, enum vendor vd) {
     this->vd = vd;
 }
 
+double OSCChannel::get_range() const {
+    QString output;
+    if(eth->query(":CHAN" + QString::number(number + 1) + ":RANG?", output))
+        return output.toDouble();
+
+    return 0.0;
+}
+
+void OSCChannel::set_range(double range) {
+    eth->write(":CHAN" + QString::number(number + 1) + ":RANG " + QString::number(range));
+}
+
+bool OSCChannel::get_enable() const {
+    QString output;
+    if(eth->query(":CHAN" + QString::number(number + 1) + ":DISP?", output))
+        return output.toInt();
+
+    return 0;
+}
+
 void OSCChannel::set_enable(int enable) {
-    this->enable = enable == 0 ? false : true;
+    eth->write(":CHAN" + QString::number(number + 1) + ":DISP " + QString::number(enable));
+}
 
-    if(!update())
-        this->enable = false;
+QVector<double> OSCChannel::get_values() const {
+    eth->write(":WAV:SOUR" + QString::number(number + 1));
+    eth->write(":WAV:MODE NORM");
+    eth->write(":WAV:FORM BYTE");
 
-    emit enable_changed(this->enable);
+    QString output;
+    if(eth->query(":WAV:DATA?", output))
+        return stream_to_vector(output);
+
+    return {0.0};
 }

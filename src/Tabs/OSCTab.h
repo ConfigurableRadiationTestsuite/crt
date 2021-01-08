@@ -4,17 +4,17 @@
 /*
  * Author: Mattis Jaksch
  *
- * Tab containing multiple powersupplies.
+ * Tab containing multiple oscilloscopes.
  *
  */
 
 #include "src/Tabs/WindowTab.h"
 
-class PSUTab : public WindowTab {
+class OSCTab : public WindowTab {
 Q_OBJECT
 
 public:
-    PSUTab(ConfigManager *m_configManager, RunManager *m_runManager);
+    OSCTab(ConfigManager *m_configManager, RunManager *m_runManager);
 
 private slots:
     void push_new_subwindow(const QString &config) override;

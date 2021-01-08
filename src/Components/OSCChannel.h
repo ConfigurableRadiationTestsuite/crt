@@ -22,38 +22,40 @@ public:
     ~OSCChannel() {}
 
     uint get_number() const {return number;}
-    bool get_enable() const {return enable;}
 
-    double get_voltage_meas() const {return voltage_meas;}
-    double get_current_meas() const {return current_meas;}
+    bool get_enable() const;
+    double get_range() const;
+    QVector<double> get_values() const;
 
 public slots:
     void set_enable(int enable);
-    void set_voltage(const QString &voltage);
-    void set_current(const QString &current);
+    void set_range(double range);
 
     bool update();
-    void meas_voltage();
-    void meas_current();
 
 signals:
-    void voltage_changed(const QString &text);
-    void current_changed(const QString &text);
     void enable_changed(bool enable);
-    void overcurrent_event();
 
 private:
     uint number;
     EthernetClient *eth;
     enum vendor vd;
-    bool enable = false;
-
-    double voltage_meas = 0, current_meas = 0;
 
     /* VENDOR */
     //void update_vendor();
     //void meas_voltage_vendor();
     //void meas_current_vendor();
+
+    QVector<double> stream_to_vector(const QString &input) const;
 };
+
+inline QVector<double> OSCChannel::stream_to_vector(const QString &input) const {
+    QVector<double> result;
+
+    for(QString::const_iterator it = input.begin(); it != input.end(); ++it)
+        result.push_back((QString(*it)).toDouble());
+
+    return result;
+}
 
 #endif // PSUCHANNEL_H
