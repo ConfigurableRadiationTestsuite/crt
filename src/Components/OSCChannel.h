@@ -1,5 +1,5 @@
-#ifndef PSUCHANNEL_H
-#define PSUCHANNEL_H
+#ifndef OSCCHANNEL_H
+#define OSCCHANNEL_H
 
 /*
  * Author: Mattis Jaksch
@@ -72,4 +72,4 @@ inline QVector<double> OSCChannel::stream_to_vector(const QString &input) const 
     return result;
 }
 
-#endif // PSUCHANNEL_H
+#endif // OSCCHANNEL_H

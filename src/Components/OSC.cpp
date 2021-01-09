@@ -41,10 +41,10 @@ void OSC::update() {
         QVector<double> values;
         values.reserve(channel_list.size()*2);
         foreach (OSCChannel * channel, channel_list) {
-            channel->meas_voltage();
-            channel->meas_current();
-            values.push_back(channel->get_voltage_meas());
-            values.push_back(channel->get_current_meas());
+//            channel->meas_voltage();
+//            channel->meas_current();
+//            values.push_back(channel->get_voltage_meas());
+//            values.push_back(channel->get_current_meas());
         }
 
         if(logging)
@@ -100,4 +100,20 @@ QStringList OSC::generate_header() {
     }
 
     return header;
+}
+
+void OSC::set_running(bool running) {
+
+}
+
+void OSC::set_trigger_channel(uint channel_number) {
+
+}
+
+void OSC::set_trigger_mode(enum TriggerMode triggerMode) {
+
+}
+
+void OSC::set_timebase(double timebase) {
+
 }

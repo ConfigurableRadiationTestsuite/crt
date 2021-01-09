@@ -18,8 +18,33 @@ OSCW::~OSCW() {
 }
 
 void OSCW::create_layout() {
-    /* main layout */
-    //Mode: Start, Stop, Clear (Start/Stop Button, Clear Button)
+    QVBoxLayout *mainVLayout = new QVBoxLayout;
+
+    /* Running Mode */
+    QHBoxLayout *modeLayout = new QHBoxLayout;
+    QPushButton *modeRunButton = new QPushButton("Start / Stop");
+//    connect(modeRunButton, SIGNAL(clicked()), this, osc, SLOT())
+    modeLayout->addWidget(modeRunButton);
+
+    /* Trigger Mode */
+    QGroupBox *triggerBox = new QGroupBox("Trigger:");
+    QHBoxLayout *triggerButtonLayout = new QHBoxLayout;
+
+    QRadioButton *triggerAuto = new QRadioButton("Auto");
+    triggerButtonLayout->addWidget(triggerAuto);
+    //connect(triggerAuto)
+
+    QRadioButton *triggerNormal = new QRadioButton("Normal");
+    triggerButtonLayout->addWidget(triggerNormal);
+    //connect(triggerAuto)
+
+    QRadioButton *triggerSingle = new QRadioButton("Single");
+    triggerButtonLayout->addWidget(triggerSingle);
+    //connect(triggerAuto)
+
+    triggerBox->setLayout(triggerButtonLayout);
+
+    modeLayout->addWidget(triggerBox);
 
     //Trigger: Auto, Normal, Single (Radio Button)
     //Trigger: Channel (Dropdown)
@@ -36,6 +61,10 @@ void OSCW::create_layout() {
     /* Plot */
     //plot->add(OSCChannel);
     //connect(osc->range, plot->range);
+
+    mainVLayout->addLayout(modeLayout);
+
+    setLayout(mainVLayout);
 
     emit layout_done();
 }

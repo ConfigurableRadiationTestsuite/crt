@@ -1,5 +1,5 @@
-#ifndef PSUW_H
-#define PSUW_H
+#ifndef OSCW_H
+#define OSCW_H
 
 /*
  * Author: Mattis Jaksch
@@ -27,4 +27,4 @@ private:
     void create_layout() override;
 };
 
-#endif // PSUW_H
+#endif // OSCW_H

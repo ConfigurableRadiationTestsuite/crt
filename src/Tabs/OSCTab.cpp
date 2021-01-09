@@ -20,10 +20,8 @@ void OSCTab::create_subwindow_from_dialog() {
     QString vendor = addDialog->get_entry_list()[1].input_value->text();
     QString address = addDialog->get_entry_list()[2].input_value->text();
     uint channel = addDialog->get_entry_list()[3].input_value->text().toUInt();
-    double max_voltage = addDialog->get_entry_list()[4].input_value->text().toDouble();
-    double max_current = addDialog->get_entry_list()[5].input_value->text().toDouble();
 
-    OSCW *oscw = new OSCW(runManager, new OSC(runManager, name, address, vendor));
+    OSCW *oscw = new OSCW(runManager, new OSC(runManager, name, address, vendor, channel));
     subWindow_list.push_back(oscw);
 
     layout_updater(oscw);

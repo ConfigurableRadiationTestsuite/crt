@@ -1,5 +1,5 @@
-#ifndef PSUTAB_H
-#define PSUTAB_H
+#ifndef OSCTAB_H
+#define OSCTAB_H
 
 /*
  * Author: Mattis Jaksch
@@ -24,4 +24,4 @@ private:
     void create_add_subwindow_dialog() override;
 };
 
-#endif // PSUTAB_H
+#endif // OSCTAB_H

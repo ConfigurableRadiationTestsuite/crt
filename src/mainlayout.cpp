@@ -8,6 +8,7 @@
 #include "Tabs/RFTab.h"
 #include "Tabs/SEQTab.h"
 #include "Tabs/FFOXTab.h"
+#include "Tabs/OSCTab.h"
 
 #include <QScrollArea>
 #include <QTabWidget>
@@ -100,6 +101,9 @@ QTabWidget * MainLayout::create_window_tabs() {
 
     //FOX
     windowTabs->addTab(new FFOXTab(configManager, runManager), "FOX");
+
+    //OSC
+    windowTabs->addTab(new OSCTab(configManager, runManager), "OSC");
 
     return windowTabs;
 }

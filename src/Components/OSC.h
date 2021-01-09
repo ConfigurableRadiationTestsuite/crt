@@ -1,5 +1,5 @@
-#ifndef PSU_H
-#define PSU_H
+#ifndef OSC_H
+#define OSC_H
 
 /*
  * Author: Mattis Jaksch
@@ -72,4 +72,4 @@ inline void OSC::update_settings() {
         channel->update();
 }
 
-#endif // PSU_H
+#endif // OSC_H

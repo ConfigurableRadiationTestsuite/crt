@@ -1,5 +1,5 @@
-#ifndef RFPLOT_H
-#define RFPLOT_H
+#ifndef OSCPLOT_H
+#define OSCPLOT_H
 
 /*
  * Author: Mattis Jaksch
@@ -9,6 +9,9 @@
  */
 
 class OSC;
+class OSCPlotElement;
+
+#include "src/Components/OSCChannel.h"
 
 #include "Plot.h"
 
@@ -16,19 +19,20 @@ class OSCPlot : public Plot {
 Q_OBJECT
 
 public:
-    OSCPlot(QCustomPlot *m_plot, OSC *osc);
+    OSCPlot(QCustomPlot *m_plotm, OSC *osc);
     virtual ~OSCPlot() override;
+
+    void add_channel(OSCChannel *oscchannel, QColor color);
 
 public slots:
     void update_plot() override;
-    void update_layout();
-    void update_data(const QVector<int> &i_axis, const QVector<int> &q_axis);
+    void update_xAxis(int timebase);
 
 private:
-    QVector<double> i_axis;
-    QVector<double> q_axis;
-
     OSC *osc;
+    QVector<OSCPlotElement*> plot_list;
+
+    QVector<double> xAxis, standard_axis;
 
     QTimer *layoutUpdateTimer;
     QTimer *plotUpdateTimer;
@@ -37,4 +41,23 @@ private:
     void modify_time_axis();
 };
 
-#endif // RFPLOT_H
+class OSCPlotElement : public QObject {
+Q_OBJECT
+
+QVector<double> data;
+bool enable;
+
+public:
+    OSCPlotElement(OSCChannel *oscchannel) {
+        enable = oscchannel->get_enable();
+    }
+    virtual ~OSCPlotElement() {}
+
+    QVector<double> & get_data() {return data;}
+    bool get_enable() const {return enable;}
+
+public slots:
+    void set_data(const QVector<double> &data) {this->data = data;}
+};
+
+#endif // OSCPLOT_H

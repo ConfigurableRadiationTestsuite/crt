@@ -13,6 +13,10 @@ OSCChannel::OSCChannel(uint number, EthernetClient * eth, enum vendor vd) {
     this->vd = vd;
 }
 
+bool OSCChannel::update() {
+
+}
+
 double OSCChannel::get_range() const {
     QString output;
     if(eth->query(":CHAN" + QString::number(number + 1) + ":RANG?", output))
@@ -35,6 +39,10 @@ bool OSCChannel::get_enable() const {
 
 void OSCChannel::set_enable(int enable) {
     eth->write(":CHAN" + QString::number(number + 1) + ":DISP " + QString::number(enable));
+}
+
+void OSCChannel::set_offset(double offset) {
+
 }
 
 QVector<double> OSCChannel::get_values() const {
