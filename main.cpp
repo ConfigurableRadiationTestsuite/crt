@@ -2,6 +2,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <lxi.h>
 
 int main(int argc, char *argv[])
 {
