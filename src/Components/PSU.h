@@ -31,6 +31,8 @@ public:
 
     void set_config() override;
 
+    void reset();
+
 public slots:
     void set_master_enable(int master_enable);
     void set_master_trigger(int master_trigger);

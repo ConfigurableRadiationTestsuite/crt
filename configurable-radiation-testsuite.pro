@@ -37,6 +37,8 @@ SOURCES += \
     src/Components/IndicatorIcon.cpp \
     src/Components/Labjack.cpp \
     src/Components/LabjackChannel.cpp \
+    src/Components/OSC.cpp \
+    src/Components/OSCChannel.cpp \
     src/Components/PSU.cpp \
     src/Components/PSUChannel.cpp \
     src/Components/ProgrammStarter.cpp \
@@ -51,6 +53,7 @@ SOURCES += \
     src/Manager/RunManager.cpp \
     src/Plot/FFOXPlot.cpp \
     src/Plot/LBJPlot.cpp \
+    src/Plot/OSCPlot.cpp \
     src/Plot/PSUPlot.cpp \
     src/Plot/Plot.cpp \
     src/Plot/RFPlot.cpp \
@@ -59,6 +62,7 @@ SOURCES += \
     src/SubWindow/ETHW.cpp \
     src/SubWindow/FFOXW.cpp \
     src/SubWindow/LBJW.cpp \
+    src/SubWindow/OSCW.cpp \
     src/SubWindow/PROGW.cpp \
     src/SubWindow/PSUW.cpp \
     src/SubWindow/RFW.cpp \
@@ -66,6 +70,7 @@ SOURCES += \
     src/Tabs/ETHTab.cpp \
     src/Tabs/FFOXTab.cpp \
     src/Tabs/LBJTab.cpp \
+    src/Tabs/OSCTab.cpp \
     src/Tabs/PROGTab.cpp \
     src/Tabs/PSUTab.cpp \
     src/Tabs/RFTab.cpp \
@@ -90,6 +95,8 @@ HEADERS += \
     src/Components/IndicatorIcon.h \
     src/Components/Labjack.h \
     src/Components/LabjackChannel.h \
+    src/Components/OSC.h \
+    src/Components/OSCChannel.h \
     src/Components/PSU.h \
     src/Components/PSUChannel.h \
     src/Components/ProgrammStarter.h \
@@ -104,6 +111,7 @@ HEADERS += \
     src/Manager/RunManager.h \
     src/Plot/FFOXPlot.h \
     src/Plot/LBJPlot.h \
+    src/Plot/OSCPlot.h \
     src/Plot/PSUPlot.h \
     src/Plot/Plot.h \
     src/Plot/RFPlot.h \
@@ -112,6 +120,7 @@ HEADERS += \
     src/SubWindow/ETHW.h \
     src/SubWindow/FFOXW.h \
     src/SubWindow/LBJW.h \
+    src/SubWindow/OSCW.h \
     src/SubWindow/PROGW.h \
     src/SubWindow/PSUW.h \
     src/SubWindow/RFW.h \
@@ -119,6 +128,7 @@ HEADERS += \
     src/Tabs/ETHTab.h \
     src/Tabs/FFOXTab.h \
     src/Tabs/LBJTab.h \
+    src/Tabs/OSCTab.h \
     src/Tabs/PROGTab.h \
     src/Tabs/PSUTab.h \
     src/Tabs/RFTab.h \

@@ -116,6 +116,8 @@ void PSU::init() {
     update_settings();
 
     emit init_done();
+
+    logTimer->start(10);
 }
 
 void PSU::set_master_enable(int master_enable) {
@@ -153,6 +155,10 @@ void PSU::switch_off() {
     foreach (PSUChannel * channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(false);
+}
+
+void PSU::reset(){
+    eth->write("*RST");
 }
 
 bool PSU::check_network_connection() {
