@@ -1,6 +1,6 @@
 #include "PSU.h"
 
-#include "EthernetClient.h"
+#include "LXIClient.h"
 
 PSU::PSU(RunManager * runManager, const QString &config)
     : Component(runManager, config) {
@@ -25,7 +25,7 @@ PSU::PSU(RunManager * runManager, const QString &m_element_name, const QString &
 }
 
 PSU::~PSU() {
-    delete eth;
+    delete lxi;
 
     foreach (PSUChannel *channel, channel_list)
         delete channel;
@@ -49,22 +49,18 @@ void PSU::set_config() {
 }
 
 void PSU::update() {
-    //Check if the network connection is ok
-    if(check_network_connection()) {
-
-        /* Gather data */
-        QVector<double> values;
-        values.reserve(channel_list.size()*2);
-        foreach (PSUChannel * channel, channel_list) {
-            channel->meas_voltage();
-            channel->meas_current();
-            values.push_back(channel->get_voltage_meas());
-            values.push_back(channel->get_current_meas());
-        }
-
-        if(logging)
-            runManager->append_values_to_file(this, values);
+    /* Gather data */
+    QVector<double> values;
+    values.reserve(channel_list.size()*2);
+    foreach (PSUChannel * channel, channel_list) {
+        channel->meas_voltage();
+        channel->meas_current();
+        values.push_back(channel->get_voltage_meas());
+        values.push_back(channel->get_current_meas());
     }
+
+    if(logging)
+        runManager->append_values_to_file(this, values);
 
     emit data_available();
 }
@@ -90,16 +86,16 @@ QString PSU::check_vendor(enum PSUChannel::vendor vd) {
 }
 
 void PSU::init() {
-    /* Setup ethernet */
+    /* Setup lxi */
     QString ip_address = address.mid(0, address.indexOf(":"));
     uint port = (address.mid(address.indexOf(":") + 1, address.size() - address.indexOf(":") - 1)).toUInt();
 
-    eth = new EthernetClient(port, ip_address);
+    lxi = new LXIClient(port, ip_address);
 
     /* Setup channel */
     for(uint i = 0; i < channel_max; i++) {
         if(is_empty())
-            channel_list.push_back(new PSUChannel{i, eth, vd, 0, 0, voltage_max, current_max});
+            channel_list.push_back(new PSUChannel{i, lxi, vd, 0, 0, voltage_max, current_max});
         else {
             assert(parse_config({"c" + QString::number(i) + "vs", "c" + QString::number(i) + "cs", "c" + QString::number(i) + "vm", "c" + QString::number(i) + "cm"}));
 
@@ -108,7 +104,7 @@ void PSU::init() {
             double voltage_max = get_value("c" + QString::number(i) + "vm").toDouble();
             double current_max = get_value("c" + QString::number(i) + "cm").toDouble();
 
-            channel_list.push_back(new PSUChannel{i, eth, vd, voltage_set, current_set, voltage_max, current_max});
+            channel_list.push_back(new PSUChannel{i, lxi, vd, voltage_set, current_set, voltage_max, current_max});
             }
     }
 
@@ -117,13 +113,10 @@ void PSU::init() {
 
     emit init_done();
 
-    logTimer->start(10);
+    logTimer->start(1000);
 }
 
 void PSU::set_master_enable(int master_enable) {
-    if(!check_network_connection())
-        return ;
-
     this->master_enable = master_enable == 0 ? false : true;
 
     if(vd == PSUChannel::rohdeSchwarz)
@@ -136,7 +129,7 @@ void PSU::set_master_enable(int master_enable) {
 }
 
 void PSU::set_master_rohdeschwarz() {
-    eth->write("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
+    lxi->write("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
 }
 
 void PSU::switch_on() {
@@ -155,22 +148,6 @@ void PSU::switch_off() {
     foreach (PSUChannel * channel, channel_list)
         if(channel->get_trigger())
             channel->set_enable(false);
-}
-
-void PSU::reset(){
-    eth->write("*RST");
-}
-
-bool PSU::check_network_connection() {
-#ifndef DUMMY_DATA
-    if(!eth->is_connected()) {
-        emit disconnected(true);
-        return false;
-    }
-#endif
-
-    emit disconnected(false);
-    return true;
 }
 
 QStringList PSU::generate_header() {

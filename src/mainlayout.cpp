@@ -103,7 +103,7 @@ QTabWidget * MainLayout::create_window_tabs() {
     windowTabs->addTab(new FFOXTab(configManager, runManager), "FOX");
 
     //OSC
-    windowTabs->addTab(new OSCTab(configManager, runManager), "OSC");
+//    windowTabs->addTab(new OSCTab(configManager, runManager), "OSC");
 
     return windowTabs;
 }

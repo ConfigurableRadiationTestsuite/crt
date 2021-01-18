@@ -1,15 +1,15 @@
 #include "PSUChannel.h"
 
-#include "EthernetClient.h"
+#include "LXIClient.h"
 
 #ifdef DUMMY_DATA
 #include <QRandomGenerator>
 #include <QtMath>
 #endif
 
-PSUChannel::PSUChannel(uint number, EthernetClient * eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max) {
+PSUChannel::PSUChannel(uint number, LXIClient * lxi, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max) {
     this->number = number;
-    this->eth = eth;
+    this->lxi = lxi;
     this->vd = vd;
 
     this->voltage_max = voltage_max;
@@ -111,26 +111,26 @@ void PSUChannel::meas_current() {
 }
 
 void PSUChannel::update_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString::number(number + 1))) {
-        eth->write(("VOLT " + QString::number(voltage_set)));
-        eth->write(("CURR " + QString::number(current_set/1000.0)));
-        eth->write("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
+    if(lxi->write("INST OUT" + QString::number(number + 1))) {
+        lxi->write(("VOLT " + QString::number(voltage_set)));
+        lxi->write(("CURR " + QString::number(current_set/1000.0)));
+        lxi->write("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
     }
 }
 
 void PSUChannel::meas_voltage_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString::number(number + 1))) {
+    if(lxi->write("INST OUT" + QString::number(number + 1))) {
         QString output;
 
-        if(eth->query("MEAS:VOLT ?", output, 11))
+        if(lxi->query("MEAS:VOLT ?", output, 11))
            voltage_meas = output.toDouble();
     }
 }
 
 void PSUChannel::meas_current_rohdeschwarz() {
-    if(eth->write("INST OUT" + QString::number(number + 1))) {
+    if(lxi->write("INST OUT" + QString::number(number + 1))) {
         QString output;
-        if(eth->query("MEAS:CURR ?", output, 11))
+        if(lxi->query("MEAS:CURR ?", output, 11))
             current_meas = output.toDouble()*1000;
     }
 }

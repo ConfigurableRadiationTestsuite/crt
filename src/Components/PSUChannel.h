@@ -9,7 +9,7 @@
  *
  */
 
-class EthernetClient;
+class LXIClient;
 
 #include <QWidget>
 
@@ -19,7 +19,7 @@ Q_OBJECT
 public:
     enum vendor {none, rohdeSchwarz, tti};
 
-    PSUChannel(uint number, EthernetClient *eth, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
+    PSUChannel(uint number, LXIClient *lxi, enum vendor vd, double voltage_set, double current_set, double voltage_max, double current_max);
     ~PSUChannel() {}
 
     uint get_number() const {return number;}
@@ -51,7 +51,7 @@ signals:
 
 private:
     uint number;
-    EthernetClient *eth;
+    LXIClient *lxi;
     enum vendor vd;
     bool enable = false;
     bool trigger = false;

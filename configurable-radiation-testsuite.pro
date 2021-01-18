@@ -18,7 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS DEBUG
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-unix:LIBS += -L/usr/local/lib -lLabJackM
+unix:LIBS += -L/usr/local/lib -lLabJackM -llxi
 
 win32:INCLUDEPATH += 'C:/Program Files (x86)/LabJack/Drivers'
 win32:LIBS += -L'C:/Program Files (x86)/LabJack/Drivers/64bit/' -lLabJackM
@@ -35,6 +35,7 @@ SOURCES += \
     src/Components/IQVector.cpp \
     src/Components/IndicatorBox.cpp \
     src/Components/IndicatorIcon.cpp \
+    src/Components/LXIClient.cpp \
     src/Components/Labjack.cpp \
     src/Components/LabjackChannel.cpp \
     src/Components/OSC.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     src/Components/IQVector.h \
     src/Components/IndicatorBox.h \
     src/Components/IndicatorIcon.h \
+    src/Components/LXIClient.h \
     src/Components/Labjack.h \
     src/Components/LabjackChannel.h \
     src/Components/OSC.h \
@@ -150,4 +152,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     icon.qrc
+
+DISTFILES += \
+    src/Components/PSU.cpp.old \
+    src/Components/PSU.h.old \
+    src/Components/PSUChannel.cpp.old \
+    src/Components/PSUChannel.h.old
 

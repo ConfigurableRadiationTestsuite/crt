@@ -11,7 +11,7 @@
  *
  */
 
-class EthernetClient;
+class LXIClient;
 
 #include "Component.h"
 #include "PSUChannel.h"
@@ -30,8 +30,6 @@ public:
     bool has_master_switch() const {return master_switch;}
 
     void set_config() override;
-
-    void reset();
 
 public slots:
     void set_master_enable(int master_enable);
@@ -56,7 +54,7 @@ protected:
     bool master_trigger = false;
     uint channel_max = 0;
     double voltage_max = 0, current_max = 0;
-    EthernetClient *eth;
+    LXIClient *lxi;
 
     QVector<PSUChannel *> channel_list;
 
@@ -71,6 +69,7 @@ private:
 
     QStringList generate_header() override;
 };
+
 
 inline void PSU::set_master_trigger(int master_trigger) {
     this->master_trigger = master_trigger > 0 ? true : false;
