@@ -13,6 +13,8 @@ class RFIOChannel;
 
 #include "Plot.h"
 
+#include <QVector>
+
 class RFPlot : public Plot {
 Q_OBJECT
 
@@ -39,8 +41,13 @@ private:
 };
 
 inline void RFPlot::update_data(const QVector<int> &i_axis, const QVector<int> &q_axis) {
-    this->i_axis = QVector<double>(i_axis.begin(), i_axis.end());
-    this->q_axis = QVector<double>(q_axis.begin(), q_axis.end());
+    this->i_axis.clear();
+    for(QVector<int>::const_iterator it = i_axis.begin(); it != i_axis.end(); ++it)
+        this->i_axis.push_back(*it);
+
+    this->q_axis.clear();
+    for(QVector<int>::const_iterator it = q_axis.begin(); it != q_axis.end(); ++it)
+        this->q_axis.push_back(*it);
 }
 
 #endif // RFPLOT_H

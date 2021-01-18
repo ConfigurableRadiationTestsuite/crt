@@ -62,6 +62,7 @@ void PSU::update() {
     if(logging)
         runManager->append_values_to_file(this, values);
 
+    emit disconnected(false);
     emit data_available();
 }
 

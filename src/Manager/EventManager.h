@@ -12,6 +12,7 @@
 class SubWindow;
 
 #include <QObject>
+#include <QVector>
 
 enum SignalType {on, off, start_log, stop_log, special};
 
