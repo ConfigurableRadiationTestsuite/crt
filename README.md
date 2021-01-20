@@ -47,4 +47,4 @@ $make
 $sudo make install
 ```
 
-** IMPORTANT: ** So far the lxi library seems to be not completly working on arch linux**!**
+**IMPORTANT:** So far the lxi library seems to be not completly working on arch linux **!**
