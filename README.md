@@ -18,7 +18,17 @@ To install the Labjack library download the [LJM Software](https://labjack.com/s
 
 ## Liblxi
 
-The lxi library for measurement devices is not officially supported on linux, therefore it needs to be build manually. First install necessary packages like:
+### Debian Linux
+
+The lxi library is in the official paket store:
+
+```
+$sudo apt-get install liblxi-dev
+```
+
+### Arch Linux
+
+The lxi library for measurement devices is not officially supported on arch-linux, therefore it needs to be build manually. First install necessary packages like:
 
 - autoconf
 - autoreconf
@@ -36,3 +46,5 @@ $./configure
 $make
 $sudo make install
 ```
+
+** IMPORTANT: ** So far the lxi library seems to be not completly working on arch linux**!**
