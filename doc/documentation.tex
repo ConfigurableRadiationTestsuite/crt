@@ -441,6 +441,32 @@ EndSection
 		\subsubsection{Supported devices}
 		So far only one device (N9917A) has been programmed and tested. But as the SCPI are common in between different models, a easy portability should be possible.
 	
+\section{Logging}
+To activate the logging, a run folder has to be chosen. Within this folder, all log files are going to be stored. 
+
+The logging is ultimately started when the \enquote{Start Test} button is clicked and only stopped by the \enquote{Stop Test} button. If the test is resumed by starting it again, a new file with a new time stamp is created. 
+
+An exception for logging start and end can be made by certain components themselves (e.g. the program-starter) to make ensure that some initiation processes are recorded before testing.
+
+
+	\subsection{Structure}
+	Every component has their own logfile, with their name as prefix and a time stamp as suffix.
+
+	The test manager itself features its own logfile which is written all the time.	
+	
+	\begin{table}[H]
+	\centering
+	\caption{Example log of \textit{component\_yyyymmddhhmmss.csv}}	
+	\begin{tabular}{llll}
+	\toprule
+	Time [s]		& Value 1	& $\hdots$	& Value N \\ \midrule
+	987				& 23.0		& $\hdots$	& 42.0	\\
+	$\vdots$		& $\vdots$	& 			& $\vdots$ \\
+	$\num{13337}$	& 23.1		& $\hdots$	& 42.2	\\
+	\bottomrule
+	\end{tabular}
+	\end{table}		
+	
 \newpage
 \section{Signal Event Mechanism}
 \label{c:signal_event_mechanism}
