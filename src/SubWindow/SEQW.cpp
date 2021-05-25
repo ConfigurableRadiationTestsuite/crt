@@ -46,7 +46,7 @@ void SEQW::create_layout() {
     taskLayout->addWidget(new QLabel(""), 0, 0);
     taskLayout->addWidget(new QLabel("#"), 0, 1);
     taskLayout->addWidget(new QLabel("Signal"), 0, 2);
-    taskLayout->addWidget(new QLabel("Sleep [s]"), 0, 3);
+    taskLayout->addWidget(new QLabel("Delay [s]"), 0, 3);
     taskLayout->addWidget(new QLabel("Aktiv"), 0, 4);
 
     int cnt = 1;
