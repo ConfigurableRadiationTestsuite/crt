@@ -13,15 +13,16 @@ class QTimer;
 
 #include <QObject>
 
-class LXIClient : public QObject {
+class LXIClient : public QObject
+{
 Q_OBJECT
 
 public:
-    LXIClient(uint port, const QString &address);
+    LXIClient(uint port, const QString& address);
     virtual ~LXIClient();
 
     bool write(QString message);
-    bool query(const QString &message, QString &buffer, int size=65536);
+    bool query(const QString& message, QString& buffer, int size=65536);
 
 signals:
     void connection_status(bool);
@@ -33,7 +34,7 @@ private:
 
     static const int timeout;
 
-    bool read(QString &buffer, int size);
+    bool read(QString& buffer, int size);
 };
 
 #endif // LXICLIENT_H

@@ -15,17 +15,21 @@ class QTimer;
 
 #include <QObject>
 
-class EthernetClient : public QObject {
+class EthernetClient : public QObject
+{
 Q_OBJECT
 
 public:
-    EthernetClient(uint port, const QString &address);
+    EthernetClient(uint port, const QString& address);
 	virtual ~EthernetClient();
 
-    bool is_connected() const {return connection_ok;}
+    bool is_connected() const
+    {
+        return connection_ok;
+    }
 
     bool write(QString message);
-    bool query(const QString &message, QString &buffer, int size=0);
+    bool query(const QString& message, QString& buffer, int size=0);
 
 signals:
     void connection_status(bool);
@@ -38,13 +42,13 @@ private:
     uint port;
     QString address;
 
-    QTimer *reconnection_timer;
+    QTimer* reconnection_timer;
     bool connection_ok = false;
-    QTcpSocket *socket;
+    QTcpSocket* socket;
 
     static const int timeout = 30000;
 
-    bool read(QString &buffer, int size);
+    bool read(QString& buffer, int size);
 };
 
 #endif // ETHERNETCLIENT_H

@@ -14,15 +14,19 @@ class Task;
 
 #include "Component.h"
 
-class Sequencer : public Component {
+class Sequencer : public Component
+{
 Q_OBJECT
 
 public:
-    Sequencer(RunManager *runManager, const QString &config);
-    Sequencer(RunManager *runManager, const QString &m_element_name, int task_number);
+    Sequencer(RunManager* runManager, const QString& config);
+    Sequencer(RunManager* runManager, const QString& m_element_name, int task_number);
     ~Sequencer() override;
 
-    QVector<Task*> get_task_vec() const {return task_vec;}
+    QVector<Task*> get_task_vec() const
+    {
+        return task_vec;
+    }
 
     void set_config() override;
 
@@ -37,8 +41,6 @@ public slots:
 
 private slots:
     void update_task_vec();
-
-    //void activate_timer(bool);
 
 signals:
     void task_vec_changed();
@@ -55,40 +57,75 @@ private:
     QStringList generate_header() override;
 };
 
-inline QStringList Sequencer::generate_header() {
+inline QStringList Sequencer::generate_header()
+{
     return {"number", "time", "signal"};
 }
 
-inline void Sequencer::set_loop(int loop) {
+inline void Sequencer::set_loop(int loop)
+{
     this->loop = loop == 0 ? false : true;
 }
 
-class Task : public QObject {
+class Task : public QObject
+{
 Q_OBJECT
 
 uint number;
 uint time;
 QString signal_name;
-struct RegisteredSignal *sig;
+RegisteredSignal* sig;
 bool active = false;
 
 public:
-    Task(uint number, uint time, QString signal_name, RegisteredSignal *sig)
-        : number(number), time(time), signal_name(signal_name), sig(sig) {}
+    Task(uint number,
+         uint time,
+         QString signal_name,
+         RegisteredSignal *sig)
+        : number(number),
+          time(time),
+          signal_name(signal_name),
+          sig(sig)
+    {
 
-    uint get_number() const {return number;}
-    uint get_time() const {return time;}
-    QString get_signal_name() const {return signal_name;}
-    RegisteredSignal * get_signal() const {return sig;}
+    }
 
-    bool is_active() const {return active;}
+    virtual ~Task()
+    {
+
+    }
+
+    uint get_number() const
+    {
+        return number;
+    }
+
+    uint get_time() const
+    {
+        return time;
+    }
+
+    QString get_signal_name() const
+    {
+        return signal_name;
+    }
+
+    RegisteredSignal* get_signal() const
+    {
+        return sig;
+    }
+
+    bool is_active() const
+    {
+        return active;
+    }
 
 public slots:
-    void set_active(bool);
-    void set_signal(RegisteredSignal *);
-    void set_time(const QString &time) {this->time = time.toUInt()*1000;}
+    void set_active(bool active);
+    void set_signal(RegisteredSignal* sig);
+    void set_time(const QString& time);
 
-    void signal_button_clicked() {emit update_task(this);}
+    void signal_button_clicked();
 
 signals:
     void update_task(Task *);
@@ -102,14 +139,25 @@ inline void Task::set_active(bool active) {
     emit status_changed(active ? 1 : 0);
 }
 
-inline void Task::set_signal(RegisteredSignal *sig) {
+inline void Task::set_signal(RegisteredSignal* sig) {
     this->sig = sig;
 
-    if(sig != nullptr) {
+    if(sig != nullptr)
+    {
         this->signal_name = sig->name;
 
         emit signal_name_changed(this->signal_name);
     }
+}
+
+inline void Task::set_time(const QString& time)
+{
+    this->time = time.toUInt()*1000;
+}
+
+inline void Task::signal_button_clicked()
+{
+    emit update_task(this);
 }
 
 #endif // SEQUENCER_H

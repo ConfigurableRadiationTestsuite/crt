@@ -4,9 +4,12 @@
 #include <QLabel>
 #include <QTimer>
 
-IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QSize size)
-    : name(name) {
-
+IndicatorIcon::IndicatorIcon(const QString &name,
+                             QPixmap connected,
+                             QPixmap disconnected,
+                             QSize size)
+    : name(name)
+{
     this->connected = connected.scaled(size);
     this->disconnected = disconnected.scaled(size);
 
@@ -16,8 +19,14 @@ IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap dis
     connect(eventTimer, SIGNAL(timeout()), this, SLOT(reset_icon()));
 }
 
-IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected,  QPixmap waiting, QPixmap event, QSize size)
-    : name(name) {
+IndicatorIcon::IndicatorIcon(const QString& name,
+                             QPixmap connected,
+                             QPixmap disconnected,
+                             QPixmap waiting,
+                             QPixmap event,
+                             QSize size)
+    : name(name)
+{
 
     this->connected = connected.scaled(size);
     this->disconnected = disconnected.scaled(size);
@@ -32,8 +41,10 @@ IndicatorIcon::IndicatorIcon(const QString &name, QPixmap connected, QPixmap dis
 
 IndicatorIcon::~IndicatorIcon() {}
 
-void IndicatorIcon::set_status(int status) {
-    switch(status) {
+void IndicatorIcon::set_status(int status)
+{
+    switch(status)
+    {
         case -1:
             setNewPixmap(waiting);
             break;
@@ -46,12 +57,14 @@ void IndicatorIcon::set_status(int status) {
     }
 }
 
-void IndicatorIcon::reset_icon() {
+void IndicatorIcon::reset_icon()
+{
     eventTimer->stop();
     setPixmap(last);
 }
 
-void IndicatorIcon::set_event() {
+void IndicatorIcon::set_event()
+{
     setPixmap(event);
     eventTimer->start(500);
 }
