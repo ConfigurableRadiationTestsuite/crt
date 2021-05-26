@@ -20,6 +20,7 @@ WindowTab::~WindowTab() {}
 
 void WindowTab::create_layout() {
     QVBoxLayout *mainTabLayout = new QVBoxLayout;
+    QVBoxLayout *subTabLayout = new QVBoxLayout;
 
     foreach (SubWindow *window, subWindow_list) {
         /* Main Box for the window */
@@ -41,16 +42,7 @@ void WindowTab::create_layout() {
 
         windowGroupBox->setLayout(windowHLayout);
 
-        /* Scroll area */
-        QScrollArea *scrollArea = new QScrollArea;
-        connect(this, SIGNAL(clean_layout()), scrollArea, SLOT(deleteLater()));
-
-        scrollArea->setWidgetResizable(true);
-        scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        scrollArea->setWidget(windowGroupBox);
-        scrollArea->setMaximumHeight(windowGroupBox->sizeHint().height()*1.1);
-
-        mainTabLayout->addWidget(scrollArea);
+        subTabLayout->addWidget(windowGroupBox);
     }
 
     /* Create add button */
@@ -60,8 +52,22 @@ void WindowTab::create_layout() {
     connect(addButton, SIGNAL(clicked()), this, SLOT(add_subwindow_from_dialog()));
     connect(this, SIGNAL(clean_layout()), addButton, SLOT(deleteLater()));
 
-    mainTabLayout->addWidget(addButton);
-    mainTabLayout->setAlignment(Qt::AlignTop);
+    subTabLayout->addWidget(addButton);
+    subTabLayout->setAlignment(Qt::AlignTop);
+
+    /* Scroll area */
+    QWidget* mainTabWidget = new QWidget;
+    mainTabWidget->setLayout(subTabLayout);
+
+    QScrollArea *scrollArea = new QScrollArea;
+    connect(this, SIGNAL(clean_layout()), scrollArea, SLOT(deleteLater()));
+
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    scrollArea->setWidget(mainTabWidget);
+//    scrollArea->setMaximumHeight(windowGroupBox->sizeHint().height()*1.1);
+
+    mainTabLayout->addWidget(scrollArea);
 
     setLayout(mainTabLayout);
 }
