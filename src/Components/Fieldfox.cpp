@@ -163,7 +163,7 @@ void Fieldfox::update_settings(bool ok) {
 
 #ifdef DUMMY_DATA
 void Fieldfox::create_dummy_data(QVector<double> &data) {
-    data.resize(points);
+    data.resize(datapoints);
 
     for(int i = 0; i < data.size(); i++)
         data[i] = double(QRandomGenerator::global()->bounded(-qint16(100), qint16(0)));
