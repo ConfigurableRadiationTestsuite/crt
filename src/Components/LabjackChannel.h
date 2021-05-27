@@ -11,6 +11,7 @@
 
 #include <LabJackM.h>
 #include <QObject>
+#include <QVector>
 
 class LabjackChannel : public QObject
 {
@@ -134,7 +135,7 @@ private:
     bool is_input, is_differential;
     double value = 0.0;
 
-    QVector<double> range_list;
+    QVector<double> range_list = {0.01, 0.1, 1, 10};
 
     void set_differential();
 
