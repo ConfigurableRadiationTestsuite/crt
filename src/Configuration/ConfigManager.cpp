@@ -7,113 +7,127 @@
 const QString ConfigManager::sectionStart = "Section";
 const QString ConfigManager::sectionEnd = "EndSection";
 
-bool ConfigManager::get_config_section(QString name, QString &section) {
+bool ConfigManager::get_config_section(QString name, QString& section)
+{
     QFile file(configName);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
-    QTextStream in(&file);
+    QTextStream config(&file);
     QString line;
     int pos = 0;
+    bool section_start_found = false;
+    bool section_end_found = false;
 
-    while(!in.atEnd()) {
-        line = in.readLine();
+    while(!config.atEnd() && !section_end_found)
+    {
+        line = config.readLine();
 
-        if(line.contains(sectionStart) && !line.contains(sectionEnd))
-            if(line.contains(name)) {
-                //Check section position
-                if(check_section_position(name, pos))
-                    break;
+        if(!section_start_found && line.contains(sectionStart) && !line.contains(sectionEnd))
+        {
+            if(line.contains(name))
+            {
+                if(!is_defined(name, pos))
+                {
+                    section_start_found = true;
+                }
                 else
+                {
                     pos++;
+                }
             }
-    }
+        }
 
-    //Exit if the section was not found
-    if(in.atEnd()) {
-        file.close();
-        return false;
-    }
-
-    while(!in.atEnd()) {
-        line = in.readLine();
-
-        if(line.contains(sectionEnd))
-            break;
-        else
-            section += line + "\n";
+        else {
+            if(line.contains(sectionEnd))
+            {
+                section_end_found = true;
+            }
+            else
+            {
+                section += line + "\n";
+            }
+        }
     }
 
     file.close();
 
-    return true;
+    return (section_start_found && section_end_found);
 }
 
 /* Check how many sections of the same kind have already been found */
-bool ConfigManager::check_section_position(const QString &name, int pos) {
-    for(QVector<section_position>::iterator i = section_positions.begin(); i != section_positions.end(); i++) {
-        if((*i).sectionName == name) {
-            if((*i).pos < pos) {
+bool ConfigManager::is_defined(const QString& name, int pos)
+{
+    bool section_exists = false;
+    bool section_defined = false;
+
+    for(QVector<section_position>::iterator i = section_positions.begin(); i != section_positions.end(); i++)
+    {
+        if((*i).sectionName == name)
+        {
+            section_exists = true;
+
+            if((*i).pos < pos)
+            {
                 (*i).pos++;
-                return true;
+                section_defined = false;
             }
-            else
-                return false;
         }
     }
 
     //Add if the section is not yet in the list
-    section_positions.push_back({name, pos});
-    return true;
+    if(!section_exists)
+    {
+        section_positions.push_back({name, pos});
+    }
+
+    return section_defined;
 }
 
-void ConfigManager::load_config() {
+void ConfigManager::load_config()
+{
     /* Show dialog */
-    QString tmp = QFileDialog::getOpenFileName(this, tr("Open Directory"), "./");
+    QString tmp = QFileDialog::getOpenFileName(this, tr("Open File"), "./");
 
     if(QFileInfo::exists(tmp))
+    {
         configName = tmp;
-    else
-        return ;
 
-    //Validate config
-    assert(parse_config());
+        //Validate config
+        assert(parse_config());
 
-    section_positions.clear();
+        section_positions.clear();
 
-    emit loading_config();
+        emit loading_config();
+    }
 }
 
-void ConfigManager::save_config() {
-    //Show dialog
-    QFileDialog fileDialog(this, tr("Open File"), "./");
-    fileDialog.setFileMode(QFileDialog::AnyFile);
-    QStringList tmp;
+void ConfigManager::save_config()
+{
+    /* Show dialog */
+    QString tmp = QFileDialog::getSaveFileName(this, tr("Open File"), "./");
 
-    if(fileDialog.exec())
-        tmp = fileDialog.selectedFiles();
-    else
-        return ;
+    if(!tmp.isEmpty())
+    {
+        //Empty config content
+        content.clear();
+        content = "";
 
-    if(tmp.size() > 0)
-        configName = tmp[0];
+        //Emit saving config signal so all the (sub)components can pass their input
+        emit saving_config();
 
-    //Empty config content
-    content.clear();
-    content = "";
+        //Save config
+        QFile file(tmp);
+        file.open(QIODevice::WriteOnly | QIODevice::Text);
 
-    //Emit saving config signal so all the (sub)components can pass their input
-    emit saving_config();
-
-    //Save config
-    QFile file(configName);
-    file.open(QIODevice::WriteOnly | QIODevice::Text);
-
-    QTextStream in(&file);
-    in << content;
-    file.close();
+        QTextStream in(&file);
+        in << content;
+        file.close();
+    }
 }
 
-bool ConfigManager::parse_config() {
+bool ConfigManager::parse_config()
+{
+    bool ok = true;
     bool in_section = false;
 
     QFile file(configName);
@@ -126,31 +140,49 @@ bool ConfigManager::parse_config() {
     while(!in.atEnd()) {
         line = in.readLine();
 
-        if(line == "\n" || line.size() <= 1)
-            continue;
+        if(line != "\n" && line.size() > 0)
+        {
+            // Check if there is code outside of 'Section' 'EndSection'
+            if(!in_section && !line.contains(sectionStart) && !line.contains(sectionEnd))
+            {
+                ok &= false;
+                break;
+            }
 
-        //Check if there is code outside of sections
-        if(!in_section && !line.contains(sectionStart) && !line.contains(sectionEnd))
-            return false;
+            // Check if there is an unmatching 'EndSection'
+            if(!in_section && line.contains(sectionEnd))
+            {
+                ok &= false;
+                break;
+            }
 
-        //Check if a 'Section' is followed by 'EndSection'
-        if(!in_section && line.contains(sectionEnd))
-            return false;
-        if(in_section && !line.contains(sectionEnd) && line.contains(sectionStart))
-            return false;
+            // Check if there is a stacked 'Section' in 'Section' or missing 'EndSection'
+            if(in_section && !line.contains(sectionEnd) && line.contains(sectionStart))
+            {
+                ok &= false;
+                break;
+            }
 
-        //Get into section
-        if(line.contains(sectionStart) && !line.contains(sectionEnd)) {
-            in_section = true;
+            // Get into section
+            if(line.contains(sectionStart) && !line.contains(sectionEnd))
+            {
+                in_section = true;
 
-            //Check if section has a name of at least 3 characters
-            if(line.length() < QString(sectionStart).length()+3)
-                return false;
+                // Check if section has a name of at least 3 characters
+                if(line.length() < QString(sectionStart).length()+3)
+                {
+                    ok &= false;
+                    break;
+                }
+            }
+
+            // Get out of section
+            if(line.contains(sectionEnd))
+            {
+                in_section = false;
+            }
         }
-
-        if(line.contains(sectionEnd))
-            in_section = false;
     }
 
-    return true;
+    return ok;
 }
