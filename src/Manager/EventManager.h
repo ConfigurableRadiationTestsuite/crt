@@ -16,25 +16,31 @@ class SubWindow;
 
 enum SignalType {on, off, start_log, stop_log, special};
 
-struct RegisteredSignal {
+struct RegisteredSignal
+{
     QString name;
     SignalType st;
 
-    SubWindow *sub;
-    void (SubWindow::*sp)(void);
+    SubWindow* sub;
+    void (SubWindow::*sp)(void); // Signal Pointer
 };
 
-class EventManager : public QObject {
+class EventManager : public QObject
+{
 Q_OBJECT
 
 public:
     EventManager() {}
     virtual ~EventManager() {}
 
-    QVector<RegisteredSignal*> get_signal_list() {return signal_list;}
-    RegisteredSignal* get_signal(const QString &name) const;
+    QVector<RegisteredSignal*> get_signal_list() const
+    {
+        return signal_list;
+    }
 
-    void add_signal(const QString &name, SignalType st, SubWindow *sub, void (SubWindow::*sp)(void));
+    RegisteredSignal* get_signal(const QString& name) const;
+
+    void add_signal(const QString& name, SignalType st, SubWindow* sub, void (SubWindow::*sp)(void));
     void delete_signal(void (SubWindow::*sp)(void));
 
 public slots:
@@ -44,21 +50,40 @@ public slots:
     void trigger_stop_log();
     void trigger_special();
 
-    void call_trigger(const QVector<RegisteredSignal*> &signal_list);
-    void call_trigger(enum SignalType st, const QVector<RegisteredSignal*> &signal_list);
+    void call_trigger(const QVector<RegisteredSignal*>& signal_list);
+    void call_trigger(enum SignalType st, const QVector<RegisteredSignal*>& signal_list);
 
 signals:
     void signal_added();
-    void signal_deleted(RegisteredSignal * reg);
+    void signal_deleted(RegisteredSignal* reg);
 
 private:
     QVector<struct RegisteredSignal*> signal_list;
 };
 
-inline void EventManager::trigger_on() {call_trigger(SignalType::on, signal_list);}
-inline void EventManager::trigger_off() {call_trigger(SignalType::off, signal_list);}
-inline void EventManager::trigger_start_log() {call_trigger(SignalType::start_log, signal_list);}
-inline void EventManager::trigger_stop_log() {call_trigger(SignalType::stop_log, signal_list);}
-inline void EventManager::trigger_special() {call_trigger(SignalType::special, signal_list);}
+inline void EventManager::trigger_on()
+{
+    call_trigger(SignalType::on, signal_list);
+}
+
+inline void EventManager::trigger_off()
+{
+    call_trigger(SignalType::off, signal_list);
+}
+
+inline void EventManager::trigger_start_log()
+{
+    call_trigger(SignalType::start_log, signal_list);
+}
+
+inline void EventManager::trigger_stop_log()
+{
+    call_trigger(SignalType::stop_log, signal_list);
+}
+
+inline void EventManager::trigger_special()
+{
+    call_trigger(SignalType::special, signal_list);
+}
 
 #endif // EVENTMANAGER_H
