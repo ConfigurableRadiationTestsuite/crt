@@ -23,8 +23,8 @@ PSUW::PSUW(RunManager *m_runManager, PSU *psu)
 
 PSUW::~PSUW() {
     /* Degregister signals */
-    eventManager->delete_signal(&SubWindow::signal_on);
-    eventManager->delete_signal(&SubWindow::signal_off);
+    eventManager->delete_signal(this, &SubWindow::signal_on);
+    eventManager->delete_signal(this, &SubWindow::signal_off);
 
     delete psu;
 }

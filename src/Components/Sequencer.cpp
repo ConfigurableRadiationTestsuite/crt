@@ -3,7 +3,6 @@
 Sequencer::Sequencer(RunManager* runManager, const QString& config)
     : Component(runManager, config)
 {
-
     load_config(config);
     assert(parse_config({"tasks"}));
 
@@ -104,7 +103,7 @@ void Sequencer::update() {
 void Sequencer::update_task_vec()
 {
     // Synchronize the task list with the available signals
-    foreach (Task *task, task_vec)
+    foreach (Task* task, task_vec)
     {
         task->set_signal(runManager->get_eventManager()->get_signal(task->get_signal_name()));
     }

@@ -81,19 +81,15 @@ public:
     Task(uint number,
          uint time,
          QString signal_name,
-         RegisteredSignal *sig)
+         RegisteredSignal* sig)
         : number(number),
           time(time),
           signal_name(signal_name),
           sig(sig)
     {
-
     }
 
-    virtual ~Task()
-    {
-
-    }
+    virtual ~Task() {}
 
     uint get_number() const
     {
@@ -129,7 +125,7 @@ public slots:
 
 signals:
     void update_task(Task *);
-    void signal_name_changed(const QString &);
+    void signal_name_changed(const QString&);
     void status_changed(int);
 };
 

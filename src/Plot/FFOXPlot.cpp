@@ -2,27 +2,22 @@
 
 #include "src/Components/Fieldfox.h"
 
-FFOXPlot::FFOXPlot(QCustomPlot *m_plot, int m_datapoints, int m_seconds)
-    : Plot(m_plot, m_datapoints, m_seconds) {
-    create_layout();
-
+FFOXPlot::FFOXPlot(QCustomPlot* m_plot, int m_datapoints, int m_seconds)
+    : Plot(m_plot, m_datapoints, m_seconds)
+{
     recreate_axis(xAxis);
+
+    create_layout();
 }
 
-FFOXPlot::~FFOXPlot() {}
-
 void FFOXPlot::update_plot() {
-    /* Set y-axis */
-    //int minimum = get_minimum(data);
-    //plot->yAxis->setRange(minimum, 0);
-
     //Set data
     plot->graph(0)->setData(xAxis, data);
 
     plot->replot();
 }
 
-void FFOXPlot::update_data(const QVector<double> &data) {
+void FFOXPlot::update_data(const QVector<double>& data) {
     this->data = data;
 
     if(this->data.size() != xAxis.size())
@@ -44,10 +39,12 @@ void FFOXPlot::create_layout() {
     plot->replot();
 }
 
-void FFOXPlot::recreate_axis(QVector<double> &vec) {
+void FFOXPlot::recreate_axis(QVector<double>& vec) {
     vec.clear();
     vec.resize(datapoints);
 
     for(int i = 0; i < datapoints; i++)
+    {
         vec[i] = i;
+    }
 }

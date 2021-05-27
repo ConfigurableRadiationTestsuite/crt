@@ -2,9 +2,9 @@
 
 #include "src/Components/RFIOChannel.h"
 
-RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
-    : Plot(m_plot, 256, 30), channel(channel) {
-
+RFPlot::RFPlot(QCustomPlot* m_plot, RFIOChannel* channel)
+    : Plot(m_plot, 256, 30), channel(channel)
+{
     recreate_axis(i_axis);
     recreate_axis(q_axis);
 
@@ -19,14 +19,18 @@ RFPlot::RFPlot(QCustomPlot *m_plot, RFIOChannel * channel)
     create_layout();
 }
 
-RFPlot::~RFPlot() {
+RFPlot::~RFPlot()
+{
     delete layoutUpdateTimer;
     delete plotUpdateTimer;
 }
 
-void RFPlot::update_plot() {
+void RFPlot::update_plot()
+{
     if(i_axis.size() != timeAxis.size())
+    {
         modify_time_axis();
+    }
 
     plot->graph(0)->setData(timeAxis, i_axis);
     plot->graph(1)->setData(timeAxis, q_axis);
@@ -34,7 +38,8 @@ void RFPlot::update_plot() {
     plot->replot();
 }
 
-void RFPlot::update_layout() {
+void RFPlot::update_layout()
+{
     modify_time_axis();
 
     int max_i = get_maximum(i_axis);
@@ -55,13 +60,15 @@ void RFPlot::update_layout() {
     counter++;
 }
 
-void RFPlot::create_layout() {
+void RFPlot::create_layout()
+{
     plot->addGraph();
-    //Assign I-Data
+
+    // Assign I-Data
     plot->graph(0)->setPen(QPen(Qt::blue));
     plot->graph(0)->setLineStyle((QCPGraph::LineStyle)QCPGraph::lsLine);
 
-    //Assign Q-Data
+    // Assign Q-Data
     plot->addGraph();
     plot->graph(1)->setPen(QPen(Qt::red));
 
@@ -75,12 +82,13 @@ void RFPlot::create_layout() {
     plot->replot();
 }
 
-void RFPlot::modify_time_axis() {
-    //Check if time axis is big enough
-
+void RFPlot::modify_time_axis()
+{
     timeAxis.clear();
     timeAxis.reserve(i_axis.size());
 
     for(int i = 0; i < i_axis.size(); i++)
+    {
         timeAxis.push_back(i);
+    }
 }

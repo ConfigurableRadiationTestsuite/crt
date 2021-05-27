@@ -6,11 +6,11 @@ void EventManager::add_signal(const QString& name, SignalType st, SubWindow* sub
     emit signal_added();
 }
 
-void EventManager::delete_signal(void (SubWindow::*sp)(void))
+void EventManager::delete_signal(SubWindow* sub, void (SubWindow::*sp)(void))
 {
     for(int i = 0; i < signal_list.size(); i++)
     {
-        if(signal_list[i]->sp == sp)
+        if(signal_list[i]->sub == sub && signal_list[i]->sp == sp)
         {
             emit signal_deleted(signal_list[i]);
 

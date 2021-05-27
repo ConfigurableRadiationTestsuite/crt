@@ -41,7 +41,7 @@ public:
     RegisteredSignal* get_signal(const QString& name) const;
 
     void add_signal(const QString& name, SignalType st, SubWindow* sub, void (SubWindow::*sp)(void));
-    void delete_signal(void (SubWindow::*sp)(void));
+    void delete_signal(SubWindow* sub, void (SubWindow::*sp)(void));
 
 public slots:
     void trigger_on();

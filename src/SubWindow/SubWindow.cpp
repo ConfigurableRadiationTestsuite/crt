@@ -32,8 +32,8 @@ SubWindow::SubWindow(RunManager *runManager, Component *component)
 }
 
 SubWindow::~SubWindow() {
-    eventManager->delete_signal(&SubWindow::signal_start_log);
-    eventManager->delete_signal(&SubWindow::signal_stop_log);
+    eventManager->delete_signal(this, &SubWindow::signal_start_log);
+    eventManager->delete_signal(this, &SubWindow::signal_stop_log);
 
     thread->quit();
 
