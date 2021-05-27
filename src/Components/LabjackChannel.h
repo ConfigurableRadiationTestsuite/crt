@@ -134,7 +134,7 @@ private:
     bool is_input, is_differential;
     double value = 0.0;
 
-    QVector<double> range_list = {0.01, 0.1, 1, 10};
+    QVector<double> range_list;
 
     void set_differential();
 
