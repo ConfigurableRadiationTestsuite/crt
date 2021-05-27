@@ -2,7 +2,7 @@
 
 #include "LXIClient.h"
 
-PSU::PSU(RunManager * runManager, const QString &config)
+PSU::PSU(RunManager* runManager, const QString &config)
     : Component(runManager, config)
 {
     load_config(config);

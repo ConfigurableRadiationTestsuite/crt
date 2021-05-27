@@ -22,7 +22,7 @@ bool ConfigManager::get_config_section(QString name, QString& section)
     {
         line = config.readLine();
 
-        if(!section_start_found && line.contains(sectionStart) && !line.contains(sectionEnd))
+        if(!section_start_found && line.contains(sectionStart))
         {
             if(line.contains(name))
             {
@@ -37,7 +37,7 @@ bool ConfigManager::get_config_section(QString name, QString& section)
             }
         }
 
-        else {
+        if(section_start_found) {
             if(line.contains(sectionEnd))
             {
                 section_end_found = true;
@@ -70,6 +70,12 @@ bool ConfigManager::is_defined(const QString& name, int pos)
             {
                 (*i).pos++;
                 section_defined = false;
+                break;
+            }
+            else
+            {
+                section_defined = true;
+                break;
             }
         }
     }
@@ -78,6 +84,7 @@ bool ConfigManager::is_defined(const QString& name, int pos)
     if(!section_exists)
     {
         section_positions.push_back({name, pos});
+        section_defined = false;
     }
 
     return section_defined;
