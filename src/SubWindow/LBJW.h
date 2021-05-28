@@ -10,29 +10,35 @@
  */
 
 class Labjack;
-class LBJPlot;
 
 class QVBoxLayout;
 
 #include "SubWindow.h"
 
-struct ChannelColor {
+struct ChannelColor
+{
     QString name;
     QColor color;
 };
 
-class LBJW : public SubWindow {
+class LBJW : public SubWindow
+{
 Q_OBJECT
 
 public:
-    LBJW(RunManager *m_runManager, Labjack *lbj);
+    LBJW(RunManager* m_runManager, Labjack* lbj);
     virtual ~LBJW() override;
 
 private:
-    Labjack * lbj;
-    LBJPlot * lbjplot;
+    Labjack* lbj;
 
-    QVector<ChannelColor> color_list = {{"black", Qt::black}, {"blue", Qt::blue}, {"red", Qt::red}, {"green", Qt::green}, {"magenta", Qt::magenta}, {"yellow", Qt::yellow}};
+    QVector<ChannelColor> color_list =
+                {{"black", Qt::black},
+                 {"blue", Qt::blue},
+                 {"red", Qt::red},
+                 {"green", Qt::green},
+                 {"magenta", Qt::magenta},
+                 {"yellow", Qt::yellow}};
 
     void create_layout() override;
 };

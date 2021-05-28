@@ -10,14 +10,15 @@
 
 #include "src/Tabs/WindowTab.h"
 
-class ETHTab : public WindowTab {
+class ETHTab : public WindowTab
+{
 Q_OBJECT
 
 public:
-    ETHTab(ConfigManager *m_configManager, RunManager *m_runManager);
+    ETHTab(ConfigManager* m_configManager, RunManager* m_runManager);
 
 private slots:
-    void push_new_subwindow(const QString &config) override;
+    void push_new_subwindow(const QString& config) override;
     void create_subwindow_from_dialog() override;
 
 private:

@@ -16,7 +16,8 @@
 #include <QToolButton>
 #include <QVBoxLayout>
 
-MainLayout::MainLayout() {
+MainLayout::MainLayout()
+{
     configManager = new ConfigManager;
     runManager = new RunManager(new EventManager);
 
@@ -25,7 +26,8 @@ MainLayout::MainLayout() {
 
 MainLayout::~MainLayout() {}
 
-void MainLayout::create_layout() {
+void MainLayout::create_layout()
+{
     mainVerticalLayout = new QVBoxLayout;
 
     mainVerticalLayout->setSpacing(20);
@@ -42,7 +44,8 @@ void MainLayout::create_layout() {
     setLayout(mainVerticalLayout);
 }
 
-QToolBar * MainLayout::create_toolbar() {
+QToolBar* MainLayout::create_toolbar()
+{
     toolbar = new QToolBar;
 
     //Save config button
@@ -78,7 +81,8 @@ QToolBar * MainLayout::create_toolbar() {
     return toolbar;
 }
 
-QTabWidget * MainLayout::create_window_tabs() {
+QTabWidget* MainLayout::create_window_tabs()
+{
     windowTabs= new QTabWidget;
 
     //Power supplies
@@ -108,7 +112,8 @@ QTabWidget * MainLayout::create_window_tabs() {
     return windowTabs;
 }
 
-void MainLayout::set_start_button(enum RunMode mode) {
+void MainLayout::set_start_button(enum RunMode mode)
+{
     switch(mode) {
     case Creation:
         startTestButton->setIcon(QIcon(":icon/startButton.png"));
@@ -124,7 +129,8 @@ void MainLayout::set_start_button(enum RunMode mode) {
     }
 }
 
-void MainLayout::set_stop_button(enum RunMode mode) {
+void MainLayout::set_stop_button(enum RunMode mode)
+{
     switch(mode) {
     case Creation:
         stopTestButton->setIcon(QIcon(":icon/stopButton.png"));

@@ -23,7 +23,8 @@ class QVBoxLayout;
 
 #include <QWidget>
 
-class MainLayout : public QWidget {
+class MainLayout : public QWidget
+{
 Q_OBJECT
 
 public:
@@ -35,20 +36,20 @@ private slots:
     void set_stop_button(enum RunMode mode);
 
 private:
-    ConfigManager *configManager;
-    RunManager *runManager;
+    ConfigManager* configManager;
+    RunManager* runManager;
 
-    QVBoxLayout *mainVerticalLayout;
-    QTabWidget *windowTabs;
-    QToolBar *toolbar;
+    QVBoxLayout* mainVerticalLayout;
+    QTabWidget* windowTabs;
+    QToolBar* toolbar;
 
     QAction* startTestButton;
     QAction* stopTestButton;
 
     void create_layout();
 
-    QTabWidget * create_window_tabs();
-    QToolBar * create_toolbar();
+    QTabWidget* create_window_tabs();
+    QToolBar* create_toolbar();
 
 
 };

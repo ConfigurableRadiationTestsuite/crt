@@ -10,14 +10,15 @@
 
 #include "src/Tabs/WindowTab.h"
 
-class PSUTab : public WindowTab {
+class PSUTab : public WindowTab
+{
 Q_OBJECT
 
 public:
-    PSUTab(ConfigManager *m_configManager, RunManager *m_runManager);
+    PSUTab(ConfigManager* m_configManager, RunManager* m_runManager);
 
 private slots:
-    void push_new_subwindow(const QString &config) override;
+    void push_new_subwindow(const QString& config) override;
     void create_subwindow_from_dialog() override;
 
 private:

@@ -23,7 +23,8 @@ SEQW::SEQW(RunManager* m_runManager, Sequencer* seq)
     eventManager->add_signal(seq->get_element_name() + " Stop sequence", SignalType::off, this, &SubWindow::signal_off);
 }
 
-SEQW::~SEQW() {
+SEQW::~SEQW()
+{
     /* Degregister signals */
     eventManager->delete_signal(this, &SubWindow::signal_on);
     eventManager->delete_signal(this, &SubWindow::signal_off);
@@ -31,7 +32,8 @@ SEQW::~SEQW() {
     delete seq;
 }
 
-void SEQW::create_layout() {
+void SEQW::create_layout()
+{
     QVBoxLayout* mainVLayout = new QVBoxLayout;
 
     /* Loop checkBox */
@@ -97,7 +99,8 @@ void SEQW::create_layout() {
     emit layout_done();
 }
 
-void SEQW::set_task(Task* task) {
+void SEQW::set_task(Task* task)
+{
     //Create dialog
     TaskDialog dia(eventManager->get_signal_list());
 

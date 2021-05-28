@@ -5,19 +5,22 @@
 
 #include "LabJackM.h"
 
-FFOXTab::FFOXTab(ConfigManager *m_configManager, RunManager *m_runManager)
-    : WindowTab(m_configManager, m_runManager) {
+FFOXTab::FFOXTab(ConfigManager* m_configManager, RunManager* m_runManager)
+    : WindowTab(m_configManager, m_runManager)
+{
     sectionName = "Fieldfox";
 }
 
-void FFOXTab::push_new_subwindow(const QString &config) {
-    FFOXW *ffoxw = new FFOXW(runManager, new Fieldfox(runManager, config));
+void FFOXTab::push_new_subwindow(const QString& config)
+{
+    FFOXW* ffoxw = new FFOXW(runManager, new Fieldfox(runManager, config));
     subWindow_list.push_back(ffoxw);
 
     layout_updater(ffoxw);
 }
 
-void FFOXTab::create_subwindow_from_dialog() {
+void FFOXTab::create_subwindow_from_dialog()
+{
     QString name = addDialog->get_entry_list()[0].input_value->text();
     QString address = addDialog->get_entry_list()[1].input_value->text();
 
@@ -28,13 +31,14 @@ void FFOXTab::create_subwindow_from_dialog() {
     ulong stop_freq = addDialog->get_entry_list()[4].input_value->text().remove(" ").toULong();
     ulong points = addDialog->get_entry_list()[5].input_value->text().remove(" ").toULong();
 
-    FFOXW *ffoxw = new FFOXW(runManager, new Fieldfox(runManager, name, address, mode, start_freq, stop_freq, points));
+    FFOXW* ffoxw = new FFOXW(runManager, new Fieldfox(runManager, name, address, mode, start_freq, stop_freq, points));
     subWindow_list.push_back(ffoxw);
 
     layout_updater(ffoxw);
 }
 
-void FFOXTab::create_add_subwindow_dialog() {
+void FFOXTab::create_add_subwindow_dialog()
+{
     addDialog->add_entry("Name", "Fieldfox N");
     addDialog->add_entry("Address", "192.168.3.141:5025");
 
