@@ -94,9 +94,12 @@ void Sequencer::update() {
             task_it = task_vec.begin();
         }
 
-        taskTimer->start((*task_it)->get_time());
+        if(task_it != task_vec.end())
+        {
+            taskTimer->start((*task_it)->get_time()*1000);
 
-        (*task_it)->set_active(true);
+            (*task_it)->set_active(true);
+        }
     }
 }
 
@@ -121,7 +124,10 @@ void Sequencer::start_seq()
 
 void Sequencer::stop_seq()
 {
-    (*task_it)->set_active(false);
+    if(task_it != task_vec.end())
+    {
+        (*task_it)->set_active(false);
+    }
 
     taskTimer->stop();
 }

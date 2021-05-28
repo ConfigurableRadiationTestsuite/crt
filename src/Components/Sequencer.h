@@ -148,7 +148,7 @@ inline void Task::set_signal(RegisteredSignal* sig) {
 
 inline void Task::set_time(const QString& time)
 {
-    this->time = time.toUInt()*1000;
+    this->time = time.toUInt();
 }
 
 inline void Task::signal_button_clicked()
