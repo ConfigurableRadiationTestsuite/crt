@@ -129,36 +129,36 @@ void PSUChannel::meas_current()
 
 void PSUChannel::update_rohdeschwarz()
 {
-    if(lxi->write("INST OUT" + QString::number(number + 1)))
+    if(lxi->query("INST OUT" + QString::number(number + 1)))
     {
-        lxi->write(("VOLT " + QString::number(voltage_set)));
-        lxi->write(("CURR " + QString::number(current_set/1000.0)));
-        lxi->write("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
+        lxi->query(("VOLT " + QString::number(voltage_set)));
+        lxi->query(("CURR " + QString::number(current_set/1000.0)));
+        lxi->query("OUTP:CHAN " + QString(enable ? "ON" : "OFF"));
     }
 }
 
 void PSUChannel::meas_voltage_rohdeschwarz()
 {
-    if(lxi->write("INST OUT" + QString::number(number + 1)))
+    if(lxi->query("INST OUT" + QString::number(number + 1)))
     {
-        QString output;
+        char output[11];
 
         if(lxi->query("MEAS:VOLT ?", output, 11))
         {
-           voltage_meas = output.toDouble();
+           voltage_meas = (QString(output)).toDouble();
         }
     }
 }
 
 void PSUChannel::meas_current_rohdeschwarz()
 {
-    if(lxi->write("INST OUT" + QString::number(number + 1)))
+    if(lxi->query("INST OUT" + QString::number(number + 1)))
     {
-        QString output;
+        char output[11];
 
         if(lxi->query("MEAS:CURR ?", output, 11))
         {
-            current_meas = output.toDouble()*1000;
+            current_meas = (QString(output)).toDouble()*1000;
         }
     }
 }

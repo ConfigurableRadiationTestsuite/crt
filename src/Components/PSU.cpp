@@ -130,7 +130,7 @@ void PSU::init()
     lxi = new LXIClient(port, ip_address);
 
     // Write reset
-    lxi->write("RST");
+    lxi->query("RST");
 
     /* Setup channel */
     for(uint i = 0; i < channel_max; i++)
@@ -175,7 +175,7 @@ void PSU::set_master_enable(int master_enable) {
 
 void PSU::set_master_rohdeschwarz()
 {
-    lxi->write("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
+    lxi->query("OUTP:MAST " + QString(master_enable ? "ON" : "OFF"));
 }
 
 void PSU::switch_on()

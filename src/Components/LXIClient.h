@@ -11,6 +11,7 @@
 class QTcpSocket;
 class QTimer;
 
+#include <QMutex>
 #include <QObject>
 
 class LXIClient : public QObject
@@ -21,20 +22,21 @@ public:
     LXIClient(uint port, const QString& address);
     virtual ~LXIClient();
 
-    bool write(QString message);
-    bool query(const QString& message, QString& buffer, int size=65536);
+    bool query(const QString& message, char* buffer=nullptr, int size=0);
 
 signals:
     void connection_status(bool);
 
 private:
+    QMutex mutex;
     uint port;
     QString address;
     int device;
 
     static const int timeout;
 
-    bool read(QString& buffer, int size);
+    bool read(char* buffer, int size);
+    bool write(QString message);
 };
 
 #endif // LXICLIENT_H

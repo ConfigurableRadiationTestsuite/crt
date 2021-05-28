@@ -16,18 +16,23 @@ LXIClient::~LXIClient()
     lxi_disconnect(device);
 }
 
-bool LXIClient::read(QString& buffer, int size)
+bool LXIClient::read(char* buffer, int size)
 {
-    char response[size];
-    bool ok = lxi_receive(device, response, size, timeout);
+    bool ok = lxi_receive(device, buffer, size, timeout);
 
     if(ok)
     {
-        buffer = (QString(response)).leftRef((QString(response)).indexOf('\n')).toString();
+        for(int i = 0; i < size; ++i)
+        {
+            if(buffer[i] == '\n')
+            {
+                buffer[i] = '\0';
+            }
+        }
     }
     else
     {
-        buffer = "";
+        buffer[0] = '\0';
     }
 
     return ok;
@@ -38,15 +43,16 @@ bool LXIClient::write(QString message)
     return lxi_send(device, message.toStdString().c_str(), message.size(), timeout);
 }
 
-bool LXIClient::query(const QString& message, QString& buffer, int size)
+bool LXIClient::query(const QString& message, char* buffer, int size)
 {
+    QMutexLocker locker(&mutex);
     bool ok = true;
 
     if(!write(message))
     {
         ok &= false;
     }
-    else if(!read(buffer, size))
+    else if(size != 0 && !read(buffer, size))
     {
         ok &= false;
     }
