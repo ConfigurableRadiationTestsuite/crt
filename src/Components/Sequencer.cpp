@@ -60,6 +60,7 @@ void Sequencer::init()
     connect(taskTimer, SIGNAL(timeout()), this, SLOT(update()));
 
     emit init_done();
+    logTimer->stop();
 }
 
 void Sequencer::update() {
