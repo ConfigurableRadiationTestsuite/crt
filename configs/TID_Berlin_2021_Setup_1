@@ -1,68 +1,5 @@
 Section PSU
-name=Bottom Left
-vendor=rohdeschwarz
-master=1
-address=192.168.3.103:5025
-channel=3
-c0vs=3.3
-c0cs=20
-c0vm=3.3
-c0cm=40
-c1vs=1
-c1cs=10
-c1vm=1
-c1cm=10
-c2vs=5.78
-c2cs=1500
-c2vm=5.78
-c2cm=1500
-signal=
-EndSection
-
-Section PSU
-name=Bottom Right
-vendor=rohdeschwarz
-master=1
-address=192.168.3.123:5025
-channel=3
-c0vs=30
-c0cs=200
-c0vm=30
-c0cm=400
-c1vs=30
-c1cs=200
-c1vm=30
-c1cm=400
-c2vs=0
-c2cs=0
-c2vm=0
-c2cm=0
-signal=
-EndSection
-
-Section PSU
-name=Mid Left
-vendor=rohdeschwarz
-master=1
-address=192.168.3.102:5025
-channel=3
-c0vs=20
-c0cs=200
-c0vm=20
-c0cm=400
-c1vs=20
-c1cs=200
-c1vm=20
-c1cm=400
-c2vs=5
-c2cs=300
-c2vm=5
-c2cm=600
-signal=
-EndSection
-
-Section PSU
-name=Top Left
+name=#1 Top Left
 vendor=rohdeschwarz
 master=1
 address=192.168.3.124:5025
@@ -83,7 +20,7 @@ signal=
 EndSection
 
 Section PSU
-name=Top Right
+name=#2 Top Right
 vendor=rohdeschwarz
 master=1
 address=192.168.3.125:5025
@@ -102,6 +39,70 @@ c2vm=32
 c2cm=1000
 signal=
 EndSection
+
+Section PSU
+name=#3 Mid Left
+vendor=rohdeschwarz
+master=1
+address=192.168.3.102:5025
+channel=3
+c0vs=20
+c0cs=200
+c0vm=20
+c0cm=400
+c1vs=20
+c1cs=200
+c1vm=20
+c1cm=400
+c2vs=5
+c2cs=300
+c2vm=5
+c2cm=600
+signal=
+EndSection
+
+Section PSU
+name=#5 Bottom Left
+vendor=rohdeschwarz
+master=1
+address=192.168.3.103:5025
+channel=3
+c0vs=3.3
+c0cs=20
+c0vm=3.3
+c0cm=40
+c1vs=1
+c1cs=10
+c1vm=1
+c1cm=10
+c2vs=5.78
+c2cs=1500
+c2vm=5.78
+c2cm=1500
+signal=
+EndSection
+
+Section PSU
+name=#6 Bottom Right
+vendor=rohdeschwarz
+master=1
+address=192.168.3.123:5025
+channel=3
+c0vs=30
+c0cs=200
+c0vm=30
+c0cm=400
+c1vs=30
+c1cs=200
+c1vm=30
+c1cm=400
+c2vs=0
+c2cs=0
+c2vm=0
+c2cm=0
+signal=
+EndSection
+
 
 Section PROG
 name=Test Programm
