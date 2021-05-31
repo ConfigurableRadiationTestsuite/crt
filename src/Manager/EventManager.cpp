@@ -43,6 +43,9 @@ void EventManager::call_trigger(enum SignalType st, const QVector<RegisteredSign
 
 RegisteredSignal* EventManager::get_signal(const QString& name) const
 {
+    if(name == "")
+        return nullptr;
+
     foreach (RegisteredSignal* signal, signal_list)
     {
         if(signal->name == name)

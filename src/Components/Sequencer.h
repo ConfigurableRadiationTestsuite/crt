@@ -52,7 +52,7 @@ private:
 
     bool loop = false;
 
-    QTimer *taskTimer = nullptr;
+    QTimer* taskTimer = nullptr;
 
     QStringList generate_header() override;
 };
