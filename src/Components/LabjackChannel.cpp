@@ -19,8 +19,7 @@ LabjackChannel::LabjackChannel(QString const& name,
     this->is_input = true;
     this->is_differential = n_chan == 199 ? false : true;
 
-    if(is_differential)
-        set_differential();
+    set_differential();
 }
 
 LabjackChannel::~LabjackChannel() {}
