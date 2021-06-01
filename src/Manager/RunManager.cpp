@@ -59,7 +59,7 @@ void RunManager::create_layout()
 
 void RunManager::create_new_run()
 {
-    QString folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "./", QFileDialog::ShowDirsOnly);
+    QString folder = QFileDialog::getExistingDirectory(this, tr("Open Directory"), "./");
 
     //If run is valid, first deregister the RunManager
     if(valid)
