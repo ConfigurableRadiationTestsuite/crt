@@ -19,10 +19,8 @@ EthernetClient::EthernetClient(uint port, const QString &address) : port(port), 
 
 EthernetClient::~EthernetClient()
 {
-    socket->close();
-
-    delete socket;
     delete reconnection_timer;
+    socket->deleteLater();
 }
 
 void EthernetClient::connected()

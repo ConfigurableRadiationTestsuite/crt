@@ -72,6 +72,7 @@ void PSUChannel::update()
 {
     overcurrent_protection();
 
+#ifndef DUMMY_DATA
     if(vd == vendor::rohdeSchwarz)
     {
         update_rohdeschwarz();
@@ -80,6 +81,7 @@ void PSUChannel::update()
     {
         update_tti();
     }
+#endif
 
 //    if(vd == vendor::vendor)
 //        update_vendor();

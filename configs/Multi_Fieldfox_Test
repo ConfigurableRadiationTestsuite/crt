@@ -1,0 +1,29 @@
+Section Fieldfox
+name=Fieldfox N
+address=192.168.3.141:5025
+mode=Unused
+start_freq=2400991500
+stop_freq=2401011500
+points=10001
+signal=
+EndSection
+
+Section Fieldfox
+name=Fieldfox M
+address=192.168.3.142:5025
+mode=Unused
+start_freq=2400991500
+stop_freq=2401011500
+points=10001
+signal=
+EndSection
+
+Section Fieldfox
+name=Fieldfox O
+address=192.168.3.143:5025
+mode=Unused
+start_freq=2400991500
+stop_freq=2401011500
+points=10001
+signal=
+EndSection

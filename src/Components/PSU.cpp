@@ -45,7 +45,7 @@ PSU::~PSU()
         delete channel;
     }
 
-    delete lxi;
+    //delete lxi;
 }
 
 void PSU::set_config()
@@ -124,6 +124,7 @@ QString PSU::check_vendor(enum PSUChannel::vendor vd)
 void PSU::init()
 {
     /* Setup lxi */
+#ifndef DUMMY_DATA
     QString ip_address = address.mid(0, address.indexOf(":"));
     uint port = (address.mid(address.indexOf(":") + 1, address.size() - address.indexOf(":") - 1)).toUInt();
 
@@ -131,6 +132,7 @@ void PSU::init()
 
     // Write reset
     lxi->query("RST");
+#endif
 
     /* Setup channel */
     for(uint i = 0; i < channel_max; i++)
@@ -163,12 +165,14 @@ void PSU::init()
 void PSU::set_master_enable(int master_enable) {
     this->master_enable = master_enable == 0 ? false : true;
 
+#ifndef DUMMY_DATA
     if(vd == PSUChannel::rohdeSchwarz)
     {
         set_master_rohdeschwarz();
     }
 //  else if(vd == vendor)
 //        set_master_vendor();
+#endif
 
     emit master_changed(this->master_enable);
 }
