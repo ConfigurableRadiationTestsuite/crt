@@ -50,7 +50,7 @@ void LabjackChannel::set_range()
 {
     foreach (double available_range, range_list)
     {
-        if(value < 0.9 * available_range)
+        if(qAbs(value) < 0.9 * available_range)
         {
             if(range == available_range)
             {
