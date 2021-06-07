@@ -83,6 +83,8 @@ void RFIO::init() {
 }
 
 void RFIO::update() {
+//    auto begin = std::chrono::high_resolution_clock::now();
+
     static int offset = 0;
     RFIOChannel* channel;
 
@@ -99,7 +101,8 @@ void RFIO::update() {
 
     /* Distribute it to the data to the channels */
     int i, chan;
-    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++) {
+    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++)
+    {
         chan = 0;
         foreach (channel, channel_list) {
             channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
@@ -114,6 +117,11 @@ void RFIO::update() {
         channel->analyze_data();
         channel->set_sample_position(channel->get_sample_position()+i*BYTE_PER_CHANNEL);
     }
+
+//    auto end = std::chrono::high_resolution_clock::now();
+//    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+//    qDebug("Duratio: " + (QString::number(duration)).toLatin1());
+//    qDebug("Data size: " + (QString::number(data.size())).toLatin1());
 }
 
 QByteArray RFIO::dummy_iq(int period, int channel) {

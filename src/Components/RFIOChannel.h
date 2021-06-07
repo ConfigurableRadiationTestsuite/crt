@@ -165,7 +165,7 @@ inline int RFIOChannel::evaluate_sample(int value, int low, int high)
     }
     else if(value < low || high < value)
     {
-        qDebug("Error found");
+//        qDebug("Error found");
         result = -1;
     }
 
