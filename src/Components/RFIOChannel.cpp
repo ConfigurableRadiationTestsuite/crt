@@ -2,20 +2,23 @@
 
 #include "src/Manager/RunManager.h"
 
-void RFIOChannel::analyze_data() {
+void RFIOChannel::analyze_data()
+{
     /* Create plot data */
     QPair<int, int> start = raw_data.get_zero();
     generate_plot_data(start, raw_data, plot_data);
     emit plot_data_changed(plot_data.get_i(), plot_data.get_q());
 
     /* Generate ref_data */
-    if(margin_changed && data_valid) {
+    if(margin_changed && data_valid)
+    {
         generate_ref_data(raw_data);
         margin_changed = false;
     }
 
     /* Huge evaluation */
-    if(data_valid && data_analyze) {
+    if(data_valid && data_analyze)
+    {
         bool ok = true;
         ok &= evaluate_vector(raw_data);
 
@@ -24,7 +27,8 @@ void RFIOChannel::analyze_data() {
     }
 
     /* Data valid check */
-    if(!data_valid && raw_data.is_valid()) {
+    if(!data_valid && raw_data.is_valid())
+    {
         generate_ref_data(raw_data);
         data_valid = true;
     }
@@ -43,7 +47,7 @@ bool RFIOChannel::evaluate_vector(const IQVector &input) {
     reset_transition();
 
     for(int i = input.get_zero().first; i < input.size(); i++) {
-        int res = evaluate_sample(input.at(i).get_i(), ref_data_low[i].get_i(), ref_data_high[i].get_i());
+        int res = evaluate_sample(input.at(i).get_i(), ref_data_low[ref_i].get_i(), ref_data_high[ref_i].get_i());
 
         if(res == 1) {
             reset_transition();
@@ -58,8 +62,9 @@ bool RFIOChannel::evaluate_vector(const IQVector &input) {
 
     reset_transition();
 
+    ref_i = 0;
     for(int i = input.get_zero().second; i < input.size(); i++) {
-        int res = evaluate_sample(input.at(i).get_q(), ref_data_low[i].get_q(), ref_data_high[i].get_q());
+        int res = evaluate_sample(input.at(i).get_q(), ref_data_low[ref_i].get_q(), ref_data_high[ref_i].get_q());
 
         if(res == 1) {
             reset_transition();
@@ -86,8 +91,8 @@ void RFIOChannel::generate_ref_data(const IQVector &input) {
     amplitude.first = (qAbs(maximum.first) + qAbs(minimum.first)) / 2;
     amplitude.second = (qAbs(maximum.second) + qAbs(minimum.second)) / 2;
 
-    ref_data_low.resize(m_period*1.5);
-    ref_data_high.resize(m_period*1.5);
+    ref_data_low.resize(m_period*1.5 + 1);
+    ref_data_high.resize(m_period*1.5 + 1);
 
     for(int i = 0; i < m_period*1.5; i++) {
         QPair<int, int> high;
@@ -96,7 +101,7 @@ void RFIOChannel::generate_ref_data(const IQVector &input) {
         ref_data_high[i] = IQSample(high.first, high.second);
 
         QPair<int, int> low;
-        low.first = amplitude.first * qSin(float(i) / float(period.first) * 2 * M_PI) + margin;
+        low.first = amplitude.first * qSin(float(i) / float(period.first) * 2 * M_PI) - margin;
         low.second = amplitude.second * qSin(float(i) / float(period.second) * 2 * M_PI) - margin;
         ref_data_low[i] = IQSample(low.first, low.second);
     }

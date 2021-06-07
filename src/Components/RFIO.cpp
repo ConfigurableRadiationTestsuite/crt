@@ -5,21 +5,28 @@
 #include <QProcess>
 #include <QRandomGenerator>
 
-RFIO::RFIO(RunManager * runManager, const QString &config)
+RFIO::RFIO(RunManager* runManager, const QString& config)
     : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name", "address", "channel"}));
 
     this->elementName = get_value("name");
-    this->address = get_value("address");
+
+    QString tmp_address = get_value("address");
+    this->address = tmp_address.left(tmp_address.indexOf(":"));
+    this->port = tmp_address.right(tmp_address.size() - tmp_address.indexOf(":") - 1).toInt();
+
     this->channel = get_value("channel").toInt();
 }
 
-RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel)
+RFIO::RFIO(RunManager* runManager, const QString& m_element_name, const QString& address, int channel)
     : Component(m_element_name, runManager), address(address), channel(channel) {
 
     this->elementName = m_element_name;
+
+    this->address = address.left(address.indexOf(":"));
+    this->port = address.right(address.size() - address.indexOf(":") - 1).toInt();
 }
 
 RFIO::~RFIO() {
@@ -58,10 +65,10 @@ void RFIO::init() {
     }
 
     /* Create reception process */
-    process = new QProcess;
+    process = new QProcess(this);
 
 #ifndef DUMMY_DATA
-    process->start("/bin/ncat -l " + QString::number(port), {""});
+    process->start("/bin/ncat", {"-l",  QString::number(port)});
 #endif
 #ifdef DUMMY_DATA
     process->start("/bin/cat", {"/dev/urandom"});
@@ -72,11 +79,15 @@ void RFIO::init() {
     process->waitForStarted();
 
     emit init_done();
+    logTimer->stop();
 }
 
 void RFIO::update() {
     static int offset = 0;
-    RFIOChannel * channel;
+    RFIOChannel* channel;
+
+    if(process->bytesAvailable() < 4096)
+        return ;
 
     //Read data from QProcess
 #ifndef DUMMY_DATA

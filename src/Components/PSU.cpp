@@ -40,7 +40,7 @@ PSU::PSU(RunManager* runManager,
 
 PSU::~PSU()
 {
-    foreach (PSUChannel *channel, channel_list)
+    foreach (PSUChannel* channel, channel_list)
     {
         delete channel;
     }
