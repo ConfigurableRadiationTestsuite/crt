@@ -73,6 +73,7 @@ bool RFIOChannel::evaluate_vector(const IQVector& input)
         /* Check anomaly counter */
         if(anomaly_counter == period.first / 3)
         {
+            qDebug("Anomaly Encounter");
             return false;
         }
 
@@ -106,6 +107,7 @@ bool RFIOChannel::evaluate_vector(const IQVector& input)
         /* Check anomaly counter */
         if(anomaly_counter == period.second / 3)
         {
+            qDebug("Anomaly Encounter");
             return false;
         }
 
