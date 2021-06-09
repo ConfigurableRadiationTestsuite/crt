@@ -124,15 +124,18 @@ void RFIO::update() {
 //    qDebug("Data size: " + (QString::number(data.size())).toLatin1());
 }
 
-QByteArray RFIO::dummy_iq(int period, int channel) {
+QByteArray RFIO::dummy_iq(int period, int channel)
+{
     QByteArray data;
     qint8 high_byte;
     qint8 low_byte;
     qint16 result;
 
-    for(int i = 0; i < period*12; ++i) {
+    for(int i = 0; i < period*12; ++i)
+    {
 
-        for(int j = 0; j < channel; ++j) {
+        for(int j = 0; j < channel; ++j)
+        {
             /* IQ-Data */
             result = qSin(float(i)/float(period) * 2 * M_PI) * qPow(2, 10) + QRandomGenerator::global()->bounded(-qint16(qPow(2, 4)), qint16(qPow(2, 4)));
             high_byte = (result & 0b1111111100000000) >> 8;

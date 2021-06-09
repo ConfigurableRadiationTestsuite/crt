@@ -41,46 +41,82 @@ void RFIOChannel::analyze_data()
     emit finished();
 }
 
-bool RFIOChannel::evaluate_vector(const IQVector &input) {
+bool RFIOChannel::evaluate_vector(const IQVector& input)
+{
     int ref_i = 0;
+    int anomaly_counter = 0;
+    QPair<int, int> period = input.get_period();
 
     reset_transition();
 
-    for(int i = input.get_zero().first; i < input.size(); i++) {
+    for(int i = input.get_zero().first; i < input.size(); i++)
+    {
         int res = evaluate_sample(input.at(i).get_i(), ref_data_low[ref_i].get_i(), ref_data_high[ref_i].get_i());
 
-        if(res == 1) {
+        /* Evaluate result */
+        if(res == 1)
+        {
             reset_transition();
             i = qAbs(input.position(i-1)) < qAbs(input[i].get_i()) ? i-1 : i;
             ref_i = 0;
+            anomaly_counter = 0;
+        }
+        else if (res == 0)
+        {
+            anomaly_counter = 0;
+        }
+        else if (res == -1)
+        {
+            anomaly_counter++;
         }
 
-        if(res == -1)
+        /* Check anomaly counter */
+        if(anomaly_counter == period.first / 3)
+        {
             return false;
+        }
+
         ref_i++;
     }
 
     reset_transition();
 
     ref_i = 0;
-    for(int i = input.get_zero().second; i < input.size(); i++) {
+    for(int i = input.get_zero().second; i < input.size(); i++)
+    {
         int res = evaluate_sample(input.at(i).get_q(), ref_data_low[ref_i].get_q(), ref_data_high[ref_i].get_q());
 
-        if(res == 1) {
+        /* Evaluate result */
+        if(res == 1)
+        {
             reset_transition();
             i = qAbs(input.position(i-1)) < qAbs(input[i].get_q()) ? i-1 : i;
             ref_i = 0;
+            anomaly_counter = 0;
+        }
+        else if (res == 0)
+        {
+            anomaly_counter = 0;
+        }
+        else if (res == -1)
+        {
+            anomaly_counter++;
         }
 
-        if(res == -1)
+        /* Check anomaly counter */
+        if(anomaly_counter == period.second / 3)
+        {
             return false;
+        }
+
         ref_i++;
     }
 
     return true;
 }
 
-void RFIOChannel::generate_ref_data(const IQVector &input) {
+void RFIOChannel::generate_ref_data(const IQVector& input)
+{
     QPair<int, int> period = input.get_period();
     int m_period = period.first < period.second ? period.second : period.first;
 
@@ -107,7 +143,8 @@ void RFIOChannel::generate_ref_data(const IQVector &input) {
     }
 }
 
-void RFIOChannel::generate_plot_data(QPair<int, int> start, const IQVector &input, IQVector &output) {
+void RFIOChannel::generate_plot_data(QPair<int, int> start, const IQVector& input, IQVector& output)
+{
     QPair<int, int> period = input.get_period();
     int m_period = period.first < period.second ? period.second : period.first;
     int m_start = (start.first < start.second ? start.first : start.second);
@@ -121,7 +158,8 @@ void RFIOChannel::generate_plot_data(QPair<int, int> start, const IQVector &inpu
     }
 }
 
-void RFIOChannel::set_margin(int margin) {
+void RFIOChannel::set_margin(int margin)
+{
     this->margin = qPow(2, margin);
     margin_changed = true;
 
