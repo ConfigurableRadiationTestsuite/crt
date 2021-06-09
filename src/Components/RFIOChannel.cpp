@@ -71,9 +71,9 @@ bool RFIOChannel::evaluate_vector(const IQVector& input)
         }
 
         /* Check anomaly counter */
-        if(anomaly_counter == period.first / 3)
+        if(anomaly_counter >= period.first / 2)
         {
-            qDebug("Anomaly Encounter");
+            qDebug("Anomaly Encounter at I: " + (QString::number(i)).toLatin1());
             return false;
         }
 
@@ -83,6 +83,8 @@ bool RFIOChannel::evaluate_vector(const IQVector& input)
     reset_transition();
 
     ref_i = 0;
+    anomaly_counter = 0;
+
     for(int i = input.get_zero().second; i < input.size(); i++)
     {
         int res = evaluate_sample(input.at(i).get_q(), ref_data_low[ref_i].get_q(), ref_data_high[ref_i].get_q());
@@ -105,9 +107,9 @@ bool RFIOChannel::evaluate_vector(const IQVector& input)
         }
 
         /* Check anomaly counter */
-        if(anomaly_counter == period.second / 3)
+        if(anomaly_counter == period.second / 2)
         {
-            qDebug("Anomaly Encounter");
+            qDebug("Anomaly Encounter at Q: " + (QString::number(i)).toLatin1());
             return false;
         }
 
