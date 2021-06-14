@@ -2,8 +2,8 @@ Section RF
 name=DUT - AD9361
 address=192.168.3.3:9001
 channel=2
-c0m=0
-c1m=0
+c0m=5
+c1m=5
 signal=
 EndSection
 
