@@ -1,7 +1,7 @@
 #include "src/mainwindow.h"
 
 #include <QApplication>
-#include <QDateTime>
+#include <QDebug>
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
