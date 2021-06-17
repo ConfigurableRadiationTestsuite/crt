@@ -44,6 +44,7 @@ void PSUW::create_layout()
         voltLineEdit->setText(QString::number(channel->get_voltage_set()));
         psuGridLayout->addWidget(voltLabel, 0, 0);
         psuGridLayout->addWidget(voltLineEdit, 1, 0);
+        connect(voltLineEdit, SIGNAL(editingFinished()), channel, SLOT(set_voltage()));
         connect(voltLineEdit, SIGNAL(textChanged(const QString &)), channel, SLOT(set_voltage(const QString &)));
         connect(channel, SIGNAL(voltage_changed(const QString &)), voltLineEdit, SLOT(setText(const QString &)));
         connect(psu, SIGNAL(disconnected(bool)), voltLineEdit, SLOT(setDisabled(bool)));
@@ -54,6 +55,7 @@ void PSUW::create_layout()
         currentLineEdit->setText(QString::number(channel->get_current_set()));
         psuGridLayout->addWidget(currentLabel, 0, 1);
         psuGridLayout->addWidget(currentLineEdit, 1, 1);
+        connect(currentLineEdit, SIGNAL(editingFinished()), channel, SLOT(set_current()));
         connect(currentLineEdit, SIGNAL(textChanged(const QString &)), channel, SLOT(set_current(const QString &)));
         connect(channel, SIGNAL(current_changed(const QString &)), currentLineEdit, SLOT(setText(const QString &)));
         connect(psu, SIGNAL(disconnected(bool)), currentLineEdit, SLOT(setDisabled(bool)));

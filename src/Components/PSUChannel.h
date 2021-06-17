@@ -80,6 +80,8 @@ public slots:
     void set_trigger(int trigger);
     void set_voltage(const QString& voltage);
     void set_current(const QString& current);
+    void set_voltage();
+    void set_current();
 
     void update();
     void meas_voltage();

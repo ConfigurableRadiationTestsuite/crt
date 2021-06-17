@@ -33,15 +33,25 @@ void PSUChannel::set_enable(int enable)
     emit enable_changed(this->enable);
 }
 
+void PSUChannel::set_voltage()
+{
+    update();
+
+    emit voltage_changed(QString::number(voltage_set));
+}
+
 void PSUChannel::set_voltage(const QString& voltage)
 {
     double dvoltage = voltage.toDouble();
 
     voltage_set = dvoltage > voltage_max ? voltage_max : dvoltage;
+}
 
+void PSUChannel::set_current()
+{
     update();
 
-    emit voltage_changed(QString::number(voltage_set));
+    emit current_changed(QString::number(current_set));
 }
 
 void PSUChannel::set_current(const QString& current)
@@ -49,10 +59,6 @@ void PSUChannel::set_current(const QString& current)
     double dcurrent = current.toDouble();
 
     current_set = dcurrent > current_max ? current_max : dcurrent;
-
-    update();
-
-    emit current_changed(QString::number(current_set));
 }
 
 void PSUChannel::overcurrent_protection()
