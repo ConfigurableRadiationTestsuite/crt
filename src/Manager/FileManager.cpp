@@ -86,10 +86,12 @@ void FileManager::append_values_to_file(const void * subComponent, const QVector
     long long  time = QDateTime::currentMSecsSinceEpoch() - get_file(subComponent)->creationTime*1000;
 
     QVector<double> internal_values;
-    internal_values.push_back(time);
+//    internal_values.push_back(time);
     internal_values.append(values);
 
-    get_file(subComponent)->file->write((QString(vector_to_string(internal_values) + "\n")).toUtf8());
+    QString res = QString::number(time) + ";" + vector_to_string(internal_values) + "\n";
+
+    get_file(subComponent)->file->write(res.toUtf8());
     get_file(subComponent)->file->flush();
 }
 
