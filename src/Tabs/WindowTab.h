@@ -20,11 +20,12 @@ class QVBoxLayout;
 
 #include <QWidget>
 
-class WindowTab : public QWidget {
+class WindowTab : public QWidget
+{
 Q_OBJECT
 
 public:
-    WindowTab(ConfigManager *configManager, RunManager *runManager);
+    WindowTab(ConfigManager* configManager, RunManager* runManager);
     virtual ~WindowTab();
 
 protected slots:
@@ -33,7 +34,7 @@ protected slots:
     virtual void create_layout();
 
     virtual void load_from_config();
-    virtual void push_new_subwindow(const QString &config) = 0;
+    virtual void push_new_subwindow(const QString& config) = 0;
 
     void save_to_config();
 
@@ -41,7 +42,7 @@ protected slots:
     void add_subwindow_from_dialog();
 
 private slots:
-    void erase_window(SubWindow * window);
+    void erase_window(SubWindow* window);
 
 signals:
     void clean_layout();
@@ -49,16 +50,16 @@ signals:
 protected:
     QString sectionName = "";
 
-    ConfigManager *configManager;
-    RunManager *runManager;
+    ConfigManager* configManager;
+    RunManager* runManager;
 
-    QList<SubWindow *> subWindow_list;
-    SpecAddDialog *addDialog = nullptr;
+    QList<SubWindow*> subWindow_list;
+    SpecAddDialog* addDialog = nullptr;
 
     void clear_subwindow_list();
 
     virtual void create_add_subwindow_dialog() = 0;
-    void layout_updater(SubWindow *sub);
+    void layout_updater(SubWindow* sub);
 };
 
 #endif // WINDOWTAB_H

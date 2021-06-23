@@ -14,16 +14,16 @@ class LBJTab : public WindowTab {
 Q_OBJECT
 
 public:
-    LBJTab(ConfigManager *m_configManager, RunManager *m_runManager);
+    LBJTab(ConfigManager* m_configManager, RunManager* m_runManager);
 
 private slots:
-    void push_new_subwindow(const QString &config) override;
+    void push_new_subwindow(const QString& config) override;
     void create_subwindow_from_dialog() override;
 
 private:
     void create_add_subwindow_dialog() override;
 
-    int get_connectionType(const QString &text);
+    int get_connectionType(const QString& text);
 };
 
 #endif // LBJTAB_H

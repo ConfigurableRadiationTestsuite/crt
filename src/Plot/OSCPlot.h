@@ -15,14 +15,15 @@ class OSCPlotElement;
 
 #include "Plot.h"
 
-class OSCPlot : public Plot {
+class OSCPlot : public Plot
+{
 Q_OBJECT
 
 public:
-    OSCPlot(QCustomPlot *m_plotm, OSC *osc);
+    OSCPlot(QCustomPlot* m_plot, OSC* osc);
     virtual ~OSCPlot() override;
 
-    void add_channel(OSCChannel *oscchannel, QColor color);
+    void add_channel(OSCChannel* oscchannel, QColor color);
 
 public slots:
     void update_plot() override;

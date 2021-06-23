@@ -1,0 +1,20 @@
+Section PROG
+name=#1 Programm
+path=/home/dlr/frame-tester/bin/Release/frame-tester
+arguments=11 /dev/ttyUSB2 /dev/ttyUSB0 $directory/frames
+signal=
+EndSection
+
+Section PROG
+name=#2 Programm
+path=/home/dlr/frame-tester/bin/Release/frame-tester
+arguments=11 /dev/ttyUSB2 /dev/ttyUSB0 $directory/frames
+signal=
+EndSection
+
+Section PROG
+name=#3 Programm
+path=/home/dlr/frame-tester/bin/Release/frame-tester
+arguments=11 /dev/ttyUSB2 /dev/ttyUSB0 $directory/frames
+signal=
+EndSection

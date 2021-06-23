@@ -1,6 +1,7 @@
 #include "IndicatorBox.h"
 
-IndicatorBox::IndicatorBox(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
+IndicatorBox::IndicatorBox(QIcon onIcon, QIcon offIcon, QIcon eventIcon)
+{
     this->onIcon = new QIcon(onIcon);
     this->offIcon = new QIcon(offIcon);
     this->eventIcon = new QIcon(eventIcon);
@@ -13,33 +14,34 @@ IndicatorBox::IndicatorBox(QIcon onIcon, QIcon offIcon, QIcon eventIcon){
     connect(this, SIGNAL(stateChanged(int)), this, SLOT(set_individual_icon(int)));
 }
 
-IndicatorBox::~IndicatorBox() {
+IndicatorBox::~IndicatorBox()
+{
     delete onIcon;
     delete offIcon;
     delete eventIcon;
 }
 
-void IndicatorBox::set_individual_icon(int ic) {
-    if(ic == 0) {
+void IndicatorBox::set_individual_icon(int ic)
+{
+    if(ic == 0)
+    {
         setIcon(*offIcon);
         lastIcon = offIcon;
     }
-
-    if(ic > 0) {
+    else if(ic > 0)
+    {
         setIcon(*onIcon);
         lastIcon = onIcon;
     }
 }
 
-void IndicatorBox::setDisabled(bool disabled) {
+void IndicatorBox::set_disabled(bool disabled)
+{
     setCheckable(!disabled);
     set_event_icon(disabled);
 }
 
-void IndicatorBox::set_event_icon(bool status) {
-    if(status == true)
-        setIcon(*eventIcon);
-
-    if(status == false)
-        setIcon(*lastIcon);
+void IndicatorBox::set_event_icon(bool status)
+{
+    status == true ? setIcon(*eventIcon) : setIcon(*lastIcon);
 }

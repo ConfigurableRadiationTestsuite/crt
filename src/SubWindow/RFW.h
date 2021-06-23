@@ -13,15 +13,16 @@ class RFIO;
 
 #include "SubWindow.h"
 
-class RFW : public SubWindow {
+class RFW : public SubWindow
+{
 Q_OBJECT
 
 public:
-    RFW(RunManager *m_runManager, RFIO *rfio);
+    RFW(RunManager* m_runManager, RFIO* rfio);
     virtual ~RFW() override;
 
 private:
-    RFIO * rfio;
+    RFIO* rfio;
 
     void create_layout() override;
 };

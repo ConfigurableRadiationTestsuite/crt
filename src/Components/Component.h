@@ -16,12 +16,13 @@
 #include <QObject>
 #include <QTimer>
 
-class Component : public QObject, public ConfigElement {
+class Component : public QObject, public ConfigElement
+{
 Q_OBJECT
 
 public:
-    Component(const QString &elementName, RunManager *runManager);
-    Component(RunManager *runManager, const QString &config);
+    Component(const QString& elementName, RunManager* runManager);
+    Component(RunManager* runManager, const QString& config);
     virtual ~Component() override;
 
     QString get_element_name() const {return elementName;}
@@ -45,10 +46,10 @@ signals:
     void data_available();
 
 protected:
-    RunManager *runManager;
+    RunManager* runManager;
     QString elementName;
 
-    QTimer *logTimer = nullptr;
+    QTimer* logTimer = nullptr;
 
     bool logging = false;
     bool permanent_logging = false;

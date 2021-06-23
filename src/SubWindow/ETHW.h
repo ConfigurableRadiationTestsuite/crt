@@ -13,15 +13,16 @@ class Ethernet;
 
 #include "SubWindow.h"
 
-class ETHW : public SubWindow {
+class ETHW : public SubWindow
+{
 Q_OBJECT
 
 public:
-    ETHW(RunManager *m_runManager, Ethernet *ethernet);
+    ETHW(RunManager* m_runManager, Ethernet* ethernet);
     virtual ~ETHW() override;
 
 private:
-    Ethernet * ethernet;
+    Ethernet* ethernet;
 
     void create_layout() override;
 };

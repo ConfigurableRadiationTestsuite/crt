@@ -2,9 +2,9 @@
 
 #include "src/Components/OSC.h"
 
-OSCPlot::OSCPlot(QCustomPlot *m_plot,  OSC *osc)
-    : Plot(m_plot, 256, 30), osc(osc) {
-
+OSCPlot::OSCPlot(QCustomPlot* m_plot,  OSC* osc)
+    : Plot(m_plot, 256, 30), osc(osc)
+{
     update_xAxis(1);
 
     plotUpdateTimer = new QTimer;
@@ -14,7 +14,8 @@ OSCPlot::OSCPlot(QCustomPlot *m_plot,  OSC *osc)
     create_layout();
 }
 
-OSCPlot::~OSCPlot() {
+OSCPlot::~OSCPlot()
+{
     delete layoutUpdateTimer;
     delete plotUpdateTimer;
 }

@@ -10,12 +10,23 @@
 
 #include <QLabel>
 
-class IndicatorIcon : public QLabel {
+class IndicatorIcon : public QLabel
+{
 Q_OBJECT
 
 public:
-    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QSize size);
-    IndicatorIcon(const QString &name, QPixmap connected, QPixmap disconnected, QPixmap waiting, QPixmap event, QSize size);
+    IndicatorIcon(const QString& name,
+                  QPixmap connected,
+                  QPixmap disconnected,
+                  QSize size);
+
+    IndicatorIcon(const QString& name,
+                  QPixmap connected,
+                  QPixmap disconnected,
+                  QPixmap waiting,
+                  QPixmap event,
+                  QSize size);
+
     virtual ~IndicatorIcon();
 
 public slots:
@@ -35,10 +46,11 @@ private:
 
     QTimer *eventTimer;
 
-    void setNewPixmap(const QPixmap &map);
+    void setNewPixmap(const QPixmap& map);
 };
 
-inline void IndicatorIcon::setNewPixmap(const QPixmap &map) {
+inline void IndicatorIcon::setNewPixmap(const QPixmap& map)
+{
     setPixmap(map);
     last = map;
 }

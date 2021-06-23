@@ -17,19 +17,41 @@ class QElapsedTimer;
 
 #include <LabJackM.h>
 
-class Labjack : public Component {
+class Labjack : public Component
+{
 Q_OBJECT
 
 public:
-    Labjack(RunManager * runManager, const QString &config);
-    Labjack(RunManager * runManager, const QString &m_element_name, const QString &channel_name, int connectionType, const QString &identifier, const QString &pchannel, const QString &nchannel);
+    Labjack(RunManager* runManager, const QString &config);
+    Labjack(RunManager* runManager,
+            const QString& m_element_name,
+            const QString& channel_name,
+            int connectionType,
+            const QString& identifier,
+            const QString& pchannel,
+            const QString& nchannel);
+
     virtual ~Labjack() override;
 
-    constexpr static int get_main_resolution_address() {return 43903;}
-    constexpr static int get_main_range_address() {return 43900;}
-    constexpr static int get_main_settling_address() {return 43904;}
+    int get_main_resolution_address() const
+    {
+        return 43903;
+    }
 
-    QVector<LabjackChannel*> get_channel_vec() const {return channel_vec;}
+    int get_main_range_address() const
+    {
+        return 43900;
+    }
+
+    int get_main_settling_address() const
+    {
+        return 43904;
+    }
+
+    QVector<LabjackChannel*> get_channel_vec() const
+    {
+        return channel_vec;
+    }
 
     void set_config() override;
 
@@ -37,13 +59,13 @@ public slots:
     void init() override;
     void update() override;
 
-    void set_main_settling(const QString &text);
+    void set_main_settling(const QString& text);
     void set_main_resolution(int index);
-    void set_samplerate(const QString &text);
+    void set_samplerate(const QString& text);
     void set_maximum_samplerate(int is_maximum);
 
 signals:
-    void samplerate_changed(const QString &text);
+    void samplerate_changed(const QString& text);
 
 private:
     int handle;
@@ -61,28 +83,26 @@ private:
     QVector<int> type_vec;
     QVector<double> value_vec;
 
+    int* aAddresses;
+    int* aTypes;
+    double* aValues;
 
-    int *aAddresses;
-    int *aTypes;
-    double *aValues;
-
-    QElapsedTimer *sampleTimer;
-    QElapsedTimer *rangeTimer;
-    QElapsedTimer *dataTimer;
+    QElapsedTimer* sampleTimer;
+    QElapsedTimer* rangeTimer;
+    QElapsedTimer* dataTimer;
     int samplerate = 1, maxSamplerate = 1, fixedSamplerate = 1;
     bool is_maximum = false;
 
-    void get_channel_addresses(const QString &input, QVector<int> &output);
-    void get_channel_names(const QString &input, QVector<QString> &output);
+    void get_channel_addresses(const QString& input, QVector<int>& output);
+    void get_channel_names(const QString& input, QVector<QString>& output);
 
     QStringList generate_header() override;
 
     void open_labjack();
 
     int write(int address, const int TYPE, double value);
-    int read(int address, const int TYPE, double &value);
-    int read(QVector<double> &value);
-//    int read(const QVector<int> &address, const QVector<int> &TYPE, QVector<double> &value);
+    int read(int address, const int TYPE, double& value);
+    int read(QVector<double>& value);
 
     void adapt_channel_range();
     void adapt_sample_rate(qint64 time);
@@ -91,45 +111,34 @@ private:
     void create_dummy_data(int size, double * values);
 };
 
-inline int Labjack::write(int address, const int TYPE, double value) {
+inline int Labjack::write(int address, const int TYPE, double value)
+{
     return is_connected ? LJM_eWriteAddress(handle, address, TYPE, value) : 0;
 }
 
-inline int Labjack::read(int address, const int TYPE, double &value) {
+inline int Labjack::read(int address, const int TYPE, double& value)
+{
     return is_connected ? LJM_eReadAddress(handle, address, TYPE, &value) : 0;
 }
 
-inline void Labjack::set_maximum_samplerate(int is_maximum) {
+inline void Labjack::set_maximum_samplerate(int is_maximum)
+{
     this->is_maximum = is_maximum > 0 ? true : false;
 }
 
-inline void Labjack::set_main_settling(const QString &text) {
+inline void Labjack::set_main_settling(const QString& text)
+{
     write(get_main_settling_address(), LJM_FLOAT32, text.toInt());
 }
 
-inline void Labjack::set_main_resolution(int index) {
+inline void Labjack::set_main_resolution(int index)
+{
     write(get_main_resolution_address(), LJM_UINT16, index);
 }
 
-inline void Labjack::adapt_sample_rate(qint64 nsecs) {
-    /* Convert to sample per second */
-    if(nsecs < 1000*1000)
-        maxSamplerate = 1000;
-    else
-        maxSamplerate = 1000*1000*1000 / (2*nsecs);
 
-    if((maxSamplerate < samplerate) || (is_maximum && samplerate != maxSamplerate)) {
-        samplerate = maxSamplerate;
-        change_samplerate();
-    }
-
-    if(!is_maximum && samplerate != fixedSamplerate) {
-        samplerate = maxSamplerate < fixedSamplerate ? maxSamplerate : fixedSamplerate;
-        change_samplerate();
-    }
-}
-
-inline void Labjack::change_samplerate() {
+inline void Labjack::change_samplerate()
+{
     if(samplerate <= 0)
         samplerate = 1;
 

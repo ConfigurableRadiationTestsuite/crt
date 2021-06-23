@@ -13,21 +13,25 @@
 #include <QSlider>
 #include <QVBoxLayout>
 
-LBJW::LBJW(RunManager *m_runManager, Labjack *lbj) : SubWindow(m_runManager, lbj), lbj(lbj) {}
-
-LBJW::~LBJW() {
-    delete lbj;
-    delete lbjplot;
+LBJW::LBJW(RunManager* m_runManager, Labjack* lbj)
+    : SubWindow(m_runManager, lbj), lbj(lbj)
+{
 }
 
-void LBJW::create_layout() {
-    QVBoxLayout *mainVLayout = new QVBoxLayout;
+LBJW::~LBJW()
+{
+    delete lbj;
+}
 
-    QHBoxLayout * topLineLayout = new QHBoxLayout;
-    QGroupBox * settingsBox = new QGroupBox("Settings");
+void LBJW::create_layout()
+{
+    QVBoxLayout* mainVLayout = new QVBoxLayout;
+
+    QHBoxLayout* topLineLayout = new QHBoxLayout;
+    QGroupBox* settingsBox = new QGroupBox("Settings");
 
     /* Precision slider from 1 to 10 */
-    QSlider *precisionSlide = new QSlider(Qt::Horizontal);
+    QSlider* precisionSlide = new QSlider(Qt::Horizontal);
     precisionSlide->setRange(1, 10);
     precisionSlide->setTickPosition(QSlider::TicksBelow);
     precisionSlide->setTickInterval(1);
@@ -37,8 +41,8 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(precisionSlide);
 
     /* Measurement settling time */
-    QLineEdit *settlingLine = new QLineEdit;
-    QIntValidator *settlingValid = new QIntValidator(1, 50000, this);
+    QLineEdit* settlingLine = new QLineEdit;
+    QIntValidator* settlingValid = new QIntValidator(1, 50000, this);
     settlingLine->setText(QString::number(10000));
     settlingLine->setValidator(settlingValid);
     connect(settlingLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_main_settling(const QString &)));
@@ -46,8 +50,8 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(settlingLine);
 
     /* Measurement datarate */
-    QLineEdit *datarateLine = new QLineEdit;
-    QIntValidator *datarateValid = new QIntValidator(1, 1000, this);
+    QLineEdit* datarateLine = new QLineEdit;
+    QIntValidator* datarateValid = new QIntValidator(1, 1000, this);
     datarateLine->setText(QString::number(1));
     datarateLine->setValidator(datarateValid);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_samplerate(const QString &)));
@@ -56,19 +60,19 @@ void LBJW::create_layout() {
     topLineLayout->addWidget(datarateLine);
 
     /* Maximum button */
-    QCheckBox *datarateBox = new QCheckBox("Maximum");
+    QCheckBox* datarateBox = new QCheckBox("Maximum");
     connect(datarateBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_maximum_samplerate(int)));
     topLineLayout->addWidget(datarateBox);
 
     /* Permanent Logging */
-    QCheckBox *permanentLogBox = new QCheckBox("Permanent Logging");
+    QCheckBox* permanentLogBox = new QCheckBox("Permanent Logging");
     permanentLogBox->setDisabled(!runManager->is_valid());
     connect(permanentLogBox, SIGNAL(stateChanged(int)), lbj, SLOT(set_permanent_logging(int)));
     connect(runManager, SIGNAL(isInvalid_changed(bool)), permanentLogBox, SLOT(setDisabled(bool)));
     topLineLayout->addWidget(permanentLogBox);
 
     /* Signal button */
-    QPushButton *signalButton = new QPushButton;
+    QPushButton* signalButton = new QPushButton;
     signalButton->setText("Add Signal");
     connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
     topLineLayout->addWidget(signalButton);
@@ -76,20 +80,20 @@ void LBJW::create_layout() {
     settingsBox->setLayout(topLineLayout);
 
     /* Plot for the channels */
-    QVBoxLayout *graphLayout = new QVBoxLayout;
-    QGroupBox *graphBox = new QGroupBox("Plot");
+    QVBoxLayout* graphLayout = new QVBoxLayout;
+    QGroupBox* graphBox = new QGroupBox("Plot");
     QCustomPlot *plot = new QCustomPlot(this);
     plot->setGeometry(QRect());
     plot->setMinimumHeight(256);
-    lbjplot = new LBJPlot(plot);
+    LBJPlot* lbjplot = new LBJPlot(plot);
     graphLayout->addWidget(plot);
     graphBox->setLayout(graphLayout);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbjplot, SLOT(set_datarate(const QString &)));
     connect(lbj, SIGNAL(data_available()), lbjplot, SLOT(update_plot()));
 
     /* Channel Layout */
-    QGridLayout *channelLayout = new QGridLayout;
-    QGroupBox * channelBox = new QGroupBox("Channel");
+    QGridLayout* channelLayout = new QGridLayout;
+    QGroupBox* channelBox = new QGroupBox("Channel");
 
     /* Channel header */
     channelLayout->addWidget(new QLabel("Name"), 0, 0);
@@ -98,12 +102,12 @@ void LBJW::create_layout() {
     channelLayout->addWidget(new QLabel("Gain"), 0, 3);
     channelLayout->addWidget(new QLabel("Graph"), 0, 4);
 
-    QTimer *timer = new QTimer;
+    QTimer* timer = new QTimer;
 
     int cnt = 1;
     foreach (LabjackChannel *channel, lbj->get_channel_vec()) {
         //Name
-        QLabel *channelLabel = new QLabel(channel->get_name());
+        QLabel* channelLabel = new QLabel(channel->get_name());
 
         //Boundary
         QLineEdit *boundaryLine = new QLineEdit(QString::number(channel->get_boundary()));
