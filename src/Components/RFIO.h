@@ -22,11 +22,11 @@ class RFIO : public Component {
 Q_OBJECT
 
 public:
-   RFIO(RunManager * runManager, const QString &config);
-   RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel);
+   RFIO(RunManager* runManager, const QString& config);
+   RFIO(RunManager* runManager, const QString& m_element_name, const QString& address, int channel);
    virtual ~RFIO() override;
 
-   QVector<RFIOChannel *> get_channel_list() const {return channel_list;}
+   QVector<RFIOChannel*> get_channel_list() const {return channel_list;}
 
    void set_config() override;
 
@@ -47,8 +47,8 @@ private:
    bool is_destroyed;
    int channel;
 
-   QProcess *process;
-   QVector<RFIOChannel *> channel_list;
+   QProcess* process;
+   QVector<RFIOChannel*> channel_list;
 
 
    QStringList generate_header() override;

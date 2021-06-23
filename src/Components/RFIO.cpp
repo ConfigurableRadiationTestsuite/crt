@@ -5,21 +5,28 @@
 #include <QProcess>
 #include <QRandomGenerator>
 
-RFIO::RFIO(RunManager * runManager, const QString &config)
+RFIO::RFIO(RunManager* runManager, const QString& config)
     : Component(runManager, config) {
 
     load_config(config);
     assert(parse_config({"name", "address", "channel"}));
 
     this->elementName = get_value("name");
-    this->address = get_value("address");
+
+    QString tmp_address = get_value("address");
+    this->address = tmp_address.left(tmp_address.indexOf(":"));
+    this->port = tmp_address.right(tmp_address.size() - tmp_address.indexOf(":") - 1).toInt();
+
     this->channel = get_value("channel").toInt();
 }
 
-RFIO::RFIO(RunManager * runManager, const QString &m_element_name, const QString &address, int channel)
+RFIO::RFIO(RunManager* runManager, const QString& m_element_name, const QString& address, int channel)
     : Component(m_element_name, runManager), address(address), channel(channel) {
 
     this->elementName = m_element_name;
+
+    this->address = address.left(address.indexOf(":"));
+    this->port = address.right(address.size() - address.indexOf(":") - 1).toInt();
 }
 
 RFIO::~RFIO() {
@@ -58,10 +65,10 @@ void RFIO::init() {
     }
 
     /* Create reception process */
-    process = new QProcess;
+    process = new QProcess(this);
 
 #ifndef DUMMY_DATA
-    process->start("/bin/ncat -l " + QString::number(port), {""});
+    process->start("/bin/ncat", {"-l",  QString::number(port)});
 #endif
 #ifdef DUMMY_DATA
     process->start("/bin/cat", {"/dev/urandom"});
@@ -72,11 +79,17 @@ void RFIO::init() {
     process->waitForStarted();
 
     emit init_done();
+    logTimer->stop();
 }
 
 void RFIO::update() {
+//    auto begin = std::chrono::high_resolution_clock::now();
+
     static int offset = 0;
-    RFIOChannel * channel;
+    RFIOChannel* channel;
+
+    if(process->bytesAvailable() < 4096)
+        return ;
 
     //Read data from QProcess
 #ifndef DUMMY_DATA
@@ -88,7 +101,8 @@ void RFIO::update() {
 
     /* Distribute it to the data to the channels */
     int i, chan;
-    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++) {
+    for(i = 0; i < data.size() / (BYTE_PER_CHANNEL * channel_list.size()); i++)
+    {
         chan = 0;
         foreach (channel, channel_list) {
             channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
@@ -103,17 +117,25 @@ void RFIO::update() {
         channel->analyze_data();
         channel->set_sample_position(channel->get_sample_position()+i*BYTE_PER_CHANNEL);
     }
+
+//    auto end = std::chrono::high_resolution_clock::now();
+//    auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(end-begin).count();
+//    qDebug("Duratio: " + (QString::number(duration)).toLatin1());
+//    qDebug("Data size: " + (QString::number(data.size())).toLatin1());
 }
 
-QByteArray RFIO::dummy_iq(int period, int channel) {
+QByteArray RFIO::dummy_iq(int period, int channel)
+{
     QByteArray data;
     qint8 high_byte;
     qint8 low_byte;
     qint16 result;
 
-    for(int i = 0; i < period*12; ++i) {
+    for(int i = 0; i < period*12; ++i)
+    {
 
-        for(int j = 0; j < channel; ++j) {
+        for(int j = 0; j < channel; ++j)
+        {
             /* IQ-Data */
             result = qSin(float(i)/float(period) * 2 * M_PI) * qPow(2, 10) + QRandomGenerator::global()->bounded(-qint16(qPow(2, 4)), qint16(qPow(2, 4)));
             high_byte = (result & 0b1111111100000000) >> 8;

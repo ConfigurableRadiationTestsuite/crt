@@ -13,15 +13,20 @@ class QProcess;
 
 #include "Component.h"
 
-class ProgrammStarter : public Component {
+class ProgrammStarter : public Component
+{
 Q_OBJECT
 
 public:
-    ProgrammStarter(RunManager * runManager, const QString &config);
-    ProgrammStarter(RunManager * runManager, const QString &m_element_name, const QString &path);
+    ProgrammStarter(RunManager* runManager, const QString& config);
+    ProgrammStarter(RunManager* runManager, const QString& m_element_name, const QString& path);
     virtual ~ProgrammStarter();
 
-    QString get_path() const {return path;}
+    QString get_path() const
+    {
+        return path;
+    }
+
     QString get_arguments();
 
     void set_config() override;
@@ -54,7 +59,7 @@ signals:
     void announce_path(const QString &);
 
 private:
-    QProcess *process;
+    QProcess* process;
 
     QString path;
     QStringList arguments;
@@ -66,26 +71,35 @@ private:
     QStringList substitute_arguments();
 };
 
-inline QString ProgrammStarter::get_arguments() {
+inline QString ProgrammStarter::get_arguments()
+{
     return arguments.join(' ');
 }
 
-inline QStringList ProgrammStarter::generate_header() {
+inline QStringList ProgrammStarter::generate_header()
+{
     return {"Line"};
 }
 
-inline void ProgrammStarter::set_arguments(const QString &text) {
+inline void ProgrammStarter::set_arguments(const QString& text)
+{
     arguments = text.split(' ');
 }
 
-inline void ProgrammStarter::start_programm() {
+inline void ProgrammStarter::start_programm()
+{
     if(trigger)
+    {
         execute_programm();
+    }
 }
 
-inline void ProgrammStarter::stop_programm() {
+inline void ProgrammStarter::stop_programm()
+{
     if(trigger)
+    {
         kill_programm();
+    }
 }
 
 #endif // PROGRAMMSTARTER_H

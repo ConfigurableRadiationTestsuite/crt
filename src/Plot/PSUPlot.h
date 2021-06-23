@@ -17,7 +17,7 @@ class PSUPlot : public Plot {
 Q_OBJECT
 
 public:
-    PSUPlot(QCustomPlot *m_plot, PSUChannel * channel, int m_datapoints=30, int m_seconds=30);
+    PSUPlot(QCustomPlot* m_plot, PSUChannel* channel, int m_datapoints=30, int m_seconds=30);
     virtual ~PSUPlot() override;
 
 public slots:
@@ -27,7 +27,7 @@ private:
     QVector<double> voltage_axis;
     QVector<double> current_axis;
 
-    PSUChannel * channel;
+    PSUChannel* channel;
 
     void create_layout() override;
 };

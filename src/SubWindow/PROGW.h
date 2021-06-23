@@ -17,14 +17,14 @@ class PROGW : public SubWindow {
 Q_OBJECT
 
 public:
-    PROGW(RunManager *m_runManager, ProgrammStarter * programmStarter);
+    PROGW(RunManager* m_runManager, ProgrammStarter* programmStarter);
     virtual ~PROGW() override;
 
 private slots:
     void path_dialog();
 
 private:
-    ProgrammStarter * programmStarter;
+    ProgrammStarter* programmStarter;
 
     void create_layout() override;
 };

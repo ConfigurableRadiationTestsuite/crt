@@ -14,15 +14,16 @@ class PSUPlot;
 
 #include "SubWindow.h"
 
-class PSUW : public SubWindow {
+class PSUW : public SubWindow
+{
 Q_OBJECT
 
 public:
-    PSUW(RunManager *m_runManager, PSU *psu);
+    PSUW(RunManager* m_runManager, PSU* psu);
     virtual ~PSUW() override;
 
 private:
-    PSU * psu;
+    PSU* psu;
 
     void create_layout() override;
 };

@@ -15,7 +15,7 @@ void SpecAddDialog::create_dialog() {
     for(QVector<struct LineEntry>::iterator i = line_entry_list.begin(); i != line_entry_list.end(); i++)
         formLayout->addRow((*i).display_name, (*i).input_value);
 
-    QHBoxLayout * hlayout = new QHBoxLayout;
+    QHBoxLayout* hlayout = new QHBoxLayout;
 
     QPushButton *okButton = new QPushButton("Ok");
     connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
@@ -25,7 +25,7 @@ void SpecAddDialog::create_dialog() {
     connect(cancleButton, SIGNAL(clicked()), this, SLOT(reject()));
     hlayout->addWidget(cancleButton);
 
-    QVBoxLayout * vlayout = new QVBoxLayout(this);
+    QVBoxLayout* vlayout = new QVBoxLayout(this);
     vlayout->addLayout(formLayout);
     vlayout->addLayout(hlayout);
 

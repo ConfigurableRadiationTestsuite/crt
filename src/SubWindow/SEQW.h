@@ -18,14 +18,14 @@ class SEQW : public SubWindow {
 Q_OBJECT
 
 public:
-    SEQW(RunManager *m_runManager, Sequencer *sequencer);
+    SEQW(RunManager* m_runManager, Sequencer* sequencer);
     virtual ~SEQW() override;
 
 public slots:
-    void set_task(Task *);
+    void set_task(Task*);
 
 private:
-    Sequencer *seq;
+    Sequencer* seq;
 
     void create_layout() override;
 };

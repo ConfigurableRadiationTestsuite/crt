@@ -12,12 +12,14 @@
 
 #include <QWidget>
 
-struct section_position {
+struct section_position
+{
     QString sectionName;
     int pos;
 };
 
-class ConfigManager : public QWidget {
+class ConfigManager : public QWidget
+{
 Q_OBJECT
 
 public:
@@ -27,10 +29,10 @@ public:
 
     virtual ~ConfigManager() {}
 
-    void set_new_config(const QString &configName);
-    bool get_config_section(QString name, QString &section);
+    void set_new_config(const QString& configName);
+    bool get_config_section(QString name, QString& section);
 
-    void append_content(const QString &section, const QString &content);
+    void append_content(const QString& section, const QString& content);
 
 public slots:
     void load_config();
@@ -48,14 +50,16 @@ private:
     static const QString sectionStart, sectionEnd;
 
     bool parse_config();
-    bool check_section_position(const QString &name, int pos);
+    bool is_defined(const QString& name, int pos);
 };
 
-inline void ConfigManager::set_new_config(const QString &configName) {
+inline void ConfigManager::set_new_config(const QString& configName)
+{
     this->configName = configName;
 }
 
-inline void ConfigManager::append_content(const QString &section, const QString &content) {
+inline void ConfigManager::append_content(const QString& section, const QString& content)
+{
     this->content += sectionStart + " " + section + "\n" + content + sectionEnd + "\n\n";
 }
 

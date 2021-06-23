@@ -2,9 +2,9 @@
 
 #include "src/Components/PSUChannel.h"
 
-PSUPlot::PSUPlot(QCustomPlot *m_plot, PSUChannel *channel, int m_datapoints, int m_seconds)
-    : Plot(m_plot, m_datapoints, m_seconds), channel(channel) {
-
+PSUPlot::PSUPlot(QCustomPlot* m_plot, PSUChannel* channel, int m_datapoints, int m_seconds)
+    : Plot(m_plot, m_datapoints, m_seconds), channel(channel)
+{
     recreate_axis(voltage_axis);
     recreate_axis(current_axis);
 
@@ -13,13 +13,16 @@ PSUPlot::PSUPlot(QCustomPlot *m_plot, PSUChannel *channel, int m_datapoints, int
 
 PSUPlot::~PSUPlot() {}
 
-void PSUPlot::update_plot() {
+void PSUPlot::update_plot()
+{
     /* Fill either vector up or shift the whole vector to add one datapoint */
-    if(counter >= datapoints) {
+    if(counter >= datapoints)
+    {
         shift_into_vector(voltage_axis, channel->get_voltage_meas());
         shift_into_vector(current_axis, channel->get_current_meas());
     }
-    else {
+    else
+    {
         voltage_axis[int(counter)] = channel->get_voltage_meas();
         current_axis[int(counter)] = channel->get_current_meas();
     }
@@ -46,7 +49,8 @@ void PSUPlot::update_plot() {
     counter++;
 }
 
-void PSUPlot::create_layout() {
+void PSUPlot::create_layout()
+{
     plot->addGraph();
     plot->graph(0)->setPen(QPen(Qt::blue));
 

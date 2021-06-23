@@ -235,7 +235,7 @@ EndSection
 
 	\newpage
 	\subsection{RF Signals}	
-	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit per sample. An evaluation margin in exponents of 2 (e.g. $x^2$) can be chosen as an upper / lower boundary. Once this boundary is crossed (and the evaluation is active) an error signal will be emitted.
+	In order to verify RF signals, the RF tab (see figure \ref{f:rf_example}) can be used. The current implementation supports only sine signals and requires IQ data with 16 bit per sample. An evaluation margin in exponents of 2 (e.g. $2^x$)\footnote{A first good guess is $2^5$} can be chosen as an upper / lower boundary. The evaluation will only start if the specific box is checked. Once the set boundary is crossed (and the evaluation is active) an error signal will be emitted.
 		
 		\begin{figure}[H]
 \centering
