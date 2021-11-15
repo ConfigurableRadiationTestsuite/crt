@@ -160,7 +160,7 @@ void Labjack::update() {
     }
 
     /* Check and adapt */
-    adapt_channel_range();
+    // adapt_channel_range(); REMOVED DUE TO PROBLEMS WITH TOGGLE SIGNAL
     adapt_sample_rate(sampleTimer->nsecsElapsed());
 
     /* Distribute data */
