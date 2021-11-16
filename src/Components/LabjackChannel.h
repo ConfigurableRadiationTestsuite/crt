@@ -22,8 +22,9 @@ public:
                    int* handle,
                    int p_chan,
                    int n_chan,
-                   int gain,
-                   double boundary);
+                   double boundary = 0,
+                   double range = 10,
+                   int gain = 1);
 
     virtual ~LabjackChannel() override;
 
@@ -31,7 +32,7 @@ public:
 
     double get_value() const
     {
-        return external_gain*value;
+        return virtual_gain*value;
     }
 
     QString get_name() const
@@ -56,7 +57,12 @@ public:
 
     double get_gain() const
     {
-        return external_gain;
+        return virtual_gain;
+    }
+
+    double get_range() const
+    {
+        return range;
     }
 
     int get_pchan_address() const
@@ -115,7 +121,8 @@ public slots:
     void update();
 
     void set_boundary(const QString& text);
-    void set_external_gain(const QString& text);
+    void set_virtual_gain(const QString& text);
+    void set_range(int index);
     void set_resolution(uint index);
     void set_settling(uint index);
 
@@ -124,14 +131,16 @@ public slots:
 signals:
     void value_changed(const QString&);
     void value_refreshed(const QString&);
+
+    void range_changed(const QString&);
     void boundary_check_failed();
 
 private:
     QString name;
     int* handle;
     int p_chan, n_chan;
-    double boundary, range = 0;
-    int external_gain;
+    double boundary, range;
+    int virtual_gain;
     bool is_input, is_differential;
     double value = 0.0;
 
@@ -189,8 +198,8 @@ inline void LabjackChannel::set_boundary(const QString& text) {
     boundary = text.toDouble();
 }
 
-inline void LabjackChannel::set_external_gain(const QString& text) {
-    external_gain = text.toInt();
+inline void LabjackChannel::set_virtual_gain(const QString& text) {
+    virtual_gain = text.toInt();
 }
 
 inline void LabjackChannel::set_resolution(uint index) {

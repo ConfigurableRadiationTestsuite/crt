@@ -7,14 +7,16 @@ LabjackChannel::LabjackChannel(QString const& name,
                                int* handle,
                                int p_chan,
                                int n_chan,
-                               int gain,
-                               double boundary)
+                               double boundary,
+                               double range,
+                               int gain)
     : name(name),
       handle(handle),
       p_chan(p_chan),
       n_chan(n_chan),
       boundary(boundary),
-      external_gain(gain)
+      range(range),
+      virtual_gain(gain)
 {
     this->is_input = true;
     this->is_differential = n_chan == 199 ? false : true;
@@ -62,8 +64,20 @@ void LabjackChannel::set_range()
                 range = available_range;
                 write(get_pchan_range_address(), LJM_FLOAT32, range);
                 write(get_nchan_range_address(), LJM_FLOAT32, range);
+
+                emit range_changed(QString::number(range));
+
                 return ;
             }
         }
     }
+}
+
+void LabjackChannel::set_range(int index)
+{
+    range = range_list.at(index);
+    write(get_pchan_range_address(), LJM_FLOAT32, range);
+    write(get_nchan_range_address(), LJM_FLOAT32, range);
+
+    emit range_changed(QString::number(range));
 }

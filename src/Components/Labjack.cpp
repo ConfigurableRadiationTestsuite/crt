@@ -74,6 +74,7 @@ void Labjack::set_config()
         set_value("c" + QString::number(i) + "nc", QString::number(channel_vec[i]->get_nchan()));
         set_value("c" + QString::number(i) + "b", QString::number(channel_vec[i]->get_boundary()));
         set_value("c" + QString::number(i) + "g", QString::number(channel_vec[i]->get_gain()));
+        set_value("c" + QString::number(i) + "r", QString::number(channel_vec[i]->get_range()));
     }
 }
 
@@ -95,7 +96,7 @@ void Labjack::init()
     {
         if(is_empty())
         {
-            channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i], 1, 0));
+            channel_vec.push_back(new LabjackChannel(m_name[i], &handle, m_pchannel[i], m_nchannel[i]));
         }
         else {
             QString name = get_value("c" + QString::number(i) + "n");
@@ -105,8 +106,9 @@ void Labjack::init()
 
             double boundary = get_value("c" + QString::number(i) + "b").toDouble();
             int gain = get_value("c" + QString::number(i) + "g").toInt();
+            int range = get_value("c" + QString::number(i) + "r").toInt();
 
-            channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, gain, boundary));
+            channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, boundary, range, gain));
         }
     }
 
@@ -160,7 +162,6 @@ void Labjack::update() {
     }
 
     /* Check and adapt */
-    // adapt_channel_range(); REMOVED DUE TO PROBLEMS WITH TOGGLE SIGNAL
     adapt_sample_rate(sampleTimer->nsecsElapsed());
 
     /* Distribute data */
