@@ -106,7 +106,7 @@ void Labjack::init()
 
             double boundary = get_value("c" + QString::number(i) + "b").toDouble();
             int gain = get_value("c" + QString::number(i) + "g").toInt();
-            int range = get_value("c" + QString::number(i) + "r").toInt();
+            double range = get_value("c" + QString::number(i) + "r").toDouble();
 
             channel_vec.push_back(new LabjackChannel(name, &handle, p_chan, n_chan, boundary, range, gain));
         }

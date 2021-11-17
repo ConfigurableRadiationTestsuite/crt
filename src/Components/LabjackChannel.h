@@ -65,6 +65,13 @@ public:
         return range;
     }
 
+    int get_range_index() const
+    {
+        return range_index;
+    }
+
+    int get_range_index(double range);
+
     int get_pchan_address() const
     {
         return p_chan*2;
@@ -140,6 +147,7 @@ private:
     int* handle;
     int p_chan, n_chan;
     double boundary, range;
+    int range_index;
     int virtual_gain;
     bool is_input, is_differential;
     double value = 0.0;

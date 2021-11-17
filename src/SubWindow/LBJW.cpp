@@ -130,7 +130,7 @@ void LBJW::create_layout()
         rangeSlide->setRange(0, 3);
         rangeSlide->setTickPosition(QSlider::TicksBelow);
         rangeSlide->setTickInterval(1);
-        rangeSlide->setValue(3);
+        rangeSlide->setValue(channel->get_range_index());
         connect(rangeSlide, SIGNAL(valueChanged(int)), channel, SLOT(set_range(int)));
 
         QLineEdit* rangeLine = new QLineEdit(QString::number(channel->get_gain()));

@@ -21,6 +21,8 @@ LabjackChannel::LabjackChannel(QString const& name,
     this->is_input = true;
     this->is_differential = n_chan == 199 ? false : true;
 
+    this->range_index = get_range_index(range);
+
     set_differential();
 }
 
@@ -46,6 +48,24 @@ bool LabjackChannel::check_boundary()
     }
 
     return ok;
+}
+
+int LabjackChannel::get_range_index(double range)
+{
+    assert(range <= range_list[range_list.size()-1]);
+
+    for(int i = 0; i < range_list.size(); ++i)
+    {
+        range_index = i;
+
+        if(qAbs(range) <= range_list[i])
+        {
+            this->range = range_list[i];
+            break;
+        }
+    }
+
+    return range_index;
 }
 
 void LabjackChannel::set_range()
