@@ -19,11 +19,12 @@ LabjackChannel::LabjackChannel(QString const& name,
       virtual_gain(gain)
 {
     this->is_input = true;
+
     this->is_differential = n_chan == 199 ? false : true;
+    set_differential();
 
     this->range_index = get_range_index(range);
-
-    set_differential();
+    set_range(range_index);
 }
 
 LabjackChannel::~LabjackChannel() {}
