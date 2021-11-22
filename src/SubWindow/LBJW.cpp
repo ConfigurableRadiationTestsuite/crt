@@ -55,9 +55,15 @@ void LBJW::create_layout()
     datarateLine->setText(QString::number(1));
     datarateLine->setValidator(datarateValid);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_samplerate(const QString &)));
-    connect(lbj, SIGNAL(samplerate_changed(const QString &)), datarateLine, SLOT(setText(const QString &)));
     topLineLayout->addWidget(new QLabel("Datarate [S/s]:"));
     topLineLayout->addWidget(datarateLine);
+
+    QLineEdit* currentDatarateLine = new QLineEdit;
+    currentDatarateLine->setText(QString::number(1));
+    currentDatarateLine->setReadOnly(true);
+    connect(lbj, SIGNAL(samplerate_changed(const QString &)), currentDatarateLine, SLOT(setText(const QString &)));
+    topLineLayout->addWidget(new QLabel("/"));
+    topLineLayout->addWidget(currentDatarateLine);
 
     /* Maximum button */
     QCheckBox* datarateBox = new QCheckBox("Maximum");
