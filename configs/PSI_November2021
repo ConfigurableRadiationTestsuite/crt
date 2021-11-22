@@ -172,3 +172,10 @@ arguments=$directory/challenge 9005
 signal=
 EndSection
 
+Section PROG
+name=SEM
+path=/home/dlr/13_PSI_2021/semutil.py
+arguments=/dev/ttyUSB1 read
+signal=
+EndSection
+
