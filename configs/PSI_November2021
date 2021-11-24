@@ -168,7 +168,7 @@ EndSection
 Section PROG
 name=Cache
 path=/home/dlr/13_PSI_2021/cache-challenge/build/cache-challenge
-arguments=$directory/challenge 9005
+arguments=$directory/challenge 9005 /dev/ttyUSB0
 signal=
 EndSection
 
