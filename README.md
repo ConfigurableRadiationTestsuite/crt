@@ -22,7 +22,7 @@ To install the Labjack library download the [LJM Software](https://labjack.com/s
 
 ## Liblxi
 
-The [LXI][https://de.wikipedia.org/wiki/LAN_eXtensions_for_Instrumentation] is used for the Rhode&Schwarz power supplies. To install it on a liunx, follow one of the two guides blow.
+The [LXI](https://de.wikipedia.org/wiki/LAN_eXtensions_for_Instrumentation) is used for the Rhode&Schwarz power supplies. To install it on a liunx, follow one of the two guides blow.
 
 ### Debian Linux
 
