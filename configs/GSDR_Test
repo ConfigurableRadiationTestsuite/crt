@@ -1,0 +1,27 @@
+Section PROG
+name=Frame Tester
+path=/home/workstation/git/frame-tester/build/frame-tester
+arguments=-c /dev/ttyUSB0 -f /dev/ttyUSB1 -t $directory/frames
+signal=
+EndSection
+
+Section PSU
+name=#1 Top Left
+vendor=rohdeschwarz
+master=1
+address=192.168.3.124:5025
+channel=3
+c0vs=5
+c0cs=1500
+c0vm=5.5
+c0cm=1500
+c1vs=0
+c1cs=0
+c1vm=0
+c1cm=0
+c2vs=0
+c2cs=0
+c2vm=0
+c2cm=0
+signal=
+EndSection
