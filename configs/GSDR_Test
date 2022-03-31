@@ -1,6 +1,6 @@
 Section PROG
 name=Frame Tester
-path=/home/workstation/git/frame-tester/build/frame-tester
+path=/home/dlr/git/frame-tester/build/frame-tester
 arguments=-c /dev/ttyUSB0 -f /dev/ttyUSB1 -t $directory/frames
 signal=
 EndSection
