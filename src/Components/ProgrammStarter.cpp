@@ -41,7 +41,7 @@ void ProgrammStarter::init()
 {
     process = new QProcess;
 
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(receive_data()));
+    connect(process, SIGNAL(readyRead()), this, SLOT(receive_data()));
     connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(handle_finished_process()));
 
     emit init_done();
@@ -111,7 +111,7 @@ void ProgrammStarter::handle_finished_process()
 
 void ProgrammStarter::receive_data()
 {
-    QString text = process->readAllStandardOutput();
+    QString text = process->readAll();
 
     if(text.size() > 1)
     {

@@ -55,9 +55,15 @@ void LBJW::create_layout()
     datarateLine->setText(QString::number(1));
     datarateLine->setValidator(datarateValid);
     connect(datarateLine, SIGNAL(textChanged(const QString &)), lbj, SLOT(set_samplerate(const QString &)));
-    connect(lbj, SIGNAL(samplerate_changed(const QString &)), datarateLine, SLOT(setText(const QString &)));
     topLineLayout->addWidget(new QLabel("Datarate [S/s]:"));
     topLineLayout->addWidget(datarateLine);
+
+    QLineEdit* currentDatarateLine = new QLineEdit;
+    currentDatarateLine->setText(QString::number(1));
+    currentDatarateLine->setReadOnly(true);
+    connect(lbj, SIGNAL(samplerate_changed(const QString &)), currentDatarateLine, SLOT(setText(const QString &)));
+    topLineLayout->addWidget(new QLabel("/"));
+    topLineLayout->addWidget(currentDatarateLine);
 
     /* Maximum button */
     QCheckBox* datarateBox = new QCheckBox("Maximum");
@@ -99,8 +105,9 @@ void LBJW::create_layout()
     channelLayout->addWidget(new QLabel("Name"), 0, 0);
     channelLayout->addWidget(new QLabel("Boundary"), 0, 1);
     channelLayout->addWidget(new QLabel("Value"), 0, 2);
-    channelLayout->addWidget(new QLabel("Gain"), 0, 3);
-    channelLayout->addWidget(new QLabel("Graph"), 0, 4);
+    channelLayout->addWidget(new QLabel("Virtual Gain"), 0, 3);
+    channelLayout->addWidget(new QLabel("Range"), 0, 4);
+    channelLayout->addWidget(new QLabel("Graph"), 0, 5);
 
     QTimer* timer = new QTimer;
 
@@ -120,11 +127,28 @@ void LBJW::create_layout()
         connect(channel, SIGNAL(value_refreshed(const QString &)), valueLine, SLOT(setText(const QString &)));
 
         //Gain
-        QLineEdit *gainLine = new QLineEdit(QString::number(channel->get_gain()));
-        connect(gainLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_external_gain(const QString &)));
+        QLineEdit* gainLine = new QLineEdit(QString::number(channel->get_gain()));
+        connect(gainLine, SIGNAL(textChanged(const QString &)), channel, SLOT(set_virtual_gain(const QString &)));
+
+        /* Range */
+        QHBoxLayout* rangeLayout = new QHBoxLayout;
+        QSlider* rangeSlide = new QSlider(Qt::Horizontal);
+        rangeSlide->setRange(0, 3);
+        rangeSlide->setTickPosition(QSlider::TicksBelow);
+        rangeSlide->setTickInterval(1);
+        rangeSlide->setValue(channel->get_range_index());
+        connect(rangeSlide, SIGNAL(valueChanged(int)), channel, SLOT(set_range(int)));
+
+        QLineEdit* rangeLine = new QLineEdit(QString::number(channel->get_gain()));
+        rangeLine->setText(QString::number(channel->get_range()));
+        rangeLine->setReadOnly(true);
+        connect(channel, SIGNAL(range_changed(const QString&)), rangeLine, SLOT(setText(const QString &)));
+
+        rangeLayout->addWidget(rangeSlide);
+        rangeLayout->addWidget(rangeLine);
 
         /* Graph */
-        QCheckBox *graphCheckBox = new QCheckBox;
+        QCheckBox* graphCheckBox = new QCheckBox;
         graphCheckBox->setStyleSheet("color: " + color_list[cnt%color_list.size()].name + " ;");
         lbjplot->add_channel(channel, color_list[cnt%color_list.size()].color);
         connect(graphCheckBox, SIGNAL(stateChanged(int)), lbjplot->get_plotelement_list().last(), SLOT(set_plot_active(int)));        
@@ -133,7 +157,8 @@ void LBJW::create_layout()
         channelLayout->addWidget(boundaryLine, cnt, 1);
         channelLayout->addWidget(valueLine, cnt, 2);
         channelLayout->addWidget(gainLine, cnt, 3);
-        channelLayout->addWidget(graphCheckBox, cnt, 4);
+        channelLayout->addLayout(rangeLayout, cnt, 4);
+        channelLayout->addWidget(graphCheckBox, cnt, 6);
         cnt++;
 
         connect(channel, SIGNAL(boundary_check_failed()), this, SLOT(trigger_signal_list()));

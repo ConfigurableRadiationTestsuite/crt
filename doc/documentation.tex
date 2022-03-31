@@ -199,7 +199,8 @@ EndSection
 	\item $pc$: Positive Channel
 	\item $nc$: Negative Channel
 	\item $b$: Boundary value
-	\item $g$: Gain value
+	\item $g$: Virtual Gain value
+	\item $r$: Range value
 	\end{itemize}
 	
 \begin{lstlisting}[caption=LBJ Config]
@@ -211,11 +212,13 @@ Section LBJ
 	c0nc=68
 	c0b=0
 	c0g=1
+	c0r=10
 	c1n=AIN63
 	c1pc=63
 	c1nc=199
 	c1b=0
 	c1g=1
+	c1r=10
 	signal=
 EndSection
 \end{lstlisting}

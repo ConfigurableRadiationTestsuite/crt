@@ -7,19 +7,24 @@ LabjackChannel::LabjackChannel(QString const& name,
                                int* handle,
                                int p_chan,
                                int n_chan,
-                               int gain,
-                               double boundary)
+                               double boundary,
+                               double range,
+                               int gain)
     : name(name),
       handle(handle),
       p_chan(p_chan),
       n_chan(n_chan),
       boundary(boundary),
-      external_gain(gain)
+      range(range),
+      virtual_gain(gain)
 {
     this->is_input = true;
-    this->is_differential = n_chan == 199 ? false : true;
 
+    this->is_differential = n_chan == 199 ? false : true;
     set_differential();
+
+    this->range_index = get_range_index(range);
+    set_range(range_index);
 }
 
 LabjackChannel::~LabjackChannel() {}
@@ -46,6 +51,24 @@ bool LabjackChannel::check_boundary()
     return ok;
 }
 
+int LabjackChannel::get_range_index(double range)
+{
+    assert(range <= range_list[range_list.size()-1]);
+
+    for(int i = 0; i < range_list.size(); ++i)
+    {
+        range_index = i;
+
+        if(qAbs(range) <= range_list[i])
+        {
+            this->range = range_list[i];
+            break;
+        }
+    }
+
+    return range_index;
+}
+
 void LabjackChannel::set_range()
 {
     foreach (double available_range, range_list)
@@ -62,8 +85,20 @@ void LabjackChannel::set_range()
                 range = available_range;
                 write(get_pchan_range_address(), LJM_FLOAT32, range);
                 write(get_nchan_range_address(), LJM_FLOAT32, range);
+
+                emit range_changed(QString::number(range));
+
                 return ;
             }
         }
     }
+}
+
+void LabjackChannel::set_range(int index)
+{
+    range = range_list.at(index);
+    write(get_pchan_range_address(), LJM_FLOAT32, range);
+    write(get_nchan_range_address(), LJM_FLOAT32, range);
+
+    emit range_changed(QString::number(range));
 }
