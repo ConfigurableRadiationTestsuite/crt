@@ -105,7 +105,7 @@ void RFIO::update() {
     {
         chan = 0;
         foreach (channel, channel_list) {
-            channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE + offset, 4));
+            channel->append_value(data.mid(i*BYTE_PER_CHANNEL*channel_list.size() + chan*BYTE_PER_SAMPLE*2 + offset, 4));
             chan++;
         }
     }
