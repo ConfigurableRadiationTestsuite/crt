@@ -1,6 +1,8 @@
 #include "mainlayout.h"
 
 #include "src/Configuration/ConfigManager.h"
+
+#include "detachedwindow.h"
 #include "Tabs/ETHTab.h"
 #include "Tabs/LBJTab.h"
 #include "Tabs/PROGTab.h"
@@ -78,6 +80,9 @@ QToolBar* MainLayout::create_toolbar()
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolbar->setIconSize(QSize(16, 16));
 
+    detachTestButton = toolbar->addAction("Detach");
+    connect(detachTestButton, SIGNAL(triggered()), this, SLOT(detach_tab()));
+
     return toolbar;
 }
 
@@ -112,6 +117,14 @@ QTabWidget* MainLayout::create_window_tabs()
     return windowTabs;
 }
 
+void MainLayout::detach_tab(void)
+{
+    DetachedWindow *win = new DetachedWindow(windowTabs,
+                                windowTabs->currentWidget(),
+                                windowTabs->tabText(windowTabs->currentIndex()));
+
+    win->show();
+}
 void MainLayout::set_start_button(enum RunMode mode)
 {
     switch(mode) {

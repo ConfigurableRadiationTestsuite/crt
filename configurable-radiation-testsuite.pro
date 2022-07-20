@@ -77,6 +77,7 @@ SOURCES += \
     src/Tabs/RFTab.cpp \
     src/Tabs/SEQTab.cpp \
     src/mainwindow.cpp \
+    src/detachedwindow.cpp \
     src/Configuration/ConfigElement.cpp \
     src/Configuration/ConfigManager.cpp \
     src/SubWindow/SubWindow.cpp \
@@ -136,6 +137,7 @@ HEADERS += \
     src/Tabs/RFTab.h \
     src/Tabs/SEQTab.h \
     src/mainwindow.h \
+    src/detachedwindow.h \
     src/Configuration/ConfigElement.h \
     src/Configuration/ConfigManager.h \
     src/SubWindow/SubWindow.h \
