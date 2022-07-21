@@ -3,7 +3,7 @@
 #include <QElapsedTimer>
 
 Plot::Plot(QCustomPlot *plot, int datapoints, int seconds)
-    : plot(plot), datapoints(datapoints), seconds(seconds)
+    : QWidget(plot), plot(plot), datapoints(datapoints), seconds(seconds)
 {
     for(int i = 0; i < 16; ++i)
     {
