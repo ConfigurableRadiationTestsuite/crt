@@ -33,8 +33,11 @@ RFIO::~RFIO() {
     foreach (RFIOChannel *channel, channel_list)
         delete channel;
 
-    process->kill();
-    delete process;
+    if (process) {
+        process->kill();
+        QMetaObject::invokeMethod(process, "deleteLater");
+	process = NULL;
+    }
 }
 
 void RFIO::set_config() {
@@ -65,7 +68,9 @@ void RFIO::init() {
     }
 
     /* Create reception process */
-    process = new QProcess(this);
+    process = new QProcess(NULL);
+
+    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
 
 #ifndef DUMMY_DATA
     process->start("/bin/ncat", {"-l",  QString::number(port)});
@@ -74,7 +79,6 @@ void RFIO::init() {
     process->start("/bin/cat", {"/dev/urandom"});
 #endif
 
-    connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
 
     process->waitForStarted();
 
