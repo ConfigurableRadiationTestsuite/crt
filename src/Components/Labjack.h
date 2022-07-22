@@ -53,6 +53,10 @@ public:
         return channel_vec;
     }
 
+    bool isconnected() {
+        return is_connected;
+    }
+
     void set_config() override;
 
 public slots:
@@ -65,6 +69,7 @@ public slots:
     void set_maximum_samplerate(int is_maximum);
 
 signals:
+    void isconnected_changed(bool connected);
     void samplerate_changed(const QString& text);
 
 private:

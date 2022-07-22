@@ -54,6 +54,8 @@ public:
 
     void set_config() override;
 
+    bool isconnected();
+
 public slots:
     void set_master_enable(int master_enable);
     void set_master_trigger(int master_trigger);
@@ -68,6 +70,7 @@ public slots:
 signals:
     void master_changed(bool master_set);
     void disconnected(bool);
+    void isconnected_changed(bool connected);
 
 protected:
     QString address;

@@ -10,7 +10,7 @@
 *
 */
 
-class QProcess;
+#include <QProcess>
 
 #include "Component.h"
 #include "RFIOChannel.h"
@@ -22,38 +22,43 @@ class RFIO : public Component {
 Q_OBJECT
 
 public:
-   RFIO(RunManager* runManager, const QString& config);
-   RFIO(RunManager* runManager, const QString& m_element_name, const QString& address, int channel);
-   virtual ~RFIO() override;
+    RFIO(RunManager* runManager, const QString& config);
+    RFIO(RunManager* runManager, const QString& m_element_name, const QString& address, int channel);
+    virtual ~RFIO() override;
 
-   QVector<RFIOChannel*> get_channel_list() const {return channel_list;}
+    QVector<RFIOChannel*> get_channel_list() const {return channel_list;}
 
-   void set_config() override;
+    void set_config() override;
+    bool isconnected();
 
 public slots:
-   void init() override;
-   void update() override;
+    void init() override;
+    void update() override;
 
-   void set_single_shot();
-   void set_multi_shot();
+    void set_single_shot();
+    void set_multi_shot();
+
+signals:
+    void isconnected_changed(bool connected);
 
 private slots:
-   void handle_error(QVector<IQSample> data, int number);
+    void handle_error(QVector<IQSample> data, int number);
+    void onProcessStateChanged(QProcess::ProcessState newState);
 
 private:
-   QString address;
-   int port;
-   bool is_single_shot = false;
-   bool is_destroyed;
-   int channel;
+    QString address;
+    int port;
+    bool is_single_shot = false;
+    bool is_destroyed;
+    int channel;
 
-   QProcess* process;
-   QVector<RFIOChannel*> channel_list;
+    QProcess* process;
+    QVector<RFIOChannel*> channel_list;
 
 
-   QStringList generate_header() override;
+    QStringList generate_header() override;
 
-   QByteArray dummy_iq(int period, int channel);
+    QByteArray dummy_iq(int period, int channel);
 };
 
 inline void RFIO::set_single_shot() {

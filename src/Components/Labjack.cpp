@@ -83,13 +83,15 @@ void Labjack::open_labjack() {
     is_connected = LJM_Open(LJM_dtANY, connectionType, identifier.toLocal8Bit(), &handle) == 0 ? true : false;
 #endif
 #ifdef DUMMY_DATA
-    is_connected = LJM_Open(LJM_dtANY, LJM_ctANY, LJM_DEMO_MODE, &handle) == 0 ? true : false;
+    is_connected = true;
 #endif
 }
 
 void Labjack::init()
 {
     open_labjack();
+
+    emit isconnected_changed(is_connected);
 
     /* Setup channel */
     for(uint i = 0; i < channel; i++)
@@ -288,3 +290,4 @@ QStringList Labjack::generate_header()
 
     return header;
 }
+

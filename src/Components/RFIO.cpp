@@ -2,7 +2,6 @@
 
 #include "src/Manager/RunManager.h"
 
-#include <QProcess>
 #include <QRandomGenerator>
 
 RFIO::RFIO(RunManager* runManager, const QString& config)
@@ -71,6 +70,7 @@ void RFIO::init() {
     process = new QProcess(NULL);
 
     connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(update()));
+    connect(process, &QProcess::stateChanged, this, &RFIO::onProcessStateChanged);
 
 #ifndef DUMMY_DATA
     process->start("/bin/ncat", {"-l",  QString::number(port)});
@@ -197,5 +197,13 @@ void RFIO::handle_error(QVector<IQSample> data, int number) {
         }
         runManager->append_values_to_file(this, row);
     }
+}
+
+bool RFIO::isconnected() {
+    return (process->state() == QProcess::Running);
+}
+
+void RFIO::onProcessStateChanged(QProcess::ProcessState newState) {
+    emit isconnected_changed(newState == QProcess::Running);
 }
 

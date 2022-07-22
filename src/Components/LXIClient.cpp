@@ -9,6 +9,10 @@ LXIClient::LXIClient(uint port, const QString& address) : port(port), address(ad
 {
     lxi_init();
     device = lxi_connect(address.toStdString().c_str(), port, "inst0", timeout, VXI11);
+
+    if (device == LXI_ERROR) {
+        printf("LXI connect failed\n");
+    }
 }
 
 LXIClient::~LXIClient()
@@ -59,3 +63,9 @@ bool LXIClient::query(const QString& message, char* buffer, int size)
 
     return ok;
 }
+
+bool LXIClient::isconnected()
+{
+    return (device != LXI_ERROR);
+}
+

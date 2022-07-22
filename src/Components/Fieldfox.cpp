@@ -18,6 +18,7 @@ Fieldfox::Fieldfox(RunManager * runManager, const QString &config)
     this->start_freq = get_value("start_freq").toUInt();
     this->stop_freq = get_value("stop_freq").toUInt();
     this->datapoints = get_value("points").toUInt();
+    this->settings_ok = false;
 }
 
 Fieldfox::Fieldfox(RunManager * runManager,
@@ -35,6 +36,7 @@ Fieldfox::Fieldfox(RunManager * runManager,
       datapoints(datapoints)
 {
     this->elementName = m_element_name;
+    this->settings_ok = false;
 }
 
 Fieldfox::~Fieldfox()
@@ -183,6 +185,7 @@ void Fieldfox::update_settings(bool ok)
 
         settings_ok = true;
     }
+    emit isconnected_changed(ok);
 }
 
 #ifdef DUMMY_DATA

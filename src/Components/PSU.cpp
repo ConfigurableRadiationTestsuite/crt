@@ -69,6 +69,9 @@ void PSU::set_config()
 
 void PSU::update()
 {
+    if (!lxi->isconnected())
+        return;
+
     /* Gather data */
     QVector<double> values;
     values.reserve(channel_list.size()*2);
@@ -130,8 +133,12 @@ void PSU::init()
 
     lxi = new LXIClient(port, ip_address);
 
+    emit isconnected_changed(lxi->isconnected());
+
     // Write reset
     lxi->query("RST");
+#else
+    emit isconnected_changed(true);
 #endif
 
     /* Setup channel */
@@ -225,3 +232,12 @@ QStringList PSU::generate_header()
 
     return header;
 }
+
+bool PSU::isconnected() {
+#ifndef DUMMY_DATA
+    return lxi->isconnected();
+#else
+    return true;
+#endif
+}
+

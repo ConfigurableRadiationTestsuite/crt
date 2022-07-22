@@ -32,6 +32,9 @@ PSUW::~PSUW()
 
 void PSUW::create_layout()
 {
+    setEnabled(psu->isconnected());
+    connect(psu, &PSU::isconnected_changed, this, &PSUW::setEnabled);
+
     QHBoxLayout* mainHLayout = new QHBoxLayout;
 
     foreach (PSUChannel* channel, psu->get_channel_list()) {
@@ -112,3 +115,4 @@ void PSUW::create_layout()
 
     emit layout_done();
 }
+

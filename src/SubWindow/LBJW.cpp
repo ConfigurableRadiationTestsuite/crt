@@ -25,6 +25,9 @@ LBJW::~LBJW()
 
 void LBJW::create_layout()
 {
+    setEnabled(lbj->isconnected());
+    connect(lbj, &Labjack::isconnected_changed, this, &LBJW::setEnabled);
+
     QVBoxLayout* mainVLayout = new QVBoxLayout;
 
     QHBoxLayout* topLineLayout = new QHBoxLayout;
@@ -176,3 +179,4 @@ void LBJW::create_layout()
 
     emit layout_done();
 }
+

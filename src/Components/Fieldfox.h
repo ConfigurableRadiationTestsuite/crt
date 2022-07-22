@@ -57,6 +57,10 @@ public:
 
     void set_config() override;
 
+    bool isconnected() {
+        return settings_ok;
+    }
+
 public slots:
     void init() override;
     void update() override;
@@ -71,6 +75,7 @@ public slots:
     void set_mode(const QString& text);
 
 signals:
+    void isconnected_changed(bool connected);
     void data_available(const QVector<double>&);
 
 private slots:

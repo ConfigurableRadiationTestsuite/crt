@@ -24,8 +24,7 @@ public:
 
     bool query(const QString& message, char* buffer=nullptr, int size=0);
 
-signals:
-    void connection_status(bool);
+    bool isconnected();
 
 private:
     QMutex mutex;

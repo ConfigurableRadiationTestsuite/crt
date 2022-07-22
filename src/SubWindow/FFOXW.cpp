@@ -20,6 +20,9 @@ FFOXW::~FFOXW()
 
 void FFOXW::create_layout()
 {
+    setEnabled(fox->isconnected());
+    connect(fox, &Fieldfox::isconnected_changed, this, &FFOXW::setEnabled);
+
     QVBoxLayout* mainVLayout = new QVBoxLayout;
 
     QHBoxLayout* topLineLayout = new QHBoxLayout;
@@ -67,3 +70,4 @@ void FFOXW::create_layout()
 
     emit layout_done();
 }
+

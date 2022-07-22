@@ -18,6 +18,9 @@ RFW::~RFW()
 
 void RFW::create_layout()
 {
+    setEnabled(rfio->isconnected());
+    connect(rfio, &RFIO::isconnected_changed, this, &RFW::setEnabled);
+
     QVBoxLayout* mainVLayout = new QVBoxLayout;
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -117,3 +120,4 @@ void RFW::create_layout()
 
     emit layout_done();
 }
+
