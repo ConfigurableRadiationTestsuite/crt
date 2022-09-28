@@ -1,0 +1,6 @@
+*.o
+moc_*
+Makefile
+configurable-radiation-testsuite
+.qmake.stash
+qrc_icon.cpp
