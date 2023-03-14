@@ -57,10 +57,12 @@ void Ethernet::start_logging() {
     server = new QTcpServer;
     connect(server, SIGNAL(newConnection()), this, SLOT(accept_connection()));
 
-    if(!server->listen(QHostAddress::Any, port))
+    if(!server->listen(QHostAddress::Any, port)) {
+        qDebug("Failed to listen on port %d", port);
         set_status(Disconnected);
-    else
+    } else {
         set_status(Connected);
+    }
 
     /* Setup Log */
     runManager->register_component(this, elementName);
@@ -97,12 +99,21 @@ void Ethernet::stop_logging() {
 void Ethernet::accept_connection() {
     socket = server->nextPendingConnection();
     connect(socket, SIGNAL(readyRead()), this, SLOT(accept_data()));
+    connect(socket, &QTcpSocket::disconnected, this, &Ethernet::handle_disconnection);
+    emit address_changed(socket->peerAddress().toString());
+
+    qDebug("Accept connection %s:%d",
+            socket->peerAddress().toString().toLocal8Bit().data(),
+            socket->localPort());
 }
 
 void Ethernet::accept_data() {
     QByteArray data = socket->readAll();
 
-    QString filename = data_folder + "/" + "Package_" + QString::number(QDateTime::currentMSecsSinceEpoch());
+    QString filename = data_folder
+                            + QDir::separator()
+                            + "Package_"
+                            + QString::number(QDateTime::currentMSecsSinceEpoch());
 
     QFile file(filename);
     file.open(QIODevice::WriteOnly);
@@ -120,13 +131,16 @@ void Ethernet::accept_data() {
 }
 
 void Ethernet::set_data_folder() {
-    data_folder = runManager->get_root_directory() + "/" + elementName;
+    data_folder = runManager->get_root_directory()
+                            + QDir::separator()
+                            + elementName;
 
     if(!QDir(data_folder).exists())
         QDir().mkdir(data_folder);
 }
 
 void Ethernet::handle_disconnection() {
+    qDebug("Ethernet disconnected");
     emit connection_timed_out();
     set_status(Disconnected);
     timeoutTimer->stop();

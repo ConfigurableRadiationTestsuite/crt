@@ -53,6 +53,7 @@ private slots:
     void handle_disconnection();
 
 signals:
+    void address_changed(const QString &);
     void files_changed(const QString &);
     void bytes_changed(const QString &);
     void status_changed(int);
@@ -84,6 +85,7 @@ inline QStringList Ethernet::generate_header() {
 }
 
 inline void Ethernet::set_status(Status status) {
+    qDebug("Ethernet set status %d", status);
     this->status = status;
     emit status_changed(status);
 }

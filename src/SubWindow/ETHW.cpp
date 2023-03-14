@@ -33,37 +33,38 @@ void ETHW::create_layout()
 
     /* Name */
     QLabel* nameLabel = new QLabel("Name");
-    QLineEdit* nameEdit = new QLineEdit(ethernet->get_element_name());
-    nameEdit->setReadOnly(true);
+    QLabel* nameEdit = new QLabel(ethernet->get_element_name());
+    nameEdit->setMinimumWidth(200);
     mainGridLayout->addWidget(nameLabel, 0, pos);
     mainGridLayout->addWidget(nameEdit, 1, pos++);
 
     /* Address */
     QLabel* addressLabel = new QLabel("Address");
-    QLineEdit* addressEdit = new QLineEdit;
-    addressEdit->setReadOnly(true);
+    QLabel* addressEdit = new QLabel;
+    addressEdit->setMinimumWidth(160);
+    connect(ethernet, &Ethernet::address_changed, addressEdit, &QLabel::setText);
     mainGridLayout->addWidget(addressLabel, 0, pos);
     mainGridLayout->addWidget(addressEdit, 1, pos++);
 
     /* Port */
     QLabel* portLabel = new QLabel("Port");
-    QLineEdit* portEdit = new QLineEdit(QString::number(ethernet->get_port()));
-    portEdit->setReadOnly(true);
+    QLabel* portEdit = new QLabel(QString::number(ethernet->get_port()));
+    portEdit->setMinimumWidth(60);
     mainGridLayout->addWidget(portLabel, 0, pos);
     mainGridLayout->addWidget(portEdit, 1, pos++);
 
     /* Received Bytes */
     QLabel* byteLabel = new QLabel("Bytes");
-    QLineEdit* byteEdit = new QLineEdit("0");
-    byteEdit->setDisabled(true);
+    QLabel* byteEdit = new QLabel("0");
+    byteEdit->setMinimumWidth(60);
     connect(ethernet, SIGNAL(bytes_changed(const QString &)), byteEdit, SLOT(setText(const QString &)));
     mainGridLayout->addWidget(byteLabel, 0, pos);
     mainGridLayout->addWidget(byteEdit, 1, pos++);
 
     /* Received Files */
     QLabel* fileLabel = new QLabel("Files");
-    QLineEdit* fileEdit = new QLineEdit("0");
-    fileEdit->setDisabled(true);
+    QLabel* fileEdit = new QLabel("0");
+    fileEdit->setMinimumWidth(60);
     connect(ethernet, SIGNAL(files_changed(const QString &)), fileEdit, SLOT(setText(const QString &)));
     mainGridLayout->addWidget(fileLabel, 0, pos);
     mainGridLayout->addWidget(fileEdit, 1, pos++);

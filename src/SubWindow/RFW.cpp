@@ -13,7 +13,8 @@ RFW::RFW(RunManager* m_runManager, RFIO* rfio)
 
 RFW::~RFW()
 {
-    delete rfio;
+    rfio->deleteLater();
+    qDebug("destroyed RFW");
 }
 
 void RFW::create_layout()
@@ -21,28 +22,28 @@ void RFW::create_layout()
     setEnabled(rfio->isconnected());
     connect(rfio, &RFIO::isconnected_changed, this, &RFW::setEnabled);
 
-    QVBoxLayout* mainVLayout = new QVBoxLayout;
+    QVBoxLayout* mainVLayout = new QVBoxLayout(this);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     /* Header */
-    QHBoxLayout* headerHLayout = new QHBoxLayout;
+    QHBoxLayout* headerHLayout = new QHBoxLayout(this);
 
     /* Signal button */
-    QPushButton* signalButton = new QPushButton;
+    QPushButton* signalButton = new QPushButton(this);
     signalButton->setText("Add Signal");
     connect(signalButton, SIGNAL(clicked()), this, SLOT(show_signal_dialog()));
     headerHLayout->addWidget(signalButton);
 
     /* Seperator */
-    QFrame* line_1 = new QFrame();
+    QFrame* line_1 = new QFrame(this);
     line_1->setFrameShape(QFrame::VLine);
     line_1->setFrameShadow(QFrame::Sunken);
     headerHLayout->addWidget(line_1);
 
     /* Single vs Multishot */
-    QButtonGroup* shotGroup = new QButtonGroup;
-    QRadioButton* singleShot = new QRadioButton("Single");
-    QRadioButton* multiShot = new QRadioButton("Multi");
+    QButtonGroup* shotGroup = new QButtonGroup(this);
+    QRadioButton* singleShot = new QRadioButton("Single", this);
+    QRadioButton* multiShot = new QRadioButton("Multi", this);
     shotGroup->addButton(singleShot);
     shotGroup->addButton(multiShot);
     multiShot->setChecked(true);
@@ -54,17 +55,17 @@ void RFW::create_layout()
     headerHLayout->addWidget(multiShot);
 
     /* Seperator */
-    QFrame* line_2 = new QFrame();
+    QFrame* line_2 = new QFrame(this);
     line_2->setFrameShape(QFrame::VLine);
     line_2->setFrameShadow(QFrame::Sunken);
     headerHLayout->addWidget(line_2);
 
     /* Channel */
-    QHBoxLayout* subHLayout = new QHBoxLayout;
+    QHBoxLayout* subHLayout = new QHBoxLayout(this);
 
     foreach (RFIOChannel* channel, rfio->get_channel_list()) {
         QGroupBox* channelGroupBox = new QGroupBox("Channel: " + QString::number(channel->get_channel_number()));
-        QHBoxLayout*channelHLayout = new QHBoxLayout;
+        QHBoxLayout*channelHLayout = new QHBoxLayout(this);
 
         /* Plot */
         QCustomPlot* plot = new QCustomPlot(this);
@@ -76,10 +77,10 @@ void RFW::create_layout()
         channelHLayout->addWidget(plot);
         rfplot->update_layout();
 
-        QVBoxLayout* evalLayout = new QVBoxLayout;
+        QVBoxLayout* evalLayout = new QVBoxLayout(this);
 
         /* Evaluate */
-        QCheckBox* evalBox = new QCheckBox("Evaluate");
+        QCheckBox* evalBox = new QCheckBox("Evaluate", this);
         evalBox->setDisabled(true);
         evalLayout->addWidget(evalBox);
         connect(channel, SIGNAL(announce_data_valid(bool)), evalBox, SLOT(setDisabled(bool)));
@@ -88,8 +89,8 @@ void RFW::create_layout()
         connect(channel, SIGNAL(error(QVector<IQSample>, int)), this, SLOT(trigger_signal_list()));
 
         /* Margin info */
-        QLabel* marginLabel = new QLabel("Margin");
-        QLineEdit* marginLineEdit = new QLineEdit;
+        QLabel* marginLabel = new QLabel("Margin", this);
+        QLineEdit* marginLineEdit = new QLineEdit(this);
         marginLineEdit->setText("2^0");
         marginLineEdit->setMaxLength(4);
         marginLineEdit->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
@@ -99,7 +100,7 @@ void RFW::create_layout()
         connect(channel, SIGNAL(announce_margin_changed(const QString &)), marginLineEdit, SLOT(setText(const QString &)));
 
         /* Slider */
-        QSlider* precisionSlide = new QSlider(Qt::Vertical);
+        QSlider* precisionSlide = new QSlider(Qt::Vertical, this);
         precisionSlide->setRange(1, 10);
         precisionSlide->setTickPosition(QSlider::TicksRight);
         precisionSlide->setTickInterval(1);
