@@ -21,12 +21,10 @@ Ethernet::Ethernet(RunManager *runManager, const QString &m_element_name, uint p
 
 Ethernet::~Ethernet() {
     if(server != nullptr) {
-        server->close();
-        delete server;
+        QMetaObject::invokeMethod(server, "deleteLater");
     }
     if(socket != nullptr) {
-        socket->close();
-        delete socket;
+        QMetaObject::invokeMethod(socket, "deleteLater");
     }
 
     delete timeoutTimer;
@@ -84,8 +82,16 @@ void Ethernet::stop_logging() {
     runManager->deregister_component(this);
 
     //Close socket and server
-    socket->close();
-    server->close();
+    if(socket != nullptr) {
+        socket->close();
+        delete socket;
+        socket = nullptr;
+    }
+    if(server != nullptr) {
+        server->close();
+        delete server;
+        server = nullptr;
+    }
 }
 
 void Ethernet::accept_connection() {
@@ -124,4 +130,10 @@ void Ethernet::handle_disconnection() {
     emit connection_timed_out();
     set_status(Disconnected);
     timeoutTimer->stop();
+
+    if(socket != nullptr) {
+        socket->close();
+        QMetaObject::invokeMethod(socket, "deleteLater");
+        socket = nullptr;
+    }
 }

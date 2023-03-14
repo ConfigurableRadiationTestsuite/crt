@@ -33,5 +33,5 @@ void ETHTab::create_add_subwindow_dialog()
 {
     addDialog->add_entry("Name", "Temperature Data");
     addDialog->add_entry("Port", "9010");
-    addDialog->add_entry("Timeout", "9999");
+    addDialog->add_entry("Timeout [ms]", "9999");
 }
