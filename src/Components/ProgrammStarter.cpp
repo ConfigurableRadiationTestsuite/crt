@@ -25,7 +25,11 @@ ProgrammStarter::ProgrammStarter(RunManager* runManager, const QString& m_elemen
 
 ProgrammStarter::~ProgrammStarter()
 {
-    delete process;
+    if (process) {
+        process->kill();
+        QMetaObject::invokeMethod(process, "deleteLater");
+        process = NULL;
+    }
 }
 
 void ProgrammStarter::set_config()
@@ -141,7 +145,7 @@ QStringList ProgrammStarter::substitute_arguments()
     {
         if(element.contains("$directory"))
         {
-            QString suffix = element.mid(element.indexOf("/"));
+            QString suffix = element.mid(element.indexOf(QDir::separator()));
             argList.push_back(runManager->get_root_directory() + suffix);
         }
         else
