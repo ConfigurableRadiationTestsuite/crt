@@ -16,12 +16,12 @@ ProgrammStarter::ProgrammStarter(RunManager* runManager, const QString &config)
     restart = get_value("restart") == "true";
 }
 
-ProgrammStarter::ProgrammStarter(RunManager* runManager, const QString& m_element_name, const QString& path)
+ProgrammStarter::ProgrammStarter(RunManager* runManager, const QString& m_element_name, const QString& path, const QString& arguments)
     : Component(m_element_name, runManager), path(path)
 {
     this->elementName = m_element_name;
 
-    arguments = QStringList("$directory");
+    set_arguments(arguments);
 }
 
 ProgrammStarter::~ProgrammStarter()
