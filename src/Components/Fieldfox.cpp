@@ -62,6 +62,8 @@ void Fieldfox::update()
     create_dummy_data(data);
     emit data_available(data);
 
+    emit isconnected_changed(true);
+
     return ;
 #endif
 
