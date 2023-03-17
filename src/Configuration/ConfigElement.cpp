@@ -49,3 +49,36 @@ bool ConfigElement::parse_config(const QVector<QString>& entries)
 
     return ok;
 }
+
+QString ConfigElement::get_value(const QString& name, const QString& defaultvalue)
+{
+    return (get_entry(name) != nullptr) ? get_entry(name)->value : defaultvalue;
+}
+
+void ConfigElement::set_value(const QString& name, const QString& value)
+{
+    config_entry* entry = get_entry(name);
+
+    if(entry == nullptr)
+    {
+        config_entry_list.push_back({name, value});
+    }
+    else
+    {
+        entry->value = value;
+    }
+}
+
+config_entry* ConfigElement::get_entry(const QString& name)
+{
+   for(QVector<config_entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
+   {
+        if((*it).name.contains(name))
+        {
+            return &(*it);
+        }
+   }
+
+    return nullptr;
+}
+

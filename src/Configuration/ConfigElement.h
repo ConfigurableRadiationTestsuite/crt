@@ -26,7 +26,7 @@ public:
     virtual ~ConfigElement() {}
 
     QString get_config();
-    QString get_value(const QString& name);
+    QString get_value(const QString& name, const QString& defaultvalue = "");
 
     void set_value(const QString& name, const QString& value);
     virtual void set_config() = 0;
@@ -43,36 +43,5 @@ protected:
     virtual bool parse_config(const QVector<QString>& entries);
 };
 
-inline QString ConfigElement::get_value(const QString& name)
-{
-    return (get_entry(name) != nullptr) ? get_entry(name)->value : "";
-}
-
-inline void ConfigElement::set_value(const QString& name, const QString& value)
-{
-    config_entry* entry = get_entry(name);
-
-    if(entry == nullptr)
-    {
-        config_entry_list.push_back({name, value});
-    }
-    else
-    {
-        entry->value = value;
-    }
-}
-
-inline config_entry* ConfigElement::get_entry(const QString& name)
-{
-   for(QVector<config_entry>::iterator it = config_entry_list.begin(); it != config_entry_list.end(); it++)
-   {
-        if((*it).name.contains(name))
-        {
-            return &(*it);
-        }
-   }
-
-    return nullptr;
-}
-
 #endif // CONFIGELEMENT_H
+
