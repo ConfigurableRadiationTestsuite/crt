@@ -40,6 +40,7 @@ public slots:
     void set_path(const QString &text);
     void set_trigger(int trigger);
     void set_restart(bool restart) {this->restart = restart;};
+    bool get_restart() {return restart;};
     void set_restartwait(int value) {restart_wait = value;};
     int  get_restartwait() {return restart_wait;};
 

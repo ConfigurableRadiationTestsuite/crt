@@ -13,7 +13,7 @@ ProgrammStarter::ProgrammStarter(RunManager* runManager, const QString &config)
     this->elementName = get_value("name");
     path = get_value("path");
     set_arguments(get_value("arguments"));
-    restart = get_value("restart", "") == "true";
+    restart = get_value("restart") == "true";
     restart_wait = get_value("restart_wait", "10").toInt();
 }
 

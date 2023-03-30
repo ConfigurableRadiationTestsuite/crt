@@ -44,8 +44,8 @@ void PROGW::create_layout()
     connect(programmStarter, SIGNAL(announce_shouldrun(bool)), trigger, SLOT(setDisabled(bool)));
 
     auto restartCheckbox = new QCheckBox("Restart");
-    restartCheckbox->setChecked(true);
-    restartCheckbox->setToolTip("Restart program automatically after 10 seconds.");
+    restartCheckbox->setChecked(programmStarter->get_restart());
+    restartCheckbox->setToolTip("Restart program automatically after some seconds.");
     connect(restartCheckbox, &QCheckBox::stateChanged, programmStarter, &ProgrammStarter::set_restart);
     connect(programmStarter, &ProgrammStarter::announce_shouldrun, restartCheckbox, &QCheckBox::setDisabled);
 
