@@ -130,12 +130,15 @@ void MainLayout::set_start_button(enum RunMode mode)
     switch(mode) {
     case Creation:
         startTestButton->setIcon(QIcon(":icon/startButton.png"));
+        startTestButton->setDisabled(false);
         break;
     case StartRun:
         startTestButton->setIcon(QIcon(":icon/startButton_active.png"));
+        startTestButton->setDisabled(true);
         break;
     case StopRun:
         startTestButton->setIcon(QIcon(":icon/startButton.png"));
+        startTestButton->setDisabled(false);
         break;
     default:
         break;
@@ -147,12 +150,15 @@ void MainLayout::set_stop_button(enum RunMode mode)
     switch(mode) {
     case Creation:
         stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
+        stopTestButton->setDisabled(true);
         break;
     case StartRun:
         stopTestButton->setIcon(QIcon(":icon/stopButton.png"));
+        stopTestButton->setDisabled(false);
         break;
     case StopRun:
         stopTestButton->setIcon(QIcon(":icon/stopButton_active.png"));
+        stopTestButton->setDisabled(true);
         break;
     default:
         break;
